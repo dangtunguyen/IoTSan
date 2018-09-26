@@ -1,0 +1,132 @@
+abstraction Signs extends real 
+  begin
+    TOKENS = {NEG, ZERO, POS};
+    DEFAULT = ZERO;
+    ONE2ONE = {ZERO};
+    abstract (n)
+      begin
+        n < 0 -> NEG;
+        n == 0 -> ZERO;
+        n > 0 -> POS;
+      end
+    operator + add 
+      begin
+        (NEG, NEG) -> NEG;
+        (NEG, ZERO) -> NEG;
+        (NEG, POS) -> {NEG, ZERO, POS};
+        (ZERO, NEG) -> NEG;
+        (ZERO, ZERO) -> ZERO;
+        (ZERO, POS) -> POS;
+        (POS, NEG) -> {NEG, ZERO, POS};
+        (POS, ZERO) -> POS;
+        (POS, POS) -> POS;
+      end
+    operator - sub 
+      begin
+        (NEG, NEG) -> {NEG, ZERO, POS};
+        (NEG, ZERO) -> NEG;
+        (NEG, POS) -> NEG;
+        (ZERO, NEG) -> POS;
+        (ZERO, ZERO) -> ZERO;
+        (ZERO, POS) -> NEG;
+        (POS, NEG) -> POS;
+        (POS, ZERO) -> POS;
+        (POS, POS) -> {NEG, ZERO, POS};
+      end
+    operator * mul 
+      begin
+        (NEG, NEG) -> POS;
+        (NEG, ZERO) -> ZERO;
+        (NEG, POS) -> NEG;
+        (ZERO, NEG) -> ZERO;
+        (ZERO, ZERO) -> ZERO;
+        (ZERO, POS) -> ZERO;
+        (POS, NEG) -> NEG;
+        (POS, ZERO) -> ZERO;
+        (POS, POS) -> POS;
+      end
+    operator / div 
+      begin
+        (NEG, NEG) -> POS;
+        (NEG, ZERO) -> T;
+        (NEG, POS) -> NEG;
+        (ZERO, NEG) -> ZERO;
+        (ZERO, ZERO) -> T;
+        (ZERO, POS) -> ZERO;
+        (POS, NEG) -> NEG;
+        (POS, ZERO) -> T;
+        (POS, POS) -> POS;
+      end
+    test == eq 
+      begin
+        (NEG, NEG) -> {TRUE, FALSE};
+        (NEG, ZERO) -> FALSE;
+        (NEG, POS) -> FALSE;
+        (ZERO, NEG) -> FALSE;
+        (ZERO, ZERO) -> TRUE;
+        (ZERO, POS) -> FALSE;
+        (POS, NEG) -> FALSE;
+        (POS, ZERO) -> FALSE;
+        (POS, POS) -> {TRUE, FALSE};
+      end
+    test != neq 
+      begin
+        (NEG, NEG) -> {TRUE, FALSE};
+        (NEG, ZERO) -> TRUE;
+        (NEG, POS) -> TRUE;
+        (ZERO, NEG) -> TRUE;
+        (ZERO, ZERO) -> FALSE;
+        (ZERO, POS) -> TRUE;
+        (POS, NEG) -> TRUE;
+        (POS, ZERO) -> TRUE;
+        (POS, POS) -> {TRUE, FALSE};
+      end
+    test < lt 
+      begin
+        (NEG, NEG) -> {TRUE, FALSE};
+        (NEG, ZERO) -> TRUE;
+        (NEG, POS) -> TRUE;
+        (ZERO, NEG) -> FALSE;
+        (ZERO, ZERO) -> FALSE;
+        (ZERO, POS) -> TRUE;
+        (POS, NEG) -> FALSE;
+        (POS, ZERO) -> FALSE;
+        (POS, POS) -> {TRUE, FALSE};
+      end
+    test <= le 
+      begin
+        (NEG, NEG) -> {TRUE, FALSE};
+        (NEG, ZERO) -> TRUE;
+        (NEG, POS) -> TRUE;
+        (ZERO, NEG) -> FALSE;
+        (ZERO, ZERO) -> TRUE;
+        (ZERO, POS) -> TRUE;
+        (POS, NEG) -> FALSE;
+        (POS, ZERO) -> FALSE;
+        (POS, POS) -> {TRUE, FALSE};
+      end
+    test > gt 
+      begin
+        (NEG, NEG) -> {TRUE, FALSE};
+        (NEG, ZERO) -> FALSE;
+        (NEG, POS) -> FALSE;
+        (ZERO, NEG) -> TRUE;
+        (ZERO, ZERO) -> FALSE;
+        (ZERO, POS) -> FALSE;
+        (POS, NEG) -> TRUE;
+        (POS, ZERO) -> TRUE;
+        (POS, POS) -> {TRUE, FALSE};
+      end
+    test >= ge 
+      begin
+        (NEG, NEG) -> {TRUE, FALSE};
+        (NEG, ZERO) -> FALSE;
+        (NEG, POS) -> FALSE;
+        (ZERO, NEG) -> TRUE;
+        (ZERO, ZERO) -> TRUE;
+        (ZERO, POS) -> FALSE;
+        (POS, NEG) -> TRUE;
+        (POS, ZERO) -> TRUE;
+        (POS, POS) -> {TRUE, FALSE};
+      end
+  end

@@ -1,0 +1,928 @@
+package edu.ksu.cis.bandera.bui;
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * Bandera, a Java(TM) analysis and transformation toolkit           *
+ * Copyright (C) 2000   Robby (robby@cis.ksu.edu)                    *
+ * All rights reserved.                                              *
+ *                                                                   *
+ * This work was done as a project in the SAnToS Laboratory,         *
+ * Department of Computing and Information Sciences, Kansas State    *
+ * University, USA (http://www.cis.ksu.edu/santos).                  *
+ * It is understood that any modification not identified as such is  *
+ * not covered by the preceding statement.                           *
+ *                                                                   *
+ * This work is free software; you can redistribute it and/or        *
+ * modify it under the terms of the GNU Library General Public       *
+ * License as published by the Free Software Foundation; either      *
+ * version 2 of the License, or (at your option) any later version.  *
+ *                                                                   *
+ * This work is distributed in the hope that it will be useful,      *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of    *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU *
+ * Library General Public License for more details.                  *
+ *                                                                   *
+ * You should have received a copy of the GNU Library General Public *
+ * License along with this toolkit; if not, write to the             *
+ * Free Software Foundation, Inc., 59 Temple Place - Suite 330,      *
+ * Boston, MA  02111-1307, USA.                                      *
+ *                                                                   *
+ * Java is a trademark of Sun Microsystems, Inc.                     *
+ *                                                                   *
+ * To submit a bug report, send a comment, or get the latest news on *
+ * this project and other SAnToS projects, please visit the web-site *
+ *                http://www.cis.ksu.edu/santos                      *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+import edu.ksu.cis.bandera.jjjc.*;
+import edu.ksu.cis.bandera.annotation.*;
+import edu.ksu.cis.bandera.specification.predicate.datastructure.*;
+import java.awt.*;
+import java.util.*;
+import javax.swing.*;
+import javax.swing.tree.*;
+public class PredicateBrowser extends JFrame {
+	private JLabel ivjConstraintLabel = null;
+	private JTextField ivjConstraintTextField = null;
+	private JLabel ivjDescriptionLabel = null;
+	private JScrollPane ivjDescriptionScrollPane = null;
+	private JTextArea ivjDescriptionTextArea = null;
+	private JButton ivjGotoButton = null;
+	private JLabel ivjNameLabel = null;
+	private JTextField ivjNameTextField = null;
+	private JButton ivjOkButton = null;
+	private JPanel ivjPredicateBrowserContentPane = null;
+	private JSplitPane ivjPredicateBrowserSplitPane = null;
+	private JPanel ivjPredicatePanel = null;
+	private JScrollPane ivjPredicateScrollPane = null;
+	private JTree ivjPredicateTree = null;
+	private JLabel ivjTypeLabel = null;
+	private JTextField ivjTypeTextField = null;
+	private JButton ivjErrorMessageButton = null;
+	IvjEventHandler ivjEventHandler = new IvjEventHandler();
+	private JButton ivjAddButton = null;
+
+class IvjEventHandler implements java.awt.event.ActionListener, javax.swing.event.TreeSelectionListener {
+		public void actionPerformed(java.awt.event.ActionEvent e) {
+			if (e.getSource() == PredicateBrowser.this.getOkButton()) 
+				connEtoM1(e);
+			if (e.getSource() == PredicateBrowser.this.getErrorMessageButton()) 
+				connEtoC2();
+			if (e.getSource() == PredicateBrowser.this.getGotoButton()) 
+				connEtoC3();
+			if (e.getSource() == PredicateBrowser.this.getAddButton()) 
+				connEtoC4();
+		};
+		public void valueChanged(javax.swing.event.TreeSelectionEvent e) {
+			if (e.getSource() == PredicateBrowser.this.getPredicateTree()) 
+				connEtoC1();
+		};
+	};
+/**
+ * PredicateBrowser constructor comment.
+ */
+public PredicateBrowser() {
+	super();
+	initialize();
+}
+/**
+ * PredicateBrowser constructor comment.
+ * @param title java.lang.String
+ */
+public PredicateBrowser(String title) {
+	super(title);
+}
+/**
+ * Comment
+ */
+public void addButton_ActionEvents() {
+	Object o = ((DefaultMutableTreeNode) getPredicateTree().getLastSelectedPathComponent()).getUserObject();
+	if (o instanceof Predicate) {
+		Predicate p = (Predicate) o;
+		/*
+		BUI.propertyManager.getPropositionTextField().setText(BUI.propertyManager.getPropositionTextField().getText() + p.getName());
+		BUI.propertyManager.propositionTextField_KeyEvents();
+		BUI.propertyManager.setVisible(true);
+		BUI.propertyManager.requestFocus();
+		BUI.propertyManager.getPropertyManagerTabbedPane().setSelectedIndex(1);
+		*/
+	}
+}
+/**
+ * 
+ * @return javax.swing.tree.DefaultMutableTreeNode
+ * @param root javax.swing.tree.DefaultMutableTreeNode
+ * @param object java.lang.Object
+ */
+private DefaultMutableTreeNode buildTree(DefaultMutableTreeNode root, Object object) {
+	if (object instanceof Hashtable) {
+		Hashtable table = (Hashtable) object;
+		TreeSet ts = new TreeSet();
+		for (Enumeration e = table.keys(); e.hasMoreElements();) {
+			ts.add(e.nextElement());
+		}
+		
+		for (Iterator i = ts.iterator(); i.hasNext();) {
+			Object key = i.next();
+			Object value = table.get(key);
+			root.add(buildTree(new DefaultMutableTreeNode(key.toString()), value));
+		}
+	} else if (object instanceof PredicateSet) {
+		PredicateSet set = (PredicateSet) object;
+		Hashtable table = set.getPredicateTable();
+		TreeSet ts = new TreeSet();
+		for (Enumeration e = table.keys(); e.hasMoreElements();) {
+			ts.add(e.nextElement());
+		}
+		for (Iterator i = ts.iterator(); i.hasNext();) {
+			root.add(new DefaultMutableTreeNode(table.get(i.next())));
+		}
+	}
+	return root;
+}
+/**
+ * connEtoC1:  (PredicateTree.treeSelection. --> PredicateBrowser.predicateTree_TreeSelectionEvents()V)
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private void connEtoC1() {
+	try {
+		// user code begin {1}
+		// user code end
+		this.predicateTree_TreeSelectionEvents();
+		// user code begin {2}
+		// user code end
+	} catch (java.lang.Throwable ivjExc) {
+		// user code begin {3}
+		// user code end
+		handleException(ivjExc);
+	}
+}
+/**
+ * connEtoC2:  (ErrorMessageButton.action. --> PredicateBrowser.errorMessageButton_ActionEvents()V)
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private void connEtoC2() {
+	try {
+		// user code begin {1}
+		// user code end
+		this.errorMessageButton_ActionEvents();
+		// user code begin {2}
+		// user code end
+	} catch (java.lang.Throwable ivjExc) {
+		// user code begin {3}
+		// user code end
+		handleException(ivjExc);
+	}
+}
+/**
+ * connEtoC3:  (GotoButton.action. --> PredicateBrowser.gotoButton_ActionEvents()V)
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private void connEtoC3() {
+	try {
+		// user code begin {1}
+		// user code end
+		this.gotoButton_ActionEvents();
+		// user code begin {2}
+		// user code end
+	} catch (java.lang.Throwable ivjExc) {
+		// user code begin {3}
+		// user code end
+		handleException(ivjExc);
+	}
+}
+/**
+ * connEtoC4:  (AddButton.action. --> PredicateBrowser.addButton_ActionEvents()V)
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private void connEtoC4() {
+	try {
+		// user code begin {1}
+		// user code end
+		this.addButton_ActionEvents();
+		// user code begin {2}
+		// user code end
+	} catch (java.lang.Throwable ivjExc) {
+		// user code begin {3}
+		// user code end
+		handleException(ivjExc);
+	}
+}
+/**
+ * connEtoM1:  (OkButton.action.actionPerformed(java.awt.event.ActionEvent) --> PredicateBrowser.setVisible(Z)V)
+ * @param arg1 java.awt.event.ActionEvent
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private void connEtoM1(java.awt.event.ActionEvent arg1) {
+	try {
+		// user code begin {1}
+		// user code end
+		this.setVisible(false);
+		// user code begin {2}
+		// user code end
+	} catch (java.lang.Throwable ivjExc) {
+		// user code begin {3}
+		// user code end
+		handleException(ivjExc);
+	}
+}
+/**
+ * Comment
+ */
+public void errorMessageButton_ActionEvents() {
+	StringBuffer buffer = new StringBuffer();
+	Predicate p = (Predicate) ((DefaultMutableTreeNode) getPredicateTree().getLastSelectedPathComponent()).getUserObject();
+	for (Enumeration e = p.getExceptions().elements(); e.hasMoreElements();) {
+		Exception ex = (Exception) e.nextElement();
+		buffer.append(ex.getMessage() + "\n");
+	}
+	JOptionPane.showMessageDialog(this, buffer.toString(), "Information", JOptionPane.INFORMATION_MESSAGE);
+}
+/**
+ * Return the AddButton property value.
+ * @return javax.swing.JButton
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private javax.swing.JButton getAddButton() {
+	if (ivjAddButton == null) {
+		try {
+			ivjAddButton = new javax.swing.JButton();
+			ivjAddButton.setName("AddButton");
+			ivjAddButton.setMnemonic('a');
+			ivjAddButton.setText("Add to property");
+			ivjAddButton.setBackground(new java.awt.Color(204,204,255));
+			ivjAddButton.setEnabled(false);
+			// user code begin {1}
+			// user code end
+		} catch (java.lang.Throwable ivjExc) {
+			// user code begin {2}
+			// user code end
+			handleException(ivjExc);
+		}
+	}
+	return ivjAddButton;
+}
+/**
+ * 
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private static void getBuilderData() {
+/*V1.1
+**start of data**
+	D0CB838494G88G88G148429A8GGGGGGGGGGGG8CGGGE2F5E9ECE4E5F2A0E4E1F4E135DD8FD8D45715174A575ADD5A52AC6D723534EB9A33A5ADCDC9BF1B35AD4932DDF657EC69162F21DB331FED5D46B4EC4BE649975B50AE5B3C610F22220202E0C09D15A098C4A220B8B3A8FF861861CFC0A1CA9A7CB34CBCE1F41C194CBC829A54BD775EF76E3CF9738650C63F6F644D7D5DFB6EBD675CF37F3E7308D03AFFF901AE37D490F485027C6F24CE901227842170479B7B902B90A2F402625F81
+	2092A15D128F4FDA12B79521AB96367696C25A8469A2B1C2D78E3FF7890E7A94877C8853CE9C647D5D692F2F1D3F1D1F14E3BB1BE8FA46DF844F6DC06D00B9009285527EE77C95B23E8C525B655F04F43902B02EA3E5FEF026C201EF104BB5C21E99C848A5E53E662F1273D7GC64AA441B3CD474AE640F3B3156E7D21D639DCD2E13C605839B5F29BE9CBD1BF12A517713A6427306EDBCB09A17204123D8D44E64357A7CF0B0E69066B7E69863B535FB0E1F3BBC41F2DE1E25AE9B08C7BC40753EE1344CE1FE746
+	AF7A84E1AD157365B305348E109352D3F984F336935B6861F7AB50F09E4A7A5220C916654AFFFFDB50BFDD9AD65604BCA6E3DADEC0D653F1E36E12FCD27F335476042F985296A0A6CB250432246423ACDFB21032B910AEAD08505597A06EB0925C8C69F1A029GE57C65991451B5759DE17D0EBD11BB424898D540E4DBD9901051D2EF4C5DC37D43360774F1966415EE0C5055828DG39002200AA29DFD6D59C01E74704546539F143636E70FABBDD8E5F2047A13A603741GB9B2F6CE34FBFC60274C77FEF726DE
+	C39E24959B037D0E90536D02003E921B7B38B07B5A2148828D5D4CBD3FDF3ACA2EA3F5E3C03722CD44EEBF23FD1B89B8615B8A44705FD0FCF8D3GE7FD6521B8C9FBA1AFFD935AB92696E5A9FAE80590571B9F39C9C316612F6AA3DB8B198C430581D9180D0D154446F3004782A5822D864AGAA5C0CB63EDA5134100D2DEEC97439ED2E1169892F4DA7F5CEBBDD6077322D1F734FE7EBADE2FCAF5EB39F33CBFC13320F323FD028E997EFDCE9E475E6E68F536600DDD85BFAA9DC5B631BC3FDE3BB6F4392BAA63C
+	1BD99F66F13C1262CB94B86B5BC76858A269E8485BG444A2F2165473628FD64D7941F5D227611EBC67411D8484B81E27D7BDC9519832FEC0D504D8145GA5G2582E5G65EC45BEFE226258A247513022FF996F35BD3B61A94ECABE1B556D17ECEE3BF85E66F35AA6DC22DF104B7877903BCE84714D5271ED07B6FAC5B74C12125363065AEDB7C4F0A6BFAB93312704147109B4F754F9C30486EEF8852C7713FBF64153E573CB6FF89DB03586CA307C4F6EA1BE71016DBC548895406F01A2E22FED6DE41E2B025F
+	2DC5E82B0D7B88968D6978A234CB516BBB61598F4EAD3A8C863353CE443079EE220FBE5F8E0B211084656B3701FD01320186367379FA8CFDB17B054705551FAF5074C5C2F15B6539F03B5A97DF26ED2C85BC8728EAC7044E84B43E8357516976B1398EA28756C7E4415F595B34FD16D03DAC6F7CE371533C0DBCD51EF26C052B23C0764DF0794C7E52FE6243F320D7AC502A9D58873D2F6B19EFF65A7CA2FA63108F9CC9F484FA0415B5D71235C67CC0F4CBE651AB426A6B167C32AF74D7EE8E7869D58F77213394
+	A773D697B8121F6397AACB988EF5A83D9E73AF53FC1BA4791C935312B8A2CA1253BD99601F2432780326C43F2C6B87FA22EB9A681881144DF54D2A5C257037810F677A34F7140CA459EFCF52753928B8C2D7DD0C7DDFEEA47BAA8BCF9F2069C07EE3866C3B0F02C8BB217E717D0F340DBCD51A3571F3A39987B8FF964878E61E1FC9739DA0DF9450CA2035C079A5E8872FF1AC8C7FC7A1B3EB6313348DF57D73797E3D907311672B427B782F2B34FDBC2BCA5B47FFD7B53F8F7F31CA4B07D9DE41DE2223E7462D98
+	93DB761279526EF13BC5BAB0B90B407649AF0D92BD1CEE27F441691894259167ADD190C6CB08EFD753B9399EFE3717607CB9F38867CF47794704460B3FDD2A355F0AFEF9EFE4EC89734B0412407C49E45A3A0F0CB551A55EGC3F5F9265D9243CB68FCAF637EBC0A0DED3243D3DFBBF43DF3DA12BC6EFA9BD52301BD06C55FD50F6F0668283DE67B4056E01B119AE8B7B4F4506CEE723BCEFF7468E93DFA2FDF6F972573CE3F93C6F26D1F6A4E57B58A2C3D07CB7EC45B6365C7FD22D8AF41FFC6C0B05636F605DE
+	A54765D1A5871543DF8B4D3CA5486D68FB4E53F63AFDBE0FEFD0747BED13E230065A2D08A165AFF7285AB80EED7CDDD38FED2357A3F996D377A4AF97D2E7935679693BE6DAE707433118AAEDD8AC2446E6B66FBEF60078C2AA7848BA206C921CF7BF350F64633CABAFAEDD9E17ECD1489B5EC9FC342623D461F745BB5939F5BB4FBF97149FAB672F07A74BFFD6B3BF1B670FF6EA65976D427C1FE8666BF7219E3776971371AA3EBFAD42B60CAC9C7D62CD5CCB6D5F294ABBEFF3CD8776E81F5CCF66A917E24DE178
+	1CDEFB7CFCCCCF56196B3C7E0F6BB78AE42F456AE463BD51C64FADBE678DD82249A2AA1F5F5F16146777E6101F1C7547606982E23C5139C497F59FD714927E83A6BC5BC7C279B82024DDECCD4C59A51F6FE93997F8B98724670062CAD9DB2BCA15651637E13966B2588F81394AD839A5E54AF26F1E46F209002F864A104B6584155BF9864BD56F067D9A5078EED64E3B1B150B5DCD4A995B713CFD0CE367A876BF30F8BC130FE71A41E2659D457893251A67CEC2EB657A33F62B4FFABFBFC86AADAE87FFA9C7FF91
+	8EA8779B9DFE3F476E24DBED396F3FF9C0B9C7B2EC6501AD703C6A7479615C6790E751FF3EFB0048CA7662B2AC7B40F02F5679315B6114BCBE5C4EF54D50215A45970E73CEF1C6567D8B4715F79EF326D717EE8D23FBF3B953F934BC20FBC633B117497175B75B96AB4728278B0EA596988AAA09704E66139D58EFB165F8F732259331D40E7DA54772AB90AB6AC24CD4013E7E7B5749F82077C7E4E919ED704F40BAECB0747510739063DBC577FEE4CFA1D5609D4C4199B2B693A01DC26A87E26741BE931EABB7G
+	D63F87670F033B1573078370A820C4A0B65FBEE10269DC3877C58F7BFAAB2DB7F831C39F7E656EF6395D84F322107639831A77C245CF6BA3D376307E4B5C2338977A5D555CF1A0265F7636A2593F1ADF07317ABA6A373CCF295F8A40D783E53E0E7ACD3791BCF8FDC5599FED2D26F355426BAA53C798D66AB336E50B26BE29563CC8211269D1DB9950A76B45645C35DF417B38E738BE9214C928C4FDCA0C6A7EDA8FF905D528CF6369CD017E127578227BA099338B2E5CF8F770315358F69554BBDA05ED1735E935
+	9D455B7EAF0D363FB972BABC432F6C5826718C36399C6ADB435BCCB6E835D93C975B7C4A1950B6DD6F1179AD6C52AF703B3B63C1F3684F0E071DC32B7732FEEA5D2B1EC3F73EC14660A860D3FBF18EEDB9C87650B8071E83DF3139A7E175647B7503C4F6D8A765740B87C93BF41D94706CBBD4C3741E03BAE3019201D683E570B65C07963C036B1E1D678E6E539D77F217D6388F4FCCBBBA6F052F0A73C55F93DFA367AB693A97BEB367FB0A5E570D6D533E47F02970A57B701E6D73F47E0C59273E2FDBCE71957B
+	5477F535B3B82F2E043C0A7D587E30E9A1396776EB1D1BAFAD4837DC4547FCFE4788719B0D75020D81815F137CF4C6394FDA351F6D115642B3EBBF2EC76F6EAE1447C8219E6F429EBDCC76AF6D109E8712002201D6822581ED5023DFA69DB2AE6817ECC1E52332CBFDB2146DD05A2636C36901E03D356DF7B0042FC16DDB87346C17B8DA2EEDBFB2614B36FB5A22341D856A1100E201928E206DFE5AD7A85719F2GEDD7D5C7EC1783690A03913AC62081A0AFD094D062C1345D36EA2D7D08166DC2B7A3013BA8E6
+	079F5D277DFE36207D528E8673B15B7C4B07EA3FA236490032B98751B696A3318D592B159E42F1326C747D49797990BE351C83070279188C83EDA803034B5091726EE7F1B28C057029E508531461D5834A3072907A48789102E5C2BA67907A4335EA72AE8F5711E10F53AD893806143FC14ED69E1FF35269C62C0AE2F60F0FDE4048F716B5616F06AE55E85F8DB9EA346F062E554CFF7F692B89F7F7446EAA9F25FB64226A88DDAD9043EABA91B3F16C2B9C9B66D8ED97E28E0E25537D6FAC2463B87666B44192A1
+	3D1AE3DF7B005A9652429B5867F1B3642CDA4453FFCB53E46F4B528DB39F657DA592E9AF60BF3D8F248D3CAB5DCBFF3FA815899A77EFEF43A1C240BB15CF18B64BE53AA54F60DB824E092F5405B9038C5B40A319AF6F18453522798DBC03DCAFA3EB228B5211C0F15C4617F62B474BCA48DB8D3496A86B0D5035DABEF39E8E6F43CF9E5676612443E46C78BD53BE3B287653FFBCDC417382B328D592EF903330B22914DF3279A64590BFFF1672333CF07CEB8F079B8B2CDF1E593D030EA53FDF7453C95DEC13ECF2
+	FF7437A97A23AB509F135DFB357BE3446E7338DC24D7841C0F27FA1573F1FE8DBB575543333D8667635FD9F02D9A2B413E7B0D1574DDB424630112EB306F5676055B172C01B219B5617A2E26AEFC5F9D2D536E3B263A70FDE728DB386F3A6A4277DDDF5D42FDB7D2972E6FD87FECBC2D6C9FF2BEE676FC6DC39C8B42E134E751EEE24FD6C88F936CB05AF35028366792480B810A87CA82CABB9CECD356765F87355D44671233A16B76FA604F86AA2A0D5069011AEB356A1BBD232C2F195717E3D057E7817EF1A0AF
+	D0A4D02C2ABEE6BB5B9132BF1E65E91126EFF29F96BB36F37BF73B9D7222466E3912687A70A3F90CB02C0D2E85CD40EC4FC36CE90AFDAFCF091D216B43C8AE4318EE3F21F31FC33CEA1BF641D266710BC3DE7935B231CFAD615BB80DE3A021966FDE1E18A1EB73D51F6D86F47B08D7348BC9F524EC67B40E29DAC81B0046016600626A70BC7A8F9F50B33BD322673D7CA3A46E69EE23406D5DEFA3F6D15FE102A7CAF4D10591AC6FFFE7157637C0BD63C7183D3D700CBC92BA5E58B96597F46E0DBD424EA9859C7F
+	B5459394B8BB3F3CDF06676EE4482BFE93574CE9FA86D88669B80EBDCD31C4C8A7F36CD0B941D2A13D1EE3FBFBF18D4EFE93ED7A45062AB0F3175765240A33B1343C976F422A6BF18CED32909947A1AD81C55563987ADF0B52C6AB6A03ED322ABE1C0DAE7751BB7FFA75994FC97135756AB35E4BD6BC63E5C25E70D15473953A57DF8969D40E258D216E6B0E221C79F3CAB9739B609C5040E42B07E7FBC3B8B913695CB15A4064A967F8BA452394B813F3A745C9BA8572169CC3199CF45FEDEA84599B917B86459C
+	1016B83653C430A5100E6558DC876A1340B1A75D3F66C03A78AD44265A50DF2AB9F63C8B7D2515E3FF55057EE266181737B14631EF73B662B9360B4A1C8469B40E0DD3ECBD24B7F06C9FA8A69C87BB9FC74C405B2867D887EDE38E525147F17C6E1DA6FD25F051068BCE3743B383A314C432C87E8633F5E4F8E8247B72505B173B8660873BCB7ACFC1F917A4443D9976AEE945F1565F2B64E776ABE717B25F1F22F3916149023C5AA602ED18D65EFF91997FA6171DB3D8FE4D874AFC32EE55894A7C3120FCA26B21
+	FCE57EDF846597A87819DEEF3E07F76D23A73EAB545AF5E1638B3DCDCC1F987939622533CB9357DAF3D9BD47DA1576D979FF2FAE550529A7D566DF539438EB137776F42FD9548C6BD9B37621DDA0189952E39C7B258EFDEC0EE3274A307F231BF1DC3EC0311510DE4D31AC0A1177C7647CAA4725167D397BF4D23F9ADB592CBC8BC47F59ED94E8E0F90A67AEA10A4E5FB75C628D0F5BE9E76B5FA3947B857139E69C83BF59CD4EC292EC4C587AF504ECF164BAFE2FA36FFAA6EC766B13BE4F345B016B68GDD8704
+	9658EFG8D34902C39D7BF0F3C2DADCA7D9F6D1D6F5EAB26A55C9C79A1DD9B62DB546B5D47A91E5422DE6F36D9F03DCB033C6693FC6E3322EF45F26C1295FDA67E847A0258C7EC134E539E1AA66F91D97AD56B03B853ED8FEA33386FC13511477BF9CB3FF6BF9F6CA7B64982D9F200583E6845A13EAFBA897BA220F120B9203813E84B4AB934EF9247BEF79B476EBA0E6D380BE3B73F9531D5BB319FAADA51867FCC4F12E6C80F834D82C583A5G2D864AG4ABF85F3A8D0BB5015D348779F14EF965231C02B0056
+	GE583D598E01D829AB3307738641DAFF9CF4B78AAF6A7EA58ABC1EEDB598EE9FB3BAC5B7D7441384C37DA56E92172C44FF0F972BD03266CDB65FC723E176C13493EE107428F7E1CB9082C910B0923AAD94097F7899F9AC3672C07A8768320B9834ED9A94660B92B1C9C0D64BA6ACC5A3E5CC177BBD1D0C7ACD011116ECFBA4CF27BA9866D186F2D0AF132864AE4821549E94148669B9DEFBB55C0ECAC3AC97804C3EE77A1832E7323D01EE11FED43334F94E0CC07D2F29C13F912683EE99672A20DA86BA7382C09
+	46D0D9B14632C016A5854A2CB1B2D989162910153571BC17AB5B08F6BD22E17F8E0A7DA3D011894B79D5767FFDF3407EEB0C5A764F2275D4C19D35A65469AC57E954942A13CE2553941419B385F40AB6296DBF26E1FF8F57B34E04772FFF5BC26798C8271A707EB52571CDF81E37DD8B0D8CGF05867015324F41321B4F2C69EEFBF183E3FB875CD2338570A7966234258C0F6583806CC59B6C5ED72F7AE6B4EAEA5CF26CB71C9FAEF87F9E3C0F3C0B1C071C049ED285B5637080C640D82085FA1C9B67B940D6840
+	978DA438A1G13C3B02B1B0652E31C6CDBEF04338F545087FB682109EB22DD9A35CD727E683EC36E28A7BCBEFAA9B3F01A6E616F607A118E72E5826981EFBE4D6E2C985FAD017039ECB7BD539272FDD6C03E98C8A7G2583E548FC2C2FCBF2693E648C7897D06B99028D17D5E858B4F85EA96FA6FC987547306337088D54E7F7FE00653C5F5DCD1E07BD0765737F3F1D8A0C051D3D7B616996E774BCF8224B637278EA0FB7B657D3EAE929134B1E6DA5BEBD829ACFF19FE918C59F496CCD90D2253A4812B0BE3264
+	0C9C7FF8A6300FA6CF3626A671B37A3AB33846C5507B4022F6B8A335A396C5B192B3C15E3BB3EC17056CBFC8197BD9A3364BED4C3FE65553B63476340B2579563039F69AF3E025F15270FBBDCDCFDB75F2FE3206FC69B2467AE6555DEDCADF20EF89713E672B46C0FF7F5350C27D5D58DCA75F9FEE9B463B287A8EBC7F3DF6CBFD7E3B90F47EFB6BC375790F78C2A05F7E217A7C37B7687C77398F5567BF64E7E34CBC07E345514146669CBC23BB18BF30B2CF5F46B27100A783E5G6548E558B8EC257B3A52CE98
+	5B1DE86F9F6DC4FB8FF4065A7BCA27525EDFAEA43213BB5A815B046862F825E91B0C0F425A536394DD8E1E77158942B3FA532B6279C67FB6998F65696BA6FBA0FA5A77591CEE09F1323C3F2A5A95149760E679AB4DA4BE51AC7A6DBE27175CB2D2E616E776168567855D5933B2D3B40EAE90AD0B78B3DE9227999A290B7919CE22A70F0895B076342CDC5937D2A76B0F58CE0C2D09B3A97393647CF41E5F542B451F41739F6E52624F61797B3A34780B3BB07F71D3DA7C55BC7F3D96AD7ED648E76FB836B52A5F47
+	D31F047CABDD38EEBCE624F33108F371F2D3E0EC3E5F311839180D4D148E9C1B33D077FE016D1B695AC27FE51D8945F0BE18A52F7565793B4A2F1C3F9DCF6D0ABCA4E84F5F09DD723CED8E4C5F7A373F1FAB6BE5A032DC35397C817FE968223ACE222E2BCE87F4956FC157D5DC57D6733D6A9AFDA650669FB4E49CE37DE1C399FF589EA8FF6C9EE47C981751FB4FB2BE5A91E87363C1B232FD4D57DB083D797B9F363513733EC5FD12FC2F6034391C37684B0491A8681EE47B23E99A0F9D8FB225GE5G65G95F7
+	633E6B4489920BC73E1E8B5DF3F5BBA6C53CE74476761C8C7F7ECCFFF2616F6C6ACE523D3787A6069B24FE440F1D24F1239EAF859956FC1278284FB9B9A53122784E6DA43121CB3CCAE1F60FE2380BF76275201B239B6F798B74E4CF283E67EFE09BBE0321DB32CF090ECEF97B07FDF9176F473B714EBF11561F8E69CC207C9E7C7E63D69E0E1F1C3AA785572F2AB46FA32B3E38B5322A070D1B761E4078992F47784A6F88783D739C642F6CC179FF55D029141FB8214140649DE01BCFA633CE07B2E776204C47F4
+	244E6A5E881D89E834974FF13566003FB514AD4647192E7FF6C2B9D79079435D3D3AFA190E513D41FBBD6613E35DFAF826C1DEA6D031857696C0A620D120A920A596744F1D06DAA17C190799C231BA52FB3EE7673D670B33A85771B7BB4818647BA645AA48728F16ECD76653C88364BDEBA532B199FAECF6106BE6837D92D49C704C106FB3BAE11C38D8FEED9D336132A6653D737A3A7C483CB0B6CC1465CC36286F653FE44539A64B426FC8695E110C89564E6DA2E5DF2DCA5A93F6DFDEEB15E3522D41FD45763D
+	293714E747A8A8335CBA7FBE1B7933EB0E47A1C279CCAB3E63DFB907FEDA5D07FE7ACBDAF69C5292D0D49F46087F6AB60E0995002D6D43B171561520F7F7ECCC747A1C0ECE5BA49B942C2D06BB58D6E9BF36B5FE0754B9GE98750DCBF0E09AB3D01B1710D1D0B1F77DF5D09FD91530FFD715BB21226731640E3D72E0609DD21FBB2B9962C9C6367D37BD157B7EA433C27641BBD467B2C89F97387505657FA91B3F1ECCD970F516758BB9CCB60588B2790DB4F3107DA902B9AC42C3B915F0F0E8E220DD31B687BC0
+	C82FGCA9A44F35AB3C1B13E6900E78C4E6FCBEC3EF85BC2A62C9CA8DB71B64C93C023C0D3C0CB00E200620112005201B201042188DDA9D0ADD0AB50G5015A11CD31EEA2B1BE7CE119DA9B029703170D4107C925437ECE8FE79995FA702786200A7F181BEA6676D4E70EBEDE46742EB6D27E8DC0288EBA4B9DBB06C21CE9A27F7752ADF64EB7ADFF796F34C6A9F76781DE49741E4EF3F3B505DD10ACA9746777602FC7B34ED35A01F1A587B15EA3AFE2E9B8A5C37B17CA845B395B81BDB1E3C0BF3CBB6640D8F63
+	3D5B2F2DE41CA6C3FAAD5086202233913AFAA04BD9741F7AAE92C0B1EFDC6C2847BBC0A6FFC5D8A2536F6F057B7BDB93BF3CCF3E0D3A7B3367A3F46FB0FED6ED4F840ACF1DD55B33C5077614A0EF4DD93427391F4EFB67A2F4E3C0F3C0B1C071C04967501E9EB3399C8FB79E4FF9BC74BA0B442440F0D4AE77327F5A3B430F13EB5D0B785B8F5D5AFB521B5D21FB52BB5D5AFB5248EE651ED47EDED12E5747839C997E19EE32EFE2F70703B6B71C1F495E132D9DD93DE4FCF609646F15607CB7B9C05F71F1FB69FB
+	8E4EE3AF920B4DCEG6883DF31AAFDA0836A49B93718F977B303FAF8960F007F838D83CD814D8145G4583A50F20CCE24FFCF7537CCED251F76C5E6F79DB44EEEB219EF28F44308C0AEDG0C5CADB19DFCF377B78FADD910CFFB9E7A4E02FC5A6366BC5D33940F2A474DE50AD70D2A47CD469C0E1BDA480B9A4535B273767D0D77BF5CA7DF531D7B53B70D6E2732C274FD0E62B9A17ACE5CC1FD8B5F0950395EC1FD3FDF26ECBF8D70756FACE6EDBDDB2EA5F7364CDBF4BEC227BF2F6597EB023EEBE9D61531C0FA
+	DC134F23999760154BC642B3D6136FE7C15F8DA5284AA4C3BADD136FCF1A5F9BE548E5F360D9FCC10B6F572714FC552AB22D109E50647B6B962D762E48E5A5F8AE53646BEB1C4FFF62AE0476A5731376E6628F09975431EFFD94CF3E200EFD7BF1931EAB52A02FF98C5F492F6B40F90414E7588B9DB80F900C4DD3931670EB05533270DA6133E82F95331650356236C5FB2DD8EA89DDAB16D948FEFF92761EE33C5C27B876AE479E22F5926C0253C15F43B0BC164AC5F00B488E9E8C7FB215EB06E2E3B2760882FB
+	D74662ADE45D811527BC7CDB0DEF503F3BF75569F249FF030916F13AE11B486D71A415516935A9647E9E475E65FD112E51BF4F85758F433E2CD16E1120F2ACDEBDF957B6AA0B4BC996957A971A38AF123F384667B5456F243B8FAACEA5B08EFE72C05BE076FD459A5E077FE0550EE1977A343F215958B77F5FD7595E977E6F2B1475A97F3E0A7C37FCF481FBFFCB715B28FB70369FFD20EDB01D877B435BFE34FF617963E23F767CE16F8F1DBF267A35678FF7FF687CF1FD000CCD3F3C6FE36366BBD69CCB85FCEF
+	753495475245DC2C6F8B0361F5FAF8F0E11D3EB6282DD362E028CE5F9E545669FB0321BAA553FAFD62A41CC6157B67FF9E545ABF337B92DB8DD99F647BF0BAC5B23CEAF6DBG47A9D2761B715B81BF95953FDF1AFB70BE3B697603EF635F6F84F47A056277541D875FF64483EDC3DEC74A504FEDF9087D3CCC6967F2CCF8B946FF4772FD43B36598F73002E31307A8AF240B5EC56CFFCCBC5617E346B664ED6458CFFBE84CBA24E3B87671DEECB71EE3AF72F807159CEB6942F6737F045806AEEC3702E36DE6642D
+	65583FF4E23B339CFB1F473BC7F16C47DD489B4B314ED358EE8647F486ECB707E3038664ADFA8F317C96ECF71CE30F37E03BDE0E6DB8013CF39CFB7898361B4AB1DBA30F83F98F4F86BD4DE49F52B84E3FE52769E11EDE53B4A667BFB8BFFE39897FEE5A03E8035DC1E73ECD46A60BBBDBD70EF1E7DE8D3D14B1E5B46ECF91CBC75211636A3833BB07685F447140EC9A947376F96A6B51D0BE8E084521D434917BA60DE38C5C39B614A5CBC396FCFF31D97E1DFFB1B82E2F6222DA1617FA583D24D3A24B88132320
+	173F973808F772A9C381FB7C3197E5E83D28ED0FBCA13CBD86AE2AE38BAFF5215EE397D16F3DE622776CC5547B02995BCC50E8935BC23D13D5FA270734195509BA2E63BABEFCB62063FFF5E1FB9B4268D8A004573170123A3D6B27D04752CB28639183513179926A68B0E01BD31734F5ACD068B8F7A9D8476810B60F3670F72717D0471B6782BA561C60B1229A6D91BEB25EB026D52DE3CAC8FB7FFA8CF5CC63BA4DB6F2FF8D5306B2EEB67FB24C2D1783ED54DFD67B6BFF5EA06F889531B2645DCB07CF3449F1AD
+	914D4A3810564BACE67B4AE5FCC7D2D2016F08244BE81333A344A66CF7927913B4F2DB9F23B1B0416F1D9AA6DCB67BF579FDED5B3D3CF3E46DAFED437693AEEB47A6B0B9E2AA83F2D475AA6390D8BD477877396B399E2E2AG4FA73A66173D49FC6F32AFB3E31BD5D76613FDF8EFC00ECDDD21323F4E6B993D425F036F8B70441C1ADF76F6433D4B7EB9833699B52F6C427E009C6616D059AF1C40FAD2386CEB94BC2F9C8BA7BB63FF2C9179F3424891DE365F6A8581671D9F5E8E0AC588FE97C947039C2F53DCA8
+	0F31E69B2E513BAB1477C3AE40175896F33F37AC68BB62986009DF94DFF3503718C9401336A83ECF1915FC6B01A7FBD1FC7B03780AA6E01FB831983EAF84FD575C8CBC16C5710D1FD0720D830FF7D1FC0F875D53C582CF6C22781EEA8E3A3FD470A4436FF4208CD5BDECBFF734A274BE67F8C5683D4F5F340516DB5196DA2E5F92DAEE5892DAEE05B9345CE36650F2A7B44A99B54ABDE188AD7724A1341C7FC4E839599321657E29B1345C3FB60616CBEF667B70895CA36B699ACB3EC9AA32A376A5A36E1B759CFB
+	5A04FBF3339D577F7F23FB67B1BB4641DAE9DDD1100E356377D3AB0D98471882589A20EC208AC7042E5501FCAF1AF01D9FF3E05C432E16FB19A3597C725281E0116731070C0B0FCD7E8FA3366FF2E0ECF221C99D1B7C32200CADB618660FCDF6195431499DBAE57E17CD61E213197CFFB4A967EE793C9D72F79596A2767FB3F92E6785B837A67C37D0A089A5BC7CC8AF4778CBC26E50F5C9A89B19724C68E9A02EDE0E442D7557C9428E92332BB70BD769FD07478DC8074321874CABFFA46277895B030D2CFB34FC
+	E971E71A26F3050DBD42C6D042BBE5338A85742F408D8839F63FA4D48E9016E340F24CCED80ED146912F4DAE9A5F93B6DF75CDCE5062A05DFBBD6FC1A5B4753EF0C758B4A0EC112668ABDCD8AAA421BCD053B0F999A8E798E7499F4E97DECBCDFD4D8B7F7C0435C0C6D2C390D646A76C600AD86955743A8F1A8CF94FBF1217AB64DB050D6CDA4AAA64133BA5D008DEBDD905BC4963252D11E311A0BFF7E854CF10A2B9FF4BBD149366A99704C8C281395CB2401304E940F3EB60ADA9240A949BCF83EFC6D00A2E28
+	94A8C89CC1A15216F938BF5A3281A329510250CE95B096B929DB999BD735E1EB58EF564DD3EC2D991BD27F7D439F507B4D98409327705DF4257528907E3B20119BB617CB32392EF7389D649B214E1B1298387FCE33127A7DD8C64EE4F9BF25F76D5794BC7F8FD0CB87885E3CE4C854A1GG68E8GGD0CB818294G94G88G88G148429A85E3CE4C854A1GG68E8GG8CGGGGGGGGGGGGGGGGGE2F5E9ECE4E5F2A0E4E1F4E1D0CB8586GGGG81G81GBAGGG8EA2GGGG
+**end of data**/
+}
+/**
+ * Return the ConstraintLabel property value.
+ * @return javax.swing.JLabel
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private javax.swing.JLabel getConstraintLabel() {
+	if (ivjConstraintLabel == null) {
+		try {
+			ivjConstraintLabel = new javax.swing.JLabel();
+			ivjConstraintLabel.setName("ConstraintLabel");
+			ivjConstraintLabel.setText("Constraint:");
+			ivjConstraintLabel.setForeground(java.awt.Color.black);
+			// user code begin {1}
+			// user code end
+		} catch (java.lang.Throwable ivjExc) {
+			// user code begin {2}
+			// user code end
+			handleException(ivjExc);
+		}
+	}
+	return ivjConstraintLabel;
+}
+/**
+ * Return the ConstraintTextField property value.
+ * @return javax.swing.JTextField
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private javax.swing.JTextField getConstraintTextField() {
+	if (ivjConstraintTextField == null) {
+		try {
+			ivjConstraintTextField = new javax.swing.JTextField();
+			ivjConstraintTextField.setName("ConstraintTextField");
+			ivjConstraintTextField.setBorder(BorderFactory.createLoweredBevelBorder());
+			ivjConstraintTextField.setEditable(false);
+			// user code begin {1}
+			// user code end
+		} catch (java.lang.Throwable ivjExc) {
+			// user code begin {2}
+			// user code end
+			handleException(ivjExc);
+		}
+	}
+	return ivjConstraintTextField;
+}
+/**
+ * Return the DescriptionLabel property value.
+ * @return javax.swing.JLabel
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private javax.swing.JLabel getDescriptionLabel() {
+	if (ivjDescriptionLabel == null) {
+		try {
+			ivjDescriptionLabel = new javax.swing.JLabel();
+			ivjDescriptionLabel.setName("DescriptionLabel");
+			ivjDescriptionLabel.setText("Description:");
+			ivjDescriptionLabel.setForeground(java.awt.Color.black);
+			// user code begin {1}
+			// user code end
+		} catch (java.lang.Throwable ivjExc) {
+			// user code begin {2}
+			// user code end
+			handleException(ivjExc);
+		}
+	}
+	return ivjDescriptionLabel;
+}
+/**
+ * Return the DescriptionScrollPane property value.
+ * @return javax.swing.JScrollPane
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private javax.swing.JScrollPane getDescriptionScrollPane() {
+	if (ivjDescriptionScrollPane == null) {
+		try {
+			ivjDescriptionScrollPane = new javax.swing.JScrollPane();
+			ivjDescriptionScrollPane.setName("DescriptionScrollPane");
+			getDescriptionScrollPane().setViewportView(getDescriptionTextArea());
+			// user code begin {1}
+			// user code end
+		} catch (java.lang.Throwable ivjExc) {
+			// user code begin {2}
+			// user code end
+			handleException(ivjExc);
+		}
+	}
+	return ivjDescriptionScrollPane;
+}
+/**
+ * Return the DescriptionTextArea property value.
+ * @return javax.swing.JTextArea
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private javax.swing.JTextArea getDescriptionTextArea() {
+	if (ivjDescriptionTextArea == null) {
+		try {
+			ivjDescriptionTextArea = new javax.swing.JTextArea();
+			ivjDescriptionTextArea.setName("DescriptionTextArea");
+			ivjDescriptionTextArea.setBorder(BorderFactory.createLoweredBevelBorder());
+			ivjDescriptionTextArea.setBackground(new java.awt.Color(204,204,204));
+			ivjDescriptionTextArea.setBounds(0, 0, 160, 120);
+			ivjDescriptionTextArea.setEditable(false);
+			// user code begin {1}
+			// user code end
+		} catch (java.lang.Throwable ivjExc) {
+			// user code begin {2}
+			// user code end
+			handleException(ivjExc);
+		}
+	}
+	return ivjDescriptionTextArea;
+}
+/**
+ * Return the ErrorMessageButton property value.
+ * @return javax.swing.JButton
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private javax.swing.JButton getErrorMessageButton() {
+	if (ivjErrorMessageButton == null) {
+		try {
+			ivjErrorMessageButton = new javax.swing.JButton();
+			ivjErrorMessageButton.setName("ErrorMessageButton");
+			ivjErrorMessageButton.setMnemonic('e');
+			ivjErrorMessageButton.setText("Show Error Message(s)");
+			ivjErrorMessageButton.setBackground(new java.awt.Color(204,204,255));
+			ivjErrorMessageButton.setEnabled(false);
+			// user code begin {1}
+			// user code end
+		} catch (java.lang.Throwable ivjExc) {
+			// user code begin {2}
+			// user code end
+			handleException(ivjExc);
+		}
+	}
+	return ivjErrorMessageButton;
+}
+/**
+ * Return the GotoButton property value.
+ * @return javax.swing.JButton
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private javax.swing.JButton getGotoButton() {
+	if (ivjGotoButton == null) {
+		try {
+			ivjGotoButton = new javax.swing.JButton();
+			ivjGotoButton.setName("GotoButton");
+			ivjGotoButton.setMnemonic('g');
+			ivjGotoButton.setText("Goto Definition");
+			ivjGotoButton.setBackground(new java.awt.Color(204,204,255));
+			ivjGotoButton.setEnabled(false);
+			// user code begin {1}
+			// user code end
+		} catch (java.lang.Throwable ivjExc) {
+			// user code begin {2}
+			// user code end
+			handleException(ivjExc);
+		}
+	}
+	return ivjGotoButton;
+}
+/**
+ * Return the NameLabel property value.
+ * @return javax.swing.JLabel
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private javax.swing.JLabel getNameLabel() {
+	if (ivjNameLabel == null) {
+		try {
+			ivjNameLabel = new javax.swing.JLabel();
+			ivjNameLabel.setName("NameLabel");
+			ivjNameLabel.setText("Name:");
+			ivjNameLabel.setForeground(java.awt.Color.black);
+			// user code begin {1}
+			// user code end
+		} catch (java.lang.Throwable ivjExc) {
+			// user code begin {2}
+			// user code end
+			handleException(ivjExc);
+		}
+	}
+	return ivjNameLabel;
+}
+/**
+ * Return the NameTextField property value.
+ * @return javax.swing.JTextField
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private javax.swing.JTextField getNameTextField() {
+	if (ivjNameTextField == null) {
+		try {
+			ivjNameTextField = new javax.swing.JTextField();
+			ivjNameTextField.setName("NameTextField");
+			ivjNameTextField.setBorder(BorderFactory.createLoweredBevelBorder());
+			ivjNameTextField.setEditable(false);
+			// user code begin {1}
+			// user code end
+		} catch (java.lang.Throwable ivjExc) {
+			// user code begin {2}
+			// user code end
+			handleException(ivjExc);
+		}
+	}
+	return ivjNameTextField;
+}
+/**
+ * Return the OkButton property value.
+ * @return javax.swing.JButton
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private javax.swing.JButton getOkButton() {
+	if (ivjOkButton == null) {
+		try {
+			ivjOkButton = new javax.swing.JButton();
+			ivjOkButton.setName("OkButton");
+			ivjOkButton.setMnemonic('o');
+			ivjOkButton.setText("Ok");
+			ivjOkButton.setBackground(new java.awt.Color(204,204,255));
+			// user code begin {1}
+			// user code end
+		} catch (java.lang.Throwable ivjExc) {
+			// user code begin {2}
+			// user code end
+			handleException(ivjExc);
+		}
+	}
+	return ivjOkButton;
+}
+/**
+ * Return the PredicateBrowserContentPane property value.
+ * @return javax.swing.JPanel
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private javax.swing.JPanel getPredicateBrowserContentPane() {
+	if (ivjPredicateBrowserContentPane == null) {
+		try {
+			ivjPredicateBrowserContentPane = new javax.swing.JPanel();
+			ivjPredicateBrowserContentPane.setName("PredicateBrowserContentPane");
+			ivjPredicateBrowserContentPane.setBorder(new javax.swing.border.EtchedBorder());
+			ivjPredicateBrowserContentPane.setLayout(new java.awt.BorderLayout());
+			ivjPredicateBrowserContentPane.setBackground(new java.awt.Color(204,204,255));
+			getPredicateBrowserContentPane().add(getOkButton(), "South");
+			getPredicateBrowserContentPane().add(getPredicateBrowserSplitPane(), "Center");
+			// user code begin {1}
+			// user code end
+		} catch (java.lang.Throwable ivjExc) {
+			// user code begin {2}
+			// user code end
+			handleException(ivjExc);
+		}
+	}
+	return ivjPredicateBrowserContentPane;
+}
+/**
+ * Return the PredicateBrowserSplitPane property value.
+ * @return javax.swing.JSplitPane
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private javax.swing.JSplitPane getPredicateBrowserSplitPane() {
+	if (ivjPredicateBrowserSplitPane == null) {
+		try {
+			ivjPredicateBrowserSplitPane = new javax.swing.JSplitPane(javax.swing.JSplitPane.HORIZONTAL_SPLIT);
+			ivjPredicateBrowserSplitPane.setName("PredicateBrowserSplitPane");
+			getPredicateBrowserSplitPane().add(getPredicateScrollPane(), "left");
+			getPredicateBrowserSplitPane().add(getPredicatePanel(), "right");
+			// user code begin {1}
+			// user code end
+		} catch (java.lang.Throwable ivjExc) {
+			// user code begin {2}
+			// user code end
+			handleException(ivjExc);
+		}
+	}
+	return ivjPredicateBrowserSplitPane;
+}
+/**
+ * Return the PredicatePanel property value.
+ * @return javax.swing.JPanel
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private javax.swing.JPanel getPredicatePanel() {
+	if (ivjPredicatePanel == null) {
+		try {
+			ivjPredicatePanel = new javax.swing.JPanel();
+			ivjPredicatePanel.setName("PredicatePanel");
+			ivjPredicatePanel.setBorder(new javax.swing.border.EtchedBorder());
+			ivjPredicatePanel.setLayout(new java.awt.GridBagLayout());
+			ivjPredicatePanel.setBackground(new java.awt.Color(204,204,255));
+
+			java.awt.GridBagConstraints constraintsNameLabel = new java.awt.GridBagConstraints();
+			constraintsNameLabel.gridx = 0; constraintsNameLabel.gridy = 0;
+			constraintsNameLabel.fill = java.awt.GridBagConstraints.BOTH;
+			constraintsNameLabel.insets = new java.awt.Insets(10, 10, 0, 0);
+			getPredicatePanel().add(getNameLabel(), constraintsNameLabel);
+
+			java.awt.GridBagConstraints constraintsNameTextField = new java.awt.GridBagConstraints();
+			constraintsNameTextField.gridx = 1; constraintsNameTextField.gridy = 0;
+			constraintsNameTextField.gridwidth = 4;
+			constraintsNameTextField.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			constraintsNameTextField.weightx = 1.0;
+			constraintsNameTextField.insets = new java.awt.Insets(10, 10, 0, 10);
+			getPredicatePanel().add(getNameTextField(), constraintsNameTextField);
+
+			java.awt.GridBagConstraints constraintsTypeLabel = new java.awt.GridBagConstraints();
+			constraintsTypeLabel.gridx = 0; constraintsTypeLabel.gridy = 1;
+			constraintsTypeLabel.fill = java.awt.GridBagConstraints.BOTH;
+			constraintsTypeLabel.insets = new java.awt.Insets(10, 10, 0, 0);
+			getPredicatePanel().add(getTypeLabel(), constraintsTypeLabel);
+
+			java.awt.GridBagConstraints constraintsTypeTextField = new java.awt.GridBagConstraints();
+			constraintsTypeTextField.gridx = 1; constraintsTypeTextField.gridy = 1;
+			constraintsTypeTextField.gridwidth = 4;
+			constraintsTypeTextField.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			constraintsTypeTextField.weightx = 1.0;
+			constraintsTypeTextField.insets = new java.awt.Insets(10, 10, 0, 10);
+			getPredicatePanel().add(getTypeTextField(), constraintsTypeTextField);
+
+			java.awt.GridBagConstraints constraintsConstraintLabel = new java.awt.GridBagConstraints();
+			constraintsConstraintLabel.gridx = 0; constraintsConstraintLabel.gridy = 2;
+			constraintsConstraintLabel.fill = java.awt.GridBagConstraints.BOTH;
+			constraintsConstraintLabel.insets = new java.awt.Insets(10, 10, 0, 0);
+			getPredicatePanel().add(getConstraintLabel(), constraintsConstraintLabel);
+
+			java.awt.GridBagConstraints constraintsConstraintTextField = new java.awt.GridBagConstraints();
+			constraintsConstraintTextField.gridx = 1; constraintsConstraintTextField.gridy = 2;
+			constraintsConstraintTextField.gridwidth = 4;
+			constraintsConstraintTextField.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			constraintsConstraintTextField.weightx = 1.0;
+			constraintsConstraintTextField.insets = new java.awt.Insets(10, 10, 0, 10);
+			getPredicatePanel().add(getConstraintTextField(), constraintsConstraintTextField);
+
+			java.awt.GridBagConstraints constraintsDescriptionLabel = new java.awt.GridBagConstraints();
+			constraintsDescriptionLabel.gridx = 0; constraintsDescriptionLabel.gridy = 3;
+			constraintsDescriptionLabel.gridwidth = 5;
+			constraintsDescriptionLabel.fill = java.awt.GridBagConstraints.BOTH;
+			constraintsDescriptionLabel.insets = new java.awt.Insets(15, 10, 0, 10);
+			getPredicatePanel().add(getDescriptionLabel(), constraintsDescriptionLabel);
+
+			java.awt.GridBagConstraints constraintsDescriptionScrollPane = new java.awt.GridBagConstraints();
+			constraintsDescriptionScrollPane.gridx = 0; constraintsDescriptionScrollPane.gridy = 4;
+			constraintsDescriptionScrollPane.gridwidth = 5;
+			constraintsDescriptionScrollPane.fill = java.awt.GridBagConstraints.BOTH;
+			constraintsDescriptionScrollPane.weightx = 1.0;
+			constraintsDescriptionScrollPane.weighty = 1.0;
+			constraintsDescriptionScrollPane.insets = new java.awt.Insets(5, 10, 0, 10);
+			getPredicatePanel().add(getDescriptionScrollPane(), constraintsDescriptionScrollPane);
+
+			java.awt.GridBagConstraints constraintsGotoButton = new java.awt.GridBagConstraints();
+			constraintsGotoButton.gridx = 2; constraintsGotoButton.gridy = 5;
+			constraintsGotoButton.gridwidth = 2;
+			constraintsGotoButton.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			constraintsGotoButton.weightx = 1.0;
+			constraintsGotoButton.insets = new java.awt.Insets(15, 10, 10, 10);
+			getPredicatePanel().add(getGotoButton(), constraintsGotoButton);
+
+			java.awt.GridBagConstraints constraintsErrorMessageButton = new java.awt.GridBagConstraints();
+			constraintsErrorMessageButton.gridx = 4; constraintsErrorMessageButton.gridy = 5;
+			constraintsErrorMessageButton.fill = java.awt.GridBagConstraints.BOTH;
+			constraintsErrorMessageButton.weightx = 1.0;
+			constraintsErrorMessageButton.insets = new java.awt.Insets(15, 0, 10, 10);
+			getPredicatePanel().add(getErrorMessageButton(), constraintsErrorMessageButton);
+
+			java.awt.GridBagConstraints constraintsAddButton = new java.awt.GridBagConstraints();
+			constraintsAddButton.gridx = 0; constraintsAddButton.gridy = 5;
+			constraintsAddButton.gridwidth = 2;
+			constraintsAddButton.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			constraintsAddButton.weightx = 1.0;
+			constraintsAddButton.insets = new java.awt.Insets(15, 10, 10, 0);
+			getPredicatePanel().add(getAddButton(), constraintsAddButton);
+			// user code begin {1}
+			// user code end
+		} catch (java.lang.Throwable ivjExc) {
+			// user code begin {2}
+			// user code end
+			handleException(ivjExc);
+		}
+	}
+	return ivjPredicatePanel;
+}
+/**
+ * Return the PredicateScrollPane property value.
+ * @return javax.swing.JScrollPane
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private javax.swing.JScrollPane getPredicateScrollPane() {
+	if (ivjPredicateScrollPane == null) {
+		try {
+			ivjPredicateScrollPane = new javax.swing.JScrollPane();
+			ivjPredicateScrollPane.setName("PredicateScrollPane");
+			ivjPredicateScrollPane.setBorder(BorderFactory.createLoweredBevelBorder());
+			getPredicateScrollPane().setViewportView(getPredicateTree());
+			// user code begin {1}
+			// user code end
+		} catch (java.lang.Throwable ivjExc) {
+			// user code begin {2}
+			// user code end
+			handleException(ivjExc);
+		}
+	}
+	return ivjPredicateScrollPane;
+}
+/**
+ * Return the PredicateTree property value.
+ * @return javax.swing.JTree
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private javax.swing.JTree getPredicateTree() {
+	if (ivjPredicateTree == null) {
+		try {
+			ivjPredicateTree = new javax.swing.JTree();
+			ivjPredicateTree.setName("PredicateTree");
+			ivjPredicateTree.setBackground(new java.awt.Color(204,204,204));
+			ivjPredicateTree.setBounds(0, 0, 526, 299);
+			// user code begin {1}
+			ivjPredicateTree.setUI(new javax.swing.plaf.metal.MetalTreeUI() {
+				public javax.swing.plaf.metal.MetalTreeUI setAngledColor() {
+					setHashColor(Color.black);
+					return this;
+				}
+			}.setAngledColor());
+			ivjPredicateTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+			ivjPredicateTree.setCellRenderer(new DefaultTreeCellRenderer() {
+				public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded, boolean leaf, int row, boolean hasFocus) {
+					super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
+					setIcon(null);
+					Object o = ((DefaultMutableTreeNode) value).getUserObject();
+					if (o instanceof PredicateSet) {
+						setText(((PredicateSet) o).getName().toString());
+					} else if (o instanceof Predicate) {
+						Predicate p = (Predicate) o;
+						setText(p.getName().getLastIdentifier());
+						if (!p.isValid())
+							setIcon(IconLibrary.errorIcon);
+					}
+					return this;
+				}
+			});
+			((DefaultTreeCellRenderer) ivjPredicateTree.getCellRenderer()).setBackgroundNonSelectionColor(new Color(204, 204, 204));
+			ivjPredicateTree.putClientProperty("JTree.lineStyle", "Angled");
+			// user code end
+		} catch (java.lang.Throwable ivjExc) {
+			// user code begin {2}
+			// user code end
+			handleException(ivjExc);
+		}
+	}
+	return ivjPredicateTree;
+}
+/**
+ * Return the TypeLabel property value.
+ * @return javax.swing.JLabel
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private javax.swing.JLabel getTypeLabel() {
+	if (ivjTypeLabel == null) {
+		try {
+			ivjTypeLabel = new javax.swing.JLabel();
+			ivjTypeLabel.setName("TypeLabel");
+			ivjTypeLabel.setText("Type:");
+			ivjTypeLabel.setForeground(java.awt.Color.black);
+			// user code begin {1}
+			// user code end
+		} catch (java.lang.Throwable ivjExc) {
+			// user code begin {2}
+			// user code end
+			handleException(ivjExc);
+		}
+	}
+	return ivjTypeLabel;
+}
+/**
+ * Return the TypeTextField property value.
+ * @return javax.swing.JTextField
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private javax.swing.JTextField getTypeTextField() {
+	if (ivjTypeTextField == null) {
+		try {
+			ivjTypeTextField = new javax.swing.JTextField();
+			ivjTypeTextField.setName("TypeTextField");
+			ivjTypeTextField.setBorder(BorderFactory.createLoweredBevelBorder());
+			ivjTypeTextField.setEditable(false);
+			// user code begin {1}
+			// user code end
+		} catch (java.lang.Throwable ivjExc) {
+			// user code begin {2}
+			// user code end
+			handleException(ivjExc);
+		}
+	}
+	return ivjTypeTextField;
+}
+/**
+ * Comment
+ */
+public void gotoButton_ActionEvents() {
+	Predicate p = (Predicate) ((DefaultMutableTreeNode) getPredicateTree().getLastSelectedPathComponent()).getUserObject();
+	if (p instanceof ExpressionPredicate) {
+		BUI.sessionPane.select(CompilationManager.getCompiledClasses().get(p.getType().getName().toString()) , p);
+		BUI.bui.requestFocus();
+	} else {
+		Annotation a = p.getAnnotation();
+		if (a instanceof LabeledStmtAnnotation) {
+			a = CompilationManager.getAnnotationManager().getMethodAnnotationContainingAnnotation(a);
+		}
+		BUI.sessionPane.select(a, p);
+	}
+}
+/**
+ * Called whenever the part throws an exception.
+ * @param exception java.lang.Throwable
+ */
+private void handleException(java.lang.Throwable exception) {
+
+	/* Uncomment the following lines to print uncaught exceptions to stdout */
+	// System.out.println("--------- UNCAUGHT EXCEPTION ---------");
+	// exception.printStackTrace(System.out);
+}
+/**
+ * Initializes connections
+ * @exception java.lang.Exception The exception description.
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private void initConnections() throws java.lang.Exception {
+	// user code begin {1}
+	// user code end
+	getOkButton().addActionListener(ivjEventHandler);
+	getPredicateTree().addTreeSelectionListener(ivjEventHandler);
+	getErrorMessageButton().addActionListener(ivjEventHandler);
+	getGotoButton().addActionListener(ivjEventHandler);
+	getAddButton().addActionListener(ivjEventHandler);
+}
+/**
+ * Initialize the class.
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private void initialize() {
+	try {
+		// user code begin {1}
+		// user code end
+		setName("PredicateBrowser");
+		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+		setSize(529, 335);
+		setTitle("Predicate Browser");
+		setContentPane(getPredicateBrowserContentPane());
+		initConnections();
+	} catch (java.lang.Throwable ivjExc) {
+		handleException(ivjExc);
+	}
+	// user code begin {2}
+	updateTree();
+	// user code end
+}
+/**
+ * main entrypoint - starts the part when it is run as an application
+ * @param args java.lang.String[]
+ */
+public static void main(java.lang.String[] args) {
+	try {
+		PredicateBrowser aPredicateBrowser;
+		aPredicateBrowser = new PredicateBrowser();
+		aPredicateBrowser.addWindowListener(new java.awt.event.WindowAdapter() {
+			public void windowClosing(java.awt.event.WindowEvent e) {
+				System.exit(0);
+			};
+		});
+		aPredicateBrowser.setVisible(true);
+	} catch (Throwable exception) {
+		System.err.println("Exception occurred in main() of javax.swing.JFrame");
+		exception.printStackTrace(System.out);
+	}
+}
+/**
+ * Comment
+ */
+public void predicateTree_TreeSelectionEvents() {
+	Object o = ((DefaultMutableTreeNode) getPredicateTree().getLastSelectedPathComponent()).getUserObject();
+	if (o instanceof Predicate) {
+		Predicate p = (Predicate) o;
+		getNameTextField().setText(p.getName().toString());
+		String si = p.isStatic() ? "Static " : "Instance ";
+		if (p instanceof LocationPredicate) {
+			getTypeTextField().setText(si + "Location Predicate on label '" + ((LocationPredicate) p).getLabel() + "'");
+		} else if (p instanceof ExpressionPredicate) {
+			getTypeTextField().setText(si + "Expression Predicate");
+		} else if (p instanceof ReturnPredicate) {
+			getTypeTextField().setText(si + "Return Predicate");
+		} else if (p instanceof InvokePredicate) {
+			getTypeTextField().setText(si + "Invoke Predicate");
+		}
+		getConstraintTextField().setText(p.getConstraint() == null ? "none" : p.getConstraint().toString().trim());
+		getDescriptionTextArea().setText(p.getDescription() == null ? "none" : p.getDescription());
+		getErrorMessageButton().setEnabled(!p.isValid());
+		getGotoButton().setEnabled(true);
+		getAddButton().setEnabled(p.isValid() && (BUI.property.getActivatedTemporalLogicProperty() != null));
+	} else {
+		getErrorMessageButton().setEnabled(false);
+		getGotoButton().setEnabled(false);
+		getAddButton().setEnabled(false);
+		getNameTextField().setText("");
+		getTypeTextField().setText("");
+		getConstraintTextField().setText("");
+		getDescriptionTextArea().setText("");
+	}
+}
+/**
+ * 
+ */
+public void updateTree() {
+	getPredicateTree().setModel(new DefaultTreeModel(buildTree(new DefaultMutableTreeNode("Predicate"), PredicateSet.getPredicateSetTable())));
+	getPredicateScrollPane().validate();
+	getPredicateScrollPane().repaint();
+	//getPredicateBrowserSplitPane().resetToPreferredSizes();
+}
+}

@@ -1,0 +1,102 @@
+public class STDoorControl extends STDevice
+{
+    public STState doorState;
+    public int currentDoor;
+    public boolean STCommand_STDoorControl_open;
+    public boolean STCommand_STDoorControl_close;
+
+    public STState currentState(int)
+    {
+        STState $ret;
+        int attributeName;
+        STDoorControl JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        attributeName := @parameter0;
+        $ret = JJJCTEMP$0.[STDoorControl.doorState:STState];
+        return $ret;
+    }
+
+    public int currentValue(int)
+    {
+        int attributeName, $ret;
+        STDoorControl JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        attributeName := @parameter0;
+        $ret = JJJCTEMP$0.[STDoorControl.currentDoor:int];
+        return $ret;
+    }
+
+    public STState latestState(int)
+    {
+        STState $ret;
+        int attributeName;
+        STDoorControl JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        attributeName := @parameter0;
+        $ret = JJJCTEMP$0.[STDoorControl.doorState:STState];
+        return $ret;
+    }
+
+    public int latestValue(int)
+    {
+        int attributeName, $ret;
+        STDoorControl JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        attributeName := @parameter0;
+        $ret = JJJCTEMP$0.[STDoorControl.currentDoor:int];
+        return $ret;
+    }
+
+    public void close()
+    {
+        STDoorControl JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        JJJCTEMP$0.[STDoorControl.STCommand_STDoorControl_close:boolean] = 1;
+        return;
+    }
+
+    public void close(int)
+    {
+        int delay;
+        STDoorControl JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        delay := @parameter0;
+        JJJCTEMP$0.[STDoorControl.STCommand_STDoorControl_close:boolean] = 1;
+        return;
+    }
+
+    public void open()
+    {
+        STDoorControl JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        JJJCTEMP$0.[STDoorControl.STCommand_STDoorControl_open:boolean] = 1;
+        return;
+    }
+
+    public void open(int)
+    {
+        int delay;
+        STDoorControl JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        delay := @parameter0;
+        JJJCTEMP$0.[STDoorControl.STCommand_STDoorControl_open:boolean] = 1;
+        return;
+    }
+
+    public void <init>()
+    {
+        STDoorControl JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        specialinvoke JJJCTEMP$0.[STDevice.<init>():void]();
+        return;
+    }
+}

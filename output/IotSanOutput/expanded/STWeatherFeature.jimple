@@ -1,0 +1,13 @@
+public class STWeatherFeature extends java.lang.Object
+{
+    public int forecast;
+
+    public void <init>()
+    {
+        STWeatherFeature JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        specialinvoke JJJCTEMP$0.[java.lang.Object.<init>():void]();
+        return;
+    }
+}

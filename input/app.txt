@@ -1,0 +1,81 @@
+<html>
+ <head></head>
+ <body>
+  <div class="modal-header"> 
+   <button type="button" class="close" data-dismiss="modal">×</button> 
+   <a href="/installedSmartApp/showModal/cd25661a-3b9f-4212-b6a8-cae59d15b3fb?max=10" onclick="return refreshModal(this)" class="pull-right" style="display: inline-block; margin: 3px 20px 0;">Refresh</a> 
+   <h3> Hello Home </h3> 
+   <div> 
+    <b>SmartApp:</b> Hello Home 
+    <b>Owner:</b> System 
+   </div> 
+  </div> 
+  <div class="modal-body"> 
+   <h4 class="first"> Settings <a href="/installedsmartapp/cd25661a-3b9f-4212-b6a8-cae59d15b3fb/events?source=true" style="float: right; font-size: 14px; font-weight: normal">List Events</a> </h4> 
+   <table class="table table-bordered table-condensed" style="margin-bottom: 5px;"> 
+    <thead> 
+     <tr> 
+      <th>Name</th> 
+      <th>Type</th> 
+      <th>Value</th> 
+     </tr> 
+    </thead> 
+    <tbody> 
+    </tbody> 
+   </table> 
+   <h4>Event Subscriptions</h4> 
+   <table class="table table-bordered table-condensed" style="margin-bottom: 5px;"> 
+    <thead> 
+     <tr> 
+      <th>Name</th> 
+      <th>Handler</th> 
+      <th>Filter</th> 
+      <th>Source</th> 
+     </tr> 
+    </thead> 
+    <tbody> 
+     <tr> 
+      <td>pictureMode</td> 
+      <td>hubActiveHandler</td> 
+      <td>true</td> 
+      <td> <a href="/location/show/6be87d7c-688c-4b7e-93ce-617fa05ef8ea">Networking Lab (Location)</a> </td> 
+     </tr> 
+    </tbody> 
+   </table> 
+   <h4>Application State</h4> 
+   <table class="table table-bordered table-condensed" style="margin-bottom: 5px;"> 
+    <thead> 
+     <tr> 
+      <th>Name</th> 
+      <th>Value</th> 
+     </tr> 
+    </thead> 
+    <tbody> 
+     <tr> 
+      <td>tvs</td> 
+      <td>[]</td> 
+     </tr> 
+     <tr> 
+      <td>welcomeIssued</td> 
+      <td>true</td> 
+     </tr> 
+    </tbody> 
+   </table> 
+   <h4>Scheduled Jobs</h4> 
+   <p>None</p> 
+   <h4>Developer Options</h4> 
+   <div> 
+    <span>Execution Location:</span> Cloud 
+   </div> 
+   <div> 
+    <span>Enable local child app discovery:</span> 
+    <input type="hidden" name="_developmentApp">
+    <input type="checkbox" name="developmentApp" id="developmentApp" data-isa="cd25661a-3b9f-4212-b6a8-cae59d15b3fb" onclick="return updateDevelopmentApp(this)"> 
+    <a id="developmentAppHelp" href="#" data-toggle="popover" title="Enable local child app discovery" data-content="When checked the system will consider your local SmartApps as well as published system SmartApps when searching for children from this app. You local version, if present, will take precedence over the system version. " data-placement="top" data-trigger="hover" class="small">What's this?</a> 
+   </div> 
+   <div style="font-size: 11px; color: #999999; padding: 0; margin: 0">
+     cd25661a-3b9f-4212-b6a8-cae59d15b3fb 
+   </div> 
+  </div> 
+ </body>
+</html>

@@ -1,0 +1,204 @@
+public class STTherMode extends STDevice
+{
+    public STState thermostatModeState;
+    public int currentThermostatMode;
+    public boolean STCommand_STTherMode_auto;
+    public boolean STCommand_STTherMode_cool;
+    public boolean STCommand_STTherMode_emergencyHeat;
+    public boolean STCommand_STTherMode_heat;
+    public boolean STCommand_STTherMode_off;
+
+    public STState currentState(int)
+    {
+        STState $ret;
+        int attributeName;
+        STTherMode JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        attributeName := @parameter0;
+        $ret = JJJCTEMP$0.[STTherMode.thermostatModeState:STState];
+        return $ret;
+    }
+
+    public int currentValue(int)
+    {
+        int attributeName, $ret;
+        STTherMode JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        attributeName := @parameter0;
+        $ret = JJJCTEMP$0.[STTherMode.currentThermostatMode:int];
+        return $ret;
+    }
+
+    public STState latestState(int)
+    {
+        STState $ret;
+        int attributeName;
+        STTherMode JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        attributeName := @parameter0;
+        $ret = JJJCTEMP$0.[STTherMode.thermostatModeState:STState];
+        return $ret;
+    }
+
+    public int latestValue(int)
+    {
+        int attributeName, $ret;
+        STTherMode JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        attributeName := @parameter0;
+        $ret = JJJCTEMP$0.[STTherMode.currentThermostatMode:int];
+        return $ret;
+    }
+
+    public void auto()
+    {
+        STTherMode JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        JJJCTEMP$0.[STTherMode.STCommand_STTherMode_auto:boolean] = 1;
+        return;
+    }
+
+    public void auto(int)
+    {
+        int delay;
+        STTherMode JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        delay := @parameter0;
+        JJJCTEMP$0.[STTherMode.STCommand_STTherMode_auto:boolean] = 1;
+        return;
+    }
+
+    public void cool()
+    {
+        STTherMode JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        JJJCTEMP$0.[STTherMode.STCommand_STTherMode_cool:boolean] = 1;
+        return;
+    }
+
+    public void cool(int)
+    {
+        int delay;
+        STTherMode JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        delay := @parameter0;
+        JJJCTEMP$0.[STTherMode.STCommand_STTherMode_cool:boolean] = 1;
+        return;
+    }
+
+    public void emergencyHeat()
+    {
+        STTherMode JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        JJJCTEMP$0.[STTherMode.STCommand_STTherMode_emergencyHeat:boolean] = 1;
+        return;
+    }
+
+    public void emergencyHeat(int)
+    {
+        int delay;
+        STTherMode JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        delay := @parameter0;
+        JJJCTEMP$0.[STTherMode.STCommand_STTherMode_emergencyHeat:boolean] = 1;
+        return;
+    }
+
+    public void heat()
+    {
+        STTherMode JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        JJJCTEMP$0.[STTherMode.STCommand_STTherMode_heat:boolean] = 1;
+        return;
+    }
+
+    public void heat(int)
+    {
+        int delay;
+        STTherMode JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        delay := @parameter0;
+        JJJCTEMP$0.[STTherMode.STCommand_STTherMode_heat:boolean] = 1;
+        return;
+    }
+
+    public void off()
+    {
+        STTherMode JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        JJJCTEMP$0.[STTherMode.STCommand_STTherMode_off:boolean] = 1;
+        return;
+    }
+
+    public void off(int)
+    {
+        int delay;
+        STTherMode JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        delay := @parameter0;
+        JJJCTEMP$0.[STTherMode.STCommand_STTherMode_off:boolean] = 1;
+        return;
+    }
+
+    public void setThermostatMode(int)
+    {
+        int mode;
+        STTherMode JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        mode := @parameter0;
+        if mode != 25 goto label0;
+
+        JJJCTEMP$0.[STTherMode.STCommand_STTherMode_auto:boolean] = 1;
+        goto label4;
+
+     label0:
+        if mode != 31 goto label1;
+
+        JJJCTEMP$0.[STTherMode.STCommand_STTherMode_cool:boolean] = 1;
+        goto label4;
+
+     label1:
+        if mode != 32 goto label2;
+
+        JJJCTEMP$0.[STTherMode.STCommand_STTherMode_emergencyHeat:boolean] = 1;
+        goto label4;
+
+     label2:
+        if mode != 33 goto label3;
+
+        JJJCTEMP$0.[STTherMode.STCommand_STTherMode_heat:boolean] = 1;
+        goto label4;
+
+     label3:
+        if mode != 16 goto label4;
+
+        JJJCTEMP$0.[STTherMode.STCommand_STTherMode_off:boolean] = 1;
+
+     label4:
+        return;
+    }
+
+    public void <init>()
+    {
+        STTherMode JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        specialinvoke JJJCTEMP$0.[STDevice.<init>():void]();
+        return;
+    }
+}

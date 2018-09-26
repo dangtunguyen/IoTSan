@@ -1,0 +1,60 @@
+public class STWaterSensor extends STDevice
+{
+    public STState waterState;
+    public int currentWater;
+
+    public STState currentState(int)
+    {
+        STState $ret;
+        int attributeName;
+        STWaterSensor JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        attributeName := @parameter0;
+        $ret = JJJCTEMP$0.[STWaterSensor.waterState:STState];
+        return $ret;
+    }
+
+    public int currentValue(int)
+    {
+        int attributeName, $ret;
+        STWaterSensor JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        attributeName := @parameter0;
+        $ret = JJJCTEMP$0.[STWaterSensor.currentWater:int];
+        return $ret;
+    }
+
+    public STState latestState(int)
+    {
+        STState $ret;
+        int attributeName;
+        STWaterSensor JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        attributeName := @parameter0;
+        $ret = JJJCTEMP$0.[STWaterSensor.waterState:STState];
+        return $ret;
+    }
+
+    public int latestValue(int)
+    {
+        int attributeName, $ret;
+        STWaterSensor JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        attributeName := @parameter0;
+        $ret = JJJCTEMP$0.[STWaterSensor.currentWater:int];
+        return $ret;
+    }
+
+    public void <init>()
+    {
+        STWaterSensor JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        specialinvoke JJJCTEMP$0.[STDevice.<init>():void]();
+        return;
+    }
+}

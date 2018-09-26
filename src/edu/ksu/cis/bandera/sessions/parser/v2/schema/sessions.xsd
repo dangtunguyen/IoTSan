@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:annotation>
+		<xs:documentation xml:lang="en">
+    The sessions schema is designed to hold session information for use
+    with the Bandera tool set.
+    The sessions node is the collection of all session nodes in this file.  Each session will
+    have at a minimum a unique ID within the collection of session nodes and the
+    application description (application node).  It might also contain any of the
+    following:
+      - description: a description of this session that will only be used by the user
+      - output: a specification of where the output for this session should go and
+                the name the generated output file names will be based upon.
+      - specificationOption: the specification to be used by Bandera for the application
+                             described in this session.
+      - components: the collection of components that will be turned on in Bandera and
+                    the configuration information for those components within this session.
+    </xs:documentation>
+	</xs:annotation>
+	<xs:element name="sessions">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="description" type="xs:string" maxOccurs="1" minOccurs="0"/>
+				<xs:element name="authors" type="authorsType" minOccurs="0" maxOccurs="1"/>
+				<xs:element name="session" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="description" type="xs:string" minOccurs="0"/>
+							<xs:element name="application" type="applicationType"/>
+							<xs:element name="output" type="outputType" minOccurs="0"/>
+							<xs:element name="specificationOption" type="specificationOptionType" minOccurs="0"/>
+							<xs:element name="components" type="componentType" minOccurs="0"/>
+						</xs:sequence>
+						<xs:attribute name="id" type="xs:ID"/>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="id" type="xs:string" use="optional"/>
+		</xs:complexType>
+		<xs:key name="sessionID">
+			<xs:selector xpath="session"/>
+			<xs:field xpath="@id"/>
+		</xs:key>
+	</xs:element>
+	<xs:complexType name="authorsType">
+		<xs:sequence>
+			<xs:element name="author" type="xs:string" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="outputType">
+		<xs:sequence>
+			<xs:element name="name" type="xs:string"/>
+			<xs:element name="location" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="applicationType">
+		<xs:sequence>
+			<xs:element name="main" type="xs:string"/>
+			<xs:element name="classpath" type="classpathType" minOccurs="0"/>
+			<xs:element name="includes" type="includeType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="classpathType">
+		<xs:sequence>
+			<xs:element name="resource" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="includeType">
+		<xs:sequence>
+			<xs:element name="resource" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="componentType">
+		<xs:sequence>
+			<xs:element name="slicer" minOccurs="0">
+				<xs:complexType>
+					<xs:attribute name="enabled" type="xs:boolean" use="optional" default="true"/>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="slabs" type="slabsType" minOccurs="0"/>
+			<xs:element name="checker" type="checkerType" minOccurs="0"/>
+			<xs:element name="counterExample" type="counterExampleType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="checkerType">
+		<xs:sequence>
+			<xs:element name="checkerOptions" type="xs:string" minOccurs="0"/>
+			<xs:element name="birOptions" type="birOptionsType" minOccurs="0"/>
+			<!-- not used this way anymore ... replaced with birOptions. -tcw
+      <xs:element name="resourceBounds" type="resourceBoundsType" minOccurs="0" maxOccurs="1"/>
+        -->
+		</xs:sequence>
+		<xs:attribute name="enabled" type="xs:boolean" use="optional" default="true"/>
+		<xs:attribute name="name" type="checkerNameType"/>
+	</xs:complexType>
+	<xs:simpleType name="checkerNameType">
+		<xs:restriction base="xs:NMTOKEN">
+			<xs:enumeration value="JPF"/>
+			<xs:enumeration value="SMV"/>
+			<xs:enumeration value="Spin"/>
+			<xs:enumeration value="DSpin"/>
+			<xs:enumeration value="HSF-Spin"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="birOptionsType">
+		<xs:sequence>
+			<xs:element name="resourceBounds" type="resourceBoundsType" minOccurs="0"/>
+		</xs:sequence>
+		<xs:attribute name="searchMode" type="searchModeType"/>
+	</xs:complexType>
+	<xs:simpleType name="searchModeType">
+		<xs:restriction base="xs:NMTOKEN">
+			<xs:enumeration value="ChooseFree"/>
+			<xs:enumeration value="Exhaustive"/>
+			<xs:enumeration value="ResourceBounded"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="resourceBoundsType">
+		<xs:sequence>
+			<xs:element name="integerBounds" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="fieldIntegerBound" type="fieldIntegerBoundType" minOccurs="0" maxOccurs="unbounded"/>
+						<xs:element name="localIntegerBound" type="localIntegerBoundType" minOccurs="0" maxOccurs="unbounded"/>
+					</xs:sequence>
+					<xs:attribute name="min" type="xs:integer"/>
+					<xs:attribute name="max" type="xs:integer"/>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="instanceBounds" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="instanceBound" minOccurs="0" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:attribute name="name" type="xs:string"/>
+								<xs:attribute name="max" type="xs:integer"/>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attribute name="max" type="xs:integer"/>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="arrayBounds" minOccurs="0">
+				<xs:complexType>
+					<xs:attribute name="max" type="xs:integer"/>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="threadInstanceBounds" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="threadInstanceBound" minOccurs="0" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:attribute name="name" type="xs:string"/>
+								<xs:attribute name="max" type="xs:integer"/>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attribute name="max" type="xs:integer"/>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="localIntegerBoundType">
+		<xs:attribute name="className" type="xs:string"/>
+		<xs:attribute name="methodName" type="xs:string"/>
+		<xs:attribute name="name" type="xs:string"/>
+		<xs:attribute name="min" type="xs:integer"/>
+		<xs:attribute name="max" type="xs:integer"/>
+	</xs:complexType>
+	<xs:complexType name="fieldIntegerBoundType">
+		<xs:attribute name="className" type="xs:string"/>
+		<xs:attribute name="name" type="xs:string"/>
+		<xs:attribute name="min" type="xs:integer"/>
+		<xs:attribute name="max" type="xs:integer"/>
+	</xs:complexType>
+	<xs:complexType name="counterExampleType">
+		<xs:sequence>
+			<xs:element name="watches" type="watchType" minOccurs="0"/>
+			<xs:element name="breakPoints" type="breakType" minOccurs="0"/>
+			<xs:element name="lockGraphs" type="lockGraphType" minOccurs="0"/>
+			<xs:element name="objectDiagrams" type="objectDiagramType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="watchType">
+		<xs:sequence>
+			<xs:element name="variable" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="breakType">
+		<xs:sequence>
+			<xs:element name="point" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="lockGraphType">
+		<xs:sequence>
+			<xs:element name="root" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="objectDiagramType">
+		<xs:sequence>
+			<xs:element name="root" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="slabsType">
+		<xs:sequence>
+			<xs:element name="abstractionOption" type="abstractionOptionType" minOccurs="0"/>
+		</xs:sequence>
+		<xs:attribute name="enabled" type="xs:boolean" use="optional" default="true"/>
+	</xs:complexType>
+	<xs:complexType name="specificationOptionType">
+		<xs:sequence>
+			<xs:element name="temporal" type="temporalType" minOccurs="0"/>
+			<xs:element name="assertions" type="assertionsType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="assertionsType">
+		<xs:sequence>
+			<xs:element name="assertion" type="assertionType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="assertionType">
+		<xs:attribute name="name" type="xs:string"/>
+		<xs:attribute name="enabled" type="xs:boolean" use="optional" default="true"/>
+	</xs:complexType>
+	<xs:complexType name="temporalType">
+		<xs:sequence>
+			<xs:element name="quantification" type="quantificationType" minOccurs="0"/>
+			<xs:element name="pattern" type="patternType"/>
+			<xs:element name="predicate" type="predicateType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="quantificationType">
+		<xs:sequence>
+			<xs:element name="quantifiedVariable" type="quantifiedVariableType" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="binding" type="bindingType"/>
+	</xs:complexType>
+	<xs:complexType name="quantifiedVariableType">
+		<xs:attribute name="name" type="xs:string"/>
+		<xs:attribute name="type" type="xs:string"/>
+	</xs:complexType>
+	<xs:simpleType name="bindingType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="instance"/>
+			<xs:enumeration value="exact"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="patternType">
+		<xs:attribute name="scope" type="xs:string"/>
+		<xs:attribute name="name" type="xs:string"/>
+	</xs:complexType>
+	<xs:complexType name="predicateType">
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="name" type="xs:string"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="abstractionOptionType">
+		<xs:sequence>
+			<xs:element name="classOrInterface" type="classOrInterfaceType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="defaultIntegralAbstraction" type="xs:string"/>
+		<xs:attribute name="defaultRealAbstraction" type="xs:string"/>
+	</xs:complexType>
+	<xs:complexType name="classOrInterfaceType">
+		<xs:sequence>
+			<xs:element name="field" type="varType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="method" type="methodType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string"/>
+	</xs:complexType>
+	<xs:complexType name="varType">
+		<xs:attribute name="name" type="xs:string"/>
+		<xs:attribute name="abstraction" type="xs:string"/>
+	</xs:complexType>
+	<xs:complexType name="methodType">
+		<xs:sequence>
+			<xs:element name="return" type="xs:string" minOccurs="0"/>
+			<xs:element name="local" type="varType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="signature" type="xs:string"/>
+	</xs:complexType>
+</xs:schema>

@@ -1,0 +1,23 @@
+public class STAttribute extends java.lang.Object
+{
+    public int name;
+
+    public int getName()
+    {
+        int $ret;
+        STAttribute JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        $ret = JJJCTEMP$0.[STAttribute.name:int];
+        return $ret;
+    }
+
+    public void <init>()
+    {
+        STAttribute JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        specialinvoke JJJCTEMP$0.[java.lang.Object.<init>():void]();
+        return;
+    }
+}

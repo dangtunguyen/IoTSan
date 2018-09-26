@@ -1,0 +1,142 @@
+public class STDevice extends java.lang.Object
+{
+    public int id;
+    public int gArrIndex;
+    public STEvent[] events;
+    public STState[] states;
+    public STState batteryState;
+    public long currentBattery;
+
+    public STEvent[] events(int)
+    {
+        STEvent[] $ret;
+        int N;
+        STDevice JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        N := @parameter0;
+        $ret = JJJCTEMP$0.[STDevice.events:STEvent[]];
+        return $ret;
+    }
+
+    public STEvent[] events()
+    {
+        STEvent[] $ret;
+        STDevice JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        $ret = JJJCTEMP$0.[STDevice.events:STEvent[]];
+        return $ret;
+    }
+
+    public STEvent[] eventsBetween(int, int)
+    {
+        STEvent[] $ret;
+        int endDate, startDate;
+        STDevice JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        startDate := @parameter0;
+        endDate := @parameter1;
+        $ret = JJJCTEMP$0.[STDevice.events:STEvent[]];
+        return $ret;
+    }
+
+    public STEvent[] eventsSince(int)
+    {
+        STEvent[] $ret;
+        int startDate;
+        STDevice JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        startDate := @parameter0;
+        $ret = JJJCTEMP$0.[STDevice.events:STEvent[]];
+        return $ret;
+    }
+
+    public int getId()
+    {
+        int $ret;
+        STDevice JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        $ret = JJJCTEMP$0.[STDevice.id:int];
+        return $ret;
+    }
+
+    public STState[] statesBetween(int, int, int)
+    {
+        int attributeName, endDate, startDate;
+        STDevice JJJCTEMP$0;
+        STState[] $ret;
+
+        JJJCTEMP$0 := @this;
+        attributeName := @parameter0;
+        startDate := @parameter1;
+        endDate := @parameter2;
+        $ret = JJJCTEMP$0.[STDevice.states:STState[]];
+        return $ret;
+    }
+
+    public STState[] statesSince(int, int)
+    {
+        int attributeName, startDate;
+        STDevice JJJCTEMP$0;
+        STState[] $ret;
+
+        JJJCTEMP$0 := @this;
+        attributeName := @parameter0;
+        startDate := @parameter1;
+        $ret = JJJCTEMP$0.[STDevice.states:STState[]];
+        return $ret;
+    }
+
+    public STState currentState(int)
+    {
+        int attributeName;
+        STDevice JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        attributeName := @parameter0;
+        return;
+    }
+
+    public int currentValue(int)
+    {
+        int attributeName;
+        STDevice JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        attributeName := @parameter0;
+        return;
+    }
+
+    public STState latestState(int)
+    {
+        int attributeName;
+        STDevice JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        attributeName := @parameter0;
+        return;
+    }
+
+    public int latestValue(int)
+    {
+        int attributeName;
+        STDevice JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        attributeName := @parameter0;
+        return;
+    }
+
+    public void <init>()
+    {
+        STDevice JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        specialinvoke JJJCTEMP$0.[java.lang.Object.<init>():void]();
+        return;
+    }
+}

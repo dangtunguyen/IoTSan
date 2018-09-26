@@ -1,0 +1,88 @@
+abstraction Set0 extends integral 
+  begin
+    TOKENS = {R0, REST};
+    DEFAULT = R0;
+    ONE2ONE = {R0};
+    abstract (n)
+      begin
+        n == 0 -> R0;
+        n != 0 -> REST;
+      end
+    operator + add 
+      begin
+        (R0, R0) -> R0;
+        (R0, REST) -> REST;
+        (REST, R0) -> REST;
+        (REST, REST) -> {R0, REST};
+      end
+    operator - sub 
+      begin
+        (R0, R0) -> R0;
+        (R0, REST) -> REST;
+        (REST, R0) -> REST;
+        (REST, REST) -> {R0, REST};
+      end
+    operator * mul 
+      begin
+        (R0, R0) -> R0;
+        (R0, REST) -> R0;
+        (REST, R0) -> R0;
+        (REST, REST) -> REST;
+      end
+    operator / div 
+      begin
+        (R0, R0) -> T;
+        (R0, REST) -> R0;
+        (REST, R0) -> T;
+        (REST, REST) -> {R0, REST};
+      end
+    operator % rem 
+      begin
+        (R0, R0) -> T;
+        (R0, REST) -> R0;
+        (REST, R0) -> T;
+        (REST, REST) -> {R0, REST};
+      end
+    test == eq 
+      begin
+        (R0, R0) -> TRUE;
+        (R0, REST) -> FALSE;
+        (REST, R0) -> FALSE;
+        (REST, REST) -> {TRUE, FALSE};
+      end
+    test != neq 
+      begin
+        (R0, R0) -> FALSE;
+        (R0, REST) -> TRUE;
+        (REST, R0) -> TRUE;
+        (REST, REST) -> {TRUE, FALSE};
+      end
+    test < lt 
+      begin
+        (R0, R0) -> FALSE;
+        (R0, REST) -> {TRUE, FALSE};
+        (REST, R0) -> {TRUE, FALSE};
+        (REST, REST) -> {TRUE, FALSE};
+      end
+    test <= le 
+      begin
+        (R0, R0) -> TRUE;
+        (R0, REST) -> {TRUE, FALSE};
+        (REST, R0) -> {TRUE, FALSE};
+        (REST, REST) -> {TRUE, FALSE};
+      end
+    test > gt 
+      begin
+        (R0, R0) -> FALSE;
+        (R0, REST) -> {TRUE, FALSE};
+        (REST, R0) -> {TRUE, FALSE};
+        (REST, REST) -> {TRUE, FALSE};
+      end
+    test >= ge 
+      begin
+        (R0, R0) -> TRUE;
+        (R0, REST) -> {TRUE, FALSE};
+        (REST, R0) -> {TRUE, FALSE};
+        (REST, REST) -> {TRUE, FALSE};
+      end
+  end

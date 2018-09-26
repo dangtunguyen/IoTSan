@@ -1,0 +1,62 @@
+public class STThreeAxis extends STDevice
+{
+    public STState threeAxisState;
+    public STxyz currentThreeAxis;
+
+    public STState currentState(int)
+    {
+        STState $ret;
+        int attributeName;
+        STThreeAxis JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        attributeName := @parameter0;
+        $ret = JJJCTEMP$0.[STThreeAxis.threeAxisState:STState];
+        return $ret;
+    }
+
+    public int currentValue(int)
+    {
+        int attributeName;
+        STThreeAxis JJJCTEMP$0;
+        STxyz $ret;
+
+        JJJCTEMP$0 := @this;
+        attributeName := @parameter0;
+        $ret = JJJCTEMP$0.[STThreeAxis.currentThreeAxis:STxyz];
+        return $ret;
+    }
+
+    public STState latestState(int)
+    {
+        STState $ret;
+        int attributeName;
+        STThreeAxis JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        attributeName := @parameter0;
+        $ret = JJJCTEMP$0.[STThreeAxis.threeAxisState:STState];
+        return $ret;
+    }
+
+    public int latestValue(int)
+    {
+        int attributeName;
+        STThreeAxis JJJCTEMP$0;
+        STxyz $ret;
+
+        JJJCTEMP$0 := @this;
+        attributeName := @parameter0;
+        $ret = JJJCTEMP$0.[STThreeAxis.currentThreeAxis:STxyz];
+        return $ret;
+    }
+
+    public void <init>()
+    {
+        STThreeAxis JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        specialinvoke JJJCTEMP$0.[STDevice.<init>():void]();
+        return;
+    }
+}

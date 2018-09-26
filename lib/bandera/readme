@@ -1,0 +1,53 @@
+readme
+by todd wallentine <tcw@cis.ksu.edu>
+
+This readme will explain what the bandera builtin system provides as well as how to use
+it.
+
+The Bandera Builtin system provides a way to reduce the fields and methods in some basic Java
+Library classes that are needed for model checking to the bare minimum.  To do this, we
+provide custom copies of some necessary Java library classes.  This can be extended but
+currently this list includes:
+1) Bandera
+2) java.lang.Object
+3) java.lang.Thread
+4) java.lang.ThreadGroup
+5) java.lang.Runnable
+
+These classes are provided in the bandera builtin directory.  Bandera will read the class files
+directly from this location during processing.
+
+To provide a speed improvement, the user can place a banderaBuiltin.txt file into that directory
+that contains the list of classes to be found in this directory.
+
+Example text file, banderaBuiltin.txt:
+---------------------------------------
+Bandera
+java.lang.Object
+java.lang.Thread
+java.lang.ThreadGroup
+java.lang.Runnable
+
+To extend this list, a user can add java source and class files to this directory (and if applicable to
+the text file list).
+
+Note:
+1) The current root directory is hard-coded into the edu.ksu.cis.bandera.util.Preferences class and
+it is lib\bandera.
+2) The list of classes is created at runtime.  If you need to refresh the list, restart Bandera.
+3) The other locations of interest in this problem are: CompilationManager, JIJCCodeGenerator, and Preferences.
+4) If JJJC would support it, these files could be loaded from a jar file.  The logic is already written into
+Preferences for this loading.
+
+
+To compile a new version of these classes, change into the root directory where the source is (lib/bandera) and:
+javac -classpath . <file>
+
+example Thread.java:
+javac -classpath . java\lang\Thread.java
+
+And to check that it worked:
+javap -classpath . <className>
+
+example Thread.java:
+javap -classpath . java.lang.Thread

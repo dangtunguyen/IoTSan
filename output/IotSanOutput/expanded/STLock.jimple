@@ -1,0 +1,116 @@
+public class STLock extends STDevice
+{
+    public STState lockState;
+    public int currentLock;
+    public boolean STCommand_STLock_lock;
+    public boolean STCommand_STLock_unlock;
+    public boolean STCommand_STLock_usercodechange;
+
+    public STState currentState(int)
+    {
+        STState $ret;
+        int attributeName;
+        STLock JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        attributeName := @parameter0;
+        $ret = JJJCTEMP$0.[STLock.lockState:STState];
+        return $ret;
+    }
+
+    public int currentValue(int)
+    {
+        int attributeName, $ret;
+        STLock JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        attributeName := @parameter0;
+        $ret = JJJCTEMP$0.[STLock.currentLock:int];
+        return $ret;
+    }
+
+    public STState latestState(int)
+    {
+        STState $ret;
+        int attributeName;
+        STLock JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        attributeName := @parameter0;
+        $ret = JJJCTEMP$0.[STLock.lockState:STState];
+        return $ret;
+    }
+
+    public int latestValue(int)
+    {
+        int attributeName, $ret;
+        STLock JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        attributeName := @parameter0;
+        $ret = JJJCTEMP$0.[STLock.currentLock:int];
+        return $ret;
+    }
+
+    public void lock()
+    {
+        STLock JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        JJJCTEMP$0.[STLock.STCommand_STLock_lock:boolean] = 1;
+        return;
+    }
+
+    public void lock(int)
+    {
+        int delay;
+        STLock JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        delay := @parameter0;
+        JJJCTEMP$0.[STLock.STCommand_STLock_lock:boolean] = 1;
+        return;
+    }
+
+    public void unlock()
+    {
+        STLock JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        JJJCTEMP$0.[STLock.STCommand_STLock_unlock:boolean] = 1;
+        return;
+    }
+
+    public void unlock(int)
+    {
+        int delay;
+        STLock JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        delay := @parameter0;
+        JJJCTEMP$0.[STLock.STCommand_STLock_unlock:boolean] = 1;
+        return;
+    }
+
+    public void usercodechange(double, double, double)
+    {
+        double status, user, code;
+        STLock JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        user := @parameter0;
+        code := @parameter1;
+        status := @parameter2;
+        JJJCTEMP$0.[STLock.STCommand_STLock_usercodechange:boolean] = 1;
+        return;
+    }
+
+    public void <init>()
+    {
+        STLock JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        specialinvoke JJJCTEMP$0.[STDevice.<init>():void]();
+        return;
+    }
+}

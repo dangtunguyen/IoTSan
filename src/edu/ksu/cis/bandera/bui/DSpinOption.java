@@ -1,0 +1,1848 @@
+package edu.ksu.cis.bandera.bui;
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * Bandera, a Java(TM) analysis and transformation toolkit           *
+ * Copyright (C) 2000   Robby (robby@cis.ksu.edu)                    *
+ * All rights reserved.                                              *
+ *                                                                   *
+ * This work was done as a project in the SAnToS Laboratory,         *
+ * Department of Computing and Information Sciences, Kansas State    *
+ * University, USA (http://www.cis.ksu.edu/santos).                  *
+ * It is understood that any modification not identified as such is  *
+ * not covered by the preceding statement.                           *
+ *                                                                   *
+ * This work is free software; you can redistribute it and/or        *
+ * modify it under the terms of the GNU Library General Public       *
+ * License as published by the Free Software Foundation; either      *
+ * version 2 of the License, or (at your option) any later version.  *
+ *                                                                   *
+ * This work is distributed in the hope that it will be useful,      *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of    *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU *
+ * Library General Public License for more details.                  *
+ *                                                                   *
+ * You should have received a copy of the GNU Library General Public *
+ * License along with this toolkit; if not, write to the             *
+ * Free Software Foundation, Inc., 59 Temple Place - Suite 330,      *
+ * Boston, MA  02111-1307, USA.                                      *
+ *                                                                   *
+ * Java is a trademark of Sun Microsystems, Inc.                     *
+ *                                                                   *
+ * To submit a bug report, send a comment, or get the latest news on *
+ * this project and other SAnToS projects, please visit the web-site *
+ *                http://www.cis.ksu.edu/santos                      *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+import java.util.*;
+import java.awt.*;
+import javax.swing.*;
+import edu.ksu.cis.bandera.dspin.*;
+public class DSpinOption extends JDialog implements java.awt.event.ActionListener, java.awt.event.FocusListener {
+	private JPanel ivjBottomPanel = null;
+	private JPanel ivjCorrectnessPanel = null;
+	private JPanel ivjJDialogContentPane = null;
+	private JLabel ivjJLabel2 = null;
+	private JLabel ivjJLabel3 = null;
+	private JPanel ivjLabelPanel = null;
+	private JPanel ivjModePanel = null;
+	private JButton ivjOkbutton = null;
+	private JPanel ivjRunPanel = null;
+	private JPanel ivjTrapPanel = null;
+	private JLabel ivjJLabel1 = null;
+	private JLabel ivjJLabel4 = null;
+	public static DSpinOptions spinOptions = new DSpinOptions();
+	private JCheckBox ivjAssertionsCheckBox = null;
+	private JCheckBox ivjCompressionCheckBox = null;
+	private JTextField ivjErrorsTextField = null;
+	private JRadioButton ivjExhaustiveRadioButton = null;
+	private JRadioButton ivjHashCompactRadioButton = null;
+	private JRadioButton ivjLivenessRadioButton = null;
+	private JCheckBox ivjNeverClaimCheckBox = null;
+	private JCheckBox ivjPartialOrderCheckBox = null;
+	private JRadioButton ivjSaftyRadioButton = null;
+	private JCheckBox ivjShortestCheckBox = null;
+	private JRadioButton ivjSupertraceRadioButton = null;
+	IvjEventHandler ivjEventHandler = new IvjEventHandler();
+	private JCheckBox ivjSaveTrailCheckBox = null;
+	private JTextField ivjPhysicalTextField = null;
+	private JTextField ivjDepthTextField = null;
+	private JTextField ivjStateTextField = null;
+	private JPanel ivjFillerPanel1 = null;
+	private JPanel ivjFillerPanel2 = null;
+	private JPanel ivjFillerPanel3 = null;
+	private JPanel ivjFillerPanel4 = null;
+
+class IvjEventHandler implements java.awt.event.ActionListener, java.awt.event.FocusListener {
+		public void actionPerformed(java.awt.event.ActionEvent e) {
+			if (e.getSource() == DSpinOption.this.getNeverClaimCheckBox()) 
+				connEtoC1(e);
+			if (e.getSource() == DSpinOption.this.getLivenessRadioButton()) 
+				connEtoC2(e);
+			if (e.getSource() == DSpinOption.this.getSaftyRadioButton()) 
+				connEtoC3(e);
+			if (e.getSource() == DSpinOption.this.getExhaustiveRadioButton()) 
+				connEtoC4(e);
+			if (e.getSource() == DSpinOption.this.getSupertraceRadioButton()) 
+				connEtoC5(e);
+			if (e.getSource() == DSpinOption.this.getHashCompactRadioButton()) 
+				connEtoC6(e);
+			if (e.getSource() == DSpinOption.this.getOkbutton()) 
+				connEtoC7(e);
+			if (e.getSource() == DSpinOption.this.getSaveTrailCheckBox()) 
+				connEtoC8(e);
+			if (e.getSource() == DSpinOption.this.getShortestCheckBox()) 
+				connEtoC9(e);
+			if (e.getSource() == DSpinOption.this.getPartialOrderCheckBox()) 
+				connEtoC10(e);
+			if (e.getSource() == DSpinOption.this.getCompressionCheckBox()) 
+				connEtoC11(e);
+			if (e.getSource() == DSpinOption.this.getAssertionsCheckBox()) 
+				connEtoC16();
+		};
+		public void focusGained(java.awt.event.FocusEvent e) {};
+		public void focusLost(java.awt.event.FocusEvent e) {
+			if (e.getSource() == DSpinOption.this.getPhysicalTextField()) 
+				connEtoC12(e);
+			if (e.getSource() == DSpinOption.this.getStateTextField()) 
+				connEtoC13(e);
+			if (e.getSource() == DSpinOption.this.getDepthTextField()) 
+				connEtoC14(e);
+			if (e.getSource() == DSpinOption.this.getErrorsTextField()) 
+				connEtoC15(e);
+		};
+	};
+/**
+ * SpinOptionDlg constructor comment.
+ */
+public DSpinOption() {
+	super();
+	initialize();
+}
+/**
+ * SpinOptionDlg constructor comment.
+ * @param owner java.awt.Dialog
+ */
+public DSpinOption(java.awt.Dialog owner) {
+	super(owner);
+}
+/**
+ * SpinOptionDlg constructor comment.
+ * @param owner java.awt.Dialog
+ * @param title java.lang.String
+ */
+public DSpinOption(java.awt.Dialog owner, String title) {
+	super(owner, title);
+}
+/**
+ * SpinOptionDlg constructor comment.
+ * @param owner java.awt.Dialog
+ * @param title java.lang.String
+ * @param modal boolean
+ */
+public DSpinOption(java.awt.Dialog owner, String title, boolean modal) {
+	super(owner, title, modal);
+}
+/**
+ * SpinOptionDlg constructor comment.
+ * @param owner java.awt.Dialog
+ * @param modal boolean
+ */
+public DSpinOption(java.awt.Dialog owner, boolean modal) {
+	super(owner, modal);
+}
+/**
+ * SpinOptionDlg constructor comment.
+ * @param owner java.awt.Frame
+ */
+public DSpinOption(java.awt.Frame owner) {
+	super(owner);
+}
+/**
+ * SpinOptionDlg constructor comment.
+ * @param owner java.awt.Frame
+ * @param title java.lang.String
+ */
+public DSpinOption(java.awt.Frame owner, String title) {
+	super(owner, title);
+}
+/**
+ * SpinOptionDlg constructor comment.
+ * @param owner java.awt.Frame
+ * @param title java.lang.String
+ * @param modal boolean
+ */
+public DSpinOption(java.awt.Frame owner, String title, boolean modal) {
+	super(owner, title, modal);
+}
+/**
+ * SpinOptionDlg constructor comment.
+ * @param owner java.awt.Frame
+ * @param modal boolean
+ */
+public DSpinOption(java.awt.Frame owner, boolean modal) {
+	super(owner, modal);
+}
+/**
+ * actionPerformed method comment.
+ */
+public void actionPerformed(java.awt.event.ActionEvent e) {}
+/**
+ * Comment
+ */
+public void assertionsCheckBox_ActionEvents() {
+	spinOptions.setAssertions(getAssertionsCheckBox().isSelected());
+}
+/**
+ * Comment
+ */
+public void compressionCheckBox_ActionPerformed(java.awt.event.ActionEvent actionEvent) {
+	spinOptions.setCompression(getCompressionCheckBox().isSelected());
+	//return;
+}
+/**
+ * connEtoC1:  (NeverClaimCheckBox.action.actionPerformed(java.awt.event.ActionEvent) --> SpinOptionDlg.neverClaimCheckBox_ActionPerformed(Ljava.awt.event.ActionEvent;)V)
+ * @param arg1 java.awt.event.ActionEvent
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private void connEtoC1(java.awt.event.ActionEvent arg1) {
+	try {
+		// user code begin {1}
+		// user code end
+		this.neverClaimCheckBox_ActionPerformed(arg1);
+		// user code begin {2}
+		// user code end
+	} catch (java.lang.Throwable ivjExc) {
+		// user code begin {3}
+		// user code end
+		handleException(ivjExc);
+	}
+}
+/**
+ * connEtoC10:  (PartialOrderCheckBox.action.actionPerformed(java.awt.event.ActionEvent) --> SpinOptionDlg.partialOrderCheckBox_ActionPerformed(Ljava.awt.event.ActionEvent;)V)
+ * @param arg1 java.awt.event.ActionEvent
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private void connEtoC10(java.awt.event.ActionEvent arg1) {
+	try {
+		// user code begin {1}
+		// user code end
+		this.partialOrderCheckBox_ActionPerformed(arg1);
+		// user code begin {2}
+		// user code end
+	} catch (java.lang.Throwable ivjExc) {
+		// user code begin {3}
+		// user code end
+		handleException(ivjExc);
+	}
+}
+/**
+ * connEtoC11:  (CompressionCheckBox.action.actionPerformed(java.awt.event.ActionEvent) --> SpinOptionDlg.compressionCheckBox_ActionPerformed(Ljava.awt.event.ActionEvent;)V)
+ * @param arg1 java.awt.event.ActionEvent
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private void connEtoC11(java.awt.event.ActionEvent arg1) {
+	try {
+		// user code begin {1}
+		// user code end
+		this.compressionCheckBox_ActionPerformed(arg1);
+		// user code begin {2}
+		// user code end
+	} catch (java.lang.Throwable ivjExc) {
+		// user code begin {3}
+		// user code end
+		handleException(ivjExc);
+	}
+}
+/**
+ * connEtoC12:  (PhysicalFieldMemory.focus.focusLost(java.awt.event.FocusEvent) --> SpinOptionDlg.jTextFieldMemory_FocusLost(Ljava.awt.event.FocusEvent;)V)
+ * @param arg1 java.awt.event.FocusEvent
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private void connEtoC12(java.awt.event.FocusEvent arg1) {
+	try {
+		// user code begin {1}
+		// user code end
+		this.physicalTextField_FocusLost(arg1);
+		// user code begin {2}
+		// user code end
+	} catch (java.lang.Throwable ivjExc) {
+		// user code begin {3}
+		// user code end
+		handleException(ivjExc);
+	}
+}
+/**
+ * connEtoC13:  (StateTextField.focus.focusLost(java.awt.event.FocusEvent) --> SpinOptionDlg.stateTextField_FocusLost(Ljava.awt.event.FocusEvent;)V)
+ * @param arg1 java.awt.event.FocusEvent
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private void connEtoC13(java.awt.event.FocusEvent arg1) {
+	try {
+		// user code begin {1}
+		// user code end
+		this.stateTextField_FocusLost(arg1);
+		// user code begin {2}
+		// user code end
+	} catch (java.lang.Throwable ivjExc) {
+		// user code begin {3}
+		// user code end
+		handleException(ivjExc);
+	}
+}
+/**
+ * connEtoC14:  (DepthTextField.focus.focusLost(java.awt.event.FocusEvent) --> SpinOptionDlg.depthTextField_FocusLost(Ljava.awt.event.FocusEvent;)V)
+ * @param arg1 java.awt.event.FocusEvent
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private void connEtoC14(java.awt.event.FocusEvent arg1) {
+	try {
+		// user code begin {1}
+		// user code end
+		this.depthTextField_FocusLost(arg1);
+		// user code begin {2}
+		// user code end
+	} catch (java.lang.Throwable ivjExc) {
+		// user code begin {3}
+		// user code end
+		handleException(ivjExc);
+	}
+}
+/**
+ * connEtoC15:  (ErrorsTextField.focus.focusLost(java.awt.event.FocusEvent) --> SpinOptionDlg.errorsTextField_FocusLost(Ljava.awt.event.FocusEvent;)V)
+ * @param arg1 java.awt.event.FocusEvent
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private void connEtoC15(java.awt.event.FocusEvent arg1) {
+	try {
+		// user code begin {1}
+		// user code end
+		this.errorsTextField_FocusLost(arg1);
+		// user code begin {2}
+		// user code end
+	} catch (java.lang.Throwable ivjExc) {
+		// user code begin {3}
+		// user code end
+		handleException(ivjExc);
+	}
+}
+/**
+ * connEtoC16:  (AssertionsCheckBox.action. --> DSpinOption.assertionsCheckBox_ActionEvents()V)
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private void connEtoC16() {
+	try {
+		// user code begin {1}
+		// user code end
+		this.assertionsCheckBox_ActionEvents();
+		// user code begin {2}
+		// user code end
+	} catch (java.lang.Throwable ivjExc) {
+		// user code begin {3}
+		// user code end
+		handleException(ivjExc);
+	}
+}
+/**
+ * connEtoC2:  (LivenessRadioButton.action.actionPerformed(java.awt.event.ActionEvent) --> SpinOptionDlg.livenessRadioButton_ActionPerformed(Ljava.awt.event.ActionEvent;)V)
+ * @param arg1 java.awt.event.ActionEvent
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private void connEtoC2(java.awt.event.ActionEvent arg1) {
+	try {
+		// user code begin {1}
+		// user code end
+		this.livenessRadioButton_ActionPerformed(arg1);
+		// user code begin {2}
+		// user code end
+	} catch (java.lang.Throwable ivjExc) {
+		// user code begin {3}
+		// user code end
+		handleException(ivjExc);
+	}
+}
+/**
+ * connEtoC3:  (SaftyRadioButton.action.actionPerformed(java.awt.event.ActionEvent) --> SpinOptionDlg.saftyRadioButton_ActionPerformed(Ljava.awt.event.ActionEvent;)V)
+ * @param arg1 java.awt.event.ActionEvent
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private void connEtoC3(java.awt.event.ActionEvent arg1) {
+	try {
+		// user code begin {1}
+		// user code end
+		this.saftyRadioButton_ActionPerformed(arg1);
+		// user code begin {2}
+		// user code end
+	} catch (java.lang.Throwable ivjExc) {
+		// user code begin {3}
+		// user code end
+		handleException(ivjExc);
+	}
+}
+/**
+ * connEtoC4:  (ExhaustiveRadioButton.action.actionPerformed(java.awt.event.ActionEvent) --> SpinOptionDlg.exhaustiveRadioButton_ActionPerformed(Ljava.awt.event.ActionEvent;)V)
+ * @param arg1 java.awt.event.ActionEvent
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private void connEtoC4(java.awt.event.ActionEvent arg1) {
+	try {
+		// user code begin {1}
+		// user code end
+		this.exhaustiveRadioButton_ActionPerformed(arg1);
+		// user code begin {2}
+		// user code end
+	} catch (java.lang.Throwable ivjExc) {
+		// user code begin {3}
+		// user code end
+		handleException(ivjExc);
+	}
+}
+/**
+ * connEtoC5:  (SupertraceRadioButton.action.actionPerformed(java.awt.event.ActionEvent) --> SpinOptionDlg.supertraceRadioButton_ActionPerformed(Ljava.awt.event.ActionEvent;)V)
+ * @param arg1 java.awt.event.ActionEvent
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private void connEtoC5(java.awt.event.ActionEvent arg1) {
+	try {
+		// user code begin {1}
+		// user code end
+		this.supertraceRadioButton_ActionPerformed(arg1);
+		// user code begin {2}
+		// user code end
+	} catch (java.lang.Throwable ivjExc) {
+		// user code begin {3}
+		// user code end
+		handleException(ivjExc);
+	}
+}
+/**
+ * connEtoC6:  (HashCompactRadioButton.action.actionPerformed(java.awt.event.ActionEvent) --> SpinOptionDlg.hashCompactRadioButton_ActionPerformed(Ljava.awt.event.ActionEvent;)V)
+ * @param arg1 java.awt.event.ActionEvent
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private void connEtoC6(java.awt.event.ActionEvent arg1) {
+	try {
+		// user code begin {1}
+		// user code end
+		this.hashCompactRadioButton_ActionPerformed(arg1);
+		// user code begin {2}
+		// user code end
+	} catch (java.lang.Throwable ivjExc) {
+		// user code begin {3}
+		// user code end
+		handleException(ivjExc);
+	}
+}
+/**
+ * connEtoC7:  (Okbutton.action.actionPerformed(java.awt.event.ActionEvent) --> SpinOptionDlg.okbutton_ActionPerformed(Ljava.awt.event.ActionEvent;)V)
+ * @param arg1 java.awt.event.ActionEvent
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private void connEtoC7(java.awt.event.ActionEvent arg1) {
+	try {
+		// user code begin {1}
+		// user code end
+		this.okbutton_ActionPerformed(arg1);
+		// user code begin {2}
+		// user code end
+	} catch (java.lang.Throwable ivjExc) {
+		// user code begin {3}
+		// user code end
+		handleException(ivjExc);
+	}
+}
+/**
+ * connEtoC8:  (SaveTrailCheckBox.action.actionPerformed(java.awt.event.ActionEvent) --> SpinOptionDlg.saverailCheckBox_ActionPerformed(Ljava.awt.event.ActionEvent;)V)
+ * @param arg1 java.awt.event.ActionEvent
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private void connEtoC8(java.awt.event.ActionEvent arg1) {
+	try {
+		// user code begin {1}
+		// user code end
+		this.saverailCheckBox_ActionPerformed(arg1);
+		// user code begin {2}
+		// user code end
+	} catch (java.lang.Throwable ivjExc) {
+		// user code begin {3}
+		// user code end
+		handleException(ivjExc);
+	}
+}
+/**
+ * connEtoC9:  (ShortestCheckBox.action.actionPerformed(java.awt.event.ActionEvent) --> SpinOptionDlg.shortestCheckBox_ActionPerformed(Ljava.awt.event.ActionEvent;)V)
+ * @param arg1 java.awt.event.ActionEvent
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private void connEtoC9(java.awt.event.ActionEvent arg1) {
+	try {
+		// user code begin {1}
+		// user code end
+		this.shortestCheckBox_ActionPerformed(arg1);
+		// user code begin {2}
+		// user code end
+	} catch (java.lang.Throwable ivjExc) {
+		// user code begin {3}
+		// user code end
+		handleException(ivjExc);
+	}
+}
+/**
+ * Comment
+ */
+public void depthTextField_FocusLost(java.awt.event.FocusEvent focusEvent) {
+	try {
+		spinOptions.setSearchDepth(Integer.parseInt(getDepthTextField().getText()));
+	} catch (Exception e) {
+		JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+		getDepthTextField().setText("" + spinOptions.getSearchDepth());
+	}
+	//return;
+}
+/**
+ * Comment
+ */
+public void errorsTextField_FocusLost(java.awt.event.FocusEvent focusEvent) {
+	try {
+		spinOptions.setStopAtError(Integer.parseInt(getErrorsTextField().getText()));
+	} catch (Exception e) {
+		JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+		getErrorsTextField().setText("" + spinOptions.getStopAtError());
+	}
+	//return;
+}
+/**
+ * Comment
+ */
+public void exhaustiveRadioButton_ActionPerformed(java.awt.event.ActionEvent actionEvent) {
+	spinOptions.setSearchMode(DSpinOptions.Exhaustive);
+	//return;
+}
+/**
+ * focusGained method comment.
+ */
+public void focusGained(java.awt.event.FocusEvent e) {}
+/**
+ * focusLost method comment.
+ */
+public void focusLost(java.awt.event.FocusEvent e) {}
+/**
+ * Return the JCheckBox1 property value.
+ * @return javax.swing.JCheckBox
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private javax.swing.JCheckBox getAssertionsCheckBox() {
+	if (ivjAssertionsCheckBox == null) {
+		try {
+			ivjAssertionsCheckBox = new javax.swing.JCheckBox();
+			ivjAssertionsCheckBox.setName("AssertionsCheckBox");
+			ivjAssertionsCheckBox.setSelected(true);
+			ivjAssertionsCheckBox.setText("Assertions");
+			ivjAssertionsCheckBox.setBackground(new java.awt.Color(204,204,255));
+			// user code begin {1}
+			// user code end
+		} catch (java.lang.Throwable ivjExc) {
+			// user code begin {2}
+			// user code end
+			handleException(ivjExc);
+		}
+	}
+	return ivjAssertionsCheckBox;
+}
+/**
+ * Return the BottomPanel property value.
+ * @return javax.swing.JPanel
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private javax.swing.JPanel getBottomPanel() {
+	if (ivjBottomPanel == null) {
+		try {
+			ivjBottomPanel = new javax.swing.JPanel();
+			ivjBottomPanel.setName("BottomPanel");
+			ivjBottomPanel.setBorder(new javax.swing.border.CompoundBorder());
+			ivjBottomPanel.setLayout(new java.awt.GridBagLayout());
+			ivjBottomPanel.setBackground(new java.awt.Color(204,204,255));
+
+			java.awt.GridBagConstraints constraintsCorrectnessPanel = new java.awt.GridBagConstraints();
+			constraintsCorrectnessPanel.gridx = 0; constraintsCorrectnessPanel.gridy = 0;
+			constraintsCorrectnessPanel.fill = java.awt.GridBagConstraints.BOTH;
+			constraintsCorrectnessPanel.weightx = 1.0;
+			constraintsCorrectnessPanel.weighty = 1.0;
+			constraintsCorrectnessPanel.insets = new java.awt.Insets(10, 10, 0, 0);
+			getBottomPanel().add(getCorrectnessPanel(), constraintsCorrectnessPanel);
+
+			java.awt.GridBagConstraints constraintsModePanel = new java.awt.GridBagConstraints();
+			constraintsModePanel.gridx = 1; constraintsModePanel.gridy = 0;
+			constraintsModePanel.fill = java.awt.GridBagConstraints.BOTH;
+			constraintsModePanel.weightx = 1.0;
+			constraintsModePanel.weighty = 1.0;
+			constraintsModePanel.insets = new java.awt.Insets(10, 10, 0, 10);
+			getBottomPanel().add(getModePanel(), constraintsModePanel);
+
+			java.awt.GridBagConstraints constraintsLabelPanel = new java.awt.GridBagConstraints();
+			constraintsLabelPanel.gridx = 0; constraintsLabelPanel.gridy = 1;
+			constraintsLabelPanel.gridwidth = 2;
+			constraintsLabelPanel.fill = java.awt.GridBagConstraints.BOTH;
+			constraintsLabelPanel.weightx = 1.0;
+			constraintsLabelPanel.weighty = 1.0;
+			constraintsLabelPanel.insets = new java.awt.Insets(10, 12, 0, 12);
+			getBottomPanel().add(getLabelPanel(), constraintsLabelPanel);
+
+			java.awt.GridBagConstraints constraintsTrapPanel = new java.awt.GridBagConstraints();
+			constraintsTrapPanel.gridx = 0; constraintsTrapPanel.gridy = 2;
+			constraintsTrapPanel.fill = java.awt.GridBagConstraints.BOTH;
+			constraintsTrapPanel.weightx = 1.0;
+			constraintsTrapPanel.weighty = 1.0;
+			constraintsTrapPanel.insets = new java.awt.Insets(10, 10, 10, 0);
+			getBottomPanel().add(getTrapPanel(), constraintsTrapPanel);
+
+			java.awt.GridBagConstraints constraintsRunPanel = new java.awt.GridBagConstraints();
+			constraintsRunPanel.gridx = 1; constraintsRunPanel.gridy = 2;
+			constraintsRunPanel.fill = java.awt.GridBagConstraints.BOTH;
+			constraintsRunPanel.weightx = 1.0;
+			constraintsRunPanel.weighty = 1.0;
+			constraintsRunPanel.insets = new java.awt.Insets(10, 10, 10, 10);
+			getBottomPanel().add(getRunPanel(), constraintsRunPanel);
+			// user code begin {1}
+			// user code end
+		} catch (java.lang.Throwable ivjExc) {
+			// user code begin {2}
+			// user code end
+			handleException(ivjExc);
+		}
+	}
+	return ivjBottomPanel;
+}
+/**
+ * 
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private static void getBuilderData() {
+/*V1.1
+**start of data**
+	D0CB838494G88G88GB90A2DA8GGGGGGGGGGGG8CGGGE2F5E9ECE4E5F2A0E4E1F4E14DFD8FFCD44535BFB6D123469AABCA542891E9CBDF735A58DF6A23ED1E62EB2C28E9C5CDED5A52B636D8E9C50BBE2CE90B75AE848890A0C800A88196C1CDC84C7FFF04G793301G81A20998B1E2166CC2D6B659E5F78389847D1D1939675C3BF76F12EC5878F979FCCE6E5E6F4C19F3E6664C5CB3F3E766CAD91B22979A66E7C912E121A47FD599A4A96EAF12547750163508B9FF5AE510D4FF1B01D6C9
+	CDF5E9F09D87E1ADB1E6C32674497CF4389F8F7783134C06F570FB3554B5BFB985FE7811938BE1FFFE3C75FB1716734305A8E7B13F4F5A19815795C01100458325A7F4017C021D59B21E82588A79B7A343FC1045630CB7E52B70168491AF942E11C0618F31B8FBF7664861290C8730E6204E07C4DC8FDC17F06D4E9C2E16634527CF16AC25B3C316B3D92A741112E45ED479AAC961A12CA096C87F3DBF9F2E352D27CF6D32DA7A8BCF3B7B8B3BED6E429366BE0B55E5AEBC51EF2B29E9F35A7A8EBBBDB6C71F49FE
+	CA6A799953714726F44EAFC945F0BF17E325CD2CDCE260F782500C1F211EAF9E2C157568FA6107127177AF7855337AE121DF67430A1EDD936FD916B10D256F64654E7822A0BC89C86461D8FA5E30F9B0A9190038A28FD3F6E29EDA27E19E56D7B199E1F09F8DB40570BFF2FCBA5C4F82129E413C7DF1B7664D5E73A3E9E6514BA1AB7D64AD7B9111273AC7143C59236ED976A637297A454CAE06A0AC9AA88EA899A895A87B51AE43FAEE4B7396EE03EB7D89CF2323375751D76FF4B658AD2E038E0B558E3FEBEAA0
+	C4460ED83B9DAE0BA489FBFD40D420238FD271235E364AC8646DA3896DABF27E772401CD2FF11B51664DF4724990131CC64723CA5E6A9EE365F64BDED6EE8300B33E4FD87EB97E8B0E07BE2660220E2B398D317B16C4307B47311C476722AE995F18A4C51D7ADD48E29DDDDA9F7EC70869C959061ED4F491E53CFE89AB63B040A7814583A5814D854AFA8A4BF84F2232614AF8DF1F476A6AB35B5B7ACFB84DAECFC33F4D8EF6A61775591D17AAEBBD92FC21817309F219DC262E23549FBF23DBAE4E7897C20A1F92
+	65517C14D2AEC276FF7B155D73142FED2C20BA3C0137092127C49DAEA07CD60E072BF0D1371BB94E6E23A0CCCA6AB20878CFD6B35C12A462EF26F41E67F82C8A97694C6269307BF990167EF417C1546F0F1632FEB36BD7DD06E220E620AE20F1C0D1C0313F42BA3EF1D151885BD12B2AFE856F7E456C21E49D70384C7B7A5C9EF3DF37752859E5B31F30DB5D129C27EDB1AB5793DEFC9D3CFDF7030C3D56BE6815D8C784291BFB2DE0CCEE91473CF8950B63327250F6DB2F958474BAA5CC5736F8B5DC6DE63767C3
+	27456C31AAB1C47819454CA64E1A0FC20A221F1312D9F9BD4D7B6A69107F593F42327A73B20619A03CB3994BE57662B760FAG0C5BEA079E53564D54B03B8651C6237646B3DB0278593F06BE9E48799B787D5BAE43B4200199DD06025F818EE47FBD3429BF40EFA0E7CA17A163996857004A7F58E5C884727C294B10B3334BB095487EAC2471E7C8832873B9300BD950BE01DA7F52E51887B47E2FDD062D4FC31F8854BC3B4BB087A86A85301D9761B7D0745FA06E1CAE43CC203017C00717216F848A7DDF10B197
+	6A9D48748AE02F507328835BCC6A335F13265D77FB5DB6431FC7FF97765F7AF7ED1BC962E5B1GF8A4509420E420D4206CD73B8C55C09DC083C011C0D3001201D20132D3A19C2883E8GA892E88AD0B2D0AAD076BFA09C2883E8GA892E88AD0B2D0AAD076BFA19C2883E8GA892E88AD0B2D0AAD0763FA09C2883E8GA892E88AD0B2D0AAD076BC881F073E4C2E26B973C75E67307257E22C0E70B72BF7D6676CB72B8FD64F17CA0F55A367FBD6DC19ADE19833972F3E7DAF7AE94DD16944EC8BFFB3FB39146C2C
+	BFDCBA9C0959A333A5AD4E6C093585B536D5A3133593E60FEA0C59B6BDBBDF99198EC82CED713218B3F2BE567E58B5C3D51E2C2DE27BCD1675E36DD14B4B5A9E3B32F6F9A9992CAD2A6FD9FFD0A06B4A5A36BA0C75812C1DD27D3D281FB66B8FD85BE5ED185B435F82ABABADCDD565CF587EEB8159FE3D8E36DD75FB8D501B726F43C06F8C13DE13FC4D172F4BD4E11BB4F12B7C2451287A3DC575FB77B032570DB04F4C977AC887E77E59828D36D3F34FFC45B68DD6217A7DE9007537DA3E9E8C00E73DFC5D2042
+	D64A754F1E859F4A58FBBA3CBB64EB49B0B276EA6E5958E6157C7BFDCD9873D9BED05D6F7313A673CFBE817AD83EBF90E0D9E9A9CF75DBBC7F5B17B39F2A831E839E2071735087F8AF5DA8F15F28416C3622B7F458850E0C5522F884A26E56A52CAC2DE72DFD9E1355E90551D61F47AD7BA279CBD8794AFE52C90704BECC8947195F5C880E0C1B702AA52B848EE9283DAE8C5F4D434D9E0F4BF6225FE3ED33FABC363ED38A7FDE2E0B5B4BA5F74BF9BD3A020FCBA10F89C0C9145769CB18CD213F5362F01C6EF736
+	B3CFCE761B127878F0964417DE4367654DD5ECAEE0AB5D5F456F1570772ABA64704B29AFFFA4E454F1995A7697DC994955F5127009181C051252E61649B63ED236F3D6062C6FDBA75B96ABDB565EB6D1DAAF7134EA21CCACC061C0F1C0B300527E8D4F8920F620A120C9C009C0F301F2DE873F8D488EB47EF5AC5F972B18D2172B57D8145BD7C922ACCA2AD9C1DCCEB9EC7EBF10174BA55116FF3A54FFDF7468D27D3EE87AD27D3E686925176EEBFE3FD42F2F91E14FAEE5F561B857276A3B7E3A140D2B3A9DFDFD
+	D65E01920BA4662FDEECE779307559BC9F59AC272C1EB65BF96802E63E4E7A20977858AD9EFECFFF9D47AF6736607845F274BBD27145DF684E4BC42CFAB5A4D7B273FE28D63E32710B506979E52CCF345A2D3DD0D00D0E7EBE0F40DF6263C299F7AF60588BC7EE052BB1374DFC96C62EB6FBE30F357BF403E320404C33D3A8AE2DD657C9072B57EA497D5CFC56DCE8BE67A96455D1D84F031B586FBC637B6F6FB2FA4DA79638B529FED62FC92E45FFFABB720E66D5C9228DC0FDE65D4175BC8471DCD025365E60EA
+	5A6713EE203A96132E991DF7F1DDDBEC90E6F53B0F18ADB6C7C33F4763688B0E32F65F04835536C4567537EDD87FA7BD03C1D7542DC9B5D0ADCB29CC3F35749E2EE753C00F395F6D0182883A32D63D24835538CC56F7C33150372D5FE9F5C167549DFCFD5DFAC9872AEF392C6FA316EFF2FD1B4D6E1EC6C72F93D48B3A42BD3AE9872AF1855944E453B5DC674327CF84D1CB071CDA20FAD512DEA786EF23BE357D7FE427AA742CFBCBEE7BBD8E17476A7684D9CDCD2A012AD9CD657933363B391EEC6CE0B35B7908
+	A5383ABAF5D28ED45F6D246F39AF22393E4C56DD50CDC32C602A5B6D1BF0407DFF315035E2477522ECFB865D36EE333D9DDC29BDB62B5DD2F052515D6FAE647FDB9CEE0FD645BDAC40FF01EA137BEC8FA52455CCC909ABD6C26578ED435542BEBDECC2BCB80A393D529A39D62532CE938605CE6008FAFA02241345AB2D116B044F1A1F540BFE304965F2385CC1D24A6A1D584835AA277ADBEF3AED4CFC3660B8ECC24F839FC40D1D3F9694E7CD68793785370C112F968CC7CD68F845766831745302642489DD7F12
+	97BD16BEDA109CB4216B6027934754BF8B1EF3A6745DF47C2AA07BE6176318891DAC2BA70C15DF968427CC68B8FF4DADE364138543A193BABEF4784EB1744702650C89DDB7FFF6475879E241F14468F9F95B06EB036D0BDD26A3A6747AA0BFB428FE58681DB0214F10A7B428BE58689DB0214F4425D785577F3AAC67CB68740B2337875977B285597992FA6E4A38A3583E17A9484E97354F97BF4367C7F07CAFD3D09DB021633FD65F9DFC7F4B94F4870C4AB4EB6F5D417741CCC1F742C85FBBAF5CB386FE18E98C
+	9CB121EF7F712B03620719026208891D7257C486578FB385539193BABEFFF1C2D07DB0D3D09DB1216357375F95F4BF4C94F4C7CC681AB7F0E7307DB0D3709DB121EB2A6B3A6078E126E0B9E2723C622EAB03600719026108D1FF18DEF9E590FCB1D3B01CB152E9764E2B03610F1902631049F537708857295E6D064791A469561A3F0FCC33CF544FD4A66B4EE549D7601A1FEBD632F73E1D125960848A83926FFCFBB3D8B82E0311977BB4BA6CF6713A1A3DB6B6307DB5E54DD91272FEB99A78595E1759F09561F1
+	3A61AB08BFE518700CFD178E2F9EA65CB2CCF844B0617143044F9AA6BCEB7F25436B0689378F939EB9CCF842B061F306894FB9F06970E65D70E683567FA33A611D943E3FC5AF5CC9610F690607D2F84BC13D70C88A7F39EEF88C059FBA2497BE15429F578DCF22705643FA6133A87C895D70F9947E933BDEF866FC8C2F6D558B5FCA617F2D9BDECD613B7A7442DBA87C815D70AE8A2FF36805FBA87CC15D70B08AEFF06A05C7D178CFF543E3A95CF4C6AFBC01429F528DCF2670BDAE5D7E09429F568D1796E0F833
+	DBAFBC0B429F518D4F25707D9E3D70DA8AFFCCB73C1542DB7A7542AD947EF35D70818ABFF4D6AFBC1C429F578D0FDE004F01E34BB3616A361E693776F5DB59C2488356C15C1B327C8DCD58D1333DDF5973E2DB4E561D59D5EBA8855E39C2FF1D510995EC5D64E9CA7F640AC5925B3BA252946B22E24DACCD274B56EBF68DB287D65EC3797CCE759E4AB8501F6D371C8157B9C062D9DAEEE43C6ADDFF5353D89914EC473D1569F0EF842ACB937C6352449AA9916F950A173350ECA8DF2844EBDF280E771D9A0CB789
+	70F8D53C99DE71BE5D0171F297C11CC5CA3C2EC56AF82BEAB1DEAC6053D471E6F945FB0862D5AFB69BDA97AB711C0B557186E9AFE98260B3D47166F945FBFF97462BCBB79BBA5215F883696AF84FD03C8440E728624D730AF773EE0C573C44EC68DA22AA67A56AF87B6AB05EF440E7296225AFD547FB0D62F5G6E840AD8AA62CD730A77C0BD464BDCE6B664AED362B5AFD347F3B7E03CF040A72962A5F845FB2F116CA5836CA5C309D717210E77DB0A978AF894D0FC0608B7DD0EA7ADE771521AF04FE991E16BB9
+	7637451274C89A6E6BBB18295E5B5B79448B3AEB7C9819160B74BB16ABEB7C043FF7FFA6CBF7G7030655846D3D62857BC0327696836716DE6F2FB3DE125FA7D1F40462FDC8A5713B6175B332F4FE29D40B6FF5BCA26AB5B0FA643F23B7DEEBE5B8B205DDF57E431F99CAEDCD25EF80EFB286D0EC607455A8C5DC6A3AD0FBCEA331E13F00F6E674DD8DED11087D1B637152A77938FF5CE8FD96627EC1264B2192BAA1B0CEF5E33CC247D6581CC3BFC0559A0B02985B1BBE1D790B609307987911BC1D888E1D9AB91
+	CBBB04D88BE1D79296CA582243084593F6B5E1F389CBEFC52CA09331176D08D988F377D23991B61730A4427A7B904BD805585F89B391F64E015890E129044591B668C4ECB6E17FA4EC6B9B08DDB803D8A7E173889BCF58C597E209047D1B30345508FD69C62C16B04903180730AB880BA1ECFEBFE2B3898BA1ACA70B6A72ACE26D04DDC9D8B8E10B4EA116G18E893C74E30B6497728334160C0217B1C2D6FD4CD4DFE134DECF71CA2FB7FF09763E56B3767812F58FBBED84F1E21DDEB4C06812088A0318F765876
+	8C394DCD86ACE58D79A99F281F7359EB21CF85322C45E763035B5958BC709995EC5FBF7A026D053A6C79FD897BBA2935CE56B54694ABF5EC7B136E9E7AC45B0C100135229DC72FD55AF3733B05CB25551364B382B656E0194C06B8DB57E119FCEFC8DDA61D6BC419042D437A793C3E0135794BFE9500FB141FA4BD22C0C692697171DABDBDB232D10F17DCEC6F56E54E744BBADC3583F5B0C27A9D5928436BC5DA9DA2A0AC0EF4D8E2B2C9EC3D7C65CF628BBDEAEAD10FE9CC07B7D10F5395FAFAD43F09FA5C3F1D
+	69910C49F921470B24C78B4888A5BD76696A91CFFABC5E4A766A85E54EDDC27B183893F5198EF2525FC2DD7AB729F529833C87A87CAD54E53E0B2DF79F656C3AAC7B68AE149D8D69A6AB320B347DC666FA70FD57236C668342B6AFEB72DC56E169EE542199529F379EF5885155E18A6970C4A3576172E647E59D6EA79D92A17D349C54612DAA2D8E3590561503BABC70865BF7990419EFD98FD79D6A618199B12447C715FAFA4CA4BD36F632BE6B72273551A65F2DC7BDD2C1C6718654A37702DA0F9E40A30062B6
+	6073647AFAF6AE4948E7CE71B952504656430EFA521B5A52AC52FB9A53F9A36AFD5F001E5E559B317C7EF00E2D479E5D7CB64A0EEA20BE85528DA55963776A490EA759F76EE332C7B70F0D32DB9B298F01F453B7216C63C5DA592C8D55EDC259AB4E32BEE4145355326CB4934AEE07F443C976B7176A799E891B50D6CE1B96AB3E07EC87CDFB5EE65830D359F4AECD2957586835E5217E46C6491B041FB0FB13F6ECB4718D66E7259B4D069CA30E0D56E432FDDFB8B6BA822391F35FA9369B947718E532BC1C368E
+	4A778FE7B239FC4EC242BDF90E66C04EF1A98659C21FBF2CE665E6027BAE2081208820D8526D502AE14F25E99A384439B421878251EBBA4895FC8BDB82611BC9FCD7854417CAFC0B8F864217319979428262B3925F12C3017015935F358171B5935F32430170F592DFF8C0FCCE62BBEB8F04AF1478DE8D08AF127886FA83610BA13EFF8444B715784E77854217C4FC7F8A08EF96718DB982611BC7FC2F85441779B672FD618C04EFAB713D9E90DFB5710DBB9388DF8B7199DC0170F5915F57826273905F82F7A0FC
+	E144979A90DF9471AD74844297CBFCD7854417C0FC0B7B8361CBA63E300078E6935F12330170C9DB289F8C08AF0B78161D8B04AF17780E6DE2E79F54EEB17B1C2F508A1885E8C0A7CC0F42B5712261DE1CBB768277A763605E7BDC33D7B91E204205AF74E5BD1EEB1684E155DBD1572E6D5ABCC6ED7516B9C5F3AF787AFC78B6EA6EE7E878049F356BA87395F466185021125F1F2CD82BFEFFB297524AFE874696C02D6F505C5991669FB1FF2B679D74D1AA5630B96EE8380F87CA821A831475AE0C95005A5FC5DF
+	650ED5FA733F5E3E0A3F49DF655C8FD196DBEBC6D70625BEFC5AB2743C2BD706EB9BB66A1721EA4C0FF3F54F8EE199053F0BF51EBCCAFD7FBC2C3E899AFD058E91EB5365B4E6108E61BBC62743EDBEFCDA9D325E7366937654DE2AE7CF8590376EBD34274AE2AC2B0E77D04F3A5A5169F94807CF2BE744FBFAE5B531824BEAB269B0F714BA4C77B9B3D12BC30A2E8E63C807D452E132CFDAA353613EE1F5A84E55337115EDFE6622513C65FAADEC5056ABBB672699526C4C45FA0D5904756A49457CF46E9ADDFEBE
+	77615366A7A6D74F7E2273746CAF8162A6ABFA96211EF3C84F4C5D2353F3238F1FD64F5CBC3D3A7FF19156FDDD9E6A10B0CA9D1E9CD60701BC3D32FA33C02F2CA2A06E24BCAC2B8F2AD04FF852F320EEF4FADE65432755F32EEED9FD3D92F5485806BA94540FCE079A9FBE2D8E26EDFA6D641DDC763C53E9A7B4E9A24A745E8A3DB26D04B41D5B30CCBF3B007697C679F9F1147919B7ECFE26EE53AB539786D007E452E1E24368F4087561536A10192F2743E3FBD1075CFC5461E86368F4307870E9F568525561E6
+	EA07832443D21FB312C726C3368FDF2166BED6D70799CB319C266523FF554F1F65D2015910D9003E54BFD731F701B8A7556A3075F9A41C0F7A769BEC4D0C43E5BBE56BC3AC06E35D8E17B800081FE3F695FF07EE04B4EBA95D67D67BBFAF6945557A67A54DDD2DFFDE52BFD7DF7A6C3679D97E4ED3927A5DFEG75EB8592D8CE8BE296426EA0EC00300D87918BA76CAE422289B39EC2AC0E303B891BC6585B07911BC158BD044DA16CFABBE2E96FA336229731EC42EEA02C00304CBE446A883B1130F6425EF0A056
+	C358CD048D911665C4AC02301B891BC4585AB308CDA1EC82E10904E53B90CBA16CD642669276169B3174C244EEA7AC07309C8FE245045DC11809300D7D08F590F697E1F6420CE7919BC7585D040DA76C6DF308CDA6EC083FDF0F077B94421E6258DC384FA8C2EC9C470CF0DFCE58239CEB067BAE42366DE618876E4389B354B3AC966E930A30FF795FFA365EEDBA5D3F466F593BBDF1FFE5FD07265F38DCE2323C7B2ABB03AEC3FD866186FE7F485A153CAFF03B2D621501496CB14BE14FF956C8BA67209DB277DA
+	A5DC17BFE17B92B9CE13475148765509E7717FF29FCF67D95CEA061ED1BC070DFB354FE1D63EF3209C520A71B93CE7AD763BB945383EA2EA8D9B3F37433D9DA8341866FC0E303EBD2AD863C741FD82D03286DFC17D5D6EB57E7B56BDEB747B5616B52C1FF7BB7ADD5DD6ED7F5936A61B42141172BE0F3517951D3C4E1273FB4C2ED3D61F7E371B730BB0FF7C76B57E7AE8D1AF1F54286B2514EC6A2FC32C0CE6EB4AC2AAB19B3200F2CBFC4BC82437F207BA3DB2CA6F6635FA73C23510CEAB1045EFFABF75CA0F6D
+	4593759DDE4A6A1B2D8F9BA8417AB69571F36561FE9AD0CA8956770EE2A6BBD5A3A32354ECB08215177A13FD2ED6AD3B0272726D8A3D3CB4C3BA1DC0CE3F69656FD427D7C969DD291BDEA82493899463B73DBFF825D7C5E5F332814BE6EAA9164D7D9BD9592442FDE69954DF99164D3D1B54326B4A042CF63876G8D157913FD53AE356CEA121D1C076DB0228CE56F5E46E4CF037B9420D4C5F691131DD96EADE3AB5CD78335147B133DF737DA76F6AA47870A744A318B5271G0579CD6FDF3B172A52E3FB416471
+	D28166A52A9C73E22EE4F9C9027B59C0E995646BD669494E0170E2A0D305BF595F2F7312DD02F93929D2AF3D8EC8478EB44EEFFA5D75DE6915E2DE7ED201F999DF01F9D9D44172128877B30166D1DEAC97543233AA052CDC79DAABDFDBAB959D046CF79A3CE417E1DEDE9ED027E711798664EB38FC0D76C96F575E6915E3FA53772A530B13792649579972F50ECFFA57B7FA25D7C173E3DEF613D6A5783265EBC1153F322EB7F925D70969BD331425D72761EB077B9E20A11D74C4DFFDFEAD1BFF9E207BAF787D20
+	044FCAEBBD0BAB7A7B26BE8B8E9A78DA63BB78D860A1569652907B81773F59FE46D78C0815F1DF7BC6206F929647B136977BCD42AA382F7DDFB06858C058FD04DDC7D89577359F836CD54226F06CEAA824ABC9176D5C57E6E74EFDFB81E2BFA66CD542A6F17F7BDEC82F1730F7382F7DC3401EA56CDB9C8B812CFBBEE26FF1DF5B8D58BD04CD66D8BF63A5AC0F7B5A0FG35D1FA7F41B1F69E5AF7A89F79CEAC2B4F880B61985B877ECB893177392F5D84B29EA76CFB9C2B87ECB57196F1DF7B03C56A74E2B9B688
+	FADCCDE5D562C6DD2EA07DFE40B1F656574F89AB633EF69924D7C6D89C47F6GF611308A6EEBAF862C024A60BE0E3D8206F51130AA6EEB3F8A580304CD61588F0172A93D6D67305E56991467817381AD561366FEBB8CA39DEE6BE1277CB99456B62BF819F0BF1B59F2C4952E9B796BAE5606CE183BCF1FF2B97A7BAC98F7BE773FB32AE14CD50DF1A76CE26D6B2C4DEDE37BD054E932622C26F84F70B4CFBADCD66FB47F318B53EC2946B5B3771EE34F4913AEF3AF38C5EDCEEB37A4EDE7F16BF7234FE907386300
+	2201268225101C6CFA3E364B6661EBC91A01CF12A2595412DCA67FF8036D2D11D782030366616368BEAB76499DB4E7923E9D7B648F384F1AG77B398369D7B6483DE7ED3C68D78AEB5229FA907EBF30DEF1FA25EEDE52E65FBC3EB443B2DE504EF6478108A1757AFF2796CBE8A42249DB456636F0DACF0BFC0D897474261BE0A30870F6018EBB2E1D2A90E256289B3DC64F5D18B7928C5EC7FC5CC2F1C306FDE44746A887B75F9CC2F1D30183548BB0930656B10B716307FF88BF993EA31ECEFAC45324D5A893E91
+	D06DCE799987D74BCEFFE5BB057B1B83BBC599AEA17CA10E0FD76122EC77F31C5D47C2D856AE5469C8B11645GE13794E3FE4289FB35987393C95831C24CCF8CE177D7A06FBC42B6D5A2EF7AEE441EA8C35E9C42220857CE58EB9548BBC0181DF843F7E3B91E761ABB1C81781C5D226C526A209D839554F91725A82F52CD2CDC6A6AC4F9ADA4FCA7475BD538A847040D38C62D8742926BD027E97C1DC5F1BD78DB7508B5EC467C7490766D4D189F8FE13F5C0379892B477C7CAE4F4B4FGFCDA3D6CE340F5CE3DBF
+	3B78FF5C5FCDEB50363987B93E35C15B661A36E11BB3C15864864ACF9136390CC644B248AE0C047512DD949076747B181FBA85ABC25E88422A08B70A303F92EFECA37937856A3210CCE03FA659AF04EB2D49DFD97C127B4B2DA611674504BF43719E95AE4A629447597DB8881BE922BCD6216E4DCD087D228AF5EFA7EC7BCE543D07307F28C45EA904ADA35E8442DE2BC55E64A61A4B779A1B656E013C6E117B8638DA76784B77975C379E58A372371C706BB99E2542C53EB3B84E6E27C2D841DE546982FF3F9089
+	77B104A5F2AC9E6E9389AB99A25D897B8747F21B21BDB4A336E410E19DF0EFA76C58A026B7C458CF8629BD90D6530769A593765CDECCEFB6E1E54D185EBC4246B7E3FA697B90AB4F4374BA883B370874A36C35A2520F306345249FE129CB313DA493D63F8C6BFEB6E19317E15D2792F66BF2CCAFE3BFBE5F9F626FADD553D2059F597AAC0EF370A8E7DF0873388BCD7B5ADA8F37B5FDF67850E70DAD70C32CE3FDC6D22FE31562537C2EE36D5CAF6C47A9DFD35D65A1420FF030D79E329FB130EB352C87DF3C5B68
+	30BBDC0527DC66C1BC13EF97CB7F24596ED6665B5E5E6D0FC7789E27F6235FB499E4276C97FBBB55EBFCD9BA3FDAA05EFB08700BF56AF0B62F443EE52304FF5FAB1C15459F3C781F718AE7BA779AC438A8377CCFF07FDFFB650F255C105F787D1EE86E81D1DEAD72F5D2DFF9C87B019FAC936994D52B4BBFEE4393A186BF69044A7C918714F544225DFF6AB546CC0070E4B94EEC38CAAD7E5A7DC35CFF4AEA51767DCFF13C3CC55B77FFC47ED6BB04CDE9C1FBBC31961FE5B987910B67D8815C5791D6190D36ECA1
+	2CA89BEDF960A076E3EB797E24E9F0BF93A86D1059309548F488433772F0364F196DF1E57B22599E6ACE8A1F3C26C36657665B9F4D5444B549B255D81AFCAFE4BC38A6506F5FAC545CAF13EDC90DADD65973EAE9A5EF7BEEABBB8345EA916302A66E333270F107306DFF3C198D47BC56810FE80FCF314F2A4863083F72789190B78AA873B04356151AE4B9538E791691BE639648B483624C815AA267A16D30308B836919FD51D74F220B28E7874497FAFD572868154443FBA04CF398751AF39E750ABE2C2F57C20D
+	DEF107953D2629741247B71B95F9155C3FCE02B8A9A46F4137D0DEC62B3EBC03CA1E91621437AA721ADB95F94216A77331C3BB60BD2DE85FAF15E25B98A22C398C5BC6B8E17FD3CE7EBFE1CB48DFCEE8C55B3E3F081D0F10750159D08D5489B46E838CFB0C075549FB7659FE7CC88AEBAD52FB6F4278B1AD164EC8EDD9CBC206CDD7865A52C29DFB8F04C4BDDEA8C63B0A7FG6D4A7936D24F4692961E88E1499FE0BD1FA944FACEBBB2FCBDE7C31C02A3CABD579D515A5571AD0A3CE66E2F35C01C0EA3A8EFD699
+	4A8B75A3CFED471190A7C6A5EF2A0F3C4A2D0A3CF7393CC40813CC72C2C8DEDA5B706DB99B6294342972572635632FB5204D363451985804B66BA4ECDC935A6CF84292F350E6A793F6E4A34358BB4B44B63447EABE7EC9017B3904B5F20C1D8F41562E886C510D7E5E974E55496BC8A925CD5D177F492F8CED1F9D88ADD0DDD7CB37B630B591A79CAE7ED2AC341D555BCB1BF05EA6836E3782F5G595B459999226ED73C23547DF4BE96CC0470E4206C8F99B6FB0F7192BA24FDA87B8A3C9E6666E13DF6FD08F553
+	320D6A15301F65D33D9276DB72E1A7FF08F57323ED6CB91C8A7799C74126001A01ACC7B17CE19EBEF4D41C65414E69E0E7D7C4D17801ED9DB2BF63751707E61D308CBF71ADAADCFEBF308D1F530B7D244FC82FDF72D7776AEFE40AFAF929887B2429C7315EEEFED729B7B1BFB29D42E69C45B67B427B58E653BF52EF3328B35F7F8FF10ABFD25A2C69A3ED9F517B1EA22F0B4BEB05B81D9F21BC837501E1FE64ADD4490B02B831AAF9899FE97B085E823425699F210DA49420AD2590E65A0E3614560158EA9A77E6
+	F720AD7CD60C3161BE8CE8B2614FF13CCBBE17E5AA613D156AB64B78F85EBA066F93A60FA00E3CEE50CB8636671174891732B532EBDEEFCD39CA3D3D4A4779B3C13FB99DD8EF2DBBCD17C8C37B6C4A79986C64E3151DFC2C3593F31EA22F1C4BEB05B81D9F233C2CE165ADD0D19870C5296445FE2C35130515E8A7719FE37DFFD9C5F6C258BF2A49CE0EA1B6C073F65947E86F8CDF67588377C3C091C013009200D2A84ECDBC4EBC384F7944EC287DC41C5513AB1F31A3623CD15125361FE35EB611F04C3F0DC4DC
+	A2EC122CD74AB1757365FDAFD95AB143B2BFE98DE7C7CB64B2DF2ECAF735740D8B6A67CC44A77CFC288BECFC5079890E977EF441FB3C301DED1D16C47DB78FDD2A7E97E8ECA089521C8534C656E55EA75A31C166C546A74686ECF7B89B5B237D6571B1C0FAA778201D281BF150D77F2AC126EFF9A7762D2B7295FD1F9CC4FDFBBA755FFD2AE98862C4F4AA7ACE6AD47495BAF573F923D84063D9DCAEBF3319491FC1727F22127F5DE6141F79293EFC352F379562D4FF2A48EF79D4AB7FD37E0C6EG5C72A94A7FCD
+	91139F7AA94AFF30C0115FDF0C722778112F76B793A1CE0ACA7EDC9F796FAE43E719F49C655D4ABEA1AC07BF4643B3A1AC67B87699314BD10766637E1FE5C81D9047F9DC69B3C20FABBA08B528FB7838A78270186338D674F7B92C500F1ABF77BD498940D617039D50B1A8D0FEAA1C5C766CBEEB5407A3B1AF33389D67F746FF7F1BD2077D893F67BBA54AF91EADDF0B3B4AC3D6D0DEE20BD8DF14739954BBD0A71087A88CA87AB34CDB5CC626A35B11846A57FBBC666E9EFE7295EED4E207D1A9B0FB71A752FE0A
+	FD1281573FEEFC47DF79C08A7B4DE74D07CFFC8EED305DFC0AB1717E5533977B66384F304FFD31997B66E442FA76E35FBC0F30C5EB30EF4E6C2271679A666F5542FD871093A88CA81A42FF4D4359DEFCF636C904FCA6GBBCFC21E47DA23FE5EA27FC86A0C492BD5450D566193B24EFA49D8AC0DFCCC0AED68D27D36E82F572DE56DB52E0B5E3D1AD81FE6B78FBA7ABD687BBFCB7B5F0CE6308D20AEA00FD91CD5A05A5AE7FCEEAC9C30C8B33635BD595856924C430FE513A14EEC33E86F3CCD1F50764F5FDA4566
+	8C34DF8A90E121E758BBE15F13001177298DEC5ED6670B88F278DD9B993F6F179D107F59D54C375BE3335B2DAE3E0432C42C212C74594B454FA7825D0DA730CCBB0F70E7182B5FAA7A28A5ECB9201C6EABA5EC822C4FFA4E68BD271CDBDADCDE402922A2CF1EDBEEAE45777C551076A64E8F4FA4897F666C76455017FA064B947DC50E9B7B0B59FBE3A44B6FE607EC11747B8B6789D1EFD3CFA8733876EB0B168A5D77DC744E5741F2A5DF3FB8BF72FCED3E0079CA554D9766611D8A657746CAC556DDEF0DDC564B
+	EF212C626EC04BF0FE15A27301D23E1740E9BE438E3390ED6069D2FC9E75F46373702DB2D6C683F0AF5A5219B2341764EE51166640B54DA27A99114E73FCFEAD8730DC8B36A5A30D095AAD7E1F1D5816FAA04E10C5E9CB9196EDDBFAB61D0569FE510262FC6BB80B237B95890A73E56EDAD6BE3AE7BD515A39431A36D3AA5ACE064FBEA0D686D120EB2C855B4EB70A3DED6CDF2ABAB8DCB872FA4FAD47FA1FE689345E1F2AD659608EC57E4F4AC6AE7FCD12AFD983155FD02B7C5E31D311EF8EC0FEDC99759D814B
+	DF3D0B7D96769BCBFB9C1DD6B18F948657A82BD8BBAE629419B0CE9C6009C0F30152CF0AB842463F4367630C0095GF51CE4581FF2547620A5F9CE154F4F3135C651A751C672FB9806DF6390D8F1A6FB66B5B8G6965B6A73F97FA5308FB4F2782FF6AC9DC2F345048FC926DFA79C2615C5754B4F93AFB2C16865955174B54EC44F7FD4527F01D518DBC7D9E389F8794F98A4F60BC3FG7B5CF9F977C976C5FF57FD8717731319A13127C47BCEBA25743963226ED9A60F09F7AB757F681E11543F083BE4AF4BE79B
+	BC55FBA4FC8E948E281F83096367072E5251090F97FA64B52ABD0ACE0A8F31E19BEB234E9E2C7F7EEDD80FC9BD220F1B8DD749A6FCA8D10FFF6373F65900ED35E19F77B20D8FDAED434FC5DBA04E00CD696342ED5ABE6EC7C666B36DEFB11F305A711B812F9DE6F97479CA8A71DC554DFD8C4DF9E9A22CF4975B27207982024C773D82CD9FD7A64EF71A37CD7DEEB6D2AE03F8380ABE7073FCED9F484227C378CC9B5AF73A268F3C2BCE3101475E9FF99F3031907B00F9B67D672C7FBE60DC3D72BB36C1117F07G
+	6417127C724F83159F56A8113D5DD2404A437EB95A5B8B34C7B771F3E1EFB3611A7A397057053D7572393D4C53B096BC0D76360D660F1ACF8FBF9E6E04B84E530A3D051E565A5B1367D8DD6BFDB9C60457D7333C69FC2DC566BF32CDE3C36542C6F6D6EAED0465AB8264CFBA0D635EABCCCA1D946E9CC91D84768C7838C979FDE40FA26B655A604B5A36177D96F5DBC8F90FBFAD1EB7C9F01DF5DA0C49C41C49D5988786AE3C7E3361DAE097F1C47D3F4D6B5F84D82B9D6B7F86FA97B5E477BF9700B69081F1A659
+	157A1FE25756FFC131525F6077E5CA0FAB98FECF6C60B185436F8DBFFC1075CBBEDF4721344DCDCCA76F2F54E0D87CE7AC4C7BEBB1127C8D0AC7AA347D8FAB138450DD046FDC28971ECC61533F508B1FED473E69018BECD2D8BC9877007B67F08D96F63B2C20E60B639C7BAECA838C296CA2BCB7CFBCF7424A546BC8E66E7BDD887A2F5ABA10FAC53DE476AA6BF8C6E6CBF3F64BF3564D0ADD6D5A2758ED94BF6BD0330E67045D5CFDDA2E2341C072A57A37856731FF2B6B9D290F05FA2E5D2F683972002267793D
+	1756735D6640751C510CFA8E842C67F38794BDD3DA94BD2F4A3B341EF30A825773DB4528E76C0875C45D269CD4F45B394C7B79F96FA1A56C6B4BC77E7CFAE6B96AB3ABE0FD2EB94CFE0B792F83054C16E96F20188214430E9432F234755958B344F61EAF74EF0308FD2744BCDAD6B68BB77641B3G288B488394560773F3CF9732858675A77466661AAC272C38468E657D28487F5E4B29C5ECECA76F3DE4DC5D202B4B463ED6C15F31F824086FB360FEB6CB9F71470BD89F67F1B8B9A83024A2567EDD36D3BD9E91
+	D546FF435FC95A2DA7B9AC7A74BBE8EF6AA448DBBC509C20B407F85FAE622C5B07F1F29C225FAF07EB339CC7747BB7727940AE406C8EFC8F3DE10DD172BF4E08F4083EC6365B9A668FB6BADCAEEB3707CD9D7187336CCB1EE679E167B409918672A4F730B2615D3B9CA070889B0B8FFE2753BB7E277C9D63117EBED55AF72FBD6E273D3433FD9172D0A4D7AF02FA2C121BD7E0FCDB253DD11EFD36D95DEF6761DA39656B185F417A5F98487BCC870E09CA3A3C4E73E00D2326E62F4BE6E9B01FEA61B30472996C6B
+	F09C146344F1D088CF339D6E6DC021CE74D3AE3E29343D2D59A3EFFBBB57E35B0BF2865AE7FD78963B93697471B99AE61BC9246B5DA5CC570CB360DFG551E41B95E03256A7978F640FB4EDCFA0ED7345146754C2F98023811C071C0C9C03300A417591085148BD48B8436E030830D839A8FB499E88AD0A2D00A8B5B743BE56CC5283F7789F20570068DC39A3EF5CD687F2E57FE433910DE3A7B527A8B3ED75FD27365GCF71B0FC22BEDFA845FED69E031735854D065B2CE6D7F70F11B5B6B0DCE1373716215D1A
+	C03FA1B76ED9FF268C6DB14E0DF53C321C451D8D77E99E9883F8509EDFD16DAB7AF7GE3198F14310CA7D0FBFCE603E20FA6BA5F4A6EC1DD7F4DF51D847771C0C99E3447774B5575B29BF029FFA47539510BAF8BF8F2C7447723B2B5DFAD70348E43A76AA5398167D8AC90BF2A9F6B4558087512540FF9BD444FE44EB88BED8F2876ACFE2B61A39356EDBBE061E731CF7AF3215719FD22CF92F6A23AA439DC6FB2212C0433A86B67BC4DF9F01FF58E46876750861ED52D89FFB0E7A4B6A07C58DFD42A67CF581C08
+	3FF55526F3225CFA4EF94F1F881913B67ADBD3AE6AE113F1387702134F691D35737E30FC5A73FF845F49E17934A456E2AF584C77581DD346C5824F6078F495AE6A78E6A356718C882B9B40F3FDD69B59F3FD925CCF85CA861A8314B988F5B608FD22F597FB21F849B3935B9D4E9666D42A0E589169BBB69B19EE10D6A750B820C82098208420E420B9A4671B3B195F6A2F6F950627F43D22BE4B3631335603536F7159A6A373991C6083AA4F6CBB36E159E51CB79BCC67310DBD3B8D6DFE68BC5A7D6AFCFEBEA75C
+	A7824DBC0FF6FFE00BE277530BC75E77EDA921F924730176FDDB787AD0790C1213FE4EA8612E1310D5160F7DE379854C63C4426C97B00FA7F99EA741FDBCD052856CB33794FA751900CBC3A3697B2A3C783200A7F798BED10EB185C702D477EF378FBA2DC647C9A3B806CA3D2F2F46FA2F85FDBCC3D8A65D55D86FB1C3D8A6B77238B361FE9ED056C52C771CF714FACF9F51DC11107149CE2C77020B01567BDCAED37E06921DD5E739083A767035F3D1F09F8714F8911F83C7AB71D9B293301CAFB03FF7D6E2FE5B
+	3F40B492F95CF0381F84947F8526B13D8A4BAC09E1DFE29A59D4E626AFB10DBD3C4C0660FEBCD04C17D8E6AF3C2B14D9EFG6FDD2652FB1704AF83AD33075ED34ACC22B21BC77AFB96D25B98075862AF29ED0C437E54154B7C32C963687B35FB599851DF1F464E1895A3CEEC8B696755EDE18A2413B8EEA4ED68992F337DD300E76E08783EDB2C66CB3F826A7D0A11707DF9391A2F98F8CC43700972484976BF865E12BD7C9838002FFD30425815B5D90115E4737743A7CF3A2DB4562E4C4EA4EC1F3B5561363151
+	3D30510776221DF7004E91D7203FD3BD480C406FFBA9B6194C36624BEF26048DACEFC63B1EF6855A750EE6163E74B598838395FF8D5B466EFD58B61A819B77B57A165ABECCE34A57B00D9F7238F360BEBD44ECB006E05BA85B26340DFFE50D7C1DD44D9AD6C60DD05A6C251A2843556B8275BD845F66D1729D8B18CFBE5B1A0FEF2BC3343E0E144DF0D3085657390646582D909697024F270675EA7959216063040E44565D25DA3D6BE43EF638766824A174DBD34A7B37D02D5E9BB99E962A557B5BA52877F888CB
+	8D45B5D596BE0E6E3CD2449718CD1CC7A0E34266BFDA6F3FED9DDFBFFC5BBA35DEFFFE29F73D6F7C12EB3D7E7C5240FA757C1240AE2EE76D6B940C1DBBA85E57887B18302BF91A8C7B48E6616FCE85FEBD570B614DD6A690711B38DE67B856A1E311AA6CE3993BE3BD33FD48F28FDBE3AA30096BD9BFFD52E6370B7BEF71B836BE68AE28BC3E4BF534B94DAA3DE3897B186AE267855F7AE938202E9F798C46753E71D62FD7479376F6D759685A57FF0E126F4F817389BB8E61E36708AB35769D4E7128AB35763D26
+	9C6DFBB204E5DCC57B723D7CBFA76021D70D24DD6E73B9F3ACD2660B016BD41DB404FEAE3ECFBD69AA2D5E97B81EF215D66F348A54FBB60435DECDFB984AFD6BF3DF39EF3DD768442B5109B73D4CB75EAF4BFC6D6377BE675BEAC9FF0CBAFBD8BE7DB16ABBBEE7590E4CBE7E074FB744DD2DAD6747B8BE75EAEDB937B7E2B9A7C2D8F1982D7F74B947F6E4F6FDFA14FC13826693792AEF62E72604E9733B1F6351E15A7CBEC573AEB19016F98D7A10EB79BA858F5CC7G4581A58225G25DE03FEE541A6F6AE21BF
+	3F72084341CF69E1877640D8D9BDEC164F3B1C3A1A4D1F587A6CB6964BE25DEB6D237CAF59AC516FB7D43FEFB7867B0CCE5F320F9BD399328FEA3C048FEA54BF83B34F28FF3EF011515F5914A23C0A4BF2FBFD768AE56DB232E70963DC1F6ABC4C731B7D6BF64566611F6157EE56FF06C7EC76FD065F3CD97F99FE7BE65FE7F8341C2E0B8EC5151F1B1B199D09B54C874DFD66D32A6FE35C33EDF46D6F5ED1727DB5E0BE51BE2F6673999957EA5BED8447332F55365BB773315DEE053030EB311F4AAD711A7FGDC
+	3AEEA44F316AFCBD3D33E45EDC3856DE27571FFF5B072FD50EE7016B000EEC112F5FF07D432F536677CF9C0F3CCE1BDFBB65F79204250763732F265077F9353B507739F6C8A7DEDB216FF3EDF375686A3DE814FCBD817309F2DA483FEDEC8F57165F8A0E8F04EB4BEF824DA305C2582CF07A860F57B7B2DA2EB79B3A2E9F093D1C77B9D753A3730541B5CAA78D215F8CBEE793FB3DD66FE7B99EFF3DD66F3ECA54FB9A0495FC1D3E2121FB2E271A747D0F4F07655377BF6E9916CFBF3FF5FCAEAA626B5A7C6E63F8
+	54573579FD1272BB9942B2EE407CBE2DFBAE6A7075B4F314FC9BC6E917BF66F6663CC11B5F1F0AF9369B3479EDA13B8C033059145F073C46832D91E603A5E2A4F639D0371E86E45EF038C6C768594560C2BD3EB8B96EB4384E50654B78D20FEF0E9CB76DC633A17BC6EFBE714CBA1B4B46FAEEF95ECDBEDB6E3CEF9F35753CEFDF165A6C9B6F35E65FF87FD36C9B6F61E25FF82FAD770DB7FF05EF5F78585E513539DF8F4B275F665E8868DB210A8DFE1F4FFD955C283541A99C2F3ED1EB03754D74DE9942A65F08
+	B65834EFF4ED27ED14FC61817309FC656D673E43B73479AD65F876B734797D894D81EE053030EF50197B6BA452E5D136727B06F5E36FF3CF9ED3994226BF56197BB83E5E37BDDC4B6735E6C339C8B7211FA14645DB613E16B0EB896EB3EC3D894BF0FD29D2EEDBD53F7F33E46C4B70E7E3AAC34CCF1B5FE536A32FD763D3E4824F99D82E60B8C5A66BF5CD39D28E5FD07DDEDFBE76E5D2BE26B26473A6F4FCCB170E8F5AD501F695CDB6F4F7A55AD582E1EEBADBA0196CEA20C2A937ABD43F17D60CFD99EE798AE4
+	CCEBD47274046A77314631176D7E8AE46CEDD272542A7A7DEB53584BFEF9CCE588FFE6D33E7FB903F773071FB3A84A571FB32848771DB32849571FB3284BD74F99083CDF1F2F1475AD2A5F1B72473E5C2B47D406BC56AD716DFBCCA53EFD4FE1DEB66C7C4E5C71584F4466E3BFD3CE58923EB6171D0795CA587D7958EFC59276FA8176DB71041D227329270F47FEABC5D566FFD17DF6FD8565FF5DD7A0E359F6A5CFD92A5FF7D40F3D6C7B46D4062853F3BBFD6DEBE8272FFD5DD809B6E23C996D6149AA349193E1
+	EDF43ED2474DE8A3FF2CD44A6DF955EFCF6558176175DF010CBDD5CA1E8E2BFEA7FF8532DF7A8AE4CC2DD67274086A77112F208D1C7E8A5A408C1DF7E24F147936019CBA9FFBB2593BE5B15AFB9CE1D3A46CE353EEC1ACE2A172E693760081F937925634GF9BD04ED7992F94388F3ACC05E71045DFB9EF9E75E02ED6F074DCAFD5D2F7A3D37F96C6B2E6BAB10D134DF49D3356A77037B46DE76EF46D4063CEF2454777C16A9F4C6C9AA54F36684B1A7E31AA04EA196FC4F1569FFAF64F5E16B9037E7826E1B9CAA
+	41FD1363A7686F1BDCA2A97BE6A7C31C78894A3E496993147987215FB5F48E440C890AFEF3A708B3E1059E0F72361491896DA19275381676EF1AA2075723836258A395BD46C5EA4F1BDBD5446CC1247DF0BE269D6EA7ED03AA6DE8089397291CD5B5CD1536503FD41C3F7E29591094097B171E233D5FF3A315FCE75CAA4E1D94FC397C1B81DB81AB3E95737D851D095CF92B7FB3D4974B3AB9A1CE682DCA3EA3EF55167F0FE90F6D24DB95BD62EF95E7988ABD7E451F5DC90025109E1F537E690C5B065F2FEF04B8
+	6537A9FAB45F26AD7FFF2B4A7F42E2BA6F44CF5A6A726F01B8C337A967F4C55C26AD7FE7A4AC7F285BF05D5A73450A3C278D011CA5988FE9CCD7491B69A32F0F7737F3G1FC77212CB94F9D7AD98CE1E3A6CF2EE077A3FDDF5D6626DDAF93FB90F79EB3D9D57762514623C1E93304937631A42D3EF53D9975D0E5EC25B095E427E333D0566931EC22B45662929B954EF374B3BA940B6795A3F8DFC2FCD8A24118A149905F9FAC2F5165131G4EB27ACFDAC31E9B95683A586F30E586725C653D348E268B52090C42
+	350AAFF2FCBA5C4F82126EC0FDA72A4EA86A89E09D6FCFE89DEF769D016AFB1E4F4F08F4D273B11DD65DF4AEF58642915519C71F94795BEFAB4AE5E5813DC781B9D36F40F2E961F8AA5CE75E89E33FBBE9AF006ADC1D4E5211174B7769CC2A3ABB835E8BD02D54639F69BD57G2493FBA76A3B093F971B857752DD50775FC5EB5837AB7AB68730067DF6DA43DEFCD740EB5837AB75983398536951CDC72F9EB11D449AC577AD8B7D55E3E0E9FEFF07E2A713EB15746F7BA2B8690FD31DBB3462023FB46535FBBEEB
+	D3C7669F4D8D18CF3C57381177CD51F7E95FF75C4671183B346FBB36503E41A99016930D3E6F8F3C56CA0C83FCFC74C85EB17E176EF7C60767FBA8E0BE112F933C2DCC0E566677B447632235791DCBFD64D4885BFAB766F72A57BB55B040236E9EC9FEDF73DA63918BBC89A362DBD3B03AF25A92B01FA80F293C2FCB3EDBDBCE0FF0FC665D5AF2BAC2FD669C88EB1F08659467E517D3GCF1CB8127C4E8AF80D00607B7BA857965C447B4A14095A7CC6F1FC76C4EDFE5F21FDB1299056F98F66B75AEB8D48D44013
+	6E99C9FE6FDD2C661B85BC73C644B701BF4FE5592A5FF9E5E3BFA6EB98D399E21C7D084E1C6CAF3C66E46535BF2A392EB32A5F7F7C8A5E372C9E53F9A11167DF694C1B4C5019B749AA700D77E601EFF97D2CC0A92347D53FBB8A463E3C4E0C298C116747F476D8CCAF75AD07DBD5F30893D53F732B463E9CCCE3AAC364793FF4661C63F5661C27AD760D7773456AF8ECC143EA690D1D8F0172B1AFC88BBDD206294DE96BB39EF672D3E3DD528AEF3746704DF5A119B714754F17966D11961DB45B1DBD66FD524233
+	6C481696E9FE375BA32DEFE1ACC540D2544DD80AB8E31B535CED5D71093464246B54899E5DA34D7FE44FA710883FBBA3FDA1ADE81116FAFA7802E86B0047A32DD3D2EAE54B2265009D83CE161D57470D9B6704BF0F342A5E69348F9A79E135C6FEDA2DC74A4123ED0D39755D5DD6A7FF2BE6EC9C6C36DB5DF99E694DB673C92BE750184BCF10D21D8282E1CB15D3C0BD52EAFE5CE7BBBB6E332841666151BD52B255811F100F4387BC52DAF6061E315EEEB70A83710C7CBCBDA80F8DFBECFD96A31E20A7E0E3EE23
+	436D318FEE86F16BBFF403826210B4A3BFA54DF844EA6967C72EFB2415ACD4F5C41AC7DAD0D2DA8D7FAB0A0BBD522212E27667118CA52037F25A2F1B95A72F74579393DFE72584D539122AF29F5FC213F2362CE6411F6ED9B0DFCA5BA7AD922F9677C9E96C7DA0D4A9FFFD38CFDA60F1B8F9F93369309C793AD4A7FD067075B198677FE83C25A308B77692AEAF3DCBF1830DC80AB61EBF2DC79ACFAFF701580B9404523AF4798DA7A1101CE54824934FA3E536C123B11ABDC6ABBF2CE0CB8DB43E7774E6168A21B3
+	68F35B4D9E762A9F779873BF43FCE961B1E975C9F6F49D6F57B026F51F340A23C72CEEC73F2B1BEF31ED1156F9E18D7DFD963B15ED8170C8EF08CE54EE6EBBD5A4C46CE811B23D229F308E32DCB4364882919751F91068F2A5163BEDF8A81F71203557619AB4561F059E0D654018FB7044A0F4F2F9C66810DD0E019ADEB88D44195F841DEAAF64813AC35E6D720702314DF65EAAF744EE6300312478F8D91E16F543C173002D373F57A81FFB438F77E3CCD627DB0E2CDFD9E9EA8AA8DEA0A6F1F9D2FCCDFB548DD7
+	4233EC631B54E78A66E4BD9B626F5B2091B17237ADE31433D8449E275AFA66AB24GBEAF8677B40557318FCA787BD6C1DB2F59EE77186D276B7BAC6C3B858D4C9CA4DCFFD2DF4F52F7E39CB9D004B557B33DBFD7717CFFD0CB878865EBE8C0D5BCGG5C69GGD0CB818294G94G88G88GB90A2DA865EBE8C0D5BCGG5C69GG8CGGGGGGGGGGGGGGGGGE2F5E9ECE4E5F2A0E4E1F4E1D0CB8586GGGG81G81GBAGGG0FBCGGGG
+**end of data**/
+}
+/**
+ * Return the JCheckBox6 property value.
+ * @return javax.swing.JCheckBox
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private javax.swing.JCheckBox getCompressionCheckBox() {
+	if (ivjCompressionCheckBox == null) {
+		try {
+			ivjCompressionCheckBox = new javax.swing.JCheckBox();
+			ivjCompressionCheckBox.setName("CompressionCheckBox");
+			ivjCompressionCheckBox.setText("Use Compression");
+			ivjCompressionCheckBox.setBackground(new java.awt.Color(204,204,255));
+			// user code begin {1}
+			// user code end
+		} catch (java.lang.Throwable ivjExc) {
+			// user code begin {2}
+			// user code end
+			handleException(ivjExc);
+		}
+	}
+	return ivjCompressionCheckBox;
+}
+/**
+ * Return the CorrectnessPanel property value.
+ * @return javax.swing.JPanel
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private javax.swing.JPanel getCorrectnessPanel() {
+	if (ivjCorrectnessPanel == null) {
+		try {
+			ivjCorrectnessPanel = new javax.swing.JPanel();
+			ivjCorrectnessPanel.setName("CorrectnessPanel");
+			ivjCorrectnessPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Correctness Properties"));
+			ivjCorrectnessPanel.setLayout(new java.awt.GridBagLayout());
+			ivjCorrectnessPanel.setBackground(new java.awt.Color(204,204,255));
+
+			java.awt.GridBagConstraints constraintsSaftyRadioButton = new java.awt.GridBagConstraints();
+			constraintsSaftyRadioButton.gridx = 0; constraintsSaftyRadioButton.gridy = 0;
+			constraintsSaftyRadioButton.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			constraintsSaftyRadioButton.anchor = java.awt.GridBagConstraints.WEST;
+			constraintsSaftyRadioButton.weightx = 1.0;
+			constraintsSaftyRadioButton.insets = new java.awt.Insets(10, 10, 0, 10);
+			getCorrectnessPanel().add(getSaftyRadioButton(), constraintsSaftyRadioButton);
+
+			java.awt.GridBagConstraints constraintsAssertionsCheckBox = new java.awt.GridBagConstraints();
+			constraintsAssertionsCheckBox.gridx = 0; constraintsAssertionsCheckBox.gridy = 1;
+			constraintsAssertionsCheckBox.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			constraintsAssertionsCheckBox.anchor = java.awt.GridBagConstraints.WEST;
+			constraintsAssertionsCheckBox.weightx = 1.0;
+			constraintsAssertionsCheckBox.insets = new java.awt.Insets(10, 28, 0, 10);
+			getCorrectnessPanel().add(getAssertionsCheckBox(), constraintsAssertionsCheckBox);
+
+			java.awt.GridBagConstraints constraintsLivenessRadioButton = new java.awt.GridBagConstraints();
+			constraintsLivenessRadioButton.gridx = 0; constraintsLivenessRadioButton.gridy = 2;
+			constraintsLivenessRadioButton.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			constraintsLivenessRadioButton.anchor = java.awt.GridBagConstraints.WEST;
+			constraintsLivenessRadioButton.weightx = 1.0;
+			constraintsLivenessRadioButton.insets = new java.awt.Insets(10, 10, 0, 10);
+			getCorrectnessPanel().add(getLivenessRadioButton(), constraintsLivenessRadioButton);
+
+			java.awt.GridBagConstraints constraintsNeverClaimCheckBox = new java.awt.GridBagConstraints();
+			constraintsNeverClaimCheckBox.gridx = 0; constraintsNeverClaimCheckBox.gridy = 3;
+			constraintsNeverClaimCheckBox.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			constraintsNeverClaimCheckBox.anchor = java.awt.GridBagConstraints.WEST;
+			constraintsNeverClaimCheckBox.weightx = 1.0;
+			constraintsNeverClaimCheckBox.insets = new java.awt.Insets(10, 28, 10, 10);
+			getCorrectnessPanel().add(getNeverClaimCheckBox(), constraintsNeverClaimCheckBox);
+
+			java.awt.GridBagConstraints constraintsFillerPanel1 = new java.awt.GridBagConstraints();
+			constraintsFillerPanel1.gridx = 0; constraintsFillerPanel1.gridy = 4;
+			constraintsFillerPanel1.fill = java.awt.GridBagConstraints.BOTH;
+			constraintsFillerPanel1.weightx = 1.0;
+			constraintsFillerPanel1.weighty = 1.0;
+			constraintsFillerPanel1.insets = new java.awt.Insets(4, 4, 4, 4);
+			getCorrectnessPanel().add(getFillerPanel1(), constraintsFillerPanel1);
+			// user code begin {1}
+			((javax.swing.border.TitledBorder) ivjCorrectnessPanel.getBorder()).setTitleColor(Color.black);
+			// user code end
+		} catch (java.lang.Throwable ivjExc) {
+			// user code begin {2}
+			// user code end
+			handleException(ivjExc);
+		}
+	}
+	return ivjCorrectnessPanel;
+}
+/**
+ * Return the JTextField3 property value.
+ * @return javax.swing.JTextField
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private javax.swing.JTextField getDepthTextField() {
+	if (ivjDepthTextField == null) {
+		try {
+			ivjDepthTextField = new javax.swing.JTextField();
+			ivjDepthTextField.setName("DepthTextField");
+			ivjDepthTextField.setBorder(BorderFactory.createLoweredBevelBorder());
+			ivjDepthTextField.setText("100000");
+			ivjDepthTextField.setSelectionColor(java.awt.Color.black);
+			// user code begin {1}
+			// user code end
+		} catch (java.lang.Throwable ivjExc) {
+			// user code begin {2}
+			// user code end
+			handleException(ivjExc);
+		}
+	}
+	return ivjDepthTextField;
+}
+/**
+ * Return the JTextField4 property value.
+ * @return javax.swing.JTextField
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private javax.swing.JTextField getErrorsTextField() {
+	if (ivjErrorsTextField == null) {
+		try {
+			ivjErrorsTextField = new javax.swing.JTextField();
+			ivjErrorsTextField.setName("ErrorsTextField");
+			ivjErrorsTextField.setBorder(BorderFactory.createLoweredBevelBorder());
+			ivjErrorsTextField.setText("1");
+			// user code begin {1}
+			// user code end
+		} catch (java.lang.Throwable ivjExc) {
+			// user code begin {2}
+			// user code end
+			handleException(ivjExc);
+		}
+	}
+	return ivjErrorsTextField;
+}
+/**
+ * Return the JRadioButton3 property value.
+ * @return javax.swing.JRadioButton
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private javax.swing.JRadioButton getExhaustiveRadioButton() {
+	if (ivjExhaustiveRadioButton == null) {
+		try {
+			ivjExhaustiveRadioButton = new javax.swing.JRadioButton();
+			ivjExhaustiveRadioButton.setName("ExhaustiveRadioButton");
+			ivjExhaustiveRadioButton.setSelected(true);
+			ivjExhaustiveRadioButton.setText("Exhaustive");
+			ivjExhaustiveRadioButton.setBackground(new java.awt.Color(204,204,255));
+			// user code begin {1}
+			// user code end
+		} catch (java.lang.Throwable ivjExc) {
+			// user code begin {2}
+			// user code end
+			handleException(ivjExc);
+		}
+	}
+	return ivjExhaustiveRadioButton;
+}
+/**
+ * Return the FillerPanel1 property value.
+ * @return javax.swing.JPanel
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private javax.swing.JPanel getFillerPanel1() {
+	if (ivjFillerPanel1 == null) {
+		try {
+			ivjFillerPanel1 = new javax.swing.JPanel();
+			ivjFillerPanel1.setName("FillerPanel1");
+			ivjFillerPanel1.setLayout(null);
+			ivjFillerPanel1.setBackground(new java.awt.Color(204,204,255));
+			// user code begin {1}
+			// user code end
+		} catch (java.lang.Throwable ivjExc) {
+			// user code begin {2}
+			// user code end
+			handleException(ivjExc);
+		}
+	}
+	return ivjFillerPanel1;
+}
+/**
+ * Return the FillerPanel2 property value.
+ * @return javax.swing.JPanel
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private javax.swing.JPanel getFillerPanel2() {
+	if (ivjFillerPanel2 == null) {
+		try {
+			ivjFillerPanel2 = new javax.swing.JPanel();
+			ivjFillerPanel2.setName("FillerPanel2");
+			ivjFillerPanel2.setLayout(null);
+			ivjFillerPanel2.setBackground(new java.awt.Color(204,204,255));
+			// user code begin {1}
+			// user code end
+		} catch (java.lang.Throwable ivjExc) {
+			// user code begin {2}
+			// user code end
+			handleException(ivjExc);
+		}
+	}
+	return ivjFillerPanel2;
+}
+/**
+ * Return the FillerPanel3 property value.
+ * @return javax.swing.JPanel
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private javax.swing.JPanel getFillerPanel3() {
+	if (ivjFillerPanel3 == null) {
+		try {
+			ivjFillerPanel3 = new javax.swing.JPanel();
+			ivjFillerPanel3.setName("FillerPanel3");
+			ivjFillerPanel3.setLayout(null);
+			ivjFillerPanel3.setBackground(new java.awt.Color(204,204,255));
+			// user code begin {1}
+			// user code end
+		} catch (java.lang.Throwable ivjExc) {
+			// user code begin {2}
+			// user code end
+			handleException(ivjExc);
+		}
+	}
+	return ivjFillerPanel3;
+}
+/**
+ * Return the FillerPanel4 property value.
+ * @return javax.swing.JPanel
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private javax.swing.JPanel getFillerPanel4() {
+	if (ivjFillerPanel4 == null) {
+		try {
+			ivjFillerPanel4 = new javax.swing.JPanel();
+			ivjFillerPanel4.setName("FillerPanel4");
+			ivjFillerPanel4.setLayout(null);
+			ivjFillerPanel4.setBackground(new java.awt.Color(204,204,255));
+			// user code begin {1}
+			// user code end
+		} catch (java.lang.Throwable ivjExc) {
+			// user code begin {2}
+			// user code end
+			handleException(ivjExc);
+		}
+	}
+	return ivjFillerPanel4;
+}
+/**
+ * Return the JRadioButton5 property value.
+ * @return javax.swing.JRadioButton
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private javax.swing.JRadioButton getHashCompactRadioButton() {
+	if (ivjHashCompactRadioButton == null) {
+		try {
+			ivjHashCompactRadioButton = new javax.swing.JRadioButton();
+			ivjHashCompactRadioButton.setName("HashCompactRadioButton");
+			ivjHashCompactRadioButton.setText("HashCompact");
+			ivjHashCompactRadioButton.setBackground(new java.awt.Color(204,204,255));
+			// user code begin {1}
+			// user code end
+		} catch (java.lang.Throwable ivjExc) {
+			// user code begin {2}
+			// user code end
+			handleException(ivjExc);
+		}
+	}
+	return ivjHashCompactRadioButton;
+}
+/**
+ * Return the JDialogContentPane property value.
+ * @return javax.swing.JPanel
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private javax.swing.JPanel getJDialogContentPane() {
+	if (ivjJDialogContentPane == null) {
+		try {
+			ivjJDialogContentPane = new javax.swing.JPanel();
+			ivjJDialogContentPane.setName("JDialogContentPane");
+			ivjJDialogContentPane.setBorder(new javax.swing.border.EtchedBorder());
+			ivjJDialogContentPane.setLayout(new java.awt.BorderLayout());
+			ivjJDialogContentPane.setBackground(new java.awt.Color(204,204,255));
+			ivjJDialogContentPane.setForeground(java.awt.Color.gray);
+			getJDialogContentPane().add(getOkbutton(), "South");
+			getJDialogContentPane().add(getBottomPanel(), "Center");
+			// user code begin {1}
+			// user code end
+		} catch (java.lang.Throwable ivjExc) {
+			// user code begin {2}
+			// user code end
+			handleException(ivjExc);
+		}
+	}
+	return ivjJDialogContentPane;
+}
+/**
+ * Return the JLabel1 property value.
+ * @return javax.swing.JLabel
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private javax.swing.JLabel getJLabel1() {
+	if (ivjJLabel1 == null) {
+		try {
+			ivjJLabel1 = new javax.swing.JLabel();
+			ivjJLabel1.setName("JLabel1");
+			ivjJLabel1.setText("Physical Memory Available (Mbytes) Approx:");
+			ivjJLabel1.setForeground(java.awt.Color.black);
+			// user code begin {1}
+			// user code end
+		} catch (java.lang.Throwable ivjExc) {
+			// user code begin {2}
+			// user code end
+			handleException(ivjExc);
+		}
+	}
+	return ivjJLabel1;
+}
+/**
+ * Return the JLabel2 property value.
+ * @return javax.swing.JLabel
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private javax.swing.JLabel getJLabel2() {
+	if (ivjJLabel2 == null) {
+		try {
+			ivjJLabel2 = new javax.swing.JLabel();
+			ivjJLabel2.setName("JLabel2");
+			ivjJLabel2.setText("Estimated State Space Size (States x 10^3):");
+			ivjJLabel2.setForeground(java.awt.Color.black);
+			// user code begin {1}
+			// user code end
+		} catch (java.lang.Throwable ivjExc) {
+			// user code begin {2}
+			// user code end
+			handleException(ivjExc);
+		}
+	}
+	return ivjJLabel2;
+}
+/**
+ * Return the JLabel3 property value.
+ * @return javax.swing.JLabel
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private javax.swing.JLabel getJLabel3() {
+	if (ivjJLabel3 == null) {
+		try {
+			ivjJLabel3 = new javax.swing.JLabel();
+			ivjJLabel3.setName("JLabel3");
+			ivjJLabel3.setText("Maximum Search Depth (Steps):");
+			ivjJLabel3.setForeground(java.awt.Color.black);
+			// user code begin {1}
+			// user code end
+		} catch (java.lang.Throwable ivjExc) {
+			// user code begin {2}
+			// user code end
+			handleException(ivjExc);
+		}
+	}
+	return ivjJLabel3;
+}
+/**
+ * Return the JLabel4 property value.
+ * @return javax.swing.JLabel
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private javax.swing.JLabel getJLabel4() {
+	if (ivjJLabel4 == null) {
+		try {
+			ivjJLabel4 = new javax.swing.JLabel();
+			ivjJLabel4.setName("JLabel4");
+			ivjJLabel4.setText("Stop at error #:");
+			ivjJLabel4.setForeground(java.awt.Color.black);
+			// user code begin {1}
+			// user code end
+		} catch (java.lang.Throwable ivjExc) {
+			// user code begin {2}
+			// user code end
+			handleException(ivjExc);
+		}
+	}
+	return ivjJLabel4;
+}
+/**
+ * Return the LabelPanel property value.
+ * @return javax.swing.JPanel
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private javax.swing.JPanel getLabelPanel() {
+	if (ivjLabelPanel == null) {
+		try {
+			ivjLabelPanel = new javax.swing.JPanel();
+			ivjLabelPanel.setName("LabelPanel");
+			ivjLabelPanel.setBorder(new javax.swing.border.EtchedBorder());
+			ivjLabelPanel.setLayout(new java.awt.GridBagLayout());
+			ivjLabelPanel.setBackground(new java.awt.Color(204,204,255));
+
+			java.awt.GridBagConstraints constraintsJLabel1 = new java.awt.GridBagConstraints();
+			constraintsJLabel1.gridx = 0; constraintsJLabel1.gridy = 0;
+			constraintsJLabel1.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			constraintsJLabel1.anchor = java.awt.GridBagConstraints.WEST;
+			constraintsJLabel1.weighty = 1.0;
+			constraintsJLabel1.insets = new java.awt.Insets(10, 10, 0, 10);
+			getLabelPanel().add(getJLabel1(), constraintsJLabel1);
+
+			java.awt.GridBagConstraints constraintsJLabel2 = new java.awt.GridBagConstraints();
+			constraintsJLabel2.gridx = 0; constraintsJLabel2.gridy = 1;
+			constraintsJLabel2.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			constraintsJLabel2.anchor = java.awt.GridBagConstraints.WEST;
+			constraintsJLabel2.weighty = 1.0;
+			constraintsJLabel2.insets = new java.awt.Insets(10, 10, 0, 10);
+			getLabelPanel().add(getJLabel2(), constraintsJLabel2);
+
+			java.awt.GridBagConstraints constraintsJLabel3 = new java.awt.GridBagConstraints();
+			constraintsJLabel3.gridx = 0; constraintsJLabel3.gridy = 2;
+			constraintsJLabel3.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			constraintsJLabel3.anchor = java.awt.GridBagConstraints.WEST;
+			constraintsJLabel3.weighty = 1.0;
+			constraintsJLabel3.insets = new java.awt.Insets(10, 10, 10, 10);
+			getLabelPanel().add(getJLabel3(), constraintsJLabel3);
+
+			java.awt.GridBagConstraints constraintsPhysicalTextField = new java.awt.GridBagConstraints();
+			constraintsPhysicalTextField.gridx = 1; constraintsPhysicalTextField.gridy = 0;
+			constraintsPhysicalTextField.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			constraintsPhysicalTextField.weightx = 1.0;
+			constraintsPhysicalTextField.weighty = 1.0;
+			constraintsPhysicalTextField.insets = new java.awt.Insets(10, 10, 0, 10);
+			getLabelPanel().add(getPhysicalTextField(), constraintsPhysicalTextField);
+
+			java.awt.GridBagConstraints constraintsStateTextField = new java.awt.GridBagConstraints();
+			constraintsStateTextField.gridx = 1; constraintsStateTextField.gridy = 1;
+			constraintsStateTextField.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			constraintsStateTextField.weightx = 1.0;
+			constraintsStateTextField.weighty = 1.0;
+			constraintsStateTextField.insets = new java.awt.Insets(10, 10, 0, 10);
+			getLabelPanel().add(getStateTextField(), constraintsStateTextField);
+
+			java.awt.GridBagConstraints constraintsDepthTextField = new java.awt.GridBagConstraints();
+			constraintsDepthTextField.gridx = 1; constraintsDepthTextField.gridy = 2;
+			constraintsDepthTextField.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			constraintsDepthTextField.weightx = 1.0;
+			constraintsDepthTextField.weighty = 1.0;
+			constraintsDepthTextField.insets = new java.awt.Insets(10, 10, 10, 10);
+			getLabelPanel().add(getDepthTextField(), constraintsDepthTextField);
+			// user code begin {1}
+			// user code end
+		} catch (java.lang.Throwable ivjExc) {
+			// user code begin {2}
+			// user code end
+			handleException(ivjExc);
+		}
+	}
+	return ivjLabelPanel;
+}
+/**
+ * Return the JRadioButton2 property value.
+ * @return javax.swing.JRadioButton
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private javax.swing.JRadioButton getLivenessRadioButton() {
+	if (ivjLivenessRadioButton == null) {
+		try {
+			ivjLivenessRadioButton = new javax.swing.JRadioButton();
+			ivjLivenessRadioButton.setName("LivenessRadioButton");
+			ivjLivenessRadioButton.setSelected(true);
+			ivjLivenessRadioButton.setText("Liveness (Acceptance Cycles)");
+			ivjLivenessRadioButton.setBackground(new java.awt.Color(204,204,255));
+			// user code begin {1}
+			// user code end
+		} catch (java.lang.Throwable ivjExc) {
+			// user code begin {2}
+			// user code end
+			handleException(ivjExc);
+		}
+	}
+	return ivjLivenessRadioButton;
+}
+/**
+ * Return the ModePanel property value.
+ * @return javax.swing.JPanel
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private javax.swing.JPanel getModePanel() {
+	if (ivjModePanel == null) {
+		try {
+			ivjModePanel = new javax.swing.JPanel();
+			ivjModePanel.setName("ModePanel");
+			ivjModePanel.setOpaque(true);
+			ivjModePanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Search Mode"));
+			ivjModePanel.setLayout(new java.awt.GridBagLayout());
+			ivjModePanel.setBackground(new java.awt.Color(204,204,255));
+
+			java.awt.GridBagConstraints constraintsExhaustiveRadioButton = new java.awt.GridBagConstraints();
+			constraintsExhaustiveRadioButton.gridx = 0; constraintsExhaustiveRadioButton.gridy = 0;
+			constraintsExhaustiveRadioButton.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			constraintsExhaustiveRadioButton.anchor = java.awt.GridBagConstraints.WEST;
+			constraintsExhaustiveRadioButton.weightx = 1.0;
+			constraintsExhaustiveRadioButton.insets = new java.awt.Insets(10, 10, 0, 10);
+			getModePanel().add(getExhaustiveRadioButton(), constraintsExhaustiveRadioButton);
+
+			java.awt.GridBagConstraints constraintsSupertraceRadioButton = new java.awt.GridBagConstraints();
+			constraintsSupertraceRadioButton.gridx = 0; constraintsSupertraceRadioButton.gridy = 2;
+			constraintsSupertraceRadioButton.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			constraintsSupertraceRadioButton.anchor = java.awt.GridBagConstraints.WEST;
+			constraintsSupertraceRadioButton.weightx = 1.0;
+			constraintsSupertraceRadioButton.insets = new java.awt.Insets(10, 10, 0, 10);
+			getModePanel().add(getSupertraceRadioButton(), constraintsSupertraceRadioButton);
+
+			java.awt.GridBagConstraints constraintsHashCompactRadioButton = new java.awt.GridBagConstraints();
+			constraintsHashCompactRadioButton.gridx = 0; constraintsHashCompactRadioButton.gridy = 3;
+			constraintsHashCompactRadioButton.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			constraintsHashCompactRadioButton.anchor = java.awt.GridBagConstraints.WEST;
+			constraintsHashCompactRadioButton.weightx = 1.0;
+			constraintsHashCompactRadioButton.insets = new java.awt.Insets(10, 10, 10, 10);
+			getModePanel().add(getHashCompactRadioButton(), constraintsHashCompactRadioButton);
+
+			java.awt.GridBagConstraints constraintsFillerPanel2 = new java.awt.GridBagConstraints();
+			constraintsFillerPanel2.gridx = 0; constraintsFillerPanel2.gridy = 4;
+			constraintsFillerPanel2.fill = java.awt.GridBagConstraints.BOTH;
+			constraintsFillerPanel2.weightx = 1.0;
+			constraintsFillerPanel2.weighty = 1.0;
+			constraintsFillerPanel2.insets = new java.awt.Insets(4, 4, 4, 4);
+			getModePanel().add(getFillerPanel2(), constraintsFillerPanel2);
+			// user code begin {1}
+			((javax.swing.border.TitledBorder) ivjModePanel.getBorder()).setTitleColor(Color.black);
+			// user code end
+		} catch (java.lang.Throwable ivjExc) {
+			// user code begin {2}
+			// user code end
+			handleException(ivjExc);
+		}
+	}
+	return ivjModePanel;
+}
+/**
+ * Return the JCheckBox2 property value.
+ * @return javax.swing.JCheckBox
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private javax.swing.JCheckBox getNeverClaimCheckBox() {
+	if (ivjNeverClaimCheckBox == null) {
+		try {
+			ivjNeverClaimCheckBox = new javax.swing.JCheckBox();
+			ivjNeverClaimCheckBox.setName("NeverClaimCheckBox");
+			ivjNeverClaimCheckBox.setSelected(true);
+			ivjNeverClaimCheckBox.setText("Apply Never Claim");
+			ivjNeverClaimCheckBox.setBackground(new java.awt.Color(204,204,255));
+			// user code begin {1}
+			// user code end
+		} catch (java.lang.Throwable ivjExc) {
+			// user code begin {2}
+			// user code end
+			handleException(ivjExc);
+		}
+	}
+	return ivjNeverClaimCheckBox;
+}
+/**
+ * Return the Okbutton property value.
+ * @return javax.swing.JButton
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private javax.swing.JButton getOkbutton() {
+	if (ivjOkbutton == null) {
+		try {
+			ivjOkbutton = new javax.swing.JButton();
+			ivjOkbutton.setName("Okbutton");
+			ivjOkbutton.setBorder(new javax.swing.border.EtchedBorder());
+			ivjOkbutton.setText("OK");
+			ivjOkbutton.setBackground(new java.awt.Color(204,204,255));
+			// user code begin {1}
+			// user code end
+		} catch (java.lang.Throwable ivjExc) {
+			// user code begin {2}
+			// user code end
+			handleException(ivjExc);
+		}
+	}
+	return ivjOkbutton;
+}
+/**
+ * Return the JCheckBox5 property value.
+ * @return javax.swing.JCheckBox
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private javax.swing.JCheckBox getPartialOrderCheckBox() {
+	if (ivjPartialOrderCheckBox == null) {
+		try {
+			ivjPartialOrderCheckBox = new javax.swing.JCheckBox();
+			ivjPartialOrderCheckBox.setName("PartialOrderCheckBox");
+			ivjPartialOrderCheckBox.setText("Use Partial Order Reduction");
+			ivjPartialOrderCheckBox.setBackground(new java.awt.Color(204,204,255));
+			// user code begin {1}
+			// user code end
+		} catch (java.lang.Throwable ivjExc) {
+			// user code begin {2}
+			// user code end
+			handleException(ivjExc);
+		}
+	}
+	return ivjPartialOrderCheckBox;
+}
+/**
+ * Return the JTextField1 property value.
+ * @return javax.swing.JTextField
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private javax.swing.JTextField getPhysicalTextField() {
+	if (ivjPhysicalTextField == null) {
+		try {
+			ivjPhysicalTextField = new javax.swing.JTextField();
+			ivjPhysicalTextField.setName("PhysicalTextField");
+			ivjPhysicalTextField.setBorder(BorderFactory.createLoweredBevelBorder());
+			ivjPhysicalTextField.setText("128");
+			ivjPhysicalTextField.setSelectionColor(java.awt.Color.black);
+			// user code begin {1}
+			// user code end
+		} catch (java.lang.Throwable ivjExc) {
+			// user code begin {2}
+			// user code end
+			handleException(ivjExc);
+		}
+	}
+	return ivjPhysicalTextField;
+}
+/**
+ * Return the RunPanel property value.
+ * @return javax.swing.JPanel
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private javax.swing.JPanel getRunPanel() {
+	if (ivjRunPanel == null) {
+		try {
+			ivjRunPanel = new javax.swing.JPanel();
+			ivjRunPanel.setName("RunPanel");
+			ivjRunPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),"Type of Run"));
+			ivjRunPanel.setLayout(new java.awt.GridBagLayout());
+			ivjRunPanel.setBackground(new java.awt.Color(204,204,255));
+
+			java.awt.GridBagConstraints constraintsPartialOrderCheckBox = new java.awt.GridBagConstraints();
+			constraintsPartialOrderCheckBox.gridx = 0; constraintsPartialOrderCheckBox.gridy = 0;
+			constraintsPartialOrderCheckBox.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			constraintsPartialOrderCheckBox.anchor = java.awt.GridBagConstraints.WEST;
+			constraintsPartialOrderCheckBox.weightx = 1.0;
+			constraintsPartialOrderCheckBox.insets = new java.awt.Insets(10, 10, 0, 10);
+			getRunPanel().add(getPartialOrderCheckBox(), constraintsPartialOrderCheckBox);
+
+			java.awt.GridBagConstraints constraintsCompressionCheckBox = new java.awt.GridBagConstraints();
+			constraintsCompressionCheckBox.gridx = 0; constraintsCompressionCheckBox.gridy = 1;
+			constraintsCompressionCheckBox.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			constraintsCompressionCheckBox.anchor = java.awt.GridBagConstraints.WEST;
+			constraintsCompressionCheckBox.weightx = 1.0;
+			constraintsCompressionCheckBox.insets = new java.awt.Insets(10, 10, 10, 10);
+			getRunPanel().add(getCompressionCheckBox(), constraintsCompressionCheckBox);
+
+			java.awt.GridBagConstraints constraintsFillerPanel4 = new java.awt.GridBagConstraints();
+			constraintsFillerPanel4.gridx = 0; constraintsFillerPanel4.gridy = 2;
+			constraintsFillerPanel4.fill = java.awt.GridBagConstraints.BOTH;
+			constraintsFillerPanel4.weightx = 1.0;
+			constraintsFillerPanel4.weighty = 1.0;
+			constraintsFillerPanel4.insets = new java.awt.Insets(4, 4, 4, 4);
+			getRunPanel().add(getFillerPanel4(), constraintsFillerPanel4);
+			// user code begin {1}
+			((javax.swing.border.TitledBorder) ivjRunPanel.getBorder()).setTitleColor(Color.black);
+			// user code end
+		} catch (java.lang.Throwable ivjExc) {
+			// user code begin {2}
+			// user code end
+			handleException(ivjExc);
+		}
+	}
+	return ivjRunPanel;
+}
+/**
+ * Return the JRadioButton1 property value.
+ * @return javax.swing.JRadioButton
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private javax.swing.JRadioButton getSaftyRadioButton() {
+	if (ivjSaftyRadioButton == null) {
+		try {
+			ivjSaftyRadioButton = new javax.swing.JRadioButton();
+			ivjSaftyRadioButton.setName("SaftyRadioButton");
+			ivjSaftyRadioButton.setText("Safety (State Properties)");
+			ivjSaftyRadioButton.setBackground(new java.awt.Color(204,204,255));
+			// user code begin {1}
+			// user code end
+		} catch (java.lang.Throwable ivjExc) {
+			// user code begin {2}
+			// user code end
+			handleException(ivjExc);
+		}
+	}
+	return ivjSaftyRadioButton;
+}
+/**
+ * Return the JCheckBox3 property value.
+ * @return javax.swing.JCheckBox
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private javax.swing.JCheckBox getSaveTrailCheckBox() {
+	if (ivjSaveTrailCheckBox == null) {
+		try {
+			ivjSaveTrailCheckBox = new javax.swing.JCheckBox();
+			ivjSaveTrailCheckBox.setName("SaveTrailCheckBox");
+			ivjSaveTrailCheckBox.setSelected(true);
+			ivjSaveTrailCheckBox.setText("Save All Errors Trails");
+			ivjSaveTrailCheckBox.setBackground(new java.awt.Color(204,204,255));
+			// user code begin {1}
+			// user code end
+		} catch (java.lang.Throwable ivjExc) {
+			// user code begin {2}
+			// user code end
+			handleException(ivjExc);
+		}
+	}
+	return ivjSaveTrailCheckBox;
+}
+/**
+ * Return the JCheckBox4 property value.
+ * @return javax.swing.JCheckBox
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private javax.swing.JCheckBox getShortestCheckBox() {
+	if (ivjShortestCheckBox == null) {
+		try {
+			ivjShortestCheckBox = new javax.swing.JCheckBox();
+			ivjShortestCheckBox.setName("ShortestCheckBox");
+			ivjShortestCheckBox.setText("Find Shortest Trail (Costly!)");
+			ivjShortestCheckBox.setBackground(new java.awt.Color(204,204,255));
+			// user code begin {1}
+			// user code end
+		} catch (java.lang.Throwable ivjExc) {
+			// user code begin {2}
+			// user code end
+			handleException(ivjExc);
+		}
+	}
+	return ivjShortestCheckBox;
+}
+/**
+ * Return the JTextField2 property value.
+ * @return javax.swing.JTextField
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private javax.swing.JTextField getStateTextField() {
+	if (ivjStateTextField == null) {
+		try {
+			ivjStateTextField = new javax.swing.JTextField();
+			ivjStateTextField.setName("StateTextField");
+			ivjStateTextField.setBorder(BorderFactory.createLoweredBevelBorder());
+			ivjStateTextField.setText("500");
+			ivjStateTextField.setSelectionColor(java.awt.Color.black);
+			// user code begin {1}
+			// user code end
+		} catch (java.lang.Throwable ivjExc) {
+			// user code begin {2}
+			// user code end
+			handleException(ivjExc);
+		}
+	}
+	return ivjStateTextField;
+}
+/**
+ * Return the JRadioButton4 property value.
+ * @return javax.swing.JRadioButton
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private javax.swing.JRadioButton getSupertraceRadioButton() {
+	if (ivjSupertraceRadioButton == null) {
+		try {
+			ivjSupertraceRadioButton = new javax.swing.JRadioButton();
+			ivjSupertraceRadioButton.setName("SupertraceRadioButton");
+			ivjSupertraceRadioButton.setText("SuperTrace/BitState");
+			ivjSupertraceRadioButton.setBackground(new java.awt.Color(204,204,255));
+			// user code begin {1}
+			// user code end
+		} catch (java.lang.Throwable ivjExc) {
+			// user code begin {2}
+			// user code end
+			handleException(ivjExc);
+		}
+	}
+	return ivjSupertraceRadioButton;
+}
+/**
+ * Return the TrapPanel property value.
+ * @return javax.swing.JPanel
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private javax.swing.JPanel getTrapPanel() {
+	if (ivjTrapPanel == null) {
+		try {
+			ivjTrapPanel = new javax.swing.JPanel();
+			ivjTrapPanel.setName("TrapPanel");
+			ivjTrapPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Error Trapping"));
+			ivjTrapPanel.setLayout(new java.awt.GridBagLayout());
+			ivjTrapPanel.setBackground(new java.awt.Color(204,204,255));
+
+			java.awt.GridBagConstraints constraintsJLabel4 = new java.awt.GridBagConstraints();
+			constraintsJLabel4.gridx = 0; constraintsJLabel4.gridy = 0;
+			constraintsJLabel4.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			constraintsJLabel4.insets = new java.awt.Insets(10, 10, 10, 10);
+			getTrapPanel().add(getJLabel4(), constraintsJLabel4);
+
+			java.awt.GridBagConstraints constraintsSaveTrailCheckBox = new java.awt.GridBagConstraints();
+			constraintsSaveTrailCheckBox.gridx = 0; constraintsSaveTrailCheckBox.gridy = 1;
+			constraintsSaveTrailCheckBox.gridwidth = 3;
+			constraintsSaveTrailCheckBox.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			constraintsSaveTrailCheckBox.anchor = java.awt.GridBagConstraints.WEST;
+			constraintsSaveTrailCheckBox.insets = new java.awt.Insets(10, 10, 0, 10);
+			getTrapPanel().add(getSaveTrailCheckBox(), constraintsSaveTrailCheckBox);
+
+			java.awt.GridBagConstraints constraintsShortestCheckBox = new java.awt.GridBagConstraints();
+			constraintsShortestCheckBox.gridx = 0; constraintsShortestCheckBox.gridy = 2;
+			constraintsShortestCheckBox.gridwidth = 3;
+			constraintsShortestCheckBox.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			constraintsShortestCheckBox.anchor = java.awt.GridBagConstraints.WEST;
+			constraintsShortestCheckBox.insets = new java.awt.Insets(10, 10, 10, 10);
+			getTrapPanel().add(getShortestCheckBox(), constraintsShortestCheckBox);
+
+			java.awt.GridBagConstraints constraintsErrorsTextField = new java.awt.GridBagConstraints();
+			constraintsErrorsTextField.gridx = 1; constraintsErrorsTextField.gridy = 0;
+			constraintsErrorsTextField.gridwidth = 2;
+			constraintsErrorsTextField.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			constraintsErrorsTextField.weightx = 1.0;
+			constraintsErrorsTextField.insets = new java.awt.Insets(10, 10, 10, 10);
+			getTrapPanel().add(getErrorsTextField(), constraintsErrorsTextField);
+
+			java.awt.GridBagConstraints constraintsFillerPanel3 = new java.awt.GridBagConstraints();
+			constraintsFillerPanel3.gridx = 0; constraintsFillerPanel3.gridy = 3;
+			constraintsFillerPanel3.gridwidth = 3;
+			constraintsFillerPanel3.fill = java.awt.GridBagConstraints.BOTH;
+			constraintsFillerPanel3.weightx = 1.0;
+			constraintsFillerPanel3.weighty = 1.0;
+			constraintsFillerPanel3.insets = new java.awt.Insets(4, 4, 4, 4);
+			getTrapPanel().add(getFillerPanel3(), constraintsFillerPanel3);
+			// user code begin {1}
+			((javax.swing.border.TitledBorder) ivjTrapPanel.getBorder()).setTitleColor(Color.black);
+			// user code end
+		} catch (java.lang.Throwable ivjExc) {
+			// user code begin {2}
+			// user code end
+			handleException(ivjExc);
+		}
+	}
+	return ivjTrapPanel;
+}
+/**
+ * Called whenever the part throws an exception.
+ * @param exception java.lang.Throwable
+ */
+private void handleException(java.lang.Throwable exception) {
+
+	/* Uncomment the following lines to print uncaught exceptions to stdout */
+	// System.out.println("--------- UNCAUGHT EXCEPTION ---------");
+	// exception.printStackTrace(System.out);
+}
+/**
+ * Comment
+ */
+public void hashCompactRadioButton_ActionPerformed(java.awt.event.ActionEvent actionEvent) {
+	spinOptions.setSearchMode(DSpinOptions.HashCompact);
+	//return;
+}
+/**
+ * Initializes connections
+ * @exception java.lang.Exception The exception description.
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private void initConnections() throws java.lang.Exception {
+	// user code begin {1}
+	// user code end
+	getNeverClaimCheckBox().addActionListener(ivjEventHandler);
+	getLivenessRadioButton().addActionListener(ivjEventHandler);
+	getSaftyRadioButton().addActionListener(ivjEventHandler);
+	getExhaustiveRadioButton().addActionListener(ivjEventHandler);
+	getSupertraceRadioButton().addActionListener(ivjEventHandler);
+	getHashCompactRadioButton().addActionListener(ivjEventHandler);
+	getOkbutton().addActionListener(ivjEventHandler);
+	getSaveTrailCheckBox().addActionListener(ivjEventHandler);
+	getShortestCheckBox().addActionListener(ivjEventHandler);
+	getPartialOrderCheckBox().addActionListener(ivjEventHandler);
+	getCompressionCheckBox().addActionListener(ivjEventHandler);
+	getPhysicalTextField().addFocusListener(ivjEventHandler);
+	getStateTextField().addFocusListener(ivjEventHandler);
+	getDepthTextField().addFocusListener(ivjEventHandler);
+	getErrorsTextField().addFocusListener(ivjEventHandler);
+	getAssertionsCheckBox().addActionListener(ivjEventHandler);
+}
+/**
+ * Initialize the class.
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private void initialize() {
+	try {
+		// user code begin {1}
+		// user code end
+		setName("DSpinOption");
+		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+		setBackground(java.awt.Color.gray);
+		setVisible(false);
+		setForeground(java.awt.Color.gray);
+		setSize(495, 491);
+		setTitle("DSpin Option");
+		setContentPane(getJDialogContentPane());
+		initConnections();
+	} catch (java.lang.Throwable ivjExc) {
+		handleException(ivjExc);
+	}
+	// user code begin {2}
+	ButtonGroup group = new ButtonGroup();
+	group.add(getExhaustiveRadioButton());
+	group.add(getSupertraceRadioButton());
+	group.add(getHashCompactRadioButton());
+	
+	group = new ButtonGroup();
+	group.add(getSaftyRadioButton());
+	group.add(getLivenessRadioButton());
+	
+	// user code end
+}
+/**
+ * Comment
+ */
+public void livenessRadioButton_ActionPerformed(java.awt.event.ActionEvent actionEvent) {
+	spinOptions.setAcceptanceCycles(true);
+	spinOptions.setAssertions(false);
+	spinOptions.setSafety(false);
+	//return;
+}
+/**
+ * main entrypoint - starts the part when it is run as an application
+ * @param args java.lang.String[]
+ */
+public static void main(java.lang.String[] args) {
+	try {
+		SpinOption aSpinOption;
+		aSpinOption = new SpinOption();
+		aSpinOption.setModal(true);
+		aSpinOption.addWindowListener(new java.awt.event.WindowAdapter() {
+			public void windowClosing(java.awt.event.WindowEvent e) {
+				System.exit(0);
+			};
+		});
+		aSpinOption.setVisible(true);
+	} catch (Throwable exception) {
+		System.err.println("Exception occurred in main() of javax.swing.JDialog");
+		exception.printStackTrace(System.out);
+	}
+}
+/**
+ * Comment
+ */
+public void neverClaimCheckBox_ActionPerformed(java.awt.event.ActionEvent actionEvent) {
+		spinOptions.setApplyNeverClaim(getNeverClaimCheckBox().isSelected());
+	//return;
+}
+/**
+ * Comment
+ */
+public void okbutton_ActionPerformed(java.awt.event.ActionEvent actionEvent) {
+	setVisible(false);
+	//gui.requestFocus();
+	//return;
+}
+/**
+ * 
+ * @param param java.lang.String
+ */
+public void parseCompileOptions(String param) {
+	Vector vector = new Vector();
+	StringTokenizer st = new StringTokenizer(param);
+	while(st.hasMoreTokens()){
+		vector.add(st.nextToken());
+	}
+	for(int i =0; i < vector.size(); i++){
+		if(((String)vector.elementAt(i)).equals("-DBITSTATE")){
+			getSupertraceRadioButton().setSelected(true);
+			spinOptions.setSearchMode(DSpinOptions.SuperTrace);
+		}
+		if(((String)vector.elementAt(i)).equals("-DHC")){
+				getHashCompactRadioButton().setSelected(true);
+				spinOptions.setSearchMode(DSpinOptions.HashCompact);
+		}
+		if(((String)vector.elementAt(i)).equals("-DMEMLIM")){
+			i++;
+			if(i == vector.size()){
+				System.out.println("Your should also specify the value after DMEMLIM");
+				System.exit(0);
+			}
+			else {
+				String temp = (String)vector.elementAt(i);
+				getPhysicalTextField().setText(temp);
+				try {
+				spinOptions.setMemoryLimit(Integer.parseInt(temp));
+				} catch (Exception e) {
+				JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+				getPhysicalTextField().setText("" + spinOptions.getMemoryLimit());
+				}
+			}
+		}
+		if(((String)vector.elementAt(i)).equals("-DSAFETY")){
+			getSaftyRadioButton().setSelected(true);
+			spinOptions.setAcceptanceCycles(false);
+			spinOptions.setAssertions(getAssertionsCheckBox().isSelected());
+			spinOptions.setSafety(true);
+		}
+		if(((String)vector.elementAt(i)).equals("-DNOREDUCE")){}
+		if(((String)vector.elementAt(i)).equals("-DCOLLAPSE")){
+			getCompressionCheckBox().setSelected(true);
+			spinOptions.setCompression(getCompressionCheckBox().isSelected());
+		}
+	}
+}
+/**
+ * 
+ * @param para java.lang.String
+ */
+public void parsepaneOptions(String para) {
+	Vector vector = new Vector();
+	StringTokenizer st = new StringTokenizer(para);
+	while(st.hasMoreTokens()){
+		vector.add(st.nextToken());
+	}
+	for(int i =0; i < vector.size(); i++){
+		if(((String)vector.elementAt(i)).equals("-n")){
+			i++;
+			if( i==vector.size() || !((String)(vector.elementAt(i))).equals("-m")){
+					System.out.println("Your input should be -n -m SearchDepth");
+					System.exit(0);
+			}
+			else{
+				i++;
+				String temp = (String)vector.elementAt(i);
+				getDepthTextField().setText(temp);
+				try{
+					spinOptions.setSearchDepth(Integer.parseInt(temp));
+				}catch(Exception e){
+					JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+					getDepthTextField().setText(""+spinOptions.getSearchDepth());
+				}
+			}
+		}
+		if(((String)vector.elementAt(i)).equals("-a")){
+			getLivenessRadioButton().setSelected(true);
+			spinOptions.setAcceptanceCycles(true);
+		}
+		if(((String)vector.elementAt(i)).equals("-A")){
+			getAssertionsCheckBox().setSelected(false);
+			spinOptions.setAssertions(false);
+		}
+		if(((String)vector.elementAt(i)).equals("-c")){		
+			i++;
+			if( i==vector.size()){
+					System.out.println("Your input should be -c StopAtErrors");
+					System.exit(0);
+			}
+			else{
+				String temp = (String)vector.elementAt(i);
+				getErrorsTextField().setText(temp);
+				try{
+					spinOptions.setStopAtError(Integer.parseInt(temp));
+				}catch(Exception e){
+					JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+					getErrorsTextField().setText(""+spinOptions.getStopAtError());
+				}
+			}
+		}
+		if(((String)vector.elementAt(i)).equals("-e")){
+			getSaveTrailCheckBox().setSelected(true);
+			spinOptions.setSaveAllTrails(true);
+		}
+		if(((String)vector.elementAt(i)).equals("-I")){
+			getShortestCheckBox().setSelected(true);
+			spinOptions.setFindShortestTrail(true);
+		}
+	}
+}
+/**
+ * Comment
+ */
+public void partialOrderCheckBox_ActionPerformed(java.awt.event.ActionEvent actionEvent) {
+	spinOptions.setPOReduction(getPartialOrderCheckBox().isSelected());
+	//return;
+}
+/**
+ * Comment
+ */
+public void physicalFieldMemory_FocusLost(java.awt.event.FocusEvent focusEvent) {
+	try {
+		spinOptions.setMemoryLimit(Integer.parseInt(getPhysicalTextField().getText()));
+	} catch (Exception e) {
+		JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+		getPhysicalTextField().setText("" + spinOptions.getMemoryLimit());
+	}
+	//return;
+}
+/**
+ * Comment
+ */
+public void physicalTextField_FocusLost(java.awt.event.FocusEvent focusEvent) {
+	try {
+		spinOptions.setMemoryLimit(Integer.parseInt(getPhysicalTextField().getText()));
+	} catch (Exception e) {
+		JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+		getPhysicalTextField().setText("" + spinOptions.getMemoryLimit());
+	}
+	//return;
+}
+/**
+ * Comment
+ */
+public void saftyRadioButton_ActionPerformed(java.awt.event.ActionEvent actionEvent) {
+	spinOptions.setAcceptanceCycles(false);
+	spinOptions.setAssertions(getAssertionsCheckBox().isSelected());
+	spinOptions.setSafety(true);
+	//return;
+}
+/**
+ * Comment
+ */
+public void saverailCheckBox_ActionPerformed(java.awt.event.ActionEvent actionEvent) {
+		spinOptions.setSaveAllTrails(getSaveTrailCheckBox().isSelected());
+	//return;
+}
+/**
+ * Comment
+ */
+public void shortestCheckBox_ActionPerformed(java.awt.event.ActionEvent actionEvent) {
+	spinOptions.setFindShortestTrail(getShortestCheckBox().isSelected());
+	//return;
+}
+/**
+ * Comment
+ */
+public void stateTextField_FocusLost(java.awt.event.FocusEvent focusEvent) {
+	try {
+		spinOptions.setSpaceEstimate(Integer.parseInt(getStateTextField().getText()));
+	} catch (Exception e) {
+		JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+		getStateTextField().setText("" + spinOptions.getSpaceEstimate());
+	}
+	//return;
+}
+/**
+ * Comment
+ */
+public void supertraceRadioButton_ActionPerformed(java.awt.event.ActionEvent actionEvent) {
+	spinOptions.setSearchMode(DSpinOptions.SuperTrace);
+	//return;
+}
+}

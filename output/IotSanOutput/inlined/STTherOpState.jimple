@@ -1,0 +1,60 @@
+public class STTherOpState extends STDevice
+{
+    public STState thermostatOperatingStateState;
+    public int currentThermostatOperatingState;
+
+    public STState currentState(int)
+    {
+        STState $ret;
+        int attributeName;
+        STTherOpState JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        attributeName := @parameter0;
+        $ret = JJJCTEMP$0.[STTherOpState.thermostatOperatingStateState:STState];
+        return $ret;
+    }
+
+    public int currentValue(int)
+    {
+        int attributeName, $ret;
+        STTherOpState JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        attributeName := @parameter0;
+        $ret = JJJCTEMP$0.[STTherOpState.currentThermostatOperatingState:int];
+        return $ret;
+    }
+
+    public STState latestState(int)
+    {
+        STState $ret;
+        int attributeName;
+        STTherOpState JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        attributeName := @parameter0;
+        $ret = JJJCTEMP$0.[STTherOpState.thermostatOperatingStateState:STState];
+        return $ret;
+    }
+
+    public int latestValue(int)
+    {
+        int attributeName, $ret;
+        STTherOpState JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        attributeName := @parameter0;
+        $ret = JJJCTEMP$0.[STTherOpState.currentThermostatOperatingState:int];
+        return $ret;
+    }
+
+    public void <init>()
+    {
+        STTherOpState JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        specialinvoke JJJCTEMP$0.[STDevice.<init>():void]();
+        return;
+    }
+}

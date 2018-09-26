@@ -1,0 +1,86 @@
+public class STTherHeatSetpoint extends STDevice
+{
+    public STState heatingSetpointState;
+    public int currentHeatingSetpoint;
+    public boolean STCommand_STTherHeatSetpoint_setHeatingSetpoint;
+
+    public STState currentState(int)
+    {
+        STState $ret;
+        int attributeName;
+        STTherHeatSetpoint JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        attributeName := @parameter0;
+        $ret = JJJCTEMP$0.[STTherHeatSetpoint.heatingSetpointState:STState];
+        return $ret;
+    }
+
+    public int currentValue(int)
+    {
+        int attributeName, $ret;
+        STTherHeatSetpoint JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        attributeName := @parameter0;
+        $ret = JJJCTEMP$0.[STTherHeatSetpoint.currentHeatingSetpoint:int];
+        return $ret;
+    }
+
+    public STState latestState(int)
+    {
+        STState $ret;
+        int attributeName;
+        STTherHeatSetpoint JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        attributeName := @parameter0;
+        $ret = JJJCTEMP$0.[STTherHeatSetpoint.heatingSetpointState:STState];
+        return $ret;
+    }
+
+    public int latestValue(int)
+    {
+        int attributeName, $ret;
+        STTherHeatSetpoint JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        attributeName := @parameter0;
+        $ret = JJJCTEMP$0.[STTherHeatSetpoint.currentHeatingSetpoint:int];
+        return $ret;
+    }
+
+    public void setHeatingSetpoint(int)
+    {
+        int setpoint;
+        STTherHeatSetpoint JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        setpoint := @parameter0;
+        JJJCTEMP$0.[STTherHeatSetpoint.currentHeatingSetpoint:int] = setpoint;
+        JJJCTEMP$0.[STTherHeatSetpoint.STCommand_STTherHeatSetpoint_setHeatingSetpoint:boolean] = 1;
+        return;
+    }
+
+    public void setHeatingSetpoint(int, int)
+    {
+        int delay, setpoint;
+        STTherHeatSetpoint JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        setpoint := @parameter0;
+        delay := @parameter1;
+        JJJCTEMP$0.[STTherHeatSetpoint.currentHeatingSetpoint:int] = setpoint;
+        JJJCTEMP$0.[STTherHeatSetpoint.STCommand_STTherHeatSetpoint_setHeatingSetpoint:boolean] = 1;
+        return;
+    }
+
+    public void <init>()
+    {
+        STTherHeatSetpoint JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        specialinvoke JJJCTEMP$0.[STDevice.<init>():void]();
+        return;
+    }
+}

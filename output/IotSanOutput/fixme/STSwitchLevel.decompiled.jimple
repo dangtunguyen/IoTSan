@@ -1,0 +1,194 @@
+public class STSwitchLevel extends STDevice
+{
+    public STState switchState;
+    public int currentSwitch;
+    public STState levelState;
+    public int currentLevel;
+    public boolean STCommand_STSwitchLevel_on;
+    public boolean STCommand_STSwitchLevel_off;
+    public boolean STCommand_STSwitchLevel_setLevel;
+
+    public STState currentState(int)
+    {
+        STState $ret;
+        int attributeName;
+        STSwitchLevel JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        attributeName := @parameter0;
+        lookupswitch(attributeName)
+        {
+            case 14: goto label0;
+            case 74: goto label1;
+            default: goto label2;
+        };
+
+     label0:
+        $ret = JJJCTEMP$0.[STSwitchLevel.switchState:STState];
+        return $ret;
+
+     label1:
+        $ret = JJJCTEMP$0.[STSwitchLevel.levelState:STState];
+        return $ret;
+
+     label2:
+        $ret = JJJCTEMP$0.[STSwitchLevel.switchState:STState];
+        return $ret;
+    }
+
+    public int currentValue(int)
+    {
+        int attributeName, $ret;
+        STSwitchLevel JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        attributeName := @parameter0;
+        lookupswitch(attributeName)
+        {
+            case 14: goto label0;
+            case 74: goto label1;
+            default: goto label2;
+        };
+
+     label0:
+        $ret = JJJCTEMP$0.[STSwitchLevel.currentSwitch:int];
+        return $ret;
+
+     label1:
+        $ret = JJJCTEMP$0.[STSwitchLevel.currentLevel:int];
+        return $ret;
+
+     label2:
+        $ret = JJJCTEMP$0.[STSwitchLevel.currentSwitch:int];
+        return $ret;
+    }
+
+    public STState latestState(int)
+    {
+        STState $ret;
+        int attributeName;
+        STSwitchLevel JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        attributeName := @parameter0;
+        lookupswitch(attributeName)
+        {
+            case 14: goto label0;
+            case 74: goto label1;
+            default: goto label2;
+        };
+
+     label0:
+        $ret = JJJCTEMP$0.[STSwitchLevel.switchState:STState];
+        return $ret;
+
+     label1:
+        $ret = JJJCTEMP$0.[STSwitchLevel.levelState:STState];
+        return $ret;
+
+     label2:
+        $ret = JJJCTEMP$0.[STSwitchLevel.switchState:STState];
+        return $ret;
+    }
+
+    public int latestValue(int)
+    {
+        int attributeName, $ret;
+        STSwitchLevel JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        attributeName := @parameter0;
+        lookupswitch(attributeName)
+        {
+            case 14: goto label0;
+            case 74: goto label1;
+            default: goto label2;
+        };
+
+     label0:
+        $ret = JJJCTEMP$0.[STSwitchLevel.currentSwitch:int];
+        return $ret;
+
+     label1:
+        $ret = JJJCTEMP$0.[STSwitchLevel.currentLevel:int];
+        return $ret;
+
+     label2:
+        $ret = JJJCTEMP$0.[STSwitchLevel.currentSwitch:int];
+        return $ret;
+    }
+
+    public void on()
+    {
+        STSwitchLevel JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        JJJCTEMP$0.[STSwitchLevel.STCommand_STSwitchLevel_on:boolean] = 1;
+        return;
+    }
+
+    public void on(int)
+    {
+        int delay;
+        STSwitchLevel JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        delay := @parameter0;
+        JJJCTEMP$0.[STSwitchLevel.STCommand_STSwitchLevel_on:boolean] = 1;
+        return;
+    }
+
+    public void off()
+    {
+        STSwitchLevel JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        JJJCTEMP$0.[STSwitchLevel.STCommand_STSwitchLevel_off:boolean] = 1;
+        return;
+    }
+
+    public void off(int)
+    {
+        int delay;
+        STSwitchLevel JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        delay := @parameter0;
+        JJJCTEMP$0.[STSwitchLevel.STCommand_STSwitchLevel_off:boolean] = 1;
+        return;
+    }
+
+    public void setLevel(int)
+    {
+        int level;
+        STSwitchLevel JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        level := @parameter0;
+        JJJCTEMP$0.[STSwitchLevel.currentLevel:int] = level;
+        JJJCTEMP$0.[STSwitchLevel.STCommand_STSwitchLevel_setLevel:boolean] = 1;
+        return;
+    }
+
+    public void setLevel(int, int)
+    {
+        int delay, level;
+        STSwitchLevel JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        level := @parameter0;
+        delay := @parameter1;
+        JJJCTEMP$0.[STSwitchLevel.currentLevel:int] = level;
+        JJJCTEMP$0.[STSwitchLevel.STCommand_STSwitchLevel_setLevel:boolean] = 1;
+        return;
+    }
+
+    public void <init>()
+    {
+        STSwitchLevel JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        specialinvoke JJJCTEMP$0.[STDevice.<init>():void]();
+        return;
+    }
+}

@@ -29,3 +29,8 @@ Eight, get a filtered logs by using: grep -v 'allEvtsHandled' log.txt | grep -v 
 Please refer to the directory "IoTSan/samples/1" for an example of app source code, config files, and log files.
 
 Note that you need to install SPIN by following instructions at http://spinroot.com/spin/whatispin.html before using this tool.
+
+# Citation
+If you use the source code, please cite the following paper:
+
+Dang Tu Nguyen, Chengyu Song, Zhiyun Qian, Srikanth V. Krishnamurthy, Edward J. M. Colbert, and Patrick McDaniel, "IotSan: Fortifying the Safety of IoT Systems," In Proc. of the 14th International Conference on emerging Networking EXperiments and Technologies (CoNEXT '18)

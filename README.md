@@ -6,7 +6,7 @@ This work was accepted and will be published at *The 14th International Conferen
 
 # Code Structure
 
-![picture](IoTSanArchitecture.png)
+![picture](images/IoTSanArchitecture.png)
 
 IoTSan is developed based on [Bandera](http://bandera.projects.cs.ksu.edu/) and its code structure is as following:
 1. The "*App Dependency Analyzer*" module and "*Translator*" (Groovy to Java) module are at "IoTSan/src/edu/ksu/cis/bandera/jjjc/gparser/"

@@ -7,9 +7,9 @@ This work was accepted and will be published at The 14th International Conferenc
 # Code Structure
 
 IoTSan is developed based on [Bandera](http://bandera.projects.cs.ksu.edu/) and its code structure is as following:
-1. The "App Dependency Analyzer" module and "Translator" module are at "IoTSan/src/edu/ksu/cis/bandera/jjjc/gparser/"
-2. The "Model Generator" module is at "IoTSan/src/edu/ksu/cis/bandera/spin/"
-3. The "Configuration Extractor" module is at "IoTSan/src/configextractor" (This module is not yet integrated into IoTSan at this initial version).
+1. The "*App Dependency Analyzer*" module and "*Translator*" module are at "IoTSan/src/edu/ksu/cis/bandera/jjjc/gparser/"
+2. The "*Model Generator*" module is at "IoTSan/src/edu/ksu/cis/bandera/spin/"
+3. The "*Configuration Extractor*" module is at "IoTSan/src/configextractor" (This module is not yet integrated into IoTSan at this initial version).
 
 # Implementation Note
 
@@ -25,11 +25,15 @@ This implementation is just the initial version of IoTSan, which does not includ
 
 4. Append the safety property in LTL format to the end of each output file.
 
-5. Run the verification with SPIN using the following command in a terminal: spin -search -DVECTORSZ=36736 -DSAFETY -DBITSTATE -E -NOBOUNDCHECK -NOFAIR -NOCOMP -n -w36 <Promela file>. An example of a command is: spin -search -DVECTORSZ=36736 -DSAFETY -DBITSTATE -E -NOBOUNDCHECK -NOFAIR -NOCOMP -n -w36 SmartThing0.prom
+5. Run the verification with SPIN using the following command in a terminal: 
+`spin -search -DVECTORSZ=36736 -DSAFETY -DBITSTATE -E -NOBOUNDCHECK -NOFAIR -NOCOMP -n -w36 <Promela file>`. 
+For example: 
+`spin -search -DVECTORSZ=36736 -DSAFETY -DBITSTATE -E -NOBOUNDCHECK -NOFAIR -NOCOMP -n -w36 SmartThing0.prom`
 
-6. If any violation is detected, the file "SmartThing0.prom.trail" will be created by SPIN. Use the following command to get counter-example log: spin -p -replay SmartThings0.prom > log.txt
+6. If any violation is detected, the file "SmartThing0.prom.trail" will be created by SPIN. Use the following command to get counter-example log: `spin -p -replay SmartThings0.prom > log.txt`
 
-7. Get a filtered logs by using: grep -v 'allEvtsHandled' log.txt | grep -v 'generatedEvent.EvtType = g_' |  grep -E 'generatedEvent.EvtType =|ST_Command.EvtType =|BroadcastChans|Handle|assert|location.mode'  > filterLog.txt
+7. Get a filtered logs by using: 
+`grep -v 'allEvtsHandled' log.txt | grep -v 'generatedEvent.EvtType = g_' |  grep -E 'generatedEvent.EvtType =|ST_Command.EvtType =|BroadcastChans|Handle|assert|location.mode'  > filterLog.txt`
 
 Please refer to the directory "IoTSan/samples/1" for an example of app source code, config files, and log files.
 

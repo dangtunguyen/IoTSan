@@ -47,7 +47,7 @@ Here is the snapshot of a verification run:
 
 ![picture](images/snapshot.png)
 
-Filtered violation log:
+Filtered violation (**The main door is unlocked when people are sleeping at night**) log:
 
 `ltl p1: [] ((((location.mode!=1402)) || ((_g_STLockArr.element[doorLock_STLock].currentLock!=48))) || ((eventProcessed!=1)))
   2:	proc  0 (:init::1) SmartThings0.prom:3707 (state 2)	[location.mode = 1400]

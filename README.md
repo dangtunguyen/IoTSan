@@ -6,7 +6,7 @@ This work was accepted and will be published at The 14th International Conferenc
 
 # Code Structure
 
-IoTSan is developed based on Bandera (http://bandera.projects.cs.ksu.edu/) and its code structure is as following:
+IoTSan is developed based on [Bandera](http://bandera.projects.cs.ksu.edu/) and its code structure is as following:
 1. The "App Dependency Analyzer" module and "Translator" module are at "IoTSan/src/edu/ksu/cis/bandera/jjjc/gparser/"
 2. The "Model Generator" module is at "IoTSan/src/edu/ksu/cis/bandera/spin/"
 3. The "Configuration Extractor" module is at "IoTSan/src/configextractor" (This module is not yet integrated into IoTSan at this initial version).
@@ -17,7 +17,7 @@ This implementation is just the initial version of IoTSan, which does not includ
 
 # Using The Tool
 
-1. Create an Eclipse project and clone this repository (you can find the instructions at https://github.com/collab-uniba/socialcde4eclipse/wiki/How-to-import-a-GitHub-project-into-Eclipse).
+1. Create an Eclipse project and clone this repository (you can find the instructions [here](https://github.com/collab-uniba/socialcde4eclipse/wiki/How-to-import-a-GitHub-project-into-Eclipse)).
 
 2. Create the folder "input/smartapps" at the root directory of your porject. You then need to put the source code of apps and their configuration files in this folder. Note that you should give good names to app files since they will become the names of apps in the resulting modeled system.
 
@@ -33,7 +33,7 @@ This implementation is just the initial version of IoTSan, which does not includ
 
 Please refer to the directory "IoTSan/samples/1" for an example of app source code, config files, and log files.
 
-Note that you need to install SPIN by following instructions at http://spinroot.com/spin/whatispin.html before using this tool.
+Note that you need to install SPIN by following instructions [here](http://spinroot.com/spin/whatispin.html) before using this tool.
 
 # Citation
 If you use the source code, please cite the following paper:

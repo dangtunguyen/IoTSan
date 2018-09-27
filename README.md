@@ -5,7 +5,7 @@ In this repository you will find the detailed technical report and protype code 
 This work was accepted and will be published at *The 14th International Conference on emerging Networking EXperiments and Technologies (CoNEXT '18)*.
 
 # Code Structure
-![alt text](IoTSan Architecture.png)
+![alt text](IoTSanArchitecture.png)
 IoTSan is developed based on [Bandera](http://bandera.projects.cs.ksu.edu/) and its code structure is as following:
 1. The "*App Dependency Analyzer*" module and "*Translator*" module are at "IoTSan/src/edu/ksu/cis/bandera/jjjc/gparser/"
 2. The "*Model Generator*" module is at "IoTSan/src/edu/ksu/cis/bandera/spin/"

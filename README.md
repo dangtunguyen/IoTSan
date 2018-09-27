@@ -44,4 +44,4 @@ Note that you need to install SPIN by following instructions [here](http://spinr
 # Citation
 If you use the source code, please cite the following paper:
 
-Dang Tu Nguyen, Chengyu Song, Zhiyun Qian, Srikanth V. Krishnamurthy, Edward J. M. Colbert, and Patrick McDaniel, "IotSan: Fortifying the Safety of IoT Systems," In Proc. of the 14th International Conference on emerging Networking EXperiments and Technologies (CoNEXT '18)
+Dang Tu Nguyen, Chengyu Song, Zhiyun Qian, Srikanth V. Krishnamurthy, Edward J. M. Colbert, and Patrick McDaniel, "*IotSan: Fortifying the Safety of IoT Systems*," In Proc. of the 14th International Conference on emerging Networking EXperiments and Technologies (CoNEXT '18)

@@ -37,9 +37,14 @@ For example:
 7. Get a filtered logs by using: 
 `grep -v 'allEvtsHandled' log.txt | grep -v 'generatedEvent.EvtType = g_' |  grep -E 'generatedEvent.EvtType =|ST_Command.EvtType =|BroadcastChans|Handle|assert|location.mode'  > filterLog.txt`
 
+Note that you need to install SPIN by following instructions [here](http://spinroot.com/spin/whatispin.html) before using this tool.
+
+# Samples
+
 Please refer to the directory "IoTSan/samples/" for examples of app source code, config files, and log files.
 
-Note that you need to install SPIN by following instructions [here](http://spinroot.com/spin/whatispin.html) before using this tool.
+Here is snapshot of a verification run:
+![picture](images/snapshot.png)
 
 # Citation
 If you use the source code, please cite the following paper:

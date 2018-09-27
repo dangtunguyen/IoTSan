@@ -13,7 +13,7 @@ IoTSan is developed based on [Bandera](http://bandera.projects.cs.ksu.edu/) and 
 
 # Implementation Note
 
-This is the initial version of IoTSan, which does not include all of the modules mentioned in the paper.
+This is the initial version of IoTSan, which does not include all of the modules mentioned in the paper. I will update this repository with additional modules.
 
 # Using The Tool
 

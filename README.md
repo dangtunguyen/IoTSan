@@ -41,9 +41,10 @@ Note that you need to install SPIN by following instructions [here](http://spinr
 
 # Samples
 
-Please refer to the directory "IoTSan/samples/" for examples of app source code, config files, and log files.
+Please refer to the directory "*IoTSan/samples/*" for examples of app source code, config files, and log files.
 
 Here is the snapshot of a verification run:
+
 ![picture](images/snapshot.png)
 
 # Citation

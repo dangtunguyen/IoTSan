@@ -13,8 +13,6 @@ IoTSan is developed based on [Bandera](http://bandera.projects.cs.ksu.edu/) and 
 2. The "*Model Generator*" module is at "IoTSan/src/edu/ksu/cis/bandera/spin/"
 3. The "*Configuration Extractor*" module is at "IoTSan/src/configextractor" (This module is not yet integrated into IoTSan at this initial version).
 
-# Implementation Note
-
 This is the initial version of IoTSan, which does not include all of the modules mentioned in the paper. I will update this repository with additional modules.
 
 # Using The Tool

@@ -4,7 +4,9 @@ In this repository you will find the detailed technical report and protype code 
 
 This work was accepted and will be published at The 14th International Conference on emerging Networking EXperiments and Technologies (CoNEXT '18).
 
-IoTSan is developed based on Bandera (http://bandera.projects.cs.ksu.edu/). The main code of IoTSan is located at edu.ksu.cis.bandera.jjjc.gparser. The "Configuration Extractor" module is located at configextractor; however, this module is not yet integrated into IoTSan at this initial version.
+# Code Structure
+
+IoTSan is developed based on Bandera (http://bandera.projects.cs.ksu.edu/). The "App Dependency Analyzer" module and "Translator" module are at "IoTSan/src/edu/ksu/cis/bandera/jjjc/gparser/"; The "Model Generator" module is at "IoTSan/src/edu/ksu/cis/bandera/spin/"; The "Configuration Extractor" module is at "IoTSan/src/configextractor" (This module is not yet integrated into IoTSan at this initial version).
 
 # Implementation Note
 

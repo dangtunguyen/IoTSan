@@ -1,5 +1,4 @@
 init:
-	git fetch --recurse-submodules
-	git pull --recurse-submodules
+	git submodule update --init --recursive
 	cd lib/groovy-lang && ./gradlew clean dist
 	echo "done"

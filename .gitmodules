@@ -1,0 +1,8 @@
+[submodule "lib/jpf-core"]
+	path = lib/jpf-core
+	url = https://github.com/javapathfinder/jpf-core.git
+	branch = master
+[submodule "lib/groovy-lang"]
+	path = lib/groovy-lang
+	url = https://github.com/apache/groovy.git
+	branch = master

@@ -13,22 +13,23 @@
 	<classpathentry kind="lib" path="lib/bandera"/>
 	<classpathentry kind="lib" path="lib/bcel"/>
 	<classpathentry kind="lib" path="lib/java_cup"/>
-	<classpathentry kind="lib" path="lib/jpf"/>
+	<classpathentry kind="lib" path="lib/jpf-core"/>
 	<classpathentry kind="lib" path="lib/soot"/>
+	<classpathentry kind="lib" path="lib/groovy-lang/lib/groovy-3.0.0-alpha-3.jar"/>
 	<classpathentry exported="true" kind="con" path="GROOVY_SUPPORT"/>
-	<classpathentry kind="lib" path="/Users/tunguyen/Desktop/Workspace/Java/IoTSan/lib/excel/commons-codec-1.10.jar"/>
-	<classpathentry kind="lib" path="/Users/tunguyen/Desktop/Workspace/Java/IoTSan/lib/excel/commons-collections4-4.1.jar"/>
-	<classpathentry kind="lib" path="/Users/tunguyen/Desktop/Workspace/Java/IoTSan/lib/excel/commons-logging-1.2.jar"/>
-	<classpathentry kind="lib" path="/Users/tunguyen/Desktop/Workspace/Java/IoTSan/lib/excel/curvesapi-1.04.jar"/>
-	<classpathentry kind="lib" path="/Users/tunguyen/Desktop/Workspace/Java/IoTSan/lib/excel/junit-4.12.jar"/>
-	<classpathentry kind="lib" path="/Users/tunguyen/Desktop/Workspace/Java/IoTSan/lib/excel/log4j-1.2.17.jar"/>
-	<classpathentry kind="lib" path="/Users/tunguyen/Desktop/Workspace/Java/IoTSan/lib/excel/poi-3.16.jar"/>
-	<classpathentry kind="lib" path="/Users/tunguyen/Desktop/Workspace/Java/IoTSan/lib/excel/poi-excelant-3.16.jar"/>
-	<classpathentry kind="lib" path="/Users/tunguyen/Desktop/Workspace/Java/IoTSan/lib/excel/poi-ooxml-3.16.jar"/>
-	<classpathentry kind="lib" path="/Users/tunguyen/Desktop/Workspace/Java/IoTSan/lib/excel/poi-ooxml-schemas-3.16.jar"/>
-	<classpathentry kind="lib" path="/Users/tunguyen/Desktop/Workspace/Java/IoTSan/lib/excel/poi-scratchpad-3.16.jar"/>
-	<classpathentry kind="lib" path="/Users/tunguyen/Desktop/Workspace/Java/IoTSan/lib/excel/xmlbeans-2.6.0.jar"/>
-	<classpathentry kind="lib" path="/Users/tunguyen/Desktop/Workspace/Java/IoTSan/lib/jsoup-1.11.2.jar"/>
-	<classpathentry kind="lib" path="/Users/tunguyen/Desktop/Workspace/Java/IoTSan/lib/json-simple-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/excel/commons-codec-1.10.jar"/>
+	<classpathentry kind="lib" path="lib/excel/commons-collections4-4.1.jar"/>
+	<classpathentry kind="lib" path="lib/excel/commons-logging-1.2.jar"/>
+	<classpathentry kind="lib" path="lib/excel/curvesapi-1.04.jar"/>
+	<classpathentry kind="lib" path="lib/excel/junit-4.12.jar"/>
+	<classpathentry kind="lib" path="lib/excel/log4j-1.2.17.jar"/>
+	<classpathentry kind="lib" path="lib/excel/poi-3.16.jar"/>
+	<classpathentry kind="lib" path="lib/excel/poi-excelant-3.16.jar"/>
+	<classpathentry kind="lib" path="lib/excel/poi-ooxml-3.16.jar"/>
+	<classpathentry kind="lib" path="lib/excel/poi-ooxml-schemas-3.16.jar"/>
+	<classpathentry kind="lib" path="lib/excel/poi-scratchpad-3.16.jar"/>
+	<classpathentry kind="lib" path="lib/excel/xmlbeans-2.6.0.jar"/>
+	<classpathentry kind="lib" path="lib/jsoup-1.11.2.jar"/>
+	<classpathentry kind="lib" path="lib/json-simple-1.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

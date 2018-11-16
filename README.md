@@ -17,22 +17,26 @@ IoTSan is developed based on [Bandera](http://bandera.projects.cs.ksu.edu/) and 
 
 # Using The Tool
 
-1. Create an Eclipse project and clone this repository (you can find the instructions [here](https://github.com/collab-uniba/socialcde4eclipse/wiki/How-to-import-a-GitHub-project-into-Eclipse)).
+1. Create an Eclipse project and clone this repository (you can find the instructions [here](https://github.com/collab-uniba/socialcde4eclipse/wiki/How-to-import-a-GitHub-project-into-Eclipse), which you should follow up until the text **In the rest of this guide...**).
 
-2. Create the folder "input/smartapps" at the root directory of your porject. You then need to put the source code of apps and their configuration files in this folder. Note that you should give good names to app files since they will become the names of apps in the resulting modeled system.
+2. Eclipse *should* clone the submodules for this project.  If it doesn't, in either the command line on \*nix-type systems or the Git-Bash emulator on Windows, run `git fetch --recurse-submodules`.  Alternatively, [you can do this inside Eclipse](https://stackoverflow.com/a/32879975/1586231).
 
-3. Run the "IotSan.java" as "Java Application". The resulting Promela model code will be generated and stored at ".../IoTSan/output/IotSanOutput/birc".
+3. Nagivate to `lib/groovy-lang` and compile `groovy` using `gradlew clean dist`.
 
-4. Append the safety property in LTL format to the end of each output file.
+4. Create the folder "input/smartapps" at the root directory of your porject. You then need to put the source code of apps and their configuration files in this folder. Note that you should give good names to app files since they will become the names of apps in the resulting modeled system.
 
-5. Run the verification with SPIN using the following command in a terminal: 
+5. Run the "IotSan.java" as "Java Application". The resulting Promela model code will be generated and stored at ".../IoTSan/output/IotSanOutput/birc".
+
+6. Append the safety property in LTL format to the end of each output file.
+
+7. Run the verification with SPIN using the following command in a terminal: 
 `spin -search -DVECTORSZ=36736 -DSAFETY -DBITSTATE -E -NOBOUNDCHECK -NOFAIR -NOCOMP -n -w36 <Promela file>`. 
 For example: 
 `spin -search -DVECTORSZ=36736 -DSAFETY -DBITSTATE -E -NOBOUNDCHECK -NOFAIR -NOCOMP -n -w36 SmartThing0.prom`
 
-6. If any violation is detected, the file "SmartThing0.prom.trail" will be created by SPIN. Use the following command to get counter-example log: `spin -p -replay SmartThings0.prom > log.txt`
+8. If any violation is detected, the file "SmartThing0.prom.trail" will be created by SPIN. Use the following command to get counter-example log: `spin -p -replay SmartThings0.prom > log.txt`
 
-7. Get a filtered logs by using: 
+9. Get a filtered logs by using: 
 `grep -v 'allEvtsHandled' log.txt | grep -v 'generatedEvent.EvtType = g_' |  grep -E 'generatedEvent.EvtType =|ST_Command.EvtType =|BroadcastChans|Handle|assert|location.mode'  > filterLog.txt`
 
 Note that you need to install SPIN by following instructions [here](http://spinroot.com/spin/whatispin.html) before using this tool.

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.6.1">
+<title>JsonBuilder</title>
+<link rel="stylesheet" href="./assets/css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+</head>
+<body class="book">
+<div id="header">
+<h1>JsonBuilder</h1>
+<div class="details">
+<span id="revnumber">version 3.0.0-alpha-3</span>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Groovy&#8217;s <code>JsonBuilder</code> makes it easy to create Json. For example to create this Json string:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">String carRecords = '''
+    {
+        "records": {
+        "car": {
+            "name": "HSV Maloo",
+            "make": "Holden",
+            "year": 2006,
+            "country": "Australia",
+            "record": {
+              "type": "speed",
+              "description": "production pickup truck with speed of 271kph"
+            }
+          }
+      }
+    }
+'''</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>you can use a <code>JsonBuilder</code> like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">JsonBuilder builder = new JsonBuilder()
+builder.records {
+  car {
+        name 'HSV Maloo'
+        make 'Holden'
+        year 2006
+        country 'Australia'
+        record {
+            type 'speed'
+            description 'production pickup truck with speed of 271kph'
+        }
+  }
+}
+String json = JsonOutput.prettyPrint(builder.toString())</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>We use <a href="https://github.com/lukas-krecan/JsonUnit">JsonUnit</a> to check that the builder produced the expected result:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">JsonAssert.assertJsonEquals(json, carRecords)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you need to customize the generated output you can pass a <code>JsonGenerator</code> instance when creating a <code>JsonBuilder</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import groovy.json.*
+
+def generator = new JsonGenerator.Options()
+        .excludeNulls()
+        .excludeFieldsByName('make', 'country', 'record')
+        .excludeFieldsByType(Number)
+        .addConverter(URL) { url -&gt; "http://groovy-lang.org" }
+        .build()
+
+JsonBuilder builder = new JsonBuilder(generator)
+builder.records {
+  car {
+        name 'HSV Maloo'
+        make 'Holden'
+        year 2006
+        country 'Australia'
+        homepage new URL('http://example.org')
+        record {
+            type 'speed'
+            description 'production pickup truck with speed of 271kph'
+        }
+  }
+}
+
+assert builder.toString() == '{"records":{"car":{"name":"HSV Maloo","homepage":"http://groovy-lang.org"}}}'</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 3.0.0-alpha-3<br>
+Last updated 2018-06-23 13:44:34 AEST
+</div>
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+<script>prettyPrint()</script>
+</body>
+</html>

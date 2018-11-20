@@ -1,0 +1,1821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.6.1">
+<title>Template engines</title>
+<link rel="stylesheet" href="./assets/css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+<h1>Template engines</h1>
+<div class="details">
+<span id="revnumber">version 3.0.0-alpha-3</span>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_introduction">1. Introduction</a></li>
+<li><a href="#_template_framework">2. Template framework</a></li>
+<li><a href="#_simpletemplateengine">3. SimpleTemplateEngine</a>
+<ul class="sectlevel2">
+<li><a href="#_advanced_usage_note">3.1. Advanced Usage Note</a></li>
+</ul>
+</li>
+<li><a href="#_streamingtemplateengine">4. StreamingTemplateEngine</a></li>
+<li><a href="#_gstringtemplateengine">5. GStringTemplateEngine</a></li>
+<li><a href="#_xmltemplateengine">6. XmlTemplateEngine</a></li>
+<li><a href="#_the_markuptemplateengine">7. The MarkupTemplateEngine</a>
+<ul class="sectlevel2">
+<li><a href="#_the_template_format">7.1. The template format</a>
+<ul class="sectlevel3">
+<li><a href="#_basics">7.1.1. Basics</a></li>
+<li><a href="#_support_methods">7.1.2. Support methods</a></li>
+<li><a href="#_includes">7.1.3. Includes</a></li>
+<li><a href="#_fragments">7.1.4. Fragments</a></li>
+<li><a href="#_layouts">7.1.5. Layouts</a></li>
+</ul>
+</li>
+<li><a href="#_rendering_contents">7.2. Rendering contents</a>
+<ul class="sectlevel3">
+<li><a href="#_creation_of_a_template_engine">7.2.1. Creation of a template engine</a></li>
+<li><a href="#markuptemplate-config">7.2.2. Configuration options</a></li>
+<li><a href="#markuptemplate-autoformat">7.2.3. Automatic formatting</a></li>
+<li><a href="#markuptemplate-autoescape">7.2.4. Automatic escaping</a></li>
+<li><a href="#markuptemplate-gotchas">7.2.5. Common gotchas</a>
+<ul class="sectlevel4">
+<li><a href="#_strings_containing_markup">Strings containing markup</a></li>
+</ul>
+</li>
+<li><a href="#markuptemplate-i18n">7.2.6. Internationalization</a></li>
+<li><a href="#markuptemplate-basetemplate">7.2.7. Custom template classes</a></li>
+</ul>
+</li>
+<li><a href="#_type_checked_templates">7.3. Type checked templates</a>
+<ul class="sectlevel3">
+<li><a href="#_optional_type_checking">7.3.1. Optional type checking</a></li>
+<li><a href="#_alternative_declaration_of_types">7.3.2. Alternative declaration of types</a></li>
+<li><a href="#_performance_of_type_checked_templates">7.3.3. Performance of type checked templates</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_other_solutions">8. Other solutions</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_introduction"><a class="anchor" href="#_introduction"></a>1. Introduction</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Groovy supports multiple ways to generate text dynamically including <code>GStrings</code>, <code>printf</code> and <a href="#_markupbuilder">MarkupBuilder</a> just to name a few. In addition to these, there is a dedicated template framework which is well-suited to applications where the text to be generated follows the form of a static template.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_template_framework"><a class="anchor" href="#_template_framework"></a>2. Template framework</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The template framework in Groovy consists of a <code>TemplateEngine</code> abstract base class that engines must implement and a <code>Template</code> interface that the resulting templates they generate must implement.</p>
+</div>
+<div class="paragraph">
+<p>Included with Groovy are several template engines:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>SimpleTemplateEngine</code> - for basic templates</p>
+</li>
+<li>
+<p><code>StreamingTemplateEngine</code> - functionally equivalent to <code>SimpleTemplateEngine</code>, but can handle strings larger than 64k</p>
+</li>
+<li>
+<p><code>GStringTemplateEngine</code> - stores the template as writeable closures (useful for streaming scenarios)</p>
+</li>
+<li>
+<p><code>XmlTemplateEngine</code> - works well when the template and output are valid XML</p>
+</li>
+<li>
+<p><code>MarkupTemplateEngine</code> - a very complete, optimized, template engine</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_simpletemplateengine"><a class="anchor" href="#_simpletemplateengine"></a>3. SimpleTemplateEngine</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Shown here is the <code>SimpleTemplateEngine</code> that allows you to use JSP-like scriptlets (see example below), script, and EL expressions in your template in order to generate parametrized text. Here is an example of using the system:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def text = 'Dear "$firstname $lastname",\nSo nice to meet you in &lt;% print city %&gt;.\nSee you in ${month},\n${signed}'
+
+def binding = ["firstname":"Sam", "lastname":"Pullara", "city":"San Francisco", "month":"December", "signed":"Groovy-Dev"]
+
+def engine = new groovy.text.SimpleTemplateEngine()
+def template = engine.createTemplate(text).make(binding)
+
+def result = 'Dear "Sam Pullara",\nSo nice to meet you in San Francisco.\nSee you in December,\nGroovy-Dev'
+
+assert result == template.toString()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>While it is generally not deemed good practice to mix processing logic in your template (or view), sometimes very simple logic can be useful. E.g. in the example above, we could change this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">$firstname</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>to this (assuming we have set up a static import for capitalize <strong>inside</strong> the template):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">${firstname.capitalize()}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>or this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">&lt;% print city %&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>to this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">&lt;% print city == "New York" ? "The Big Apple" : city %&gt;</code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_advanced_usage_note"><a class="anchor" href="#_advanced_usage_note"></a>3.1. Advanced Usage Note</h3>
+<div class="paragraph">
+<p>If you happen to be embedding your template directly in your script (as we did above) you have to be careful about backslash escaping. Because the template string itself will be parsed by Groovy before it is passed to the the templating framework, you have to escape any backslashes inside GString expressions or scriptlet 'code' that are entered as part of a Groovy program. E.g. if we wanted quotes around <em>The Big Apple</em> above, we would use:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">&lt;% print city == "New York" ? "\\"The Big Apple\\"" : city %&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Similarly, if we wanted a newline, we would use:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">\\n</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>in any GString expression or scriptlet 'code' that appears inside a Groovy script. A normal &#8220;\n&#8221; is fine within the static template text itself or if the entire template itself is in an external template file. Similarly, to represent an actual backslash in your text you would need</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">\\\\</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>in an external file or</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">\\\\</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>in any GString expression or scriptlet 'code'. (Note: the necessity to have this extra slash may go away in a future version of Groovy if we can find an easy way to support such a change.)</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_streamingtemplateengine"><a class="anchor" href="#_streamingtemplateengine"></a>4. StreamingTemplateEngine</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>StreamingTemplateEngine</code> engine is functionally equivalent to the <code>SimpleTemplateEngine</code>, but creates the template using writable closures making it more scalable for large templates. Specifically this template engine can handle strings larger than 64k.</p>
+</div>
+<div class="paragraph">
+<p>It uses JSP style &lt;% %&gt; script and &lt;%= %&gt; expression syntax or GString style expressions. The variable 'out' is bound to the writer that the template is being written to.</p>
+</div>
+<div class="paragraph">
+<p>Frequently, the template source will be a file but here we show a simple example providing the template as a string:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def text = '''\
+Dear &lt;% out.print firstname %&gt; ${lastname},
+
+We &lt;% if (accepted) out.print 'are pleased' else out.print 'regret' %&gt; \
+to inform you that your paper entitled
+'$title' was ${ accepted ? 'accepted' : 'rejected' }.
+
+The conference committee.'''
+
+def template = new groovy.text.StreamingTemplateEngine().createTemplate(text)
+
+def binding = [
+    firstname : "Grace",
+    lastname  : "Hopper",
+    accepted  : true,
+    title     : 'Groovy for COBOL programmers'
+]
+
+String response = template.make(binding)
+
+assert response == '''Dear Grace Hopper,
+
+We are pleased to inform you that your paper entitled
+'Groovy for COBOL programmers' was accepted.
+
+The conference committee.'''</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_gstringtemplateengine"><a class="anchor" href="#_gstringtemplateengine"></a>5. GStringTemplateEngine</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>As an example of using the <code>GStringTemplateEngine</code>, here is the example above done again (with a few changes to show some other options). First we will store the template in a file this time:</p>
+</div>
+<div class="listingblock">
+<div class="title">test.template</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Dear "$firstname $lastname",
+So nice to meet you in &lt;% out &lt;&lt; (city == "New York" ? "\\"The Big Apple\\"" : city) %&gt;.
+See you in ${month},
+${signed}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note that we used <code>out</code> instead of <code>print</code> to support the streaming nature of <code>GStringTemplateEngine</code>. Because we have the template in a separate file, there is no need to escape the backslashes. Here is how we call it:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def f = new File('test.template')
+def engine = new groovy.text.GStringTemplateEngine()
+def template = engine.createTemplate(f).make(binding)
+println template.toString()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>and here is the output:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Dear "Sam Pullara",
+So nice to meet you in "The Big Apple".
+See you in December,
+Groovy-Dev</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_xmltemplateengine"><a class="anchor" href="#_xmltemplateengine"></a>6. XmlTemplateEngine</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><code>XmlTemplateEngine</code> for use in templating scenarios where both the template source and the expected output are intended to be XML. Templates may use the normal <code>${expression}</code> and <code>$variable</code> notations to insert an arbitrary expression into the template. In addition, support is also provided for special tags: <code>&lt;gsp:scriptlet&gt;</code> (for inserting code fragments) and <code>&lt;gsp:expression&gt;</code> (for code fragments which produce output).</p>
+</div>
+<div class="paragraph">
+<p>Comments and processing instructions will be removed as part of processing and special XML characters such as <code>&lt;</code>, <code>&gt;</code>, <code>"</code> and <code>'</code> will be escaped using the respective XML notation. The output will also be indented using standard XML pretty printing.</p>
+</div>
+<div class="paragraph">
+<p>The xmlns namespace definition for gsp: tags will be removed but other namespace definitions will be preserved (but may change to an equivalent position within the XML tree).</p>
+</div>
+<div class="paragraph">
+<p>Normally, the template source will be in a file but here is a simple example providing the XML template as a string:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def binding = [firstname: 'Jochen', lastname: 'Theodorou', nickname: 'blackdrag', salutation: 'Dear']
+def engine = new groovy.text.XmlTemplateEngine()
+def text = '''\
+    &lt;document xmlns:gsp='http://groovy.codehaus.org/2005/gsp' xmlns:foo='baz' type='letter'&gt;
+        &lt;gsp:scriptlet&gt;def greeting = "${salutation}est"&lt;/gsp:scriptlet&gt;
+        &lt;gsp:expression&gt;greeting&lt;/gsp:expression&gt;
+        &lt;foo:to&gt;$firstname "$nickname" $lastname&lt;/foo:to&gt;
+        How are you today?
+    &lt;/document&gt;
+'''
+def template = engine.createTemplate(text).make(binding)
+println template.toString()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This example will produce this output:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;document type='letter'&gt;
+  Dearest
+  &lt;foo:to xmlns:foo='baz'&gt;
+    Jochen &amp;quot;blackdrag&amp;quot; Theodorou
+  &lt;/foo:to&gt;
+  How are you today?
+&lt;/document&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_the_markuptemplateengine"><a class="anchor" href="#_the_markuptemplateengine"></a>7. The MarkupTemplateEngine</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This template engine is a template engine primarily aimed at generating XML-like markup (XML, XHTML, HTML5, &#8230;&#8203;), but that
+can be used to generate any text based content. Unlike traditional template engines, this one relies on a DSL that uses the
+builder syntax. Here is a sample template:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">xmlDeclaration()
+cars {
+   cars.each {
+       car(make: it.make, model: it.model)
+   }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you feed it with the following model:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">model = [cars: [new Car(make: 'Peugeot', model: '508'), new Car(make: 'Toyota', model: 'Prius')]]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>It would be rendered as:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;?xml version='1.0'?&gt;
+&lt;cars&gt;&lt;car make='Peugeot' model='508'/&gt;&lt;car make='Toyota' model='Prius'/&gt;&lt;/cars&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The key features of this template engine are:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>a <em>markup builder like</em> syntax</p>
+</li>
+<li>
+<p>templates are compiled into bytecode</p>
+</li>
+<li>
+<p>fast rendering</p>
+</li>
+<li>
+<p>optional type checking of the model</p>
+</li>
+<li>
+<p>includes</p>
+</li>
+<li>
+<p>internationalization support</p>
+</li>
+<li>
+<p>fragments/layouts</p>
+</li>
+</ul>
+</div>
+<div class="sect2">
+<h3 id="_the_template_format"><a class="anchor" href="#_the_template_format"></a>7.1. The template format</h3>
+<div class="sect3">
+<h4 id="_basics"><a class="anchor" href="#_basics"></a>7.1.1. Basics</h4>
+<div class="paragraph">
+<p>Templates consist of Groovy code. Let&#8217;s explore the first example more thoroughly:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">xmlDeclaration()                                <i class="conum" data-value="1"></i><b>(1)</b>
+cars {                                          <i class="conum" data-value="2"></i><b>(2)</b>
+   cars.each {                                  <i class="conum" data-value="3"></i><b>(3)</b>
+       car(make: it.make, model: it.model)      <i class="conum" data-value="4"></i><b>(4)</b>
+   }                                            <i class="conum" data-value="5"></i><b>(5)</b>
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>renders the XML declaration string.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>opens a <code>cars</code> tag</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td><code>cars</code> is a variable found in the <em>template model</em>, which is a list of <code>Car</code> instances</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>for each item, we create a <code>car</code> tag with the attributes from the <code>Car</code> instance</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>closes the <code>cars</code> tag</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>As you can see, regular Groovy code can be used in the template. Here, we are calling <code>each</code> on a list (retrieved from the model), allowing us to
+render one <code>car</code> tag per entry.</p>
+</div>
+<div class="paragraph">
+<p>In a similar fashion, rendering HTML code is as simple as this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">yieldUnescaped '&lt;!DOCTYPE html&gt;'                                                    <i class="conum" data-value="1"></i><b>(1)</b>
+html(lang:'en') {                                                                   <i class="conum" data-value="2"></i><b>(2)</b>
+    head {                                                                          <i class="conum" data-value="3"></i><b>(3)</b>
+        meta('http-equiv':'"Content-Type" content="text/html; charset=utf-8"')      <i class="conum" data-value="4"></i><b>(4)</b>
+        title('My page')                                                            <i class="conum" data-value="5"></i><b>(5)</b>
+    }                                                                               <i class="conum" data-value="6"></i><b>(6)</b>
+    body {                                                                          <i class="conum" data-value="7"></i><b>(7)</b>
+        p('This is an example of HTML contents')                                    <i class="conum" data-value="8"></i><b>(8)</b>
+    }                                                                               <i class="conum" data-value="9"></i><b>(9)</b>
+}                                                                                   <i class="conum" data-value="10"></i><b>(10)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>renders the HTML doctype special tag</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>opens the <code>html</code> tag with an attribute</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>opens the <code>head</code> tag</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>renders a <code>meta</code> tag with one <code>http-equiv</code> attribute</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>renders the <code>title</code> tag</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>closes the <code>head</code> tag</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td>opens the <code>body</code> tag</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="8"></i><b>8</b></td>
+<td>renders a <code>p</code> tag</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="9"></i><b>9</b></td>
+<td>closes the <code>body</code> tag</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="10"></i><b>10</b></td>
+<td>closes the <code>html</code> tag</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The output is straightforward:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-html" data-lang="html">&lt;!DOCTYPE html&gt;&lt;html lang='en'&gt;&lt;head&gt;&lt;meta http-equiv='"Content-Type" content="text/html; charset=utf-8"'/&gt;&lt;title&gt;My page&lt;/title&gt;&lt;/head&gt;&lt;body&gt;&lt;p&gt;This is an example of HTML contents&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+With some <a href="#markuptemplate-config">configuration</a>, you can have the output pretty printed, with newlines and indent automatically added.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_support_methods"><a class="anchor" href="#_support_methods"></a>7.1.2. Support methods</h4>
+<div class="paragraph">
+<p>In the previous example, the doctype declaration was rendered using the <code>yieldUnescaped</code> method. We have also seen the <code>xmlDeclaration</code> method.
+The template engine provides several support methods that will help you render contents appropriately:</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 16.6666%;">
+<col style="width: 33.3333%;">
+<col style="width: 50.0001%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Method</th>
+<th class="tableblock halign-left valign-top">Description</th>
+<th class="tableblock halign-left valign-top">Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">yield</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Renders contents, but escapes it before rendering</p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p><strong>Template</strong>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">yield 'Some text with &lt;angle brackets&gt;'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Output</strong>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-html" data-lang="html">Some text with &amp;lt;angle brackets&amp;gt;</code></pre>
+</div>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">yieldUnescaped</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Renders raw contents. The argument is rendered as is, without escaping.</p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p><strong>Template</strong>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">yieldUnescaped 'Some text with &lt;angle brackets&gt;'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Output</strong>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-html" data-lang="html">Some text with &lt;angle brackets&gt;</code></pre>
+</div>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">xmlDeclaration</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Renders an XML declaration String. If the encoding is specified in the configuration, it is written in the declaration.</p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p><strong>Template</strong>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">xmlDeclaration()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Output</strong>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-html" data-lang="html">&lt;?xml version='1.0'?&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If <code>TemplateConfiguration#getDeclarationEncoding</code> is not null:</p>
+</div>
+<div class="paragraph">
+<p><strong>Output</strong>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-html" data-lang="html">&lt;?xml version='1.0' encoding='UTF-8'?&gt;</code></pre>
+</div>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">comment</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Renders raw contents inside an XML comment</p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p><strong>Template</strong>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">comment 'This is &lt;a href="foo.html"&gt;commented out&lt;/a&gt;'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Output</strong>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-html" data-lang="html">&lt;!--This is &lt;a href="foo.html"&gt;commented out&lt;/a&gt;--&gt;</code></pre>
+</div>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">newLine</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Renders a new line. See also <code>TemplateConfiguration#setAutoNewLine</code> and <code>TemplateConfiguration#setNewLineString</code>.</p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p><strong>Template</strong>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">p('text')
+newLine()
+p('text on new line')</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Output</strong>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-html" data-lang="html">&lt;p&gt;text&lt;/p&gt;
+&lt;p&gt;text on new line&lt;/p&gt;</code></pre>
+</div>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">pi</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Renders an XML processing instruction.</p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p><strong>Template</strong>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">pi("xml-stylesheet":[href:"mystyle.css", type:"text/css"])</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Output</strong>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;?xml-stylesheet href='mystyle.css' type='text/css'?&gt;</code></pre>
+</div>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">tryEscape</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Returns an escaped string for an object, if it is a <code>String</code> (or any type derived from <code>CharSequence</code>). Otherwise returns the object itself.</p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p><strong>Template</strong>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">yieldUnescaped tryEscape('Some text with &lt;angle brackets&gt;')</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Output</strong>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-html" data-lang="html">Some text with &amp;lt;angle brackets&amp;gt;</code></pre>
+</div>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_includes"><a class="anchor" href="#_includes"></a>7.1.3. Includes</h4>
+<div class="paragraph">
+<p>The <code>MarkupTemplateEngine</code> supports inclusion of contents from another file. Included contents may be:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>another template</p>
+</li>
+<li>
+<p>raw contents</p>
+</li>
+<li>
+<p>contents to be escaped</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Including another template can be done using:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">include template: 'other_template.tpl'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Including a file as raw contents, without escaping it, can be done like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">include unescaped: 'raw.txt'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Eventually, inclusion of text that should be escaped before rendering can be done using:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">include escaped: 'to_be_escaped.txt'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Alternatively, you can use the following helper methods instead:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>includeGroovy(&lt;name&gt;)</code> to include another template</p>
+</li>
+<li>
+<p><code>includeEscaped(&lt;name&gt;)</code> to include another file with escaping</p>
+</li>
+<li>
+<p><code>includeUnescaped(&lt;name&gt;)</code> to include another file without escaping</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Calling those methods instead of the <code>include xxx:</code> syntax can be useful if the name of the file to be included is dynamic (stored in a variable for example).
+Files to be included (independently of their type, template or text) are found on <strong>classpath</strong>. This is one of the reasons why the <code>MarkupTemplateEngine</code> takes
+an optional <code>ClassLoader</code> as constructor argument (the other reason being that you can include code referencing other classes in a template).</p>
+</div>
+<div class="paragraph">
+<p>If you don&#8217;t want your templates to be on classpath, the <code>MarkupTemplateEngine</code> accepts a convenient constructor that lets you define the directory where
+templates are to be found.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_fragments"><a class="anchor" href="#_fragments"></a>7.1.4. Fragments</h4>
+<div class="paragraph">
+<p>Fragments are nested templates. They can be used to provide improved composition in a single template. A fragment consists of
+a string, the inner template, and a model, used to render this template. Consider the following template:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">ul {
+    pages.each {
+        fragment "li(line)", line:it
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>fragment</code> element creates a nested template, and renders it with a model which is specific to this template. Here,
+we have the <code>li(line)</code> fragment, where <code>line</code> is bound to <code>it</code>. Since <code>it</code> corresponds to the iteration of <code>pages</code>,
+we will generate a single <code>li</code> element for each page in our model:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-html" data-lang="html">&lt;ul&gt;&lt;li&gt;Page 1&lt;/li&gt;&lt;li&gt;Page 2&lt;/li&gt;&lt;/ul&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Fragments are interesting to factorize template elements. They come at the price of the compilation of a fragment per template, and they cannot
+be externalized.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_layouts"><a class="anchor" href="#_layouts"></a>7.1.5. Layouts</h4>
+<div class="paragraph">
+<p>Layouts, unlike fragments, refer to other templates. They can be used to compose templates and share common structures. This is often
+interesting if you have, for example, a common HTML page setup, and that you only want to replace the body. This can be done easily
+with a <em>layout</em>. First of all, you need to create a layout template:</p>
+</div>
+<div class="listingblock">
+<div class="title">layout-main.tpl</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">html {
+    head {
+        title(title)                <i class="conum" data-value="1"></i><b>(1)</b>
+    }
+    body {
+        bodyContents()              <i class="conum" data-value="2"></i><b>(2)</b>
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>the <code>title</code> variable (inside the title tag) is a layout variable</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>the <code>bodyContents</code> call will render the body</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Then what you need is a template that includes the layout:</p>
+</div>
+<div id="example-layout-simple" class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">layout 'layout-main.tpl',                                   <i class="conum" data-value="1"></i><b>(1)</b>
+    title: 'Layout example',                                <i class="conum" data-value="2"></i><b>(2)</b>
+    bodyContents: contents { p('This is the body') }        <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>use the <code>main-layout.tpl</code> layout file</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>set the <code>title</code> variable</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>set the <code>bodyContents</code></td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>As you can see, <code>bodyContents</code> will be rendered inside the layout, thanks to the <code>bodyContents()</code> call in the layout file. As
+a result, the template will be rendered as this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-html" data-lang="html">&lt;html&gt;&lt;head&gt;&lt;title&gt;Layout example&lt;/title&gt;&lt;/head&gt;&lt;body&gt;&lt;p&gt;This is the body&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The call to the <code>contents</code> method is used to tell the template engine that the block of code is in fact a specification of a
+template, instead of a helper function to be rendered directly. If you don&#8217;t add <code>contents</code> before your specification, then
+the contents would be rendered, but you would also see a random string generated, corresponding to the result value of the block.</p>
+</div>
+<div class="paragraph">
+<p>Layouts are a powerful way to share common elements across multiple
+templates, without having to rewrite everything or use includes.</p>
+</div>
+<div class="paragraph">
+<p>Layouts use, by default, a model which is independent from the model of the page where they are used. It is however possible
+to make them inherit from the parent model. Imagine that the model is defined like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">model = new HashMap&lt;String,Object&gt;();
+model.put('title','Title from main model');</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>and the following template:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">layout 'layout-main.tpl', true,                             <i class="conum" data-value="1"></i><b>(1)</b>
+    bodyContents: contents { p('This is the body') }</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>note the use of <code>true</code> to enable model inheritance</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>then it is not necessary to pass the <code>title</code> value to the layout as in the <a href="#example-layout-simple">previous example</a>. The result will be:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-html" data-lang="html">&lt;html&gt;&lt;head&gt;&lt;title&gt;Title from main model&lt;/title&gt;&lt;/head&gt;&lt;body&gt;&lt;p&gt;This is the body&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>But it is also possible to override a value from the parent model:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">layout 'layout-main.tpl', true,                             <i class="conum" data-value="1"></i><b>(1)</b>
+    title: 'overridden title',                               <i class="conum" data-value="2"></i><b>(2)</b>
+    bodyContents: contents { p('This is the body') }</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>true</code> means inherit from the parent model</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>but <code>title</code> is overridden</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>then the output will be:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-html" data-lang="html">&lt;html&gt;&lt;head&gt;&lt;title&gt;overridden title&lt;/title&gt;&lt;/head&gt;&lt;body&gt;&lt;p&gt;This is the body&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_rendering_contents"><a class="anchor" href="#_rendering_contents"></a>7.2. Rendering contents</h3>
+<div class="sect3">
+<h4 id="_creation_of_a_template_engine"><a class="anchor" href="#_creation_of_a_template_engine"></a>7.2.1. Creation of a template engine</h4>
+<div class="paragraph">
+<p>On the server side, rendering templates require an instance of <code>groovy.text.markup.MarkupTemplateEngine</code> and a
+<code>groovy.text.markup.TemplateConfiguration</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">TemplateConfiguration config = new TemplateConfiguration();         <i class="conum" data-value="1"></i><b>(1)</b>
+MarkupTemplateEngine engine = new MarkupTemplateEngine(config);     <i class="conum" data-value="2"></i><b>(2)</b>
+Template template = engine.createTemplate("p('test template')");    <i class="conum" data-value="3"></i><b>(3)</b>
+Map&lt;String, Object&gt; model = new HashMap&lt;&gt;();                        <i class="conum" data-value="4"></i><b>(4)</b>
+Writable output = template.make(model);                             <i class="conum" data-value="5"></i><b>(5)</b>
+output.writeTo(writer);                                             <i class="conum" data-value="6"></i><b>(6)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>creates a template configuration</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>creates a template engine with this configuration</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>creates a template instance from a <code>String</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>creates a model to be used in the template</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>bind the model to the template instance</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>render output</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>There are several possible options to parse templates:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>from a <code>String</code>, using <code>createTemplate(String)</code></p>
+</li>
+<li>
+<p>from a <code>Reader</code>, using <code>createTemplate(Reader)</code></p>
+</li>
+<li>
+<p>from a <code>URL</code>, using <code>createTemplate(URL)</code></p>
+</li>
+<li>
+<p>given a template name, using <code>createTemplateByPath(String)</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The last version should in general be preferred:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Template template = engine.createTemplateByPath("main.tpl");
+Writable output = template.make(model);
+output.writeTo(writer);</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="markuptemplate-config"><a class="anchor" href="#markuptemplate-config"></a>7.2.2. Configuration options</h4>
+<div class="paragraph">
+<p>The behavior of the engine can be tweaked with several configuration options accessible through the <code>TemplateConfiguration</code> class:</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 14.2857%;">
+<col style="width: 14.2857%;">
+<col style="width: 28.5714%;">
+<col style="width: 42.8572%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Option</th>
+<th class="tableblock halign-left valign-top">Default value</th>
+<th class="tableblock halign-left valign-top">Description</th>
+<th class="tableblock halign-left valign-top">Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">declarationEncoding</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">null</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Determines the value of the encoding to be written when <code>xmlDeclaration</code> is called. It does <strong>not</strong> influence the writer you are using as output.</p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p><strong>Template</strong>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">xmlDeclaration()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Output</strong>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-html" data-lang="html">&lt;?xml version='1.0'?&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If <code>TemplateConfiguration#getDeclarationEncoding</code> is not null:</p>
+</div>
+<div class="paragraph">
+<p><strong>Output</strong>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-html" data-lang="html">&lt;?xml version='1.0' encoding='UTF-8'?&gt;</code></pre>
+</div>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">expandEmptyElements</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If true, empty tags are rendered in their expanded form.</p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p><strong>Template</strong>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">p()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Output</strong>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-html" data-lang="html">&lt;p/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If <code>expandEmptyElements</code> is true:</p>
+</div>
+<div class="paragraph">
+<p><strong>Output</strong>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-html" data-lang="html">&lt;p&gt;&lt;/p&gt;</code></pre>
+</div>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">useDoubleQuotes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If true, use double quotes for attributes instead of simple quotes</p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p><strong>Template</strong>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">tag(attr:'value')</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Output</strong>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-html" data-lang="html">&lt;tag attr='value'/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If <code>useDoubleQuotes</code> is true:</p>
+</div>
+<div class="paragraph">
+<p><strong>Output</strong>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;tag attr="value"/&gt;</code></pre>
+</div>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">newLineString</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">System default (system property <code>line.separator</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Allows to choose what string is used when a new line is rendered</p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p><strong>Template</strong>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">p('foo')
+newLine()
+p('baz')</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If <code>newLineString='BAR'</code>:</p>
+</div>
+<div class="paragraph">
+<p><strong>Output</strong>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-html" data-lang="html">&lt;p&gt;foo&lt;/p&gt;BAR&lt;p&gt;baz&lt;/p&gt;</code></pre>
+</div>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">autoEscape</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If true, variables from models are automatically escaped before rendering.</p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>See <a href="#markuptemplate-autoescape">the auto escape section</a></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">autoIndent</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If true, performs automatic indentation after new lines</p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>See <a href="#markuptemplate-autoformat">the auto formatting section</a></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">autoIndentString</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">four (4) spaces</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The string to be used as indent.</p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>See <a href="#markuptemplate-autoformat">the auto formatting section</a></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">autoNewLine</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If true, performs automatic insertion of new lines</p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>See <a href="#markuptemplate-autoformat">the auto formatting section</a></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">baseTemplateClass</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>groovy.text.markup.BaseTemplate</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sets the super class of compiled templates. This can be used to provide application specific templates.</p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>See <a href="#markuptemplate-basetemplate">the custom templates section</a></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">locale</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Default locale</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sets the default locale for templates.</p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>See <a href="#markuptemplate-i18n">the internationalization section</a></p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+Once the template engine has been created, it is <strong>unsafe</strong> to change the configuration.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="markuptemplate-autoformat"><a class="anchor" href="#markuptemplate-autoformat"></a>7.2.3. Automatic formatting</h4>
+<div class="paragraph">
+<p>By default, the template engine will render output without any specific formatting. Some <a href="#markuptemplate-config">configuration options</a> can improve the situation:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>autoIndent</code> is responsible for auto-indenting after a new line is inserted</p>
+</li>
+<li>
+<p><code>autoNewLine</code> is responsible for automatically inserting new lines based on the original formatting of the template source</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>In general, it is recommended to set both <code>autoIndent</code> and <code>autoNewLine</code> to true if you want human-readable, pretty printed, output:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">config.setAutoNewLine(true);
+config.setAutoIndent(true);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Using the following template:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">html {
+    head {
+        title('Title')
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The output will now be:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-html" data-lang="html">&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;Title&lt;/title&gt;
+    &lt;/head&gt;
+&lt;/html&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>We can slightly change the template so that the <code>title</code> instruction is found on the same line as the <code>head</code> one:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">html {
+    head { title('Title')
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And the output will reflect that:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-html" data-lang="html">&lt;html&gt;
+    &lt;head&gt;&lt;title&gt;Title&lt;/title&gt;
+    &lt;/head&gt;
+&lt;/html&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>New lines are <strong>only</strong> inserted where curly braces for tags are found, and the insertion corresponds to where the nested content is found. This means that
+tags in the body of another tag will <strong>not</strong> trigger new lines unless they use curly braces themselves:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">html {
+    head {
+        meta(attr:'value')          <i class="conum" data-value="1"></i><b>(1)</b>
+        title('Title')              <i class="conum" data-value="2"></i><b>(2)</b>
+        newLine()                   <i class="conum" data-value="3"></i><b>(3)</b>
+        meta(attr:'value2')         <i class="conum" data-value="4"></i><b>(4)</b>
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>a new line is inserted because <code>meta</code> is not on the same line as <code>head</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>no new line is inserted, because we&#8217;re on the same depth as the previous tag</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>we can force rendering of a new line by explicitly calling <code>newLine</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>and this tag will be rendered on a separate line</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>This time, the output will be:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-html" data-lang="html">&lt;html&gt;
+    &lt;head&gt;
+        &lt;meta attr='value'/&gt;&lt;title&gt;Title&lt;/title&gt;
+        &lt;meta attr='value2'/&gt;
+    &lt;/head&gt;
+&lt;/html&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>By default, the renderer uses four(4) spaces as indent, but you can change it by setting the <code>TemplateConfiguration#autoIndentString</code> property.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="markuptemplate-autoescape"><a class="anchor" href="#markuptemplate-autoescape"></a>7.2.4. Automatic escaping</h4>
+<div class="paragraph">
+<p>By default, contents which is read from the model is rendered <strong>as is</strong>. If this contents comes from user input, it can be sensible, and you might
+want to escape it by default, for example to avoid XSS injection. For that, the template configuration provides an option which will automatically
+escape objects from the model, as long as they inherit from <code>CharSequence</code> (typically, `String`s).</p>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s imagine the following setup:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">config.setAutoEscape(false);
+model = new HashMap&lt;String,Object&gt;();
+model.put("unsafeContents", "I am an &lt;html&gt; hacker.");</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>and the following template:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">html {
+    body {
+        div(unsafeContents)
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then you wouldn&#8217;t want the HTML from <code>unsafeContents</code> to be rendered as is, because of potential security issues:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-html" data-lang="html">&lt;html&gt;&lt;body&gt;&lt;div&gt;I am an &lt;html&gt; hacker.&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Automatic escaping will fix this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">config.setAutoEscape(true);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And now the output is properly escaped:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-html" data-lang="html">&lt;html&gt;&lt;body&gt;&lt;div&gt;I am an &amp;lt;html&amp;gt; hacker.&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note that using automatic escaping doesn&#8217;t prevent you from including unescaped contents from the model. To do this, your template should then explicitly
+mention that a model variable should not be escaped by prefixing it with <code>unescaped.</code>, like in this example:</p>
+</div>
+<div class="listingblock">
+<div class="title">Explicit bypass of automatic escaping</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-html" data-lang="html">html {
+    body {
+        div(unescaped.unsafeContents)
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="markuptemplate-gotchas"><a class="anchor" href="#markuptemplate-gotchas"></a>7.2.5. Common gotchas</h4>
+<div class="sect4">
+<h5 id="_strings_containing_markup"><a class="anchor" href="#_strings_containing_markup"></a>Strings containing markup</h5>
+<div class="paragraph">
+<p>Say that you want to generate a <code>&lt;p&gt;</code> tag which contains a string containing markup:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">p {
+    yield "This is a "
+    a(href:'target.html', "link")
+    yield " to another page"
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>and generates:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-html" data-lang="html">&lt;p&gt;This is a &lt;a href='target.html'&gt;link&lt;/a&gt; to another page&lt;/p&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Can&#8217;t this be written shorter? A naive alternative would be:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">p {
+    yield "This is a ${a(href:'target.html', "link")} to another page"
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>but the result will not look as expected:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">&lt;p&gt;&lt;a href='target.html'&gt;link&lt;/a&gt;This is a  to another page&lt;/p&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The reason is that the markup template engine is a <em>streaming</em> engine. In the original version, the first <code>yield</code> call
+generates a string which is streamed to the output, then the <code>a</code> link is generated and streamed, and then the last <code>yield</code>
+call is streamed, leading in an execution <strong>in order</strong>. But with the string version above, the order of execution is different:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>the <code>yield</code> call requires an argument, a <em>string</em></p>
+</li>
+<li>
+<p>that arguments needs to be evaluated <em>before</em> the <em>yield</em> call is generated</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>so evaluating the string leads to an execution of the <code>a(href:&#8230;&#8203;)</code> call <strong>before</strong> <code>yield</code> is itself called. This is not
+what you want to do. Instead, you want to generate a <em>string</em> which contains markup, which is then passed to the <code>yield</code>
+call. This can be done this way:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">p("This is a ${stringOf {a(href:'target.html', "link")}} to another page")</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note the <code>stringOf</code> call, which basically tells the markup template engine that the underlying markup needs to be rendered
+separately and exported as a string. Note that for simple expressions, <code>stringOf</code> can be replaced by an alternate tag
+notation that starts with a <em>dollar</em> sign:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">p("This is a ${$a(href:'target.html', "link")} to another page")</code></pre>
+</div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+It is worth noting that using <code>stringOf</code> or the special <code>$tag</code> notation triggers the creation of a distinct string writer
+which is then used to render the markup. It is slower than using the version with calls to <code>yield</code> which perform direct
+streaming of the markup instead.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="markuptemplate-i18n"><a class="anchor" href="#markuptemplate-i18n"></a>7.2.6. Internationalization</h4>
+<div class="paragraph">
+<p>The template engine has native support for internationalization. For that, when you create the <code>TemplateConfiguration</code>, you can provide
+a <code>Locale</code> which is the default locale to be used for templates. Each template may have different versions, one for each locale. The
+name of the template makes the difference:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>file.tpl</code>: default template file</p>
+</li>
+<li>
+<p><code>file_fr_FR.tpl</code>: french version of the template</p>
+</li>
+<li>
+<p><code>file_en_US.tpl</code>: american english version of the template</p>
+</li>
+<li>
+<p>&#8230;&#8203;</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>When a template is rendered or included, then:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>if the template name or include name <strong>explicitly</strong> sets a locale, the <strong>specific</strong> version is included, or the default version if not found</p>
+</li>
+<li>
+<p>if the template name doesn&#8217;t include a locale, the version for the <code>TemplateConfiguration</code> locale is used, or the default version if not found</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>For example, imagine the default locale is set to <code>Locale.ENGLISH</code> and that the main template includes:</p>
+</div>
+<div class="listingblock">
+<div class="title">Use an explicit locale in include</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">include template: 'locale_include_fr_FR.tpl'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>then the template is rendered using the specific template:</p>
+</div>
+<div class="listingblock">
+<div class="title">Bypass the template configuration</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-html" data-lang="html">Texte en français</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Using an include without specifying a locale will make the template engine look for a template with the configured locale, and if not, fallback to the default, like here:</p>
+</div>
+<div class="listingblock">
+<div class="title">Don&#8217;t use a locale in include</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">include template: 'locale_include.tpl'</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Fallback to the default template</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-html" data-lang="html">Default text</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>However, changing the default locale of the template engine to <code>Locale.FRANCE</code> will change the output, because the template engine will now look for a file
+with the <code>fr_FR</code> locale:</p>
+</div>
+<div class="listingblock">
+<div class="title">Don&#8217;t fallback to the default template because a locale specific template was found</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-html" data-lang="html">Texte en français</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This strategy lets you translate your templates one by one, by relying on default templates, for which no locale is set in the file name.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="markuptemplate-basetemplate"><a class="anchor" href="#markuptemplate-basetemplate"></a>7.2.7. Custom template classes</h4>
+<div class="paragraph">
+<p>By default, templates created inherit the <code>groovy.text.markup.BaseTemplate</code> class. It may be interesting for an application to provide a different
+template class, for example to provide additional helper methods which are aware of the application, or customized rendering primitives (for HTML,
+for example).</p>
+</div>
+<div class="paragraph">
+<p>The template engine provides this ability by setting an alternative <code>baseTemplateClass</code> in the <code>TemplateConfiguration</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">config.setBaseTemplateClass(MyTemplate.class);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The custom base class has to extend <code>BaseClass</code> like in this example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">public abstract class MyTemplate extends BaseTemplate {
+    private List&lt;Module&gt; modules
+    public MyTemplate(
+            final MarkupTemplateEngine templateEngine,
+            final Map model,
+            final Map&lt;String, String&gt; modelTypes,
+            final TemplateConfiguration configuration) {
+        super(templateEngine, model, modelTypes, configuration)
+    }
+
+    List&lt;Module&gt; getModules() {
+        return modules
+    }
+
+    void setModules(final List&lt;Module&gt; modules) {
+        this.modules = modules
+    }
+
+    boolean hasModule(String name) {
+        modules?.any { it.name == name }
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This example shows a class which provides an additional method named <code>hasModule</code>, which can then be used directly in the template:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">if (hasModule('foo')) {
+    p 'Found module [foo]'
+} else {
+    p 'Module [foo] not found'
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_type_checked_templates"><a class="anchor" href="#_type_checked_templates"></a>7.3. Type checked templates</h3>
+<div class="sect3">
+<h4 id="_optional_type_checking"><a class="anchor" href="#_optional_type_checking"></a>7.3.1. Optional type checking</h4>
+<div class="paragraph">
+<p>Even if templates are not type checked, they are statically compiled. This means that once the templates are compiled, performance should be very good. For some
+applications, it might be good to make sure that templates are valid before they are actually rendered. This means failing template compilation, for example, if
+a method on a model variable doesn&#8217;t exist.</p>
+</div>
+<div class="paragraph">
+<p>The <code>MarkupTemplateEngine</code> provides such a facility. Templates can be optionally type checked. For that, the developer must provide additional information at
+template creation time, which is the types of the variables found in the model. Imagine a model exposing a list of pages, where a page is defined as:</p>
+</div>
+<div class="listingblock">
+<div class="title">Page.groovy</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">public class Page {
+
+    Long id
+    String title
+    String body
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then a list of pages can be exposed in the model, like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Page p = new Page();
+p.setTitle("Sample page");
+p.setBody("Page body");
+List&lt;Page&gt; pages = new LinkedList&lt;&gt;();
+pages.add(p);
+model = new HashMap&lt;String,Object&gt;();
+model.put("pages", pages);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A template can use it easily:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">pages.each { page -&gt;                    <i class="conum" data-value="1"></i><b>(1)</b>
+    p("Page title: $page.title")        <i class="conum" data-value="2"></i><b>(2)</b>
+    p(page.text)                        <i class="conum" data-value="3"></i><b>(3)</b>
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>iterate on pages from the model</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td><code>page.title</code> is valid</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td><code>page.text</code> is <strong>not</strong> (should be <code>page.body</code>)</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Without type checking, the compilation of the template succeeds, because the template engine doesn&#8217;t know about the model until a page
+is actually rendered. This means that the problem would only surface at runtime, once the page is rendered:</p>
+</div>
+<div class="listingblock">
+<div class="title">Runtime error</div>
+<div class="content">
+<pre>No such property: text</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In some situations, this can be complicated to sort out or even notice. By declaring the type of the <code>pages</code> to the template engine, we&#8217;re now capable of failing at compile time:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">modelTypes = new HashMap&lt;String,String&gt;();                                          <i class="conum" data-value="1"></i><b>(1)</b>
+modelTypes.put("pages", "List&lt;Page&gt;");                                              <i class="conum" data-value="2"></i><b>(2)</b>
+Template template = engine.createTypeCheckedModelTemplate("main.tpl", modelTypes)   <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>create a map which will hold the model types</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>declare the type of the <code>pages</code> variables (note the use of a string for the type)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>use <code>createTypeCheckedModelTemplate</code> instead of <code>createTemplate</code></td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>This time, when the template is compiled at the last line, an error occurs:</p>
+</div>
+<div class="listingblock">
+<div class="title">Template compilation time error</div>
+<div class="content">
+<pre>[Static type checking] - No such property: text for class: Page</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This means that you don&#8217;t need to wait for the page to be rendered to see an error. The use of <code>createTypeCheckedModelTemplate</code> is mandatory.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_alternative_declaration_of_types"><a class="anchor" href="#_alternative_declaration_of_types"></a>7.3.2. Alternative declaration of types</h4>
+<div class="paragraph">
+<p>Alternatively, if the developer is also the one who writes the templates, it is possible to declare the types of the expected variables
+directly in the template. In this case, even if you call <code>createTemplate</code>, it will be type checked:</p>
+</div>
+<div class="listingblock">
+<div class="title">Inline declaration of types</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">modelTypes = {                          <i class="conum" data-value="1"></i><b>(1)</b>
+    List&lt;Page&gt; pages                    <i class="conum" data-value="2"></i><b>(2)</b>
+}
+
+pages.each { page -&gt;
+    p("Page title: $page.title")
+    p(page.text)
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>types need to be declared in the <code>modelTypes</code> header</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>declare one variable per object in the model</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_performance_of_type_checked_templates"><a class="anchor" href="#_performance_of_type_checked_templates"></a>7.3.3. Performance of type checked templates</h4>
+<div class="paragraph">
+<p>An additional interest of using type checked models is that performance should improve. By telling the type checker what are the expected types,
+you also let the compiler generate optimized code for that, so if you are looking for the best performance, consider using type checked templates.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_other_solutions"><a class="anchor" href="#_other_solutions"></a>8. Other solutions</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Also, there are other templating solutions that can be used along with Groovy, such as <a href="http://freemarker.org">FreeMarker</a>, <a href="http://velocity.apache.org">Velocity</a>, <a href="http://stringtemplate.org">StringTemplate</a> and others.</p>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 3.0.0-alpha-3<br>
+Last updated 2018-06-23 13:44:44 AEST
+</div>
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+<script>prettyPrint()</script>
+</body>
+</html>

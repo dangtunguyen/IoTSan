@@ -1,0 +1,227 @@
+<!--
+
+     Licensed to the Apache Software Foundation (ASF) under one
+     or more contributor license agreements.  See the NOTICE file
+     distributed with this work for additional information
+     regarding copyright ownership.  The ASF licenses this file
+     to you under the Apache License, Version 2.0 (the
+     "License"); you may not use this file except in compliance
+     with the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing,
+     software distributed under the License is distributed on an
+     "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+     specific language governing permissions and limitations
+     under the License.
+
+-->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+
+<title>org.codehaus.groovy.control.customizers.builder (groovy 3.0.0-alpha-3 API)</title>
+<meta name="keywords" content="org.codehaus.groovy.control.customizers.builder package">
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<link rel ="stylesheet" TYPE="text/css" HREF="../../../../../../stylesheet.css" title="Style">
+<link href="../../../../../../groovy.ico" type="image/x-icon" rel="shortcut icon">
+<link href="../../../../../../groovy.ico" type="image/x-icon" rel="icon">
+<script type="text/javascript">
+function windowTitle()
+{
+    parent.document.title="org.codehaus.groovy.control.customizers.builder (groovy 3.0.0-alpha-3 API)";
+}
+</script>
+<noscript>
+</noscript>
+
+</head>
+
+<body class="center" onload="windowTitle();">
+
+<!-- ========= START OF TOP NAVBAR ======= -->
+<div class="topNav"><a name="navbar_top">
+    <!--   -->
+</a><a href="#skip-navbar_top" title="Skip navigation links"></a><a name="navbar_top_firstrow">
+    <!--   -->
+</a>
+<a name="navbar_top_firstrow"><!-- --></a>
+<ul class="navList" title="Navigation">
+    <li><a href="../../../../../../overview-summary.html">Overview</a></li>
+    <li class="navBarCell1Rev">Package</li>
+    <li>Class</li>
+    <li><a href="../../../../../../deprecated-list.html">Deprecated</a></li>
+    <li><a href="../../../../../../index-all.html">Index</a></li>
+    <li><a href="../../../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+
+<div class="subNav">
+    <ul class="navList">
+        <li><a href="../../../../../../index.html?org/codehaus/groovy/control/customizers/builder/package-summary.html" target="_top">Frames</a></li>
+        <li><a href="package-summary.html" target="_top">No Frames</a></li>
+    </ul>
+</div>
+
+<!-- ========= END OF TOP NAVBAR ========= -->
+
+<div class="header">
+    <h1 class="title">Package org.codehaus.groovy.control.customizers.builder</h1>
+</div>
+
+
+
+<div class="contentContainer">
+
+
+    <div class="summary">
+        <ul class="blockList">
+            <li class="blockList">
+                <table border="0" cellpadding="3" cellspacing="0" summary="Interface Summary">
+                    <caption><span>Interface Summary</span><span class="tabEnd">&nbsp;</span></caption>
+                    <tbody>
+                    <tr>
+                        <th class="colFirst" scope="col">Interface</th>
+                        <th class="colLast" scope="col">Description</th>
+                    </tr>
+<tr class="altColor">
+                            <td class="colOne">
+                                <strong><a href="PostCompletionFactory.html" title="class in org/codehaus/groovy/control/customizers/builder">
+                                    PostCompletionFactory
+                                </a></strong>
+                            </td>
+                            <td>A helper interface for factories which require post processing of generated nodes.</td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </li>
+            </ul>
+        </div>
+    
+
+
+
+    <div class="summary">
+        <ul class="blockList">
+            <li class="blockList">
+                <table border="0" cellpadding="3" cellspacing="0" summary="Class Summary">
+                    <caption><span>Class Summary</span><span class="tabEnd">&nbsp;</span></caption>
+                    <tbody>
+                    <tr>
+                        <th class="colFirst" scope="col">Class</th>
+                        <th class="colLast" scope="col">Description</th>
+                    </tr>
+<tr class="altColor">
+                            <td class="colOne">
+                                <strong><a href="ASTTransformationCustomizerFactory.html" title="class in org/codehaus/groovy/control/customizers/builder">
+                                    ASTTransformationCustomizerFactory
+                                </a></strong>
+                            </td>
+                            <td>This factory generates an <a href='../../../../../../org/codehaus/groovy/control/customizers/ASTTransformationCustomizer.html' title='ast transformation customizer'>ast transformation customizer</a>.</td>
+                        </tr>
+<tr class="altColor">
+                            <td class="colOne">
+                                <strong><a href="CompilerCustomizationBuilder.html" title="class in org/codehaus/groovy/control/customizers/builder">
+                                    CompilerCustomizationBuilder
+                                </a></strong>
+                            </td>
+                            <td></td>
+                        </tr>
+<tr class="altColor">
+                            <td class="colOne">
+                                <strong><a href="CustomizersFactory.html" title="class in org/codehaus/groovy/control/customizers/builder">
+                                    CustomizersFactory
+                                </a></strong>
+                            </td>
+                            <td>This factory generates an array of compilation customizers.</td>
+                        </tr>
+<tr class="altColor">
+                            <td class="colOne">
+                                <strong><a href="ImportCustomizerFactory.html" title="class in org/codehaus/groovy/control/customizers/builder">
+                                    ImportCustomizerFactory
+                                </a></strong>
+                            </td>
+                            <td>This factory allows the generation of an <a href='../../../../../../org/codehaus/groovy/control/customizers/ImportCustomizer.html' title='import customizer'>import customizer</a>. </td>
+                        </tr>
+<tr class="altColor">
+                            <td class="colOne">
+                                <strong><a href="InlinedASTCustomizerFactory.html" title="class in org/codehaus/groovy/control/customizers/builder">
+                                    InlinedASTCustomizerFactory
+                                </a></strong>
+                            </td>
+                            <td>This factory lets a user define a compilation customizer without having to define
+ an anonymous inner class.</td>
+                        </tr>
+<tr class="altColor">
+                            <td class="colOne">
+                                <strong><a href="SecureASTCustomizerFactory.html" title="class in org/codehaus/groovy/control/customizers/builder">
+                                    SecureASTCustomizerFactory
+                                </a></strong>
+                            </td>
+                            <td>This factory allows the generation of a <a href='../../../../../../org/codehaus/groovy/control/customizers/SecureASTCustomizer.html' title='SecureASTCustomizer'>SecureASTCustomizer</a>. </td>
+                        </tr>
+<tr class="altColor">
+                            <td class="colOne">
+                                <strong><a href="SourceAwareCustomizerFactory.html" title="class in org/codehaus/groovy/control/customizers/builder">
+                                    SourceAwareCustomizerFactory
+                                </a></strong>
+                            </td>
+                            <td>Factory for use with <a href='../../../../../../org/codehaus/groovy/control/customizers/builder/CompilerCustomizationBuilder.html' title='CompilerCustomizationBuilder'>CompilerCustomizationBuilder</a>. </td>
+                        </tr>
+<tr class="altColor">
+                            <td class="colOne">
+                                <strong><a href="SourceAwareCustomizerFactory.SourceOptions.html" title="class in org/codehaus/groovy/control/customizers/builder">
+                                    SourceAwareCustomizerFactory.SourceOptions
+                                </a></strong>
+                            </td>
+                            <td></td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </li>
+            </ul>
+        </div>
+    
+
+
+
+
+
+
+</div>
+
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<div class="bottomNav"><a name="navbar_bottom">
+    <!--   -->
+</a><a href="#skip-navbar_bottom" title="Skip navigation links"></a><a name="navbar_bottom_firstrow">
+    <!--   -->
+</a>
+    <ul class="navList" title="Navigation">
+        <li><a href="overview-summary.html">Overview</a></li>
+        <li class="navBarCell1Rev">Package</li>
+        <li>Class</li>
+        <li><a href="deprecated-list.html">Deprecated</a></li>
+        <li><a href="index-all.html">Index</a></li>
+        <li><a href="help-doc.html">Help</a></li>
+    </ul>
+</div>
+<div class="subNav">
+    <div>
+        <ul class="navList">
+            <li><a href="index.html?deprecated-list.html" target="_top">Frames</a></li>
+            <li><a href="deprecated-list.html" target="_top">No Frames</a></li>
+        </ul>
+    </div>
+
+    <div class="aboutLanguage"><em>Copyright &copy; 2003-2018 The Apache Software Foundation. All rights reserved.</em></div>
+    <a name="skip-navbar_bottom">
+        <!--   -->
+    </a></div>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+
+</body>
+</html>

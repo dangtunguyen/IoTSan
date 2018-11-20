@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.6.1">
+<title>AntBuilder</title>
+<link rel="stylesheet" href="./assets/css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+</head>
+<body class="book">
+<div id="header">
+<h1>AntBuilder</h1>
+<div class="details">
+<span id="revnumber">version 3.0.0-alpha-3</span>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Despite being primarily a build tool, <a href="http://ant.apache.org/">Apache Ant</a> is
+a very practical tool for manipulating files including zip files, copy, resource processing, &#8230;&#8203;
+But if ever you’ve been working with a <code>build.xml</code> file or some <em>Jelly script</em>
+and found yourself a little restricted by all those pointy brackets, or
+found it a bit weird using XML as a scripting language and wanted
+something a little cleaner and more straight forward, then maybe Ant
+scripting with Groovy might be what you&#8217;re after.</p>
+</div>
+<div class="paragraph">
+<p>Groovy has a helper class called <code>AntBuilder</code> which makes the scripting
+of Ant tasks really easy; allowing a real scripting language to be used
+for programming constructs (variables, methods, loops, logical
+branching, classes etc). It still looks like a neat concise version of
+Ant&#8217;s XML without all those pointy brackets; though you can mix and
+match this markup inside your script. Ant itself is a collection of jar
+files. By adding them to your classpath, you can easily use them within
+Groovy as is. We believe using <code>AntBuilder</code> leads to more concise and
+readily understood syntax.</p>
+</div>
+<div class="paragraph">
+<p><code>AntBuilder</code> exposes Ant tasks directly using the convenient builder notation that
+we are used to in Groovy. Here is the most basic example, which is printing a message
+on the standard output:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def ant = new AntBuilder()          <i class="conum" data-value="1"></i><b>(1)</b>
+ant.echo('hello from Ant!')         <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>creates an instance of <code>AntBuilder</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>executes the <code>echo</code> task with the message in parameter</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Imagine that you need to create a ZIP file:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def ant = new AntBuilder()
+ant.zip(destfile: 'sources.zip', basedir: 'src')</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In the next example, we demonstrate the use of <code>AntBuilder</code> to copy a list of files
+using a classical Ant pattern directly in Groovy:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// lets just call one task
+ant.echo("hello")
+
+// here is an example of a block of Ant inside GroovyMarkup
+ant.sequential {
+    echo("inside sequential")
+    def myDir = "target/AntTest/"
+    mkdir(dir: myDir)
+    copy(todir: myDir) {
+        fileset(dir: "src/test") {
+            include(name: "**/*.groovy")
+        }
+    }
+    echo("done")
+}
+
+// now lets do some normal Groovy again
+def file = new File(ant.project.baseDir,"target/AntTest/groovy/util/AntTest.groovy")
+assert file.exists()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Another example would be iterating over a list of files matching a specific pattern:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// lets create a scanner of filesets
+def scanner = ant.fileScanner {
+    fileset(dir:"src/test") {
+        include(name:"**/Ant*.groovy")
+    }
+}
+
+// now lets iterate over
+def found = false
+for (f in scanner) {
+    println("Found file $f")
+    found = true
+    assert f instanceof File
+    assert f.name.endsWith(".groovy")
+}
+assert found</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Or execute a JUnit test:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// lets create a scanner of filesets
+ant.junit {
+    test(name:'groovy.util.SomethingThatDoesNotExist')
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>We can even go further by compiling and executing a Java file directly from Groovy:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">ant.echo(file:'Temp.java', '''
+    class Temp {
+        public static void main(String[] args) {
+            System.out.println("Hello");
+        }
+    }
+''')
+ant.javac(srcdir:'.', includes:'Temp.java', fork:'true')
+ant.java(classpath:'.', classname:'Temp', fork:'true')
+ant.echo('Done')</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>It is worth mentioning that <code>AntBuilder</code> is included in <a href="http://gradle.org/">Gradle</a>, so you can use it in Gradle
+just like you would in Groovy. Additional documentation can be found in the
+<a href="http://gradle.org/docs/current/userguide/ant.html">Gradle manual</a>.</p>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 3.0.0-alpha-3<br>
+Last updated 2018-06-23 13:44:38 AEST
+</div>
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+<script>prettyPrint()</script>
+</body>
+</html>

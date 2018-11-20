@@ -239,7 +239,7 @@ public class AutoModeChange extends java.lang.Object
     private boolean everyoneIsAway()
     {
         STPresSensor person;
-        int JJJCTEMP$5, $ret, JJJCTEMP$2, index2, result;
+        int JJJCTEMP$5, $ret, index5, JJJCTEMP$2, result;
         STPresSensor[] _static_AutoModeChange_people;
         AutoModeChange JJJCTEMP$0;
 
@@ -248,11 +248,11 @@ public class AutoModeChange extends java.lang.Object
 
      label0:
         result = 1;
-        index2 = 0;
+        index5 = 0;
         goto label3;
 
      label1:
-        person = _static_AutoModeChange_people[index2];
+        person = _static_AutoModeChange_people[index5];
         JJJCTEMP$2 = person.[STPresSensor.currentPresence:int];
         if JJJCTEMP$2 != 19 goto label2;
 
@@ -260,11 +260,11 @@ public class AutoModeChange extends java.lang.Object
         goto label4;
 
      label2:
-        index2 = index2 + 1;
+        index5 = index5 + 1;
 
      label3:
         JJJCTEMP$5 = lengthof _static_AutoModeChange_people;
-        if index2 < JJJCTEMP$5 goto label1;
+        if index5 < JJJCTEMP$5 goto label1;
 
      label4:
         $ret = result;

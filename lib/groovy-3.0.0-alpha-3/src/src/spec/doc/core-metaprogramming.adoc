@@ -1,0 +1,3416 @@
+//////////////////////////////////////////
+
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+
+//////////////////////////////////////////
+
+= Metaprogramming
+
+The Groovy language supports two flavors of metaprogramming: runtime and compile-time.
+The first allows altering the class model and the behavior of a program at runtime while the second only occurs
+at compile-time. Both have pros and cons that we will detail in this section.
+
+== Runtime metaprogramming
+With runtime metaprogramming we can postpone to runtime the decision to intercept, inject and even synthesize methods of classes and interfaces. For a deep understanding of Groovy's metaobject protocol (MOP) we need to understand Groovy objects and Groovy's method handling.
+In Groovy we work with three kinds of objects: POJO, POGO and Groovy Interceptors. Groovy allows metaprogramming for all types of objects but in a different manner.
+
+- POJO - A regular Java object whose class can be written in Java or any other language for the JVM.
+- POGO - A Groovy object whose class is written in Groovy. It extends `java.lang.Object` and implements the gapi:groovy.lang.GroovyObject[] interface by default.
+- Groovy Interceptor - A Groovy object that implements the gapi:groovy.lang.GroovyInterceptable[] interface and has method-interception capability which is discussed in the <<core-metaprogramming.adoc#_groovyinterceptable,GroovyInterceptable>> section.
+
+For every method call Groovy checks whether the object is a POJO or a POGO. For POJOs, Groovy fetches its `MetaClass` from the gapi:groovy.lang.MetaClassRegistry[] and delegates method invocation to it. For POGOs, Groovy takes more steps, as illustrated in the following figure:
+
+.Groovy interception mechanism
+image::assets/img/GroovyInterceptions.png[align="center"]
+
+=== GroovyObject interface
+
+gapi:groovy.lang.GroovyObject[] is the main interface in Groovy as the `Object` class is in Java. `GroovyObject` has a default implementation in the gapi:groovy.lang.GroovyObjectSupport[] class and it is responsible to transfer invocation to the gapi:groovy.lang.MetaClass[] object. The `GroovyObject` source looks like this:
+
+[source, java]
+----
+package groovy.lang;
+
+public interface GroovyObject {
+
+    Object invokeMethod(String name, Object args);
+
+    Object getProperty(String propertyName);
+
+    void setProperty(String propertyName, Object newValue);
+
+    MetaClass getMetaClass();
+
+    void setMetaClass(MetaClass metaClass);
+}
+----
+
+==== invokeMethod
+
+This method is primarily intended to be used in conjunction with the <<core-metaprogramming.adoc#_groovyinterceptable,GroovyInterceptable>>
+interface or an object's `MetaClass` where it will intercept all method calls.
+
+It is also invoked when the method called is not present on a Groovy object. Here is a simple example using an
+overridden `invokeMethod()` method:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/metaprogramming/GroovyObjectTest.groovy[tags=groovy_invoke_method,indent=0]
+----
+
+However, the use of `invokeMethod` to intercept missing methods is discouraged.  In cases where the intent is to only
+intercept method calls in the case of a failed method dispatch use <<core-metaprogramming.adoc#_methodmissing,methodMissing>>
+instead.
+
+==== get/setProperty
+
+Every read access to a property can be intercepted by overriding the `getProperty()` method of the current object.
+Here is a simple example:
+
+[source, groovy]
+----
+include::{projectdir}/src/spec/test/metaprogramming/GroovyObjectTest.groovy[tags=groovy_get_property,indent=0]
+----
+<1> Forwards the request to the getter for all properties except `field3`.
+
+You can intercept write access to properties by overriding the `setProperty()` method:
+
+[source, groovy]
+----
+include::{projectdir}/src/spec/test/metaprogramming/GroovyObjectTest.groovy[tags=groovy_set_property,indent=0]
+----
+
+==== get/setMetaClass
+
+You can a access an object's `metaClass` or set your own `MetaClass` implementation for changing the default interception mechanism. For example, you can write your own implementation of the `MetaClass` interface and assign it to objects in order to change the interception mechanism:
+
+[source,groovy]
+----
+// getMetaclass
+someObject.metaClass
+
+// setMetaClass
+someObject.metaClass = new OwnMetaClassImplementation()
+----
+
+[NOTE]
+You can find an additional example in the <<core-metaprogramming.adoc#_groovyinterceptable,GroovyInterceptable>> topic.
+
+=== get/setAttribute
+
+This functionality is related to the `MetaClass` implementation. In the default implementation you can access fields without invoking their getters and setters. The examples below demonstrates this approach:
+
+[source, groovy]
+----
+include::{projectdir}/src/spec/test/metaprogramming/GroovyObjectTest.groovy[tags=groovy_get_attribute,indent=0]
+----
+
+[source, groovy]
+----
+include::{projectdir}/src/spec/test/metaprogramming/GroovyObjectTest.groovy[tags=groovy_set_attribute,indent=0]
+----
+
+=== methodMissing
+
+Groovy supports the concept of `methodMissing`. This method differs from `invokeMethod` in that it
+is only invoked in the case of a failed method dispatch when no method can be found for the given name and/or the
+given arguments:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/metaprogramming/MethodPropertyMissingTest.groovy[tags=method_missing_simple,indent=0]
+----
+
+Typically when using `methodMissing` it is possible to cache the result for the next time the same method is called.
+
+For example, consider dynamic finders in GORM. These are implemented in terms of `methodMissing`. The code resembles
+something like this:
+
+[source,groovy]
+----
+class GORM {
+
+   def dynamicMethods = [...] // an array of dynamic methods that use regex
+
+   def methodMissing(String name, args) {
+       def method = dynamicMethods.find { it.match(name) }
+       if(method) {
+          GORM.metaClass."$name" = { Object[] varArgs ->
+             method.invoke(delegate, name, varArgs)
+          }
+          return method.invoke(delegate,name, args)
+       }
+       else throw new MissingMethodException(name, delegate, args)
+   }
+}
+----
+
+Notice how, if we find a method to invoke, we then dynamically register a new method on the fly using <<core-metaprogramming.adoc#metaprogramming_emc,ExpandoMetaClass>>.
+This is so that the next time the same method is called it is more efficient. This way of using `methodMissing` does not have
+the overhead of `invokeMethod` _and_ is not expensive from the second call on.
+
+=== propertyMissing
+
+Groovy supports the concept of `propertyMissing` for intercepting otherwise failing property resolution attempts. In the
+case of a getter method, `propertyMissing` takes a single `String` argument containing the property name:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/metaprogramming/MethodPropertyMissingTest.groovy[tags=property_missing_getter,indent=0]
+----
+
+The `propertyMissing(String)` method is only called when no getter method for the given property can be found by the Groovy
+runtime.
+
+For setter methods a second `propertyMissing` definition can be added that takes an additional value argument:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/metaprogramming/MethodPropertyMissingTest.groovy[tags=property_missing_getter_setter,indent=0]
+----
+
+As with `methodMissing` it is best practice to dynamically register new properties at runtime to improve the overall lookup
+performance.
+
+[NOTE]
+`methodMissing` and `propertyMissing` methods that deal with static methods and properties can be added via
+the <<core-metaprogramming.adoc#metaprogramming_emc,ExpandoMetaClass>>.
+
+=== GroovyInterceptable
+The gapi:groovy.lang.GroovyInterceptable[] interface is marker interface that extends `GroovyObject` and is used to notify the Groovy runtime that all methods should be intercepted through the method dispatcher mechanism of the Groovy runtime.
+
+[source, java]
+----
+package groovy.lang;
+
+public interface GroovyInterceptable extends GroovyObject {
+}
+----
+When a Groovy object implements the `GroovyInterceptable` interface, its `invokeMethod()` is called for any method calls. Below you can see a simple example of an object of this type:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/metaprogramming/InterceptableTest.groovy[tags=groovy_interceptable_object_example,indent=0]
+----
+
+The next piece of code is a test which shows that both calls to existing and non-existing methods will return the same value.
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/metaprogramming/InterceptableTest.groovy[tags=groovy_interceptable_test,indent=0]
+----
+
+[NOTE]
+We cannot use default groovy methods like `println` because these methods are injected into all Groovy objects so they will be intercepted too.
+
+If we want to intercept all method calls but do not want to implement the `GroovyInterceptable` interface we can implement `invokeMethod()` on an object's `MetaClass`.
+This approach works for both POGOs and POJOs, as shown by this example:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/metaprogramming/InterceptionThroughMetaClassTest.groovy[tags=meta_class_interception,indent=0]
+----
+
+[NOTE]
+Additional information about `MetaClass` can be found in the <<core-metaprogramming.adoc#_metaclasses,MetaClasses>> section.
+
+[[categories]]
+=== Categories
+
+There are situations where it is useful if a class _not_ under control had additional methods. In order to enable this
+capability, Groovy implements a feature borrowed from Objective-C, called _Categories_.
+
+Categories are implemented with so-called _category classes_. A category class is special in that it needs to meet certain
+pre-defined rules for defining extension methods.
+
+There are a few categories that are included in the system for adding functionality to classes that make them more
+usable within the Groovy environment:
+
+* gapi:groovy.time.TimeCategory[]
+* gapi:groovy.servlet.ServletCategory[]
+* gapi:groovy.xml.dom.DOMCategory[]
+
+Category classes aren't enabled by default. To use the methods defined in a category class it is necessary to apply
+the scoped `use` method that is provided by the GDK and available from inside every Groovy object instance:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/metaprogramming/CategoryTest.groovy[tags=time_category,indent=0]
+----
+<1> `TimeCategory` adds methods to `Integer`
+<2> `TimeCategory` adds methods to `Date`
+
+The `use` method takes the category class as its first parameter and a closure code block as second parameter. Inside the
+`Closure` access to the category methods is available. As can be seen in the example above even JDK classes
+like `java.lang.Integer` or `java.util.Date` can be enriched with user-defined methods.
+
+A category needs not to be directly exposed to the user code, the following will also do:
+
+[source,groovy]
+----------------------------------------------------------------------------------------------------------------------
+class JPACategory{
+  // Let's enhance JPA EntityManager without getting into the JSR committee
+  static void persistAll(EntityManager em , Object[] entities) { //add an interface to save all
+    entities?.each { em.persist(it) }
+  }
+}
+
+def transactionContext = {
+  EntityManager em, Closure c ->
+  def tx = em.transaction
+  try {
+    tx.begin()
+    use(JPACategory) {
+      c()
+    }
+    tx.commit()
+  } catch (e) {
+    tx.rollback()
+  } finally {
+    //cleanup your resource here
+  }
+}
+
+// user code, they always forget to close resource in exception, some even forget to commit, let's not rely on them.
+EntityManager em; //probably injected
+transactionContext (em) {
+ em.persistAll(obj1, obj2, obj3)
+ // let's do some logics here to make the example sensible
+ em.persistAll(obj2, obj4, obj6)
+}
+----------------------------------------------------------------------------------------------------------------------
+
+When we have a look at the `groovy.time.TimeCategory` class we see that the extension methods are all declared as `static`
+methods. In fact, this is one of the requirements that must be met by category classes for its methods to be successfully added to
+a class inside the `use` code block:
+
+[source,groovy]
+----------------------------------------------------------------------------------------------------------------------
+public class TimeCategory {
+
+    public static Date plus(final Date date, final BaseDuration duration) {
+        return duration.plus(date);
+    }
+
+    public static Date minus(final Date date, final BaseDuration duration) {
+        final Calendar cal = Calendar.getInstance();
+
+        cal.setTime(date);
+        cal.add(Calendar.YEAR, -duration.getYears());
+        cal.add(Calendar.MONTH, -duration.getMonths());
+        cal.add(Calendar.DAY_OF_YEAR, -duration.getDays());
+        cal.add(Calendar.HOUR_OF_DAY, -duration.getHours());
+        cal.add(Calendar.MINUTE, -duration.getMinutes());
+        cal.add(Calendar.SECOND, -duration.getSeconds());
+        cal.add(Calendar.MILLISECOND, -duration.getMillis());
+
+        return cal.getTime();
+    }
+
+    // ...
+----------------------------------------------------------------------------------------------------------------------
+
+Another requirement is the first argument of the static method must define the type the method is attached to once being activated. The
+other arguments are the normal arguments the method will take as parameters.
+
+Because of the parameter and static method convention, category method definitions may be a bit less intuitive than
+normal method definitions. As an alternative Groovy comes with a `@Category` annotation that transforms annotated classes
+into category classes at compile-time.
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/metaprogramming/CategoryTest.groovy[tags=time_category_anno,indent=0]
+----
+
+Applying the `@Category` annotation has the advantage of being able to use instance methods without the target type as a
+first parameter. The target type class is given as an argument to the annotation instead.
+
+[NOTE]
+There is a distinct section on `@Category` in the <<core-metaprogramming.adoc#xform-Category,compile-time metaprogramming section>>.
+
+=== Metaclasses
+
+As explained in other section, Metaclasses has a central role in the method resolution. For every method invocation from groovy code, Groovy will find the `MetaClass` for the given object and delegate the method resolution to the metaclass via gapid:groovy.lang.MetaClass#invokeMethod(java.lang.Class,java.lang.Object,java.lang.String,java.lang.Object,boolean,boolean)[MetaClass#invokeMethod] which should not be confused with gapid:groovy.lang.GroovyObject#invokeMethod(java.lang.String,java.lang.Object)[GroovyObject#invokeMethod].
+
+
+==== The default metaclass `MetaClassImpl`
+By default objects get an instance of `MetaClassImpl` that implements the default method lookup. This method lookup includes looking up of the method in the object class ("regular" method) but also if no method is found this way it will resort to calling `methodMissing` and ultimately gapid:groovy.lang.GroovyObject.html#invokeMethod(java.lang.String,java.lang.Object)[GroovyObject#invokeMethod]
+
+
+[source,groovy]
+----
+class Foo {}
+
+def f = new Foo()
+
+assert f.metaClass =~ /MetaClassImpl/
+----
+
+
+
+==== Custom metaclasses
+
+You can change the metaclass of any object or class and replace with a custom implementation of the `MetaClass` gapi:groovy.lang.MetaClass[interface]. Usually you will want to subclass one of the existing metaclasses `MetaClassImpl`, `DelegatingMetaClass`, `ExpandoMetaClass`, `ProxyMetaClass`, etc. otherwise you will need to implement the complete method lookup logic. Before using a new metaclass instance you should call  gapid:groovy.lang.MetaClass#initialize()[] otherwise the metaclass may or may not behave as expected.
+
+===== Delegating metaclass
+
+If you only need to decorate an existing metaclass the `DelegatingMetaClass` simplifies that use case. The old metaclass implementation is still accessible via `super` making easy to apply pretransformations to the inputs, routing to other methods and postprocess the outputs.
+
+[source,groovy]
+----
+class Foo { def bar() { "bar" } }
+
+class MyFooMetaClass extends DelegatingMetaClass {
+  MyFooMetaClass(MetaClass metaClass) { super(metaClass) }
+  MyFooMetaClass(Class theClass) { super(theClass) }
+
+  Object invokeMethod(Object object, String methodName, Object[] args) {
+     def result = super.invokeMethod(object,methodName.toLowerCase(), args)
+     result.toUpperCase();
+  }
+}
+
+
+def mc =  new MyFooMetaClass(Foo.metaClass)
+mc.initialize()
+
+Foo.metaClass = mc
+def f = new Foo()
+
+assert f.BAR() == "BAR" // the new metaclass routes .BAR() to .bar() and uppercases the result
+----
+
+===== Magic package
+
+It is possible to change the metaclass at startup time by giving the metaclass a specially crafted (magic) class name  and package name. In order to change the metaclass for `java.lang.Integer` it's enough to put a class `groovy.runtime.metaclass.java.lang.IntegerMetaClass` in the classpath. This is useful, for example,  when working with frameworks if you want to to metaclass changes before your code is executed by the framework. The general form of the magic package is `groovy.runtime.metaclass.[package].[class]MetaClass`. In the example below the `[package]` is `java.lang` and the `[class]` is `Integer`:
+
+
+[source,groovy]
+----
+// file: IntegerMetaClass.groovy
+package groovy.runtime.metaclass.java.lang;
+
+class IntegerMetaClass extends DelegatingMetaClass {
+  IntegerMetaClass(MetaClass metaClass) { super(metaClass) }
+  IntegerMetaClass(Class theClass) { super(theClass) }
+  Object invokeMethod(Object object, String name, Object[] args) {
+    if (name =~ /isBiggerThan/) {
+      def other = name.split(/isBiggerThan/)[1].toInteger()
+      object > other
+    } else {
+      return super.invokeMethod(object,name, args);
+    }
+  }
+}
+----
+
+By compiling the above file with `groovyc IntegerMetaClass.groovy` a `./groovy/runtime/metaclass/java/lang/IntegerMetaClass.class` will be generated. The example below will use this new metaclass:
+
+[source,groovy]
+----
+// File testInteger.groovy
+def i = 10
+
+assert i.isBiggerThan5()
+assert !i.isBiggerThan15()
+
+println i.isBiggerThan5()
+----
+
+By running that file with `groovy -cp . testInteger.groovy` the `IntegerMetaClass` will be in the classpath and therefore it will become the metaclass for `java.lang.Integer` intercepting the method calls to `isBiggerThan*()` methods.
+
+
+==== Per instance metaclass
+
+You can change the metaclass of individual objects separately, so it's possible to have multiple object of the same class with different metaclasses.
+
+[source,groovy]
+----
+class Foo { def bar() { "bar" }}
+
+class FooMetaClass extends DelegatingMetaClass {
+  FooMetaClass(MetaClass metaClass) { super(metaClass) }
+  Object invokeMethod(Object object, String name, Object[] args) {
+      super.invokeMethod(object,name,args).toUpperCase()
+  }
+}
+
+def f1 = new Foo()
+def f2 = new Foo()
+f2.metaClass = new FooMetaClass(f2.metaClass)
+
+assert f1.bar() == "bar"
+assert f2.bar() == "BAR"
+assert f1.metaClass =~ /MetaClassImpl/
+assert f2.metaClass =~ /FooMetaClass/
+assert f1.class.toString() == "class Foo"
+assert f2.class.toString() == "class Foo"
+----
+
+[[metaprogramming_emc]]
+==== ExpandoMetaClass
+
+Groovy comes with a special `MetaClass` the so-called `ExpandoMetaClass`. It is special in that it allows for dynamically
+adding or changing methods, constructors, properties and even static methods by using a neat closure syntax.
+
+Applying those modifications can be especially useful in mocking or stubbing scenarios as shown in the <<core-testing-guide.adoc#testing_guide_emc,Testing Guide>>.
+
+Every `java.lang.Class` is supplied by Groovy with a special `metaClass` property that will give you a reference to an
+`ExpandoMetaClass` instance. This instance can then be used to add methods or change the behaviour of already existing
+ones.
+
+[NOTE]
+By default `ExpandoMetaClass` doesn't do inheritance. To enable this you must call `ExpandoMetaClass#enableGlobally()`
+before your app starts such as in the main method or servlet bootstrap.
+
+The following sections go into detail on how `ExpandoMetaClass` can be used in various scenarios.
+
+===== Methods
+
+Once the `ExpandoMetaClass` is accessed by calling the `metaClass` property, methods can added by using either the left shift
+`<<` or the `=` operator.
+
+[NOTE]
+Note that the left shift operator is used to _append_ a new method. If a public method with the same name and
+parameter types is declared by the class or interface, including those inherited from superclasses and superinterfaces
+but excluding those added to the `metaClass` at runtime, an exception will be thrown. If you want to _replace_ a
+method declared by the class or interface you can use the `=` operator.
+
+The operators are applied on a non-existent property of `metaClass` passing an instance of a `Closure` code block.
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/metaprogramming/ExpandoMetaClassTest.groovy[tags=emc_method,indent=0]
+----
+
+The example above shows how a new method can be added to a class by accessing the `metaClass` property and using the `<<` or
+ `=` operator to assign a `Closure` code block. The `Closure` parameters are interpreted as method parameters. Parameterless methods
+ can be added by using the `{-> ...}` syntax.
+
+===== Properties
+
+`ExpandoMetaClass` supports two mechanisms for adding or overriding properties.
+
+Firstly, it has support for declaring a _mutable property_ by simply assigning a value to a property of `metaClass`:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/metaprogramming/ExpandoMetaClassTest.groovy[tags=emc_property,indent=0]
+----
+
+Another way is to add getter and/or setter methods by using the standard mechanisms for adding instance methods.
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/metaprogramming/ExpandoMetaClassTest.groovy[tags=emc_getter,indent=0]
+----
+
+In the source code example above the property is dictated by the closure and is a read-only property. It is feasible to add
+an equivalent setter method but then the property value needs to be stored for later usage. This could be done as
+shown in the following example.
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/metaprogramming/ExpandoMetaClassTest.groovy[tags=emc_getter_setter,indent=0]
+----
+
+This is not the only technique however. For example in a servlet container one way might be to store the values in
+the currently executing request as request attributes (as is done in some cases in Grails).
+
+===== Constructors
+
+Constructors can be added by using a special `constructor` property. Either the `<<` or `=` operator can be used
+to assign a `Closure` code block. The `Closure` arguments will become the constructor arguments when the code is
+executed at runtime.
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/metaprogramming/ExpandoMetaClassTest.groovy[tags=emc_constructors,indent=0]
+----
+
+[NOTE]
+Be careful when adding constructors however, as it is very easy to get into stack overflow troubles.
+
+===== Static Methods
+
+Static methods can be added using the same technique as instance methods with the addition of the `static` qualifier
+before the method name.
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/metaprogramming/ExpandoMetaClassTest.groovy[tags=emc_static,indent=0]
+----
+
+===== Borrowing Methods
+
+With `ExpandoMetaClass` it is possible to use Groovy's method pointer syntax to borrow methods from other classes.
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/metaprogramming/ExpandoMetaClassTest.groovy[tags=emc_method_pointer,indent=0]
+----
+
+===== Dynamic Method Names
+
+Since Groovy allows you to use Strings as property names this in turns allows you to dynamically create method and
+property names at runtime. To create a method with a dynamic name simply use the language feature of reference property
+names as strings.
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/metaprogramming/ExpandoMetaClassTest.groovy[tags=emc_dynamic_method_names,indent=0]
+----
+
+The same concept can be applied to static methods and properties.
+
+One application of dynamic method names can be found in the Grails web application framework. The concept of "dynamic
+codecs" is implemented by using dynamic method names.
+
+[source,groovy]
+.`HTMLCodec` Class
+------------------------------------------------------
+class HTMLCodec {
+    static encode = { theTarget ->
+        HtmlUtils.htmlEscape(theTarget.toString())
+    }
+
+    static decode = { theTarget ->
+    	HtmlUtils.htmlUnescape(theTarget.toString())
+    }
+}
+------------------------------------------------------
+
+The example above shows a codec implementation. Grails comes with various codec implementations each defined in a single class.
+At runtime there will be multiple codec classes in the application classpath. At application startup the framework adds
+a `encodeXXX` and a `decodeXXX` method to certain meta-classes where `XXX` is the first part of the codec class name (e.g.
+`encodeHTML`). This mechanism is in the following shown in some Groovy pseudo-code:
+
+[source,groovy]
+------------------------------------------------------
+def codecs = classes.findAll { it.name.endsWith('Codec') }
+
+codecs.each { codec ->
+    Object.metaClass."encodeAs${codec.name-'Codec'}" = { codec.newInstance().encode(delegate) }
+    Object.metaClass."decodeFrom${codec.name-'Codec'}" = { codec.newInstance().decode(delegate) }
+}
+
+
+def html = '<html><body>hello</body></html>'
+
+assert '<html><body>hello</body></html>' == html.encodeAsHTML()
+------------------------------------------------------
+
+===== Runtime Discovery
+
+At runtime it is often useful to know what other methods or properties exist at the time the method is executed. `ExpandoMetaClass`
+provides the following methods as of this writing:
+
+* `getMetaMethod`
+* `hasMetaMethod`
+* `getMetaProperty`
+* `hasMetaProperty`
+
+Why can't you just use reflection? Well because Groovy is different, it has the methods that are "real" methods and
+methods that are available only at runtime. These are sometimes (but not always) represented as MetaMethods. The
+MetaMethods tell you what methods are available at runtime, thus your code can adapt.
+
+This is of particular use when overriding `invokeMethod`, `getProperty` and/or `setProperty`.
+
+===== GroovyObject Methods
+
+Another feature of `ExpandoMetaClass` is that it allows to override the methods `invokeMethod`, `getProperty` and
+`setProperty`, all of them can be found in the `groovy.lang.GroovyObject` class.
+
+The following example shows how to override `invokeMethod`:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/metaprogramming/ExpandoMetaClassTest.groovy[tags=emc_invoke_method,indent=0]
+----
+
+The first step in the `Closure` code is to lookup the `MetaMethod` for the given name and arguments. If the method
+can be found everything is fine and it is delegated to. If not, a dummy value is returned.
+
+[NOTE]
+A `MetaMethod` is a method that is known to exist on the `MetaClass` whether added at runtime or at compile-time.
+
+The same logic can be used to override `setProperty` or `getProperty`.
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/metaprogramming/ExpandoMetaClassTest.groovy[tags=emc_get_property,indent=0]
+----
+
+The important thing to note here is that instead of a `MetaMethod` a `MetaProperty` instance is looked up. If that exists
+the `getProperty` method of the `MetaProperty` is called, passing the delegate.
+
+===== Overriding Static invokeMethod
+
+`ExpandoMetaClass` even allows for overriding static method with a special `invokeMethod` syntax.
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/metaprogramming/ExpandoMetaClassTest.groovy[tags=emc_invoke_method_static,indent=0]
+----
+
+The logic that is used for overriding the static method is the same as we've seen before for overriding instance methods. The
+only difference is the access to the `metaClass.static` property and the call to `getStaticMethodName` for retrieving
+the static `MetaMethod` instance.
+
+===== Extending Interfaces
+
+It is possible to add methods onto interfaces with `ExpandoMetaClass`. To do this however, it *must* be enabled
+globally using the `ExpandoMetaClass.enableGlobally()` method before application start-up.
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/metaprogramming/ExpandoMetaClassTest.groovy[tags=emc_interface,indent=0]
+----
+
+=== Extension modules
+==== Extending existing classes
+
+An extension module allows you to add new methods to existing classes, including classes which are precompiled, like
+classes from the JDK. Those new methods, unlike those defined through a metaclass or using a category, are available
+globally. For example, when you write:
+
+[source,groovy]
+.Standard extension method
+------------------------------------
+def file = new File(...)
+def contents = file.getText('utf-8')
+------------------------------------
+
+The `getText` method doesn’t exist on the `File` class. However, Groovy knows it because it is defined in a special
+class, `ResourceGroovyMethods`:
+
+[source,java]
+.ResourceGroovyMethods.java
+----------------------------------------------------------------------------
+public static String getText(File file, String charset) throws IOException {
+ return IOGroovyMethods.getText(newReader(file, charset));
+}
+----------------------------------------------------------------------------
+
+You may notice that the extension method is defined using a static method in a helper class (where various extension
+methods are defined). The first argument of the `getText` method corresponds to the receiver, while additional parameters
+correspond to the arguments of the extension method. So here, we are defining a method called _getText_ on
+the `File` class (because the first argument is of type `File`), which takes a single argument as a parameter (the encoding `String`).
+
+The process of creating an extension module is simple:
+
+* write an extension class like above
+* write a module descriptor file
+
+Then you have to make the extension module visible to Groovy, which is as simple as having the extension module classes
+and descriptor available on classpath. This means that you have the choice:
+
+* either provide the classes and module descriptor directly on classpath
+* or bundle your extension module into a jar for reusability
+
+An extension module may add two kind of methods to a class:
+
+* instance methods (to be called on an instance of a class)
+* static methods (to be called on the class itself)
+
+==== Instance methods
+
+To add an instance method to an existing class, you need to create an extension class. For example, let's say you
+want to add a `maxRetries` method on `Integer` which accepts a closure and executes it at most _n_ times until no
+exception is thrown. To do that, you only need to write the following:
+
+[source,groovy]
+.MaxRetriesExtension.groovy
+----
+include::{projectdir}/src/spec/test/support/MaxRetriesExtension.groovy[tags=instance_extension,indent=0]
+----
+<1> The extension class
+<2> First argument of the static method corresponds to the receiver of the message, that is to say the extended instance
+
+Then, after <<module-descriptor,having declared your extension class>>, you can call it this way:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/ExtensionModuleSpecTest.groovy[tags=instance_extension_assert,indent=0]
+----
+
+==== Static methods
+
+It is also possible to add static methods to a class. In that case, the static method needs to be defined in its *own*
+file. Static and instance extension methods *cannot* be present in the same class.
+
+[source,groovy]
+.StaticStringExtension.groovy
+----
+include::{projectdir}/src/spec/test/support/StaticStringExtension.groovy[tags=static_extension,indent=0]
+----
+<1> The static extension class
+<2> First argument of the static method corresponds to the class being extended and is *unused*
+
+In which case you can call it directly on the `String` class:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/ExtensionModuleSpecTest.groovy[tags=static_extension_assert,indent=0]
+----
+
+[[module-descriptor]]
+==== Module descriptor
+
+For Groovy to be able to load your extension methods, you must declare
+your extension helper classes. You must create a file named
+`org.codehaus.groovy.runtime.ExtensionModule` into the
+`META-INF/groovy` directory:
+
+.org.codehaus.groovy.runtime.ExtensionModule
+--------------------------------------------------------
+include::{projectdir}/src/spec/test-resources/META-INF/groovy/org.codehaus.groovy.runtime.ExtensionModuleSpec[tags=extension_descriptor,indent=0]
+--------------------------------------------------------
+
+The module descriptor requires 4 keys:
+
+* _moduleName_ : the name of your module
+* _moduleVersion_: the version of your module. Note that version number
+is only used to check that you don’t load the same module in two
+different versions.
+* _extensionClasses_: the list of extension helper classes for instance
+methods. You can provide several classes, given that they are comma
+separated.
+* _staticExtensionClasses_: the list of extension helper classes for
+static methods. You can provide several classes, given that they are
+comma separated.
+
+Note that it is not required for a module to define both static helpers
+and instance helpers, and that you may add several classes to a single
+module. You can also extend different classes in a single module without
+problem. It is even possible to use different classes in a single
+extension class, but it is recommended to group extension methods into
+classes by feature set.
+
+==== Extension modules and classpath
+
+It's worth noting that you can't use an extension which is compiled at the same time as code using it. That means that
+to use an extension, it *has* to be available on classpath, as compiled classes, before the code using it gets compiled.
+Usually, this means that you can't have the _test_ classes in the same source unit as the extension class itself. Since
+in general, test sources are separated from normal sources and executed in another step of the build, this is not an issue.
+
+==== Compatibility with type checking
+
+Unlike categories, extension modules are compatible with type checking: if they are found on classpath, then the type
+checker is aware of the extension methods and will not complain when you call them. It is also compatible with static
+compilation.
+
+== Compile-time metaprogramming
+
+Compile-time metaprogramming in Groovy allows code generation at compile-time. Those transformations are altering the
+Abstract Syntax Tree (AST) of a program, which is why in Groovy we call it AST transformations. AST transformations
+allow you to hook into the compilation process, modify the AST and continue the compilation process to generate regular
+bytecode. Compared to runtime metaprogramming, this has the advantage of making the changes visible in the class file
+itself (that is to say, in the bytecode). Making it visible in the bytecode is important for example if you want the
+transformations to be part of the class contract (implementing interfaces, extending abstract classes, ...) or even
+if you need your class to be callable from Java (or other JVM languages). For example, an AST transformation can add
+methods to a class. If you do it with runtime metaprogramming, the new method would only be visible from Groovy. If you
+do the same using compile-time metaprogramming, the method would be visible from Java too. Last but not least, performance
+would likely be better with compile-time metaprogramming (because no initialization phase is required).
+
+In this section, we will start with explaining the various compile-time transformations that are bundled with the Groovy
+distribution. In a subsequent section, we will describe how you can <<developing-ast-xforms,implement your own AST transformations>>
+and what are the disadvantages of this technique.
+
+=== Available AST transformations
+
+Groovy comes with various AST transformations covering different needs: reducing boilerplate (code generation), implementing
+design patterns (delegation, ...), logging, declarative concurrency, cloning, safer scripting, tweaking the compilation,
+implementing Swing patterns, testing and eventually managing dependencies. If none of those AST transformations cover
+your needs, you can still implement your own, as show in section <<developing-ast-xforms,Developing your own AST
+transformations>>.
+
+AST transformations can be separated into two categories:
+
+* global AST transformations are applied transparently, globally, as soon as they are found on compile classpath
+* local AST transformations are applied by annotating the source code with markers. Unlike global AST transformations,
+local AST transformations may support parameters.
+
+Groovy doesn't ship with any global AST transformation, but you can find a list of local AST transformations
+available for you to use in your code here:
+
+==== Code generation transformations
+
+This category of transformation includes AST transformations which help removing boilerplate code. This is typically
+code that you have to write but that does not carry any useful information. By autogenerating this boilerplate code,
+the code you have to write is left clean and concise and the chance of introducing an error by getting such
+boilerplate code incorrect is reduced.
+
+[[xform-ToString]]
+===== `@groovy.transform.ToString`
+The `@ToString` AST transformation generates a human readable `toString` representation of the class. For example,
+annotating the `Person` class like below will automatically generate the `toString` method for you:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=tostring_import,indent=0]
+
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=tostring_simple,indent=0]
+----
+
+With this definition, then the following assertion passes, meaning that a `toString` method taking the field values from
+the class and printing them out has been generated:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=tostring_simple_assert,indent=0]
+----
+
+The `@ToString` annotation accepts several parameters which are summarized in the following table:
+
+[cols="1,1,2,3a",options="header"]
+|=======================================================================
+|Attribute|Default value|Description|Example
+|excludes|Empty list|List of properties to exclude from toString|
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=tostring_example_excludes,indent=0]
+----
+|includes|Undefined marker list (indicates all fields)|List of fields to include in toString|
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=tostring_example_includes,indent=0]
+----
+|includeSuper|False|Should superclass be included in toString|
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=tostring_example_includeSuper,indent=0]
+----
+|includeNames|false|Whether to include names of properties in generated toString.|
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=tostring_example_includeNames,indent=0]
+----
+|includeFields|False|Should fields be included in toString, in addition to properties|
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=tostring_example_includeFields,indent=0]
+----
+|includeSuperProperties|False|Should super properties be included in toString|
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=tostring_example_includeSuperProperties,indent=0]
+----
+|includeSuperFields|False|Should visible super fields be included in toString|
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=tostring_example_includeSuperFields,indent=0]
+----
+|ignoreNulls|False|Should properties/fields with null value be displayed|
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=tostring_example_ignoreNulls,indent=0]
+----
+|includePackage|True|Use fully qualified class name instead of simple name in toString|
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=tostring_example_includePackage,indent=0]
+----
+|allProperties|True|Include all JavaBean properties in toString|
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=tostring_example_allProperties,indent=0]
+----
+|cache|False|Cache the toString string. Should only be set to true if the class is immutable.|
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=tostring_example_cache,indent=0]
+----
+|allNames|False|Should fields and/or properties with internal names be included in the generated toString|
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=tostring_example_allNames,indent=0]
+
+|=======================================================================
+
+[[xform-EqualsAndHashCode]]
+===== `@groovy.transform.EqualsAndHashCode`
+
+The `@EqualsAndHashCode` AST transformation aims at generating `equals` and `hashCode` methods for you. The generated
+hashcode follows the best practices as described in _Effective Java_ by _Josh Bloch_:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=equalshashcode,indent=0]
+----
+
+There are several options available to tweak the behavior of `@EqualsAndHashCode`:
+
+[cols="1,1,2,3a",options="header"]
+|=======================================================================
+|Attribute|Default value|Description|Example
+|excludes|Empty list|List of properties to exclude from equals/hashCode|
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=equalshashcode_example_excludes,indent=0]
+----
+|includes|Undefined marker list (indicating all fields)|List of fields to include in equals/hashCode|
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=equalshashcode_example_includes,indent=0]
+----
+|cache|False|Cache the hashCode computation. Should only be set to true if the class is immutable.|
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=equalshashcode_example_cache,indent=0]
+----
+|callSuper|False|Whether to include super in equals and hashCode calculations|
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=equalshashcode_example_super,indent=0]
+----
+|includeFields|False|Should fields be included in equals/hashCode, in addition to properties|
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=equalshashcode_example_includeFields,indent=0]
+----
+|useCanEqual|True|Should equals call canEqual helper method.|See http://www.artima.com/lejava/articles/equality.html
+|allProperties|False|Should JavaBean properties be included in equals and hashCode calculations|
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=equalshashcode_example_allProperties,indent=0]
+----
+|allNames|False|Should fields and/or properties with internal names be included in equals and hashCode calculations|
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=equalshashcode_example_allNames,indent=0]
+----
+|=======================================================================
+
+[[xform-TupleConstructor]]
+===== `@groovy.transform.TupleConstructor`
+
+The `@TupleConstructor` annotation aims at eliminating boilerplate code by generating constructors for you. A tuple
+constructor is created having a parameter for each property (and possibly each field). Each parameter has a default value
+(using the initial value of the property if present or otherwise Java's default value according to the properties type).
+
+===== Implementation Details
+
+Normally you don't need to understand the imp[ementation details of the generated constructor(s); you just use them in the normal way.
+However, if you want to add multiple constructors, understand Java integration options or meet requirements of some
+dependency injection frameworks, then some details are useful.
+
+As previously mentioned, the generated constructor has default values applied. In later compilation phases,
+the Groovy compiler's standard default value processing behavior is then applied.
+The end result is that multiple constructors are placed within the bytecode of your class.
+This provides a well understood semantics and is also useful for Java integration purposes. As an example, the
+following code will generate 3 constructors:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=tupleconstructor_simple,indent=0]
+----
+
+The first constructor is a no-arg constructor which allows the traditional map-style construction so long as
+you don't have final properties. Groovy calls the no-arg constructor and then the relevant setters under the covers.
+It is worth noting that if the first property (or field) has type LinkedHashMap or if there is a single Map,
+AbstractMap or HashMap property (or field), then the map-style named arguments won't be available.
+
+The other constructors are generated by taking the properties in the order they are defined. Groovy will generate as
+many constructors as there are properties (or fields, depending on the options).
+
+Setting the `defaults` attribute (see the available configuration options table) to `false`, disables the normal default values behavior which means:
+
+* Exactly one constructor will be produced
+* Attempting to use an initial value will produce an error
+* Map-style named arguments won't be available
+
+This attribute is normally only used in situations where another Java framework is
+expecting exactly one constructor, e.g. injection frameworks or JUnit parameterized runners.
+
+===== Immutability support
+
+If the `@PropertyOptions` annotation is also found on the class with the `@TupleConstructor` annotation,
+then the generated constructor may contain custom property handling logic.
+The `propertyHandler` attribute on the `@PropertyOptions` annotation could for instance be set to
+`ImmutablePropertyHandler` which will result in the addition of the necessary logic for immutable classes
+(defensive copy in, cloning, etc.). This normally would happen automatically behind the scenes when you use
+the `@Immutable` meta-annotation.
+Some of the annotation attributes might not be supported by all property handlers.
+
+===== Customization options
+
+The `@TupleConstructor` AST transformation accepts several annotation attributes:
+
+[cols="1,1,2,3a",options="header"]
+|=======================================================================
+|Attribute|Default value|Description|Example
+|excludes|Empty list|List of properties to exclude from tuple constructor generation|
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=tupleconstructor_example_excludes,indent=0]
+----
+|includes|Undefined list (indicates all fields)|List of fields to include in tuple constructor generation|
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=tupleconstructor_example_includes,indent=0]
+----
+|includeProperties|True|Should properties be included in tuple constructor generation|
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=tupleconstructor_example_includeProperties,indent=0]
+----
+|includeFields|False|Should fields be included in tuple constructor generation, in addition to properties|
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=tupleconstructor_example_includeFields,indent=0]
+----
+|includeSuperProperties|True|Should properties from super classes be included in tuple constructor generation|
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=tupleconstructor_example_includeSuperProperties,indent=0]
+----
+|includeSuperFields|False|Should fields from super classes be included in tuple constructor generation|
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=tupleconstructor_example_includeSuperFields,indent=0]
+----
+|callSuper|False|Should super properties be called within a call to the parent constructor rather than set as properties|
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=tupleconstructor_example_callSuper,indent=0]
+----
+|force|False|By default, the transformation will do nothing if a constructor is already defined. Setting this attribute to
+true, the constructor will be generated and it's your responsibility to ensure that no duplicate constructor is defined.|
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=tupleconstructor_example_force,indent=0]
+----
+|defaults|True|Indicates that default value processing is enabled for constructor parameters.
+Set to false to obtain exactly one constructor but with initial value support and named-arguments disabled. |
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=tupleconstructor_example_defaults_false,indent=0]
+----
+|useSetters|False|By default, the transformation will directly set the backing field of each property
+from its corresponding constructor parameter. Setting this attribute to true, the constructor will instead call setters if
+they exist. It's usually deemed bad style from within a constructor to call setters that can be overridden. It's your
+responsibility to avoid such bad style.|
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=tupleconstructor_example_useSetters,indent=0]
+----
+|allNames|False|Should fields and/or properties with internal names be included within the constructor|
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=tupleconstructor_example_allNames,indent=0]
+----
+|allProperties|False|Should JavaBean properties be included within the constructor|
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=tupleconstructor_example_allProperties,indent=0]
+----
+|pre|empty|A closure containing statements to be inserted at the start of the generated constructor(s)|
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=tupleconstructor_example_pre,indent=0]
+----
+|post|empty|A closure containing statements to be inserted at the end of the generated constructor(s)|
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=tupleconstructor_example_post,indent=0]
+----
+|=======================================================================
+
+Setting the `defaults` annotation attribute to `false` and the `force` annotation attribute to `true` allows
+multiple tuple constructors to be created by using different customization options for the different cases
+(provided each case has a different type signature) as shown in the following example:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=tupleconstructor_example_defaults_multiple,indent=0]
+----
+
+Similarly, here is another example using different options for `includes`:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=tupleconstructor_example_defaults_multipleIncludes,indent=0]
+----
+
+[[xform-MapConstructor]]
+===== `@groovy.transform.MapConstructor`
+
+The `@MapConstructor` annotation aims at eliminating boilerplate code by generating a map constructor for you. A map
+constructor is created such that each property in the class is set based on the value in the supplied map
+having the key with the name of the property. Usage is as shown in this example:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=mapconstructor_simple,indent=0]
+----
+
+The generated constructor will be roughly like this:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=mapconstructor_equiv,indent=0]
+----
+
+[[xform-Canonical]]
+===== `@groovy.transform.Canonical`
+
+The `@Canonical` meta-annotation combines the <<xform-ToString,@ToString>>,
+<<xform-EqualsAndHashCode,@EqualsAndHashCode>> and <<xform-TupleConstructor,@TupleConstructor>>
+annotations:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=canonical_simple,indent=0]
+----
+
+A similar immutable class can be generated using the <<xform-Immutable,@Immutable>> meta-annotation instead.
+The `@Canonical` meta-annotation supports the configuration options found in the annotations
+it aggregates. See those annotations for more details.
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=canonical_example_excludes,indent=0]
+----
+
+The `@Canonical` meta-annotation can be used in conjunction with an explicit use one or more of its
+component annotations, like this:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=canonical_example_excludes,indent=0]
+----
+
+Any applicable annotation attributes from `@Canonical` are passed along to the explicit annotation but
+attributes already existing in the explicit annotation take precedence.
+
+[[xform-InheritConstructors]]
+===== `@groovy.transform.InheritConstructors`
+
+The `@InheritConstructor` AST transformation aims at generating constructors matching super constructors for you. This
+is in particular useful when overriding exception classes:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=inheritconstructors_simple,indent=0]
+----
+
+The `@InheritConstructor` AST transformation supports the following configuration options:
+
+[cols="1,1,2,3a",options="header"]
+|=======================================================================
+|Attribute|Default value|Description|Example
+|constructorAnnotations|False|Whether to carry over annotations from the constructor during copying|
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=inheritconstructors_constructor_annotations,indent=0]
+----
+|parameterAnnotations|False|Whether to carry over annotations from the constructor parameters when copying the constructor|
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=inheritconstructors_parameter_annotations,indent=0]
+----
+|=======================================================================
+
+[[xform-Category]]
+===== `@groovy.lang.Category`
+
+The `@Category` AST transformation simplifies the creation of Groovy categories. Historically, a Groovy category was
+written like this:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=oldstyle_category,indent=0]
+----
+
+The `@Category` transformation lets you write the same using an instance-style class, rather than a static class style.
+This removes the need for having the first argument of each method being the receiver. The category can be written like
+this:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=newstyle_category,indent=0]
+----
+
+Note that the mixed in class can be referenced using `this` instead. It's also worth noting that using instance fields
+in a category class is inherently unsafe: categories are not stateful (like traits).
+
+[[xform-IndexedProperty]]
+===== `@groovy.transform.IndexedProperty`
+
+The `@IndexedProperty` annotation aims at generating indexed getters/setters for properties of list/array types.
+This is in particular useful if you want to use a Groovy class from Java. While Groovy supports GPath to access properties,
+this is not available from Java. The `@IndexedProperty` annotation will generate indexed properties of the following
+form:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=indexedproperty_simple,indent=0]
+----
+
+[[xform-Lazy]]
+===== `@groovy.lang.Lazy`
+
+The `@Lazy` AST transformation implements lazy initialization of fields. For example, the following code:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=lazy_simple,indent=0]
+----
+
+will produce the following code:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=lazy_simple_generated,indent=0]
+----
+
+The default value which is used to initialize the field is the default constructor of the declaration type. It is possible
+to define a default value by using a closure on the right hand side of the property assignment, as in the following
+example:
+
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=lazy_default,indent=0]
+----
+
+In that case, the generated code looks like the following:
+
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=lazy_default_generated,indent=0]
+----
+
+If the field is declared volatile then initialization will be synchronized using the
+http://en.wikipedia.org/wiki/Double-checked_locking[double-checked locking] pattern.
+
+Using the `soft=true` parameter, the helper field will use a `SoftReference` instead, providing a simple way to
+implement caching. In that case, if the garbage collector decides to collect the reference, initialization will occur
+the next time the field is accessed.
+
+[[xform-Newify]]
+===== `@groovy.lang.Newify`
+
+The `@Newify` AST transformation is used to bring alternative syntaxes to construct objects:
+
+* Using the `Python` style:
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=newify_python,indent=0]
+----
+* or using the `Ruby` style:
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=newify_ruby,indent=0]
+----
+The `Ruby` version can be disabled by setting the `auto` flag to `false`.
+
+[[xform-Sortable]]
+===== `@groovy.transform.Sortable`
+
+The `@Sortable` AST transformation is used to help write classes that are `Comparable` and easily sorted by
+numerous properties. It is easy to use as shown in the following example where we annotate the `Person` class:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=sortable_simple,indent=0]
+----
+
+The generated class has the following properties:
+
+* it implements the `Comparable` interface
+* it contains a `compareTo` method with an implementation based on the natural ordering of the `first`, `last` and `born` properties
+* it has three methods returning comparators: `comparatorByFirst`, `comparatorByLast` and `comparatorByBorn`.
+
+The generated `compareTo` method will look like this:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=sortable_simple_generated_compareTo,indent=0]
+----
+As an example of the generated comparators, the `comparatorByFirst` comparator will have a `compare` method that looks like this:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=sortable_simple_generated_comparatorByFirst,indent=0]
+----
+
+The `Person` class can be used wherever a `Comparable` is expected and the generated comparators
+wherever a `Comparator` is expected as shown by these examples:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=sortable_simple_usage,indent=0]
+----
+
+Normally, all properties are used in the generated `compareTo` method in the priority order in which they are defined.
+You can include or exclude certain properties from the generated `compareTo` method by giving a list of property names
+in the `includes` or `excludes` annotation attributes. If using `includes`, the order of the property names given will
+determine the priority of properties when comparing. To illustrate, consider the following `Person` class definition:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=sortable_custom,indent=0]
+----
+
+It will have two comparator methods `comparatorByFirst` and `comparatorByBorn` and the generated `compareTo` method will look like this:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=sortable_custom_generated_compareTo,indent=0]
+----
+
+This `Person` class can be used as follows:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=sortable_custom_usage,indent=0]
+----
+
+[[xform-Builder]]
+===== `@groovy.transform.builder.Builder`
+
+The `@Builder` AST transformation is used to help write classes that can be created using _fluent_ api calls.
+The transform supports multiple building strategies to cover a range of cases and there are a number
+of configuration options to customize the building process. If you're an AST hacker, you can also define your own
+strategy class. The following table lists the available strategies that are bundled with Groovy and the
+configuration options each strategy supports.
+
+|================================
+| Strategy | Description | builderClassName | builderMethodName |buildMethodName | prefix | includes/excludes | includeSuperProperties | allNames
+| `SimpleStrategy` | chained setters | n/a | n/a | n/a | yes, default "set" | yes | n/a | yes, default `false`
+| `ExternalStrategy` | explicit builder class, class being built untouched | n/a | n/a | yes, default "build" | yes, default "" | yes | yes, default `false`| yes, default `false`
+| `DefaultStrategy` | creates a nested helper class | yes, default __<TypeName>__Builder | yes, default "builder" | yes, default "build" | yes, default "" | yes | yes, default `false`| yes, default `false`
+| `InitializerStrategy` | creates a nested helper class providing type-safe fluent creation | yes, default __<TypeName>__Initializer | yes, default "createInitializer" | yes, default "create" but usually only used internally | yes, default "" | yes | yes, default `false`| yes, default `false`
+|================================
+
+.SimpleStrategy
+To use the `SimpleStrategy`, annotate your Groovy class using the `@Builder` annotation, and specify the strategy as shown in this example:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=builder_simple,indent=0]
+----
+
+Then, just call the setters in a chained fashion as shown here:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=builder_simple_usage,indent=0]
+----
+
+For each property, a generated setter will be created which looks like this:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=builder_simple_generated_setter,indent=0]
+----
+
+You can specify a prefix as shown in this example:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=builder_simple_prefix,indent=0]
+----
+
+And calling the chained setters would look like this:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=builder_simple_prefix_usage,indent=0]
+----
+
+You can use the `SimpleStrategy` in conjunction with `@TupleConstructor`. If your `@Builder`
+annotation doesn't have explicit `includes` or `excludes` annotation attributes but your `@TupleConstructor`
+annotation does, the ones from `@TupleConstructor` will be re-used for `@Builder`. The same applies for any
+annotation aliases which combine `@TupleConstructor` such as `@Canonical`.
+
+The annotation attribute `useSetters` can be used if you have a setter which you want called as part of the
+construction process. See the JavaDoc for details.
+
+The annotation attributes `builderClassName`, `buildMethodName`, `builderMethodName`, `forClass` and `includeSuperProperties` are not supported for this strategy.
+
+NOTE: Groovy already has built-in building mechanisms. Don't rush to using `@Builder` if the built-in mechanisms meet your needs. Some examples:
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=builder_simple_alternatives,indent=0]
+----
+
+.ExternalStrategy
+To use the `ExternalStrategy`, create and annotate a Groovy builder class using the `@Builder` annotation, specify the
+class the builder is for using `forClass` and indicate use of the `ExternalStrategy`.
+Suppose you have the following class you would like a builder for:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=builder_external_buildee,indent=0]
+----
+
+you explicitly create and use your builder class as follows:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=builder_external,indent=0]
+----
+
+Note that the (normally empty) builder class you provide will be filled in with appropriate setters and a build method.
+The generated build method will look something like:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=builder_external_generated_build,indent=0]
+----
+
+The class you are creating the builder for can be any Java or Groovy class following the normal JavaBean conventions,
+e.g. a no-arg constructor and setters for the properties. Here is an example using a Java class:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=builder_external_java,indent=0]
+----
+
+The generated builder can be customised using the `prefix`, `includes`, `excludes` and `buildMethodName` annotation attributes.
+Here is an example illustrating various customisations:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=builder_external_custom,indent=0]
+----
+
+The `builderMethodName` and `builderClassName` annotation attributes for `@Builder` aren't applicable for this strategy.
+
+You can use the `ExternalStrategy` in conjunction with `@TupleConstructor`. If your `@Builder` annotation doesn't have
+explicit `includes` or `excludes` annotation attributes but the `@TupleConstructor` annotation of the class you are creating
+the builder for does, the ones from `@TupleConstructor` will be re-used for `@Builder`. The same applies for any
+annotation aliases which combine `@TupleConstructor` such as `@Canonical`.
+
+.DefaultStrategy
+To use the `DefaultStrategy`, annotate your Groovy class using the `@Builder` annotation as shown in this example:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=builder_default,indent=0]
+----
+
+If you want, you can customize various aspects of the building process
+using the `builderClassName`, `buildMethodName`, `builderMethodName`, `prefix`, `includes` and `excludes` annotation attributes,
+some of which are used in the example here:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=builder_default_custom,indent=0]
+----
+
+This strategy also supports annotating static methods and constructors. In this case, the static method or constructor
+parameters become the properties to use for building purposes and in the case of static methods, the return type
+of the method becomes the target class being built. If you have more than one `@Builder` annotation used within
+a class (at either the class, method or constructor positions) then it is up to you to ensure that the generated
+helper classes and factory methods have unique names (i.e. no more than one can use the default name values).
+Here is an example highlighting method and constructor usage (and also illustrating the renaming required for unique names).
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=builder_default_methods,indent=0]
+----
+
+The `forClass` annotation attribute is not supported for this strategy.
+
+.InitializerStrategy
+To use the `InitializerStrategy`, annotate your Groovy class using the `@Builder` annotation, and specify the strategy as shown in this example:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=builder_initializer,indent=0]
+----
+
+Your class will be locked down to have a single public constructor taking a "fully set" initializer.
+It will also have a factory method to create the initializer. These are used as follows:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=builder_initializer_usage,indent=0]
+----
+
+Any attempt to use the initializer which doesn't involve setting all the properties (though order is not important) will result in
+a compilation error. If you don't need this level of strictness, you don't need to use `@CompileStatic`.
+
+You can use the `InitializerStrategy` in conjunction with `@Canonical` and `@Immutable`. If your `@Builder` annotation
+doesn't have explicit `includes` or `excludes` annotation attributes but your `@Canonical` annotation does, the ones
+from `@Canonical` will be re-used for `@Builder`. Here is an example using `@Builder` with `@Immutable`:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=builder_initializer_immutable,indent=0]
+----
+
+The annotation attribute `useSetters` can be used if you have a setter which you want called as part of the
+construction process. See the JavaDoc for details.
+
+This strategy also supports annotating static methods and constructors. In this case, the static method or constructor
+parameters become the properties to use for building purposes and in the case of static methods, the return type
+of the method becomes the target class being built. If you have more than one `@Builder` annotation used within
+a class (at either the class, method or constructor positions) then it is up to you to ensure that the generated
+helper classes and factory methods have unique names (i.e. no more than one can use the default name values).
+For an example of method and constructor usage but using the `DefaultStrategy` strategy, consult that strategy's
+documentation.
+
+The annotation attribute `forClass` is not supported for this strategy.
+
+[[xform-AutoImplement]]
+===== `@groovy.transform.AutoImplement`
+
+The `@AutoImplement` AST transformation supplies dummy implementations for any found abstract methods from
+superclasses or interfaces. The dummy implementation is the same for all abstract methods found and can be:
+
+* essentially empty (exactly true for void methods and for methods with a return type, returns the default value for
+that type)
+* a statement that throws a specified exception (with optional message)
+* some user supplied code
+
+The first example illustrates the default case. Our class is annotated with `@AutoImplement`,
+has a superclass and a single interface as can be seen here:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=autoimplement_default,indent=0]
+----
+
+A `void close()` method from the
+`Closeable` interface is supplied and left empty. Implementations are also supplied
+for the three abstract methods from the super class. The `get`, `addAll` and `size` methods
+have return types of `String`, `boolean` and `int` respectively with default values
+`null`, `false` and `0`. We can use our class (and check the expected return type for one
+of the methods) using the following code:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=autoimplement_default_usage,indent=0]
+----
+
+It is also worthwhile examining the equivalent generated code:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=autoimplement_default_equiv,indent=0]
+----
+
+The second example illustrates the simplest exception case. Our class is annotated with `@AutoImplement`,
+has a superclass and an annotation attribute indicates that an `IOException` should be thrown if any of
+our "dummy" methods are called. Here is the class definition:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=autoimplement_exception,indent=0]
+----
+
+We can use the class (and check the expected exception is thrown for one
+of the methods) using the following code:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=autoimplement_exception_usage,indent=0]
+----
+
+It is also worthwhile examining the equivalent generated code where three void methods
+have been provided all of which throw the supplied exception:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=autoimplement_exception_equiv,indent=0]
+----
+
+The third example illustrates the exception case with a supplied message. Our class is annotated with `@AutoImplement`,
+implements an interface, and has annotation attributes to indicate that an `UnsupportedOperationException` with
+`Not supported by MyIterator` as the message should be thrown for any supplied methods. Here is the class definition:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=autoimplement_exceptionmsg,indent=0]
+----
+
+We can use the class (and check the expected exception is thrown and has the correct message
+for one of the methods) using the following code:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=autoimplement_exceptionmsg_usage,indent=0]
+----
+
+It is also worthwhile examining the equivalent generated code where three void methods
+have been provided all of which throw the supplied exception:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=autoimplement_exceptionmsg_equiv,indent=0]
+----
+
+The fourth example illustrates the case of user supplied code. Our class is annotated with `@AutoImplement`,
+implements an interface, has an explcitly overriden `hasNext` method, and has an annotation attribute containing the
+supplied code for any supplied methods. Here is the class definition:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=autoimplement_code,indent=0]
+----
+
+We can use the class (and check the expected exception is thrown and has a message of the expected form)
+using the following code:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=autoimplement_code_usage,indent=0]
+----
+
+It is also worthwhile examining the equivalent generated code where the `next` method has been supplied:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CodeGenerationASTTransformsTest.groovy[tags=autoimplement_code_equiv,indent=0]
+----
+
+==== Class design annotations
+
+This category of annotations are aimed at simplifying the implementation of well-known design patterns (delegation,
+singleton, ...) by using a declarative style.
+
+[[xform-BaseScript]]
+===== `@groovy.transform.BaseScript`
+
+`@BaseScript` is used within scripts to indicate that the script should
+extend fron a custom script base class rather than `groovy.lang.Script`.
+See the documentation for <<dsl-basescript,domain specific languages>> for further details.
+
+[[xform-Delegate]]
+===== `@groovy.lang.Delegate`
+
+The `@Delegate` AST transformation aims at implementing the delegation design pattern. In the following class:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/ClassDesignASTTransformsTest.groovy[tags=delegating_class,indent=0]
+----
+
+The `when` property is annotated with `@Delegate`, meaning that the `Event` class will delegate calls to `Date` methods
+to the `when` property. In this case, the generated code looks like this:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/ClassDesignASTTransformsTest.groovy[tags=delegating_class_generated,indent=0]
+----
+
+Then you can call the `before` method, for example, directly on the `Event` class:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/ClassDesignASTTransformsTest.groovy[tags=delegation_assert,indent=0]
+----
+
+Instead of annotating a property (or field), you can also annotate a method.
+In this case, the method can be thought of as a getter or factory method for the delegate.
+As an example, here is a class which (rather unusually) has a pool of delegates which are
+accessed in a round-robin fashion:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/ClassDesignASTTransformsTest.groovy[tags=delegate_method,indent=0]
+----
+
+Here is an example usage of that class:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/ClassDesignASTTransformsTest.groovy[tags=delegate_method_usage,indent=0]
+----
+
+Using a standard list in this round-robin fashion would violate many expected properties of lists, so
+don't expect the above class to do anything useful beyond this trivial example.
+
+The behavior of the `@Delegate` AST transformation can be changed using the following parameters:
+
+[cols="1,1,2,3a",options="header"]
+|=======================================================================
+|Attribute|Default value|Description|Example
+|interfaces|True|Should the interfaces implemented by the field be implemented by the class too|
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/ClassDesignASTTransformsTest.groovy[tags=delegate_example_interfaces,indent=0]
+----
+|deprecated|false|If true, also delegates methods annotated with @Deprecated|
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/ClassDesignASTTransformsTest.groovy[tags=delegate_deprecated_header,indent=0]
+include::{projectdir}/src/spec/test/ClassDesignASTTransformsTest.groovy[tags=delegate_deprecated_footer,indent=0]
+----
+|methodAnnotations|False|Whether to carry over annotations from the methods of the delegate to your delegating method.|
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/ClassDesignASTTransformsTest.groovy[tags=delegate_example_annotations,indent=0]
+----
+|parameterAnnotations|False|Whether to carry over annotations from the method parameters of the delegate to your delegating method.|
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/ClassDesignASTTransformsTest.groovy[tags=delegate_example_parameter_annotations,indent=0]
+----
+|excludes|Empty array|A list of methods to be excluded from delegation. For more fine-grained control, see also `excludeTypes`.|
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/ClassDesignASTTransformsTest.groovy[tags=delegate_example_excludes_header,indent=0]
+include::{projectdir}/src/spec/test/ClassDesignASTTransformsTest.groovy[tags=delegate_example_excludes_footer,indent=0]
+----
+|includes|Undefined marker array (indicates all methods)|A list of methods to be included in delegation. For more
+fine-grained
+control, see also `includeTypes`.|
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/ClassDesignASTTransformsTest.groovy[tags=delegate_example_includes_header,indent=0]
+include::{projectdir}/src/spec/test/ClassDesignASTTransformsTest.groovy[tags=delegate_example_includes_footer,indent=0]
+----
+|excludeTypes|Empty array|A list of interfaces containing method signatures to be excluded from delegation|
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/ClassDesignASTTransformsTest.groovy[tags=delegate_example_excludeTypes,indent=0]
+----
+|includeTypes|Undefined marker array (indicates no list be default)|A list of interfaces containing method signatures to
+ be included in delegation|
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/ClassDesignASTTransformsTest.groovy[tags=delegate_example_includeTypes_header,indent=0]
+include::{projectdir}/src/spec/test/ClassDesignASTTransformsTest.groovy[tags=delegate_example_includeTypes_footer,indent=0]
+----
+|allNames|False|Should the delegate pattern be also applied to methods with internal names|
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/ClassDesignASTTransformsTest.groovy[tags=delegate_example_allNames,indent=0]
+----
+|=======================================================================
+
+[[xform-Immutable]]
+===== `@groovy.transform.Immutable`
+
+The `@Immutable` meta-annotation combines the following annotations:
+
+* <<xform-ToString,@ToString>>
+* <<xform-EqualsAndHashCode,@EqualsAndHashCode>>
+* <<xform-TupleConstructor,@TupleConstructor>>
+* <<xform-MapConstructor,@MapConstructor>>
+* <<xform-ImmutableBase,@ImmutableBase>>
+* <<xform-ImmutableOptions,@ImmutableOptions>>
+* <<xform-PropertyOptions,@PropertyOptions>>
+* <<xform-KnownImmutable,@KnownImmutable>>
+
+The `@Immutable` meta-annotation simplifies the creation of immutable classes. Immutable classes are useful
+since they are often easier to reason about and are inherently thread-safe.
+See http://www.informit.com/store/effective-java-9780134685991[Effective Java, Minimize Mutability] for all the details
+about how to achieve immutable classes in Java. The `@Immutable` meta-annotation does most of the things described
+in _Effective Java_ for you automatically.
+To use the meta-annotation, all you have to do is annotate the class like in the following example:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/ClassDesignASTTransformsTest.groovy[tags=immutable_simple,indent=0]
+----
+
+One of the requirements for immutable classes is that there is no way to modify any state information within the class.
+One requirement to achieve this is to use immutable classes for each property or alternatively perform special coding
+such as defensive copy in and defensive copy out for any mutable properties within the constructors
+and property getters. Between `@ImmutableBase`, `@MapConstructor` and `@TupleConstructor` properties
+are either identified as immutable or the special coding for numerous known cases is handled automatically.
+Various mechanisms are provided for you to extend the handled property types which are allowed. See
+`@ImmutableOptions` and `@KnownImmutable` for details.
+
+The results of applying `@Immutable` to a class are pretty similar to those of
+applying the <<xform-Canonical,@Canonical>> meta-annotation but the generated class will have extra
+logic to handle immutability. You will observe this by, for instance, trying to modify a property
+which will result in a `ReadOnlyPropertyException` being thrown since the backing field for the property
+will have been automatically made final.
+
+The `@Immutable` meta-annotation supports the configuration options found in the annotations
+it aggregates. See those annotations for more details.
+
+[[xform-ImmutableBase]]
+===== `@groovy.transform.ImmutableBase`
+
+Immutable classes generated with `@ImmutableBase` are automatically made final. Also, the type of each property is checked
+and various checks are made on the class, for example, public instance fields currently aren't allowed. It also generates
+a `copyWith` constructor if desired.
+
+The following annotation attribute is supported:
+
+[cols="1,1,2,3a",options="header"]
+|=======================================================================
+|Attribute|Default value|Description|Example
+|copyWith|false|A boolean whether to generate a `copyWith( Map )` method.|
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/ClassDesignASTTransformsTest.groovy[tags=immutable_example_copyWith,indent=0]
+----
+|=======================================================================
+
+[[xform-PropertyOptions]]
+===== `@groovy.transform.PropertyOptions`
+
+This annotation allows you to specify a custom property handler to be used by transformations
+during class construction. It is ignored by the main Groovy compiler but is referenced by other transformations
+like `@TupleConstructor`, `@MapConstructor`, and `@ImmutableBase`. It is frequently used behind the
+scenes by the `@Immutable` meta-annotation.
+
+[[xform-VisibilityOptions]]
+===== `@groovy.transform.VisibilityOptions`
+
+This annotation allows you to specify a custom visibility for a construct generated by another transformation.
+It is ignored by the main Groovy compiler but is referenced by other transformations
+like `@TupleConstructor`, `@MapConstructor`, and `@NamedVariant`.
+
+[[xform-ImumtableOptions]]
+===== `@groovy.transform.ImmutableOptions`
+
+Groovy's immutability support relies on a predefined list of known immutable classes (like `java.net.URI` or `java.lang.String`
+and fails if you use a type which is not in that list, you are allowed to add to the list of known immutable types
+thanks to the following annotation attributes of the `@ImmutableOptions` annotation:
+
+[cols="1,1,2,3a",options="header"]
+|=======================================================================
+|Attribute|Default value|Description|Example
+|knownImmutableClasses|Empty list|A list of classes which are deemed immutable.|
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/ClassDesignASTTransformsTest.groovy[tags=immutable_example_knownimmutableclasses,indent=0]
+----
+|knownImmutables|Empty list|A list of property names which are deemed immutable.|
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/ClassDesignASTTransformsTest.groovy[tags=immutable_example_knownimmutables,indent=0]
+----
+|=======================================================================
+
+If you deem a type as immutable and it isn't one of the ones automatically handled, then it is up to you
+to correctly code that class to ensure immutability.
+
+[[xform-KnownImmutable]]
+===== `@groovy.transform.KnownImmutable`
+
+The `@KnownImmutable` annotation isn't actually one that triggers any AST transformations. It is simply
+a marker annotation. You can annotate your classes with the annotation (including Java classes) and they
+will be recognized as acceptable types for members within an immutable class. This saves you having to
+explicitly use the `knownImmutables` or `knownImmutableClasses` annotation attributes from `@ImmutableOptions`.
+
+[[xform-Memoized]]
+===== `@groovy.transform.Memoized`
+
+The `@Memoized` AST transformations simplifies the implementation of caching by allowing the result of method calls
+to be cached just by annotating the method with `@Memoized`. Let's imagine the following method:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/ClassDesignASTTransformsTest.groovy[tags=memoized_long_computation,indent=0]
+----
+
+This emulates a long computation, based on the actual parameters of the method. Without `@Memoized`, each method call
+would take several seconds plus it would return a random result:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/ClassDesignASTTransformsTest.groovy[tags=memoized_long_computation_asserts,indent=0]
+----
+
+Adding `@Memoized` changes the semantics of the method by adding caching, based on the parameters:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/ClassDesignASTTransformsTest.groovy[tags=memoized_long_computation_cached,indent=0]
+----
+
+The size of the cache can be configured using two optional parameters:
+
+* _protectedCacheSize_: the number of results which are guaranteed not to be cleared after garbage collection
+* _maxCacheSize_: the maximum number of results that can be kept in memory
+
+By default, the size of the cache is unlimited and no cache result is protected from garbage collection. Setting a
+_protectedCacheSize>0_ would create an unlimited cache with some results protected. Setting _maxCacheSize>0_ would
+ create a limited cache but without any protection from garbage protection. Setting both would create a limited,
+ protected cache.
+
+[[xform-TailRecursive]]
+===== `@groovy.transform.TailRecursive`
+
+TBD
+
+[[xform-Singleton]]
+===== `@groovy.lang.Singleton`
+
+The `@Singleton` annotation can be used to implement the singleton design pattern on a class. The singleton instance
+is defined eagerly by default, using class initialization, or lazily, in which case the field is initialized using
+double checked locking.
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/ClassDesignASTTransformsTest.groovy[tags=singleton_simple,indent=0]
+----
+
+By default, the singleton is created eagerly when the class is initialized and available through the `instance` property.
+It is possible to change the name of the singleton using the `property` parameter:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/ClassDesignASTTransformsTest.groovy[tags=singleton_example_property,indent=0]
+----
+
+And it is also possible to make initialization lazy using the `lazy` parameter:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/ClassDesignASTTransformsTest.groovy[tags=singleton_example_lazy,indent=0]
+----
+
+In this example, we also set the `strict` parameter to false, which allows us to define our own constructor.
+
+[[xform-Mixin]]
+===== `@groovy.lang.Mixin`
+
+Deprecated. Consider using traits instead.
+
+==== Logging improvements
+
+Groovy provides AST transformation that helps integrating with the most widely used logging frameworks. It's worth noting
+that annotating a class with one of those annotations doesn't prevent you from adding the appropriate logging framework
+on classpath.
+
+All transformations work in a similar way:
+
+* add static final `log` field corresponding to the logger
+* wrap all calls to `log.level()` into the appropriate `log.isLevelEnabled` guard, depending on the underlying framework
+
+Those transformations support two parameters:
+
+* `value` (default `log`) corresponds to the name of the logger field
+* `category` (defaults to the class name) is the name of the logger category
+
+[[xform-Log]]
+===== `@groovy.util.logging.Log`
+
+The first logging AST transformation available is the `@Log` annotation which relies on the JDK logging framework. Writing:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/LogImprovementsASTTransformsTest.groovy[tags=log_spec,indent=0]
+----
+
+is equivalent to writing:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/LogImprovementsASTTransformsTest.groovy[tags=log_equiv,indent=0]
+----
+
+[[xform-Commons]]
+===== `@groovy.util.logging.Commons`
+
+Groovy supports the http://commons.apache.org/proper/commons-logging/[Apache Commons Logging] framework using to the
+`@Commons` annotation. Writing:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/LogImprovementsASTTransformsTest.groovy[tags=commons_spec,indent=0]
+----
+
+is equivalent to writing:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/LogImprovementsASTTransformsTest.groovy[tags=commons_equiv,indent=0]
+----
+
+[[xform-Log4j]]
+===== `@groovy.util.logging.Log4j`
+
+Groovy supports the http://logging.apache.org/log4j/1.2/[Apache Log4j 1.x] framework using to the
+`@Log4j` annotation. Writing:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/LogImprovementsASTTransformsTest.groovy[tags=log4j_spec,indent=0]
+----
+
+is equivalent to writing:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/LogImprovementsASTTransformsTest.groovy[tags=log4j_equiv,indent=0]
+----
+
+[[xform-Log4j2]]
+===== `@groovy.util.logging.Log4j2`
+
+Groovy supports the http://logging.apache.org/log4j/2.x/[Apache Log4j 2.x] framework using to the
+`@Log4j2` annotation. Writing:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/LogImprovementsASTTransformsTest.groovy[tags=log4j2_spec,indent=0]
+----
+
+is equivalent to writing:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/LogImprovementsASTTransformsTest.groovy[tags=log4j2_equiv,indent=0]
+----
+
+[[xform-Slf4j]]
+===== `@groovy.util.logging.Slf4j`
+
+Groovy supports the http://www.slf4j.org/[Simple Logging Facade for Java (SLF4J)] framework using to the
+`@Slf4j` annotation. Writing:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/LogImprovementsASTTransformsTest.groovy[tags=slf4j_spec,indent=0]
+----
+
+is equivalent to writing:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/LogImprovementsASTTransformsTest.groovy[tags=slf4j_equiv,indent=0]
+----
+
+==== Declarative concurrency
+
+The Groovy language provides a set of annotations aimed at simplifying common concurrency patterns in a declarative
+approach.
+
+[[xform-Synchronized]]
+===== `@groovy.transform.Synchronized`
+
+The `@Synchronized` AST transformations works in a similar way to the `synchronized` keyword but locks on different
+objects for safer concurrency. It can be applied on any method or static method:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/DeclarativeConcurrencyASTTransformsTest.groovy[tags=example_synchronized,indent=0]
+----
+
+Writing this is equivalent to creating a lock object and wrapping the whole method into a synchronized block:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/DeclarativeConcurrencyASTTransformsTest.groovy[tags=example_synchronized_equiv,indent=0]
+----
+
+By default, `@Synchronized` creates a field named `$lock` (or `$LOCK` for a static method) but you can make it use any
+field you want by specifying the value attribute, like in the following example:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/DeclarativeConcurrencyASTTransformsTest.groovy[tags=example_synchronized_customlock,indent=0]
+----
+
+[[xform-WithReadLock]]
+===== `@groovy.transform.WithReadLock` and `@groovy.transform.WithWriteLock`
+
+The `@WithReadLock` AST transformation works in conjunction with the `@WithWriteLock` transformation
+to provide read/write synchronization using the `ReentrantReadWriteLock` facility that the JDK provides. The annotation
+can be added to a method or a static method. It will transparently create a `$reentrantLock` final field (or
+`$REENTRANTLOCK` for a static method) and proper synchronization code will be added. For example, the following code:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/DeclarativeConcurrencyASTTransformsTest.groovy[tags=example_rwlock,indent=0]
+----
+
+is equivalent to this:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/DeclarativeConcurrencyASTTransformsTest.groovy[tags=example_rwlock_equiv,indent=0]
+----
+
+Both `@WithReadLock` and `@WithWriteLock` support specifying an alternative lock object. In that case, the referenced
+ field must be declared by the user, like in the following alternative:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/DeclarativeConcurrencyASTTransformsTest.groovy[tags=example_rwlock_alter,indent=0]
+----
+
+For details
+
+* See Javadoc for gapi:groovy.transform.WithReadLock[]
+* See Javadoc for gapi:groovy.transform.WithWriteLock[]
+
+==== Easier cloning and externalizing
+
+Groovy provides two annotations aimed at facilitating the implementation of `Cloneable` and `Externalizable` interfaces,
+respectively named `@AutoClone` and `@AutoExternalize`.
+
+[[xform-AutoClone]]
+===== `@groovy.transform.AutoClone`
+
+The `@AutoClone` annotation is aimed at implementing the `@java.lang.Cloneable` interface using various strategies, thanks to the `style` parameter:
+
+* the default `AutoCloneStyle.CLONE` strategy calls `super.clone()` first then `clone()` on each cloneable property
+* the `AutoCloneStyle.SIMPLE` strategy uses a regular constructor call and copies properties from the source to the clone
+* the `AutoCloneStyle.COPY_CONSTRUCTOR` strategy creates and uses a copy constructor
+* the `AutoCloneStyle.SERIALIZATION` strategy uses serialization (or externalization) to clone the object
+
+Each of those strategies have pros and cons which are discussed in the Javadoc for gapi:groovy.transform.AutoClone[] and gapi:groovy.transform.AutoCloneStyle[] .
+
+For example, the following example:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CloningASTTransformsTest.groovy[tags=example_autoclone,indent=0]
+----
+
+is equivalent to this:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CloningASTTransformsTest.groovy[tags=example_autoclone_equiv,indent=0]
+----
+
+Note that the String properties aren't explicitly handled because Strings are immutable and the `clone()` method from `Object` will copy the String references. The same would apply to primitive fields and most of the concrete subclasses of `java.lang.Number`.
+
+In addition to cloning styles, `@AutoClone` supports multiple options:
+
+[cols="1,1,2,3a",options="header"]
+|=======================================================================
+|Attribute|Default value|Description|Example
+|excludes|Empty list|A list of property or field names that need to be excluded from cloning. A string consisting of a comma-separated field/property names is also allowed.
+See gapi:groovy.transform.AutoClone#excludes[] for details|
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CloningASTTransformsTest.groovy[tags=example_autoclone_excludes,indent=0]
+----
+|includeFields|false|By default, only properties are cloned. Setting this flag to true will also clone fields.|
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CloningASTTransformsTest.groovy[tags=example_autoclone_includeFields,indent=0]
+----
+|=======================================================================
+
+[[xform-AutoExternalize]]
+===== `@groovy.transform.AutoExternalize`
+
+The `@AutoExternalize` AST transformation will assist in the creation of `java.io.Externalizable` classes. It will
+automatically add the interface to the class and generate the `writeExternal` and `readExternal` methods. For example, this
+code:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CloningASTTransformsTest.groovy[tags=example_autoext,indent=0]
+----
+
+will be converted into:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CloningASTTransformsTest.groovy[tags=example_autoext_equiv,indent=0]
+----
+
+The `@AutoExternalize` annotation supports two parameters which will let you slightly customize its behavior:
+
+[cols="1,1,2,3a",options="header"]
+|=======================================================================
+|Attribute|Default value|Description|Example
+|excludes|Empty list|A list of property or field names that need to be excluded from externalizing. A string consisting of a comma-separated field/property names is also allowed.
+See gapi:groovy.transform.AutoExternalize#excludes[] for details|
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CloningASTTransformsTest.groovy[tags=example_autoext_excludes,indent=0]
+----
+|includeFields|false|By default, only properties are externalized. Setting this flag to true will also clone fields.|
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CloningASTTransformsTest.groovy[tags=example_autoext_includeFields,indent=0]
+----
+|=======================================================================
+
+
+==== Safer scripting
+
+The Groovy language makes it easy to execute user scripts at runtime (for example using gapi:groovy.lang.GroovyShell[]),
+but how do you make sure that a script won't eat all CPU (infinite loops) or that concurrent scripts won't slowly consume
+all available threads of a thread pool? Groovy provides several annotations which are aimed towards safer scripting,
+generating code which will for example allow you to interrupt execution automatically.
+
+[[xform-ThreadInterrupt]]
+===== `@groovy.transform.ThreadInterrupt`
+
+One complicated situation in the JVM world is when a thread can't be stopped. The `Thread#stop` method exists but is
+deprecated (and isn't reliable) so your only chance relies in `Thread#interrupt`. Calling the latter will set the
+`interrupt` flag on the thread, but it will *not* stop the execution of the thread. This is problematic because it's the
+responsibility of the code executing in the thread to check the interrupt flag and properly exit. This makes sense when
+you, as a developer, know that the code you are executing is meant to be run in an independent thread, but in general,
+you don't know it. It's even worse with user scripts, who might not even know what a thread is (think of DSLs).
+
+`@ThreadInterrupt` simplifies this by adding thread interruption checks at critical places in the code:
+
+* loops (for, while)
+* first instruction of a method
+* first instruction of a closure body
+
+Let's imagine the following user script:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/SaferScriptingASTTransformsTest.groovy[tags=threadinterrupt_infiniteloop,indent=0]
+----
+
+This is an obvious infinite loop. If this code executes in its own thread, interrupting wouldn't help: if you `join` on
+the thread, then the calling code would be able to continue, but the thread would still be alive, running in background
+without any ability for you to stop it, slowly causing thread starvation.
+
+One possibility to work around this is to set up your shell this way:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/SaferScriptingASTTransformsTest.groovy[tags=threadinterrupt_shell_setup,indent=0]
+----
+
+The shell is then configured to automatically apply the `@ThreadInterrupt` AST transformations on all scripts. This allows
+you to execute user scripts this way:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/SaferScriptingASTTransformsTest.groovy[tags=threadinterrupt_control,indent=0]
+----
+
+The transformation automatically modified user code like this:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/SaferScriptingASTTransformsTest.groovy[tags=threadinterrupt_infiniteloop_equiv,indent=0]
+----
+
+The check which is introduced inside the loop guarantees that if the `interrupt` flag is set on the current thread, an
+exception will be thrown, interrupting the execution of the thread.
+
+`@ThreadInterrupt` supports multiple options that will let you further customize the behavior of the transformation:
+
+[cols="1,1,2,3a",options="header"]
+|=======================================================================
+|Attribute|Default value|Description|Example
+|thrown|`java.lang.InterruptedException`|Specifies the type of exception which is thrown if the thread is interrupted.|
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/SaferScriptingASTTransformsTest.groovy[tags=threadinterrupt_thrown,indent=0]
+----
+|checkOnMethodStart|true|Should an interruption check be inserted at the beginning of each method body. See gapi:groovy.transform.ThreadInterrupt[] for details.|
+[source,groovy]
+----
+@ThreadInterrupt(checkOnMethodStart=false)
+----
+|applyToAllClasses|true|Should the transformation be applied on all classes of the same source unit (in the same source file). See gapi:groovy.transform.ThreadInterrupt[] for details.|
+[source,groovy]
+----
+@ThreadInterrupt(applyToAllClasses=false)
+class A { ... } // interrupt checks added
+class B { ... } // no interrupt checks
+----
+|applyToAllMembers|true|Should the transformation be applied on all members of class. See gapi:groovy.transform.ThreadInterrupt[] for details.|
+[source,groovy]
+----
+class A {
+    @ThreadInterrupt(applyToAllMembers=false)
+    void method1() { ... } // interrupt checked added
+    void method2() { ... } // no interrupt checks
+}
+----
+|=======================================================================
+
+[[xform-TimedInterrupt]]
+===== `@groovy.transform.TimedInterrupt`
+
+The `@TimedInterrupt` AST transformation tries to solve a slightly different problem from <<xform-ThreadInterrupt>>: instead of checking the `interrupt` flag of the thread, it will automatically
+throw an exception if the thread has been running for too long.
+
+NOTE: This annotation does *not* spawn a monitoring thread. Instead, it works in a similar manner as `@ThreadInterrupt` by placing checks at appropriate places in the code. This means that if you
+have a thread blocked by I/O, it will *not* be interrupted.
+
+Imagine the following user code:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/SaferScriptingASTTransformsTest.groovy[tags=timedinterrupt_fib,indent=0]
+----
+
+The implementation of the famous Fibonacci number computation here is far from optimized. If it is called with a high `n` value, it can take minutes to answer. With `@TimedInterrupt`, you can
+choose how long a script is allowed to run. The following setup code will allow the user script to run for 1 second at max:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/SaferScriptingASTTransformsTest.groovy[tags=timedinterrupt_shell_setup,indent=0]
+----
+
+This code is equivalent to annotating a class with `@TimedInterrupt` like this:
+
+[source,groovy]
+----
+@TimedInterrupt(value=1, unit=TimeUnit.SECONDS)
+class MyClass {
+    def fib(int n) {
+        n<2?n:fib(n-1)+fib(n-2)
+    }
+}
+----
+
+`@TimedInterrupt` supports multiple options that will let you further customize the behavior of the transformation:
+
+[cols="1,1,2,3a",options="header"]
+|=======================================================================
+|Attribute|Default value|Description|Example
+|value|Long.MAX_VALUE|Used in combination with `unit` to specify after how long execution times out.|
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/SaferScriptingASTTransformsTest.groovy[tags=timedinterrupt_duration,indent=0]
+----
+|unit|TimeUnit.SECONDS|Used in combination with `value` to specify after how long execution times out.|
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/SaferScriptingASTTransformsTest.groovy[tags=timedinterrupt_duration,indent=0]
+----
+|thrown|`java.util.concurrent.TimeoutException`|Specifies the type of exception which is thrown if timeout is reached.|
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/SaferScriptingASTTransformsTest.groovy[tags=timedinterrupt_thrown,indent=0]
+----
+|checkOnMethodStart|true|Should an interruption check be inserted at the beginning of each method body. See gapi:groovy.transform.TimedInterrupt[] for details.|
+[source,groovy]
+----
+@TimedInterrupt(checkOnMethodStart=false)
+----
+|applyToAllClasses|true|Should the transformation be applied on all classes of the same source unit (in the same source file). See gapi:groovy.transform.TimedInterrupt[] for details.|
+[source,groovy]
+----
+@TimedInterrupt(applyToAllClasses=false)
+class A { ... } // interrupt checks added
+class B { ... } // no interrupt checks
+----
+|applyToAllMembers|true|Should the transformation be applied on all members of class. See gapi:groovy.transform.TimedInterrupt[] for details.|
+[source,groovy]
+----
+class A {
+    @TimedInterrupt(applyToAllMembers=false)
+    void method1() { ... } // interrupt checked added
+    void method2() { ... } // no interrupt checks
+}
+----
+|=======================================================================
+
+WARNING: `@TimedInterrupt` is currently not compatible with static methods!
+
+[[xform-ConditionalInterrupt]]
+===== `@groovy.transform.ConditionalInterrupt`
+
+The last annotation for safer scripting is the base annotation when you want to interrupt a script using a custom strategy. In particular, this is the annotation of choice if you
+want to use resource management (limit the number of calls to an API, ...). In the following example, user code is using an infinite loop, but `@ConditionalInterrupt` will allow us
+to check a quota manager and interrupt automatically the script:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/SaferScriptingASTTransformsTest.groovy[tags=conditionalinterrupt,indent=0]
+----
+
+The quota checking is very basic here, but it can be any code:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/SaferScriptingASTTransformsTest.groovy[tags=conditionalinterrupt_quotaclass,indent=0]
+----
+
+We can make sure `@ConditionalInterrupt` works properly using this test code:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/SaferScriptingASTTransformsTest.groovy[tags=conditionalinterrupt_assert,indent=0]
+----
+
+Of course, in practice, it is unlikely that `@ConditionalInterrupt` will be itself added by hand on user code. It can be injected in a similar manner as the example shown in the
+<<xform-ThreadInterrupt,ThreadInterrupt>> section, using the gapi:org.codehaus.groovy.control.customizers.ASTTransformationCustomizer[] :
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/SaferScriptingASTTransformsTest.groovy[tags=conditionalinterrupt_injected,indent=0]
+----
+
+`@ConditionalInterrupt` supports multiple options that will let you further customize the behavior of the transformation:
+
+[cols="1,1,2,3a",options="header"]
+|=======================================================================
+|Attribute|Default value|Description|Example
+|value||The closure which will be called to check if execution is allowed. If the closure returns false, execution is allowed. If it returns true, then an exception will be thrown.|
+[source,groovy]
+----
+@ConditionalInterrupt({ ... })
+----
+|thrown|`java.lang.InterruptedException`|Specifies the type of exception which is thrown if execution should be aborted.|
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/SaferScriptingASTTransformsTest.groovy[tags=conditionalinterrupt_thrown,indent=0]
+----
+|checkOnMethodStart|true|Should an interruption check be inserted at the beginning of each method body. See gapi:groovy.transform.ConditionalInterrupt[] for details.|
+[source,groovy]
+----
+@ConditionalInterrupt(checkOnMethodStart=false)
+----
+|applyToAllClasses|true|Should the transformation be applied on all classes of the same source unit (in the same source file). See gapi:groovy.transform.ConditionalInterrupt[] for details.|
+[source,groovy]
+----
+@ConditionalInterrupt(applyToAllClasses=false)
+class A { ... } // interrupt checks added
+class B { ... } // no interrupt checks
+----
+|applyToAllMembers|true|Should the transformation be applied on all members of class. See gapi:groovy.transform.ConditionalInterrupt[] for details.|
+[source,groovy]
+----
+class A {
+    @ConditionalInterrupt(applyToAllMembers=false)
+    void method1() { ... } // interrupt checked added
+    void method2() { ... } // no interrupt checks
+}
+----
+|=======================================================================
+
+==== Compiler directives
+
+This category of AST transformations groups annotations which have a direct impact on the semantics of the code, rather
+than focusing on code generation. With that regards, they can be seen as compiler directives that either change the
+behavior of a program at compile time or runtime.
+
+[[xform-Field]]
+===== `@groovy.transform.Field`
+
+The `@Field` annotation only makes sense in the context of a script and aims at solving a common scoping error with
+scripts. The following example will for example fail at runtime:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CompilerDirectivesASTTransformsTest.groovy[tags=field_missing_property,indent=0]
+----
+
+The error that is thrown may be difficult to interpret: +groovy.lang.MissingPropertyException: No such property: x+. The reason is that scripts are compiled
+to classes and the script body is itself compiled as a single _run()_ method. Methods which are defined in the scripts are independent, so the code above is
+equivalent to this:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CompilerDirectivesASTTransformsTest.groovy[tags=field_missing_property_equiv,indent=0]
+----
+
+So `def x` is effectively interpreted as a local variable, outside of the scope of the `line` method. The `@Field` AST transformation aims at fixing this
+by changing the scope of the variable to a field of the enclosing script:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CompilerDirectivesASTTransformsTest.groovy[tags=field_fixed,indent=0]
+----
+
+The resulting, equivalent, code is now:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CompilerDirectivesASTTransformsTest.groovy[tags=field_fixed_equiv,indent=0]
+----
+
+[[xform-PackageScope]]
+===== `@groovy.transform.PackageScope`
+
+By default, Groovy visibility rules imply that if you create a field without specifying a modifier, then the field is interpreted as a property:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CompilerDirectivesASTTransformsTest.groovy[tags=packagescope_property,indent=0]
+----
+
+Should you want to create a package private field instead of a property (private field+getter/setter), then annotate your field with `@PackageScope`:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CompilerDirectivesASTTransformsTest.groovy[tags=packagescope_property_javalike,indent=0]
+----
+
+The `@PackageScope` annotation can also be used for classes, methods and constructors. In addition, by specifying a list
+of `PackageScopeTarget` values as the annotation attribute at the class level, all members within that class that don't
+have an explicit modifier and match the provided `PackageScopeTarget` will remain package protected. For example to apply
+to fields within a class use the following annotation:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CompilerDirectivesASTTransformsTest.groovy[tags=packagescope_property_usingtarget,indent=0]
+----
+
+The `@PackageScope` annotation is seldom used as part of normal Groovy conventions but is sometimes useful
+for factory methods that should be visible internally within a package or for methods or constructors provided
+for testing purposes, or when integrating with third-party libraries which require such visibility conventions.
+
+[[xform-AutoFinal]]
+===== `@groovy.transform.AutoFinal`
+
+The `@AutoFinal` annotation instructs the compiler to automatically insert the final modifier
+in numerous places within the annotated node. If applied on a method (or constructor), the parameters
+for that method (or constructor) will be marked as final. If applied on a class definition, the same
+treatment will occur for all declared methods and constructors within that class.
+
+It is often considered bad practice to reassign parameters of a method or constructor with its body.
+By adding the final modifier to all parameter declarations you can avoid this practice entirely.
+Some programmers feel that adding final everywhere increases the amount of boilerplate code and makes the
+method signatures somewhat noisy. An alternative might instead be to use a code review process or apply
+a http://codenarc.org[codenarc] http://codenarc.sourceforge.net/codenarc-rules-convention.html#ParameterReassignment[rule]
+to give warnings if that practice is observed but these alternatives might lead to delayed feedback during
+quality checking rather than within the IDE or during compilation. The `@AutoFinal` annotation aims to
+maximise compiler/IDE feedback while retaining succinct code with minimum boilerplate noise.
+
+The following example illustrates applying the annotation at the class level:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CompilerDirectivesASTTransformsTest.groovy[tags=autofinal_class,indent=0]
+----
+
+In this example, the two parameters for the constructor and the single parameter for
+both the `fullname` and `greeting` methods will be final. Attempts to modify those parameters within the
+constructor or method bodies will be flagged by the compiler.
+
+The following example illustrates applying the annotation at the method level:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/CompilerDirectivesASTTransformsTest.groovy[tags=autofinal_method,indent=0]
+----
+
+Here, the `add` method will have final parameters but the `mult` method will remain unchanged.
+
+[[xform-AnnotationCollector]]
+===== `@groovy.transform.AnnotationCollector`
+
+`@AnnotationCollector` allows the creation of meta-annotations, which are described in a <<meta-annotations,dedicated section>>.
+
+[[xform-TypeChecked]]
+===== `@groovy.transform.TypeChecked`
+
+`@TypeChecked` activates compile-time type checking on your Groovy code. See <<section-typechecked,section on type checking>> for details.
+
+[[xform-CompileStatic]]
+===== `@groovy.transform.CompileStatic`
+
+`@CompileStatic` activates static compilation on your Groovy code. See <<section-typechecked,section on type checking>> for details.
+
+[[xform-CompileDynamic]]
+===== `@groovy.transform.CompileDynamic`
+
+`@CompileDynamic` disables static compilation on parts of your Groovy code. See <<section-typechecked,section on type checking>> for details.
+
+[[xform-DelegatesTo]]
+===== `@groovy.lang.DelegatesTo`
+
+`@DelegatesTo` is not, technically speaking, an AST transformation. It is aimed at documenting code and helping the compiler in case you are
+using <<xform-TypeChecked,type checking>> or <<xform-CompileStatic, static compilation>>. The annotation is described thoroughly in the
+<<section-delegatesto,DSL section>> of this guide.
+
+[[xform-SelfType]]
+===== `@groovy.transform.SelfType`
+
+`@SelfType` is not an AST transformation but rather a marker interface used
+with traits. See the <<traits-selftype,traits documentation>> for further details.
+
+==== Swing patterns
+
+[[xform-Bindable]]
+===== `@groovy.beans.Bindable`
+
+`@Bindable` is an AST transformation that transforms a regular property into a bound property (according to the http://download.oracle.com/otndocs/jcp/7224-javabeans-1.01-fr-spec-oth-JSpec/[JavaBeans specification]).
+The `@Bindable` annotation can be placed on a property or a class. To convert all properties of a class into bound properties, on can annotate the class like in this example:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/SwingASTTransformsTest.groovy[tags=bindable_on_class,indent=0]
+----
+
+This is equivalent to writing this:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/SwingASTTransformsTest.groovy[tags=bindable_on_class_equiv,indent=0]
+----
+
+`@Bindable` therefore removes a lot of boilerplate from your class, dramatically increasing readability. If the annotation is put on a single property, only that property is bound:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/SwingASTTransformsTest.groovy[tags=bindable_single_property,indent=0]
+----
+
+[[xform-ListenerList]]
+===== `@groovy.beans.ListenerList`
+
+The `@ListenerList` AST transformation generates code for adding, removing and getting the list of listeners to a class, just by annotating a collection property:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/SwingASTTransformsTest.groovy[tags=listenerlist_simple,indent=0]
+----
+
+The transform will generate the appropriate add/remove methods based on the generic type of the list. In addition, it will also create `fireXXX` methods based on the public methods declared on the class:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/SwingASTTransformsTest.groovy[tags=listenerlist_simple_equiv,indent=0]
+----
+
+`@Bindable` supports multiple options that will let you further customize the behavior of the transformation:
+
+[cols="1,1,2,3a",options="header"]
+|=======================================================================
+|Attribute|Default value|Description|Example
+|name|Generic type name|By default, the suffix which will be appended to add/remove/... methods is the simple class name of the generic type of the list.|
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/SwingASTTransformsTest.groovy[tags=listenerlist_name,indent=0]
+----
+|synchronize|false|If set to true, generated methods will be synchronized|
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/SwingASTTransformsTest.groovy[tags=listenerlist_synchronized,indent=0]
+----
+|=======================================================================
+
+[[xform-Vetoable]]
+===== `@groovy.beans.Vetoable`
+
+The `@Vetoable` annotation works in a similar manner to `@Bindable` but generates constrained property according to the JavaBeans specification, instead of bound properties. The annotation
+can be placed on a class, meaning that all properties will be converted to constrained properties, or on a single property. For example, annotating this class with `@Vetoable`:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/SwingASTTransformsTest.groovy[tags=vetoable_on_class,indent=0]
+----
+
+is equivalent to writing this:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/SwingASTTransformsTest.groovy[tags=vetoable_on_class_equiv,indent=0]
+----
+
+If the annotation is put on a single property, only that property is made vetoable:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/SwingASTTransformsTest.groovy[tags=vetoable_single_property,indent=0]
+----
+
+==== Test assistance
+[[xform-NotYetImplemented]]
+===== `@groovy.transform.NotYetImplemented`
+
+`@NotYetImplemented` is used to invert the result of a JUnit 3/4 test case. It is in particular useful if a feature is not yet implemented but the test is. In that case, it is expected
+that the test fails. Marking it with `@NotYetImplemented` will inverse the result of the test, like in this example:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/TestingASTTransformsTest.groovy[tags=notyetimplemented,indent=0]
+----
+
+Another advantage of using this technique is that you can write test cases for bugs before knowing how to fix them. If some time in the future, a modification in the code fixes a bug by side effect,
+you'll be notified because a test which was expected to fail passed.
+
+[[xform-ASTTest]]
+===== `@groovy.transform.ASTTest`
+
+`@ASTTest` is a special AST transformation meant to help debugging other AST transformations or the Groovy compiler itself. It will let the developer "explore" the AST during compilation and
+perform assertions on the AST rather than on the result of compilation. This means that this AST transformations gives access to the AST before the bytecode is produced. `@ASTTest` can be
+placed on any annotable node and requires two parameters:
+
+* _phase_: sets at which phase at which `@ASTTest` will be triggered. The test code will work on the AST tree at the end of this phase.
+* _value_: the code which will be executed once the phase is reached, on the annotated node
+
+TIP: Compile phase has to be chosen from one of gapi:org.codehaus.groovy.control.CompilePhase[] . However, since it is not possible to annotate a node twice with the same annotation, you will
+not be able to use `@ASTTest` on the same node at two distinct compile phases.
+
+`value` is a closure expression which has access to a special variable `node` corresponding to the annotated node, and a helper `lookup` method which will be discussed <<asttest-lookup,here>>.
+For example, you can annotate a class node like this:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/TestingASTTransformsTest.groovy[tags=asttest_basic,indent=0]
+----
+<1> we're checking the state of the Abstract Syntax Tree after the CONVERSION phase
+<2> node refers to the AST node which is annotated by @ASTTest
+<3> it can be used to perform assertions at compile time
+
+One interesting feature of `@ASTTest` is that if an assertion fails, then *compilation will fail*. Now imagine that we want to check the behavior of an AST transformation at compile time.
+We will take `@PackageScope` here, and we will want to verify that a property annotated with `@PackageScope` becomes a package private field. For this, we have to know at which phase the
+transform runs, which can be found in gapi:org.codehaus.groovy.transform.PackageScopeASTTransformation[] : semantic analysis. Then a test can be written like this:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/TestingASTTransformsTest.groovy[tags=asttest_packagescope,indent=0]
+----
+
+[[asttest-lookup]]
+The `@ASTTest` annotation can only be placed wherever the grammar allows it. Sometimes, you would like to test the contents of an AST node which is not annotable. In this case,
+`@ASTTest` provides a convenient `lookup` method which will search the AST for nodes which are labelled with a special token:
+
+[source,groovy]
+----
+def list = lookup('anchor') <1>
+Statement stmt = list[0] <2>
+----
+<1> returns the list of AST nodes which label is 'anchor'
+<2> it is always necessary to choose which element to process since lookup always returns a list
+
+Imagine, for example, that you want to test the declared type of a for loop variable. Then you can do it like this:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/TestingASTTransformsTest.groovy[tags=asttest_forloop,indent=0]
+----
+
+`@ASTTest` also exposes those variables inside the test closure:
+
+* `node` corresponds to the annotated node, as usual
+* `compilationUnit` gives access to the current `org.codehaus.groovy.control.CompilationUnit`
+* `compilePhase` returns the current compile phase (`org.codehaus.groovy.control.CompilePhase`)
+
+The latter is interesting if you don't specify the `phase` attribute. In that case, the closure will be executed after
+each compile phase after (and including) `SEMANTIC_ANALYSIS`. The context of the transformation is kept after each phase,
+giving you a chance to check what changed between two phases.
+
+As an example, here is how you could dump the list of AST transformations registered on a class node:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/TestingASTTransformsTest.groovy[tags=dump_ast_xforms,indent=0]
+----
+
+And here is how you can memorize variables for testing between two phases:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/TestingASTTransformsTest.groovy[tags=memorize_in_binding,indent=0]
+----
+<1> if the current compile phase is instruction selection
+<2> then we want to make sure `toString` was added at `CANONICALIZATION`
+<3> otherwise, if `toString` exists and that the variable from the context, `added` is null
+<4> then it means that this compile phase is the one where `toString` was added
+
+==== Grape handling
+[[xform-Grab]]
+===== `@groovy.lang.Grab`
+[[xform-GrabConfig]]
+===== `@groovy.lang.GrabConfig`
+[[xform-GrabExclude]]
+===== `@groovy.lang.GrabExclude`
+[[xform-GrabResolver]]
+===== `@groovy.lang.GrabResolver`
+[[xform-Grapes]]
+===== `@groovy.lang.Grapes`
+
+`Grape` is a dependency management engine embedded into Groovy, relying on several annotations which are described
+thoroughly in this <<section-grape,section of the guide>>.
+
+[[developing-ast-xforms]]
+=== Developing AST transformations
+
+There are two kinds of transformations: global and local transformations.
+
+* <<transforms-global,Global transformations>> are applied to by the compiler on the code being compiled,
+wherever the transformation apply. Compiled classes that implement global transformations
+are in a JAR added to the classpath of the compiler and contain service locator file
+`META-INF/services/org.codehaus.groovy.transform.ASTTransformation` with a line with the name of the
+transformation class. The transformation class must have a no-args constructor and implement the
+`org.codehaus.groovy.transform.ASTTransformation` interface.
+It will be run against *every source in the compilation*, so be sure to not create transformations which
+scan all the AST in an expansive and time-consuming manner, to keep the compiler fast.
+* <<transforms-local,Local transformations>> are transformations applied locally by annotating code elements you want to
+transform. For this, we reuse the annotation notation, and those annotations should implement
+`org.codehaus.groovy.transform.ASTTransformation`. The compiler will discover them and apply the
+transformation on these code elements.
+
+==== Compilation phases guide
+
+Groovy AST transformations must be performed in one of the nine defined
+compilation phases (gapi:org.codehaus.groovy.control.CompilePhase[]).
+
+Global transformations may be applied in any phase, but local
+transformations may only be applied in the semantic analysis phase or
+later. Briefly, the compiler phases are:
+
+* _Initialization_: source files are opened and environment configured
+* _Parsing_: the grammar is used to to produce tree of tokens representing
+the source code
+* _Conversion_: An abstract syntax tree (AST) is created from token trees.
+* _Semantic Analysis_: Performs consistency and validity checks that the
+grammar can’t check for, and resolves classes.
+* _Canonicalization_: Complete building the AST
+* _Instruction Selection_: instruction set is chosen, for example Java 6 or Java 7 bytecode level
+* _Class Generation_: creates the bytecode of the class in memory
+* _Output_: write the binary output to the file system
+* _Finalization_: Perform any last cleanup
+
+Generally speaking, there is more type information available later in
+the phases. If your transformation is concerned with reading the AST,
+then a later phase where information is more plentiful might be a good
+choice. If your transformation is concerned with writing AST, then an
+earlier phase where the tree is more sparse might be more convenient.
+
+[[transforms-local]]
+==== Local transformations
+
+Local AST transformations are relative to the context they are applied to. In
+most cases, the context is defined by an annotation that will define the scope
+of the transform. For example, annotating a field would mean that the transformation
+_applies to_ the field, while annotating the class would mean that the transformation
+_applies to_ the whole class.
+
+As a naive and simple example, consider wanting to write a `@WithLogging`
+transformation that would add console messages at the start and end of a
+method invocation. So the following "Hello World" example would
+actually print "Hello World" along with a start and stop message:
+
+[source,groovy]
+.Poor man's aspect oriented programming
+----
+include::{projectdir}/src/spec/test/metaprogramming/ASTXFormSpecTest.groovy[tags=withlogging_example,indent=0]
+----
+
+A local AST transformation is an easy way to do this. It requires two things:
+
+* a definition of the `@WithLogging` annotation
+* an implementation of gapi:org.codehaus.groovy.transform.ASTTransformation[] that adds the logging
+expressions to the method
+
+An `ASTTransformation` is a callback that gives you access to the
+gapi:org.codehaus.groovy.control.SourceUnit[],
+through which you can get a reference to the
+gapi:org.codehaus.groovy.ast.ModuleNode[] (AST).
+
+The AST (Abstract Syntax Tree) is a tree structure consisting mostly of
+gapi:org.codehaus.groovy.ast.expr.Expression[] (expressions) or
+gapi:org.codehaus.groovy.ast.expr.Statement[] (statements). An easy way to
+learn about the AST is to explore it in a debugger. Once you have the AST,
+you can analyze it to find out information about the code or rewrite it to add
+new functionality.
+
+The local transformation annotation is the simple part. Here is the
+`@WithLogging` one:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/metaprogramming/ASTXFormSpecTest.groovy[tags=withlogging_ann,indent=0]
+----
+
+The annotation retention can be `SOURCE` because you won’t need the annotation
+past that. The element type here is `METHOD`, the `@WithLogging` because the annotation
+applies to methods.
+
+But the most important part is the
+`@GroovyASTTransformationClass` annotation. This links the `@WithLogging`
+annotation to the `ASTTransformation` class you will write.
+`gep.WithLoggingASTTransformation` is the fully qualified class name of the
+`ASTTransformation` we are going to write. This line wires the annotation to the transformation.
+
+With this in place, the Groovy compiler is going to invoke
+`gep.WithLoggingASTTransformation` every time an `@WithLogging` is found in a
+source unit. Any breakpoint set within `LoggingASTTransformation` will now
+be hit within the IDE when running the sample script.
+
+The `ASTTransformation` class is a little more complex. Here is the
+very simple, and very naive, transformation to add a method start and
+stop message for `@WithLogging`:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/metaprogramming/ASTXFormSpecTest.groovy[tags=withlogging_xform,indent=0]
+----
+<1> even if not mandatory, if you write an AST transformation in Groovy, it is highly recommended to use `CompileStatic`
+because it will improve performance of the compiler.
+<2> annotate with gapi:org.codehaus.groovy.transform.GroovyASTTransformation[] to tell at which compilation phase the
+transform needs to run. Here, it's at the _semantic analysis_ phase.
+<3> implement the `ASTTransformation` interface
+<4> which only has a single `visit` method
+<5> the `nodes` parameter is a 2 AST node array, for which the first one is the annotation node (`@WithLogging`) and
+the second one is the annotated node (the method node)
+<6> create a statement that will print a message when we enter the method
+<7> create a statement that will print a message when we exit the method
+<8> get the method body, which in this case is a `BlockStatement`
+<9> add the enter method message before the first statement of existing code
+<10> append the exit method message after the last statement of existing code
+<11> creates an `ExpressionStatement` wrapping a `MethodCallExpression` corresponding to `this.println("message")`
+
+It is important to notice that for the brevity of this example, we didn't make the necessary checks, such as checking
+that the annotated node is really a `MethodNode`, or that the method body is an instance of `BlockStatement`. This
+exercise is left to the reader.
+
+Note the creation of the new println statements in the
+`createPrintlnAst(String)` method. Creating AST for code is not always
+simple. In this case we need to construct a new method call, passing in
+the receiver/variable, the name of the method, and an argument list.
+When creating AST, it might be helpful to write the code you’re trying
+to create in a Groovy file and then inspect the AST of that code in the
+debugger to learn what to create. Then write a function like
+`createPrintlnAst` using what you learned through the debugger.
+
+In the end:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/metaprogramming/ASTXFormSpecTest.groovy[tags=withlogging_example,indent=0]
+----
+
+Produces:
+
+--------------
+Starting greet
+Hello World
+Ending greet
+--------------
+
+NOTE: It is important to note that an AST transformation participates directly in the compilation process. A common
+error by beginners is to have the AST transformation code in the same source tree as a class that uses the transformation.
+Being in the same source tree in general means that they are compiled at the same time. Since the transformation itself
+is going to be compiled in phases and that each compile phase processes all files of the same source unit before going
+to the next one, there's a direct consequence: the transformation will not be compiled before the class that uses it! In
+conclusion, AST transformations need to be precompiled before you can use them. In general, it is as easy as having them
+in a separate source tree.
+
+[[transforms-global]]
+==== Global transformations
+
+Global AST transformation are similar to local one with a major difference: they do not need an annotation, meaning that
+they are applied _globally_, that is to say on each class being compiled. It is therefore very important to limit their
+use to last resort, because it can have a significant impact on the compiler performance.
+
+Following the example of the <<transform-local, local AST transformation>>, imagine that we would like to trace all
+methods, and not only those which are annotated with `@WithLogging`. Basically, we need this code to behave the same
+as the one annotated with `@WithLogging` before:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/metaprogramming/ASTXFormSpecTest.groovy[tags=withlogging_example_global,indent=0]
+----
+
+To make this work, there are two steps:
+
+. create the `org.codehaus.groovy.transform.ASTTransformation` descriptor inside the `META-INF/services` directory
+. create the `ASTTransformation` implementation
+
+The descriptor file is required and must be found on classpath. It will contain a single line:
+
+[source,groovy]
+.META-INF/services/org.codehaus.groovy.transform.ASTTransformation
+----
+include::{projectdir}/src/spec/test/metaprogramming/ASTXFormSpecTest.groovy[tags=xform_descriptor_file,indent=0]
+----
+
+The code for the transformation looks similar to the local case, but instead of using the `ASTNode[]` parameter, we need
+to use the `SourceUnit` instead:
+
+[source,groovy]
+.gep/WithLoggingASTTransformation.groovy
+----
+include::{projectdir}/src/spec/test/metaprogramming/ASTXFormSpecTest.groovy[tags=withlogging_xform_global,indent=0]
+----
+<1> even if not mandatory, if you write an AST transformation in Groovy, it is highly recommended to use `CompileStatic`
+because it will improve performance of the compiler.
+<2> annotate with gapi:org.codehaus.groovy.transform.GroovyASTTransformation[] to tell at which compilation phase the
+transform needs to run. Here, it's at the _semantic analysis_ phase.
+<3> implement the `ASTTransformation` interface
+<4> which only has a single `visit` method
+<5> the `sourceUnit` parameter gives access to the source being compiled, so we get the AST of the current source
+and retrieve the list of methods from this file
+<6> we iterate on each method from the source file
+<7> create a statement that will print a message when we enter the method
+<8> create a statement that will print a message when we exit the method
+<9> get the method body, which in this case is a `BlockStatement`
+<10> add the enter method message before the first statement of existing code
+<11> append the exit method message after the last statement of existing code
+<12> creates an `ExpressionStatement` wrapping a `MethodCallExpression` corresponding to `this.println("message")`
+
+==== AST API guide
+===== AbstractASTTransformation
+
+While you have seen that you can directly implement the `ASTTransformation` interface, in almost all cases you will not
+do this but extend the gapi:org.codehaus.groovy.transform.AbstractASTTransformation[] class. This class provides several
+utility methods that make AST transformations easier to write. Almost all AST transformations included in Groovy
+extend this class.
+
+===== ClassCodeExpressionTransformer
+
+It is a common use case to be able to transform an expression into another. Groovy provides a class which makes it
+very easy to do this: gapi:org.codehaus.groovy.ast.ClassCodeExpressionTransformer[]
+
+To illustrate this, let's create a `@Shout` transformation that will transform all `String` constants in method call
+arguments into their uppercase version. For example:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/metaprogramming/ASTXFormSpecTest.groovy[tags=shout_example,indent=0]
+----
+
+should print:
+
+----
+HELLO WORLD
+----
+
+Then the code for the transformation can use the `ClassCodeExpressionTransformer` to make this easier:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/metaprogramming/ASTXFormSpecTest.groovy[tags=shout_xform,indent=0]
+----
+<1> Internally the transformation creates a `ClassCodeExpressionTransformer`
+<2> The transformer needs to return the source unit
+<3> if a constant expression of type string is detected inside an argument list, transform it into its upper case version
+<4> call the transformer on the method being annotated
+
+===== AST Nodes
+
+WARNING: Writing an AST transformation requires a deep knowledge of the internal Groovy API. In particular it requires
+knowledge about the AST classes. Since those classes are internal, there are chances that the API will change in the
+future, meaning that your transformations _could_ break. Despite that warning, the AST has been very stable over time
+and such a thing rarely happens.
+
+Classes of the Abstract Syntax Tree belong to the `org.codehaus.groovy.ast` package. It is recommended to the reader
+to use the Groovy Console, in particular the AST browser tool, to gain knowledge about those classes. However, a good
+resource for learning is the https://github.com/apache/groovy/tree/master/src/test/org/codehaus/groovy/ast/builder[AST Builder]
+test suite.
+
+==== Macros
+
+===== Introduction
+
+Until version 2.5.0, when developing AST transformations, developers should have a deep knowledge about how the AST
+(Abstract Syntax Tree) was built by the compiler in order to know how to add new expressions or statements during
+compile time.
+
+Although the use of `org.codehaus.groovy.ast.tool.GeneralUtils` static methods could mitigate the burden of creating
+expressions and statements, it's still a low-level way of writing those AST nodes directly.
+We needed something to abstract us from writing the AST directly and that's exactly what Groovy macros were made for.
+They allow you to directly add code during compilation, without having to translate the code you had in mind to the
+`org.codehaus.groovy.ast.*` node related classes.
+
+===== Statements and expressions
+
+Let's see an example, lets create a local AST transformation: `@AddMessageMethod`. When applied to a given class it
+will add a new method called `getMessage` to that class. The method will return "42". The annotation is pretty
+straight forward:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/metaprogramming/MacroStatementTest.groovy[tags=addmethodannotation,indent=0]
+----
+
+What would the AST transformation look like without the use of a macro ? Something like this:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/metaprogramming/MacroStatementTest.groovy[tags=addmethodtransformationwithoutmacro,indent=0]
+----
+
+<1> Create a return statement
+<2> Create a constant expression "42"
+<3> Adding the code to the new method
+<4> Adding the new method to the annotated class
+
+If you're not used to the AST API, that definitely doesn't look like the code you had in mind. Now look how the
+previous code simplifies with the use of macros.
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/metaprogramming/MacroStatementTest.groovy[tags=basicWithMacro,indent=0]
+----
+
+<1> Much simpler. You wanted to add a return statement that returned "42" and that's exactly what you can read inside
+the `macro` utility method. Your plain code will be translated for you to a `org.codehaus.groovy.ast.stmt.ReturnStatement`
+<2> Adding the return statement to the new method
+<3> Adding the new code to the annotated class
+
+Although the `macro` method is used in this example to create a **statement** the `macro` method could also be used to create
+**expressions** as well, it depends on which `macro` signature you use:
+
+- `macro(Closure)`: Create a given statement with the code inside the closure.
+- `macro(Boolean,Closure)`: if **true** wrap expressions inside the closure inside an statement, if **false** then return
+an expression
+- `macro(CompilePhase, Closure)`: Create a given statement with the code inside the closure in a specific compile phase
+- `macro(CompilePhase, Boolean, Closure)`: Create an statement or an expression (true == statement, false == expression)
+in a specific compilation phase.
+
+NOTE: All these signatures can be found at `org.codehaus.groovy.macro.runtime.MacroGroovyMethods`
+
+Sometimes we could be only interested in creating a given expression, not the whole statement, in order to do that we
+should use any of the `macro` invocations with a boolean parameter:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/metaprogramming/MacroExpressionTest.groovy[tags=addgettwotransformation,indent=0]
+----
+
+<1> We're telling macro not to wrap the expression in a statement, we're only interested in the expression
+<2> Assigning the expression
+<3> Creating a `ReturnStatement` using a method from `GeneralUtils` and returning the expression
+<4> Adding the code to the new method
+<5> Adding the method to the class
+
+===== Variable substitution
+
+Macros are great but we can't create anything useful or reusable if our macros couldn't receive parameters or resolve
+surrounding variables.
+
+In the following example we're creating an AST transformation `@MD5` that when applied to a given String field will
+add a method returning the MD5 value of that field.
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/metaprogramming/MacroVariableSubstitutionTest.groovy[tags=md5annotation,indent=0]
+----
+
+And the transformation:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/metaprogramming/MacroVariableSubstitutionTest.groovy[tags=md5transformation,indent=0]
+----
+
+<1> We need a reference to a variable expression
+<2> If using a class outside the standard packages we should add any needed imports or use the qualified name. When
+using the qualified named of a given static method you need to make sure it's resolved in the proper compile phase. In
+this particular case we're instructing the macro to resolve it at the SEMANTIC_ANALYSIS phase, which is the first compile phase
+with type information.
+<3> In order to substitute any `expression` inside the macro we need to use the `$v` method. `$v` receives a closure as an
+argument, and the closure is only allowed to substitute expressions, meaning classes inheriting
+`org.codehaus.groovy.ast.expr.Expression`.
+
+===== MacroClass
+
+As we mentioned earlier, the `macro` method is only capable of producing `statements` and `expressions`. But what if we
+want to produce other types of nodes, such as a method, a field and so on?
+
+`org.codehaus.groovy.macro.transform.MacroClass` can be used to create **classes** (ClassNode instances) in our
+transformations the same way we created statements and expressions with the `macro` method before.
+
+The next example is a local transformation `@Statistics`. When applied to a given class, it will add two methods
+**getMethodCount()** and **getFieldCount()** which return how many methods and fields within the class respectively. Here
+is the marker annotation.
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/metaprogramming/MacroClassTest.groovy[tags=statisticsannotation,indent=0]
+----
+
+And the AST transformation:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/metaprogramming/MacroClassTest.groovy[tags=statisticstransformation,indent=0]
+----
+
+<1> Creating a template class
+<2> Adding template class methods to the annotated class
+<3> Passing the reference class
+<4> Extracting reference class method count value expression
+<5> Extracting reference class field count value expression
+<6> Building the **getMethodCount()** method using reference's method count value expression
+<7> Building the **getFieldCount()** method using reference's field count value expression
+
+Basically we've created the **Statistics** class as a template to avoid writing low level AST API, then we
+copied methods created in the template class to their final destination.
+
+NOTE: Types inside the `MacroClass` implementation should be resolved inside, that's why we had to write
+`java.lang.Integer` instead of simply writing `Integer`.
+
+IMPORTANT: Notice that we're using `@CompileDynamic`. That's because the way we use `MacroClass` is like we
+were actually implementing it. So if you were using `@CompileStatic` it will complain because an implementation of
+an abstract class can't be another different class.
+
+===== @Macro methods
+
+You have seen that by using `macro` you can save yourself a lot of work but you might wonder where
+that method came from. You didn't declare it or static import it. You can think of it as a special
+global method (or if you prefer, a method on every `Object`). This is much like how the `println`
+extension method is defined. But unlike `println` which becomes a method selected for execution
+later in the compilation process, `macro` expansion is done early in the compilation process.
+The declaration of `macro` as one of the available methods for this early expansion is done
+by annotating a `macro` method definition with the `@Macro` annotation and making that method
+available using a similar mechanism for extension modules. Such methods are known as _macro_ methods
+and the good news is you can define your own.
+
+To define your own macro method, create a class in a similar way to an extension module and
+add a method such as:
+
+[source,groovy]
+----
+public class ExampleMacroMethods {
+
+    @Macro
+    public static Expression safe(MacroContext macroContext, MethodCallExpression callExpression) {
+        return ternaryX(
+                notNullX(callExpression.getObjectExpression()),
+                callExpression,
+                constX(null)
+        );
+    }
+    ...
+}
+----
+
+Now you would register this as an extension module using a `org.codehaus.groovy.runtime.ExtensionModule`
+file within the `META-INF/groovy` directory.
+
+Now, assuming that the class and meta info file are on your classpath, you can use the
+macro method in the following way:
+
+[source,groovy]
+----
+def nullObject = null
+assert null == safe(safe(nullObject.hashcode()).toString())
+----
+
+==== Testing AST transformations
+===== Separating source trees
+
+This section is about good practices with regards to testing AST transformations. Previous sections highlighted the fact
+that to be able to execute an AST transformation, it has to be precompiled. It might sound obvious but a lot of people
+get caught on this, trying to use an AST transformation in the same source tree as where it is defined.
+
+The first tip for testing AST transformation is therefore to separate test sources from the sources of the transform.
+Again, this is nothing but best practices, but you must make sure that your build too does actually compile them separately.
+This is the case by default with both http://maven.apache.org[Apache Maven] and http://gradle.org[Gradle].
+
+===== Debugging AST transformations
+
+It is very handy to be able to put a breakpoint in an AST transformation, so that you can debug your code in the IDE.
+However, you might be surprised to see that your IDE doesn't stop on the breakpoint. The reason is actually simple: if
+your IDE uses the Groovy compiler to compile the unit tests for your AST transformation, then the compilation is triggered
+from the IDE, but the process which will compile the files doesn't have debugging options. It's only when the test case
+is executed that the debugging options are set on the virtual machine. In short: it is too late, the class has been compiled
+already, and your transformation is already applied.
+
+A very easy workaround is to use the `GroovyTestCase` class which provides an `assertScript` method. This means that
+instead of writing this in a test case:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/metaprogramming/ASTXFormSpecTest.groovy[tags=breakpoint_missed,indent=0]
+----
+
+You should write:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/metaprogramming/ASTXFormSpecTest.groovy[tags=breakpoint_hit,indent=0]
+----
+
+The difference is that when you use `assertScript`, the code in the `assertScript` block is compiled *when the
+unit test is executed*. That is to say that this time, the `Subject` class will be compiled with debugging active, and
+the breakpoint is going to be hit.
+
+===== ASTMatcher
+
+Sometimes you may want to make assertions over AST nodes; perhaps to filter the nodes, or to make sure a given
+transformation has built the expected AST node.
+
+**Filtering nodes**
+
+For instance if you would like to apply a given transformation only to a specific set of AST nodes, you could
+use **ASTMatcher** to filter these nodes. The following example shows how to transform a given expression to
+another. Using **ASTMatcher** it looks for a specific expression `1 + 1` and it transforms it to `3`. That's why
+we called it the `@Joking` example.
+
+First we create the `@Joking` annotation that only can be applied to methods:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/metaprogramming/ASTMatcherFilteringTest.groovy[tags=jokingannotation,indent=0]
+----
+
+Then the transformation, that only applies an instance of `org.codehaus.groovy.ast.ClassCodeExpressionTransformer`
+to all the expressions within the method code block.
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/metaprogramming/ASTMatcherFilteringTest.groovy[tags=jokingtransformation,indent=0]
+----
+<1> Get the method's code statement and apply the expression transformer
+
+And this is when the **ASTMatcher** is used to apply the transformation only to those expressions matching
+the expression `1 + 1`.
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/metaprogramming/ASTMatcherFilteringTest.groovy[tags=jokingexpressiontransformer,indent=0]
+----
+<1> Builds the expression used as reference pattern
+<2> Checks the current expression evaluated matches the reference expression
+<3> If it matches then replaces the current expression with the expression built with `macro`
+
+Then you could test the implementation as follows:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/metaprogramming/ASTMatcherFilteringTest.groovy[tags=jokingexample,indent=0]
+----
+
+**Unit testing AST transforms**
+
+Normally we test AST transformations just checking that the final use of the transformation does what we expect. But
+it would be great if we could have an easy way to check, for example, that the nodes the transformation adds are what
+we expected from the beginning.
+
+The following transformation adds a new method `giveMeTwo` to an annotated class.
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/metaprogramming/ASTMatcherTestingTest.groovy[tags=twiceasttransformation,indent=0]
+----
+<1> Adding the method to the annotated class
+<2> Building a binary expression. The binary expression uses the same variable expression in both
+sides of the `+` token (check `varX` method at **org.codehaus.groovy.ast.tool.GeneralUtils**).
+<3> Builds a new **ClassNode** with a method called `giveMeTwo` which returns the result of an expression
+passed as parameter.
+
+Now instead of creating a test executing the transformation over a given sample code. I would like to check that
+the construction of the binary expression is done properly:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/metaprogramming/ASTMatcherTestingTest.groovy[tags=testexpression,indent=0]
+----
+<1> Using ASTMatcher as a category
+<2> Build a template node
+<3> Apply some constraints to that template node
+<4> Tells compiler that `a` is a placeholder.
+<5> Asserts reference node and current node are equal
+
+Of course you can/should always check the actual execution:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/metaprogramming/ASTMatcherTestingTest.groovy[tags=executiontesting,indent=0]
+----
+
+===== ASTTest
+
+Last but not least, testing an AST transformation is also about testing the state of the AST *during compilation*. Groovy
+provides a tool named `@ASTTest` for this: it is an annotation that will let you add assertions on an abstract syntax
+tree. Please check the <<xform-ASTTest,documentation for ASTTest>> for more details.
+
+==== External references
+
+If you are interested in a step-by-step tutorial about writing AST transformations, you can follow
+http://melix.github.io/ast-workshop/[this workshop].

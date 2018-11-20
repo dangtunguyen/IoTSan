@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.6.1">
+<title>groovydoc, the Groovy &amp; Java documentation generator</title>
+<link rel="stylesheet" href="./assets/css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+<h1>groovydoc, the Groovy &amp; Java documentation generator</h1>
+<div class="details">
+<span id="revnumber">version 3.0.0-alpha-3</span>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#Groovydoc-CommandLine">1. The groovydoc command line tool</a></li>
+<li><a href="#Groovydoc-Ant">2. The groovydoc Ant task</a>
+<ul class="sectlevel2">
+<li><a href="#ThegroovydocAnttask-Requiredtaskdef">2.1. Required taskdef</a></li>
+<li><a href="#ThegroovydocAnttask-groovydocAttributes">2.2. &lt;groovydoc&gt; Attributes</a></li>
+<li><a href="#ThegroovydocAnttask-groovydocNestedElements">2.3. &lt;groovydoc&gt; Nested Elements</a>
+<ul class="sectlevel3">
+<li><a href="#ThegroovydocAnttask-link">2.3.1. link</a></li>
+<li><a href="#ThegroovydocAnttask-Example1-groovydocAnttask">2.3.2. Example #1 - &lt;groovydoc&gt; Ant task</a></li>
+<li><a href="#ThegroovydocAnttask-Example2-ExecutinggroovydocfromGroovy">2.3.3. Example #2 - Executing &lt;groovydoc&gt; from Groovy</a></li>
+</ul>
+</li>
+<li><a href="#_custom_templates">2.4. Custom templates</a>
+<ul class="sectlevel3">
+<li><a href="#_custom_groovydoc_class">2.4.1. Custom Groovydoc class</a></li>
+<li><a href="#_using_the_custom_groovydoc_task">2.4.2. Using the custom groovydoc task</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#Groovydoc-GMavenPlus">3. GMavenPlus Maven Plugin</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>GroovyDoc is a tool responsible for generating documentation from your code. It acts like the Javadoc tool in the
+Java world but is capable of handling both <code>groovy</code> and <code>java</code> files. The distribution comes with two ways of generating
+documentation: from <a href="#Groovydoc-CommandLine">command line</a> or from <a href="#Groovydoc-Ant">Apache Ant</a>. Other build tools
+like Maven or Gradle also offer wrappers for Groovydoc.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="Groovydoc-CommandLine"><a class="anchor" href="#Groovydoc-CommandLine"></a>1. The groovydoc command line tool</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>groovydoc</code> command line can be invoked to generate groovydocs:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>groovydoc [options] [packagenames] [sourcefiles]</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>where options must be picked from the following table:</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 22.2222%;">
+<col style="width: 22.2222%;">
+<col style="width: 55.5556%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Short version</th>
+<th class="tableblock halign-left valign-top">Long version</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tfoot>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-windowtitle &lt;text&gt;</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Browser window title for the documentation</p></td>
+</tr>
+</tfoot>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-author</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Include @author paragraphs (currently not used)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-charset &lt;charset&gt;</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Charset for cross-platform viewing of generated documentation</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-classpath, -cp</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--classpath</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Specify where to find the class files - must be
+first argument</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-d</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--destdir &lt;dir&gt;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Destination directory for output files</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--debug</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enable debug output</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-doctitle &lt;html&gt;</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Include title for the overview page</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-exclude &lt;pkglist&gt;</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Specify a list of packages to exclude
+(separated by colons for all operating systems)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-fileEncoding &lt;charset&gt;</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Charset for generated documentation files</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-footer &lt;html&gt;</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Include footer text for each page</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-header &lt;html&gt;</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Include header text for each page</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-help</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--help</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Display help message</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-nomainforscripts</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Don&#8217;t include the implicit 'public static void
+main' method for scripts</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-noscripts</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Don&#8217;t process Groovy Scripts</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-notimestamp</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Don&#8217;t include timestamp within hidden comment in generated HTML</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-noversionstamp</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Don&#8217;t include Groovy version within hidden comment in generated HTML</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-overview &lt;file&gt;</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Read overview documentation from HTML file</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-package</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Show package/protected/public classes and members</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-private</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Show all classes and members</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-protected</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Show protected/public classes and members (default)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-public</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Show only public classes and members</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-quiet</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Suppress superfluous output</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-sourcepath &lt;pathlist&gt;</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Specify where to find source files (dirs
+separated by platform path separator)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-stylesheetfile &lt;path&gt;</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">File to change style of the generated documentation</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-verbose</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enable verbose output</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--version</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Display the version</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="Groovydoc-Ant"><a class="anchor" href="#Groovydoc-Ant"></a>2. The groovydoc Ant task</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>groovydoc</code> Ant task allows generating groovydocs from an Ant build.</p>
+</div>
+<div class="sect2">
+<h3 id="ThegroovydocAnttask-Requiredtaskdef"><a class="anchor" href="#ThegroovydocAnttask-Requiredtaskdef"></a>2.1. Required taskdef</h3>
+<div class="paragraph">
+<p>Assuming <code>groovy-all-3.0.0-alpha-3.jar</code> is in <em>my.classpath</em> you will need to
+declare this task at some point in the build.xml prior to the groovydoc
+task being invoked.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;taskdef name         = "groovydoc"
+         classname    = "org.codehaus.groovy.ant.Groovydoc"
+         classpathref = "my.classpath"/&gt;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="ThegroovydocAnttask-groovydocAttributes"><a class="anchor" href="#ThegroovydocAnttask-groovydocAttributes"></a>2.2. &lt;groovydoc&gt; Attributes</h3>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 50%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Attribute</th>
+<th class="tableblock halign-left valign-top">Description</th>
+<th class="tableblock halign-left valign-top">Required</th>
+</tr>
+</thead>
+<tfoot>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">private</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Show all classes and members (i.e. including private ones) if
+set to ``true''.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+</tr>
+</tfoot>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">destdir</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Location to store the class files.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">sourcepath</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The sourcepath to use.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">packagenames</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Comma separated list of package files (with terminating
+wildcard).</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">use</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Create class and package usage pages.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">windowtitle</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Browser window title for the documentation (text).</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">doctitle</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Include title for the package index(first) page (html-code).</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">header</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Include header text for each page (html-code).</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">footer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Include footer text for each page (html-code).</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">overview</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Read overview documentation from HTML file.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="ThegroovydocAnttask-groovydocNestedElements"><a class="anchor" href="#ThegroovydocAnttask-groovydocNestedElements"></a>2.3. &lt;groovydoc&gt; Nested Elements</h3>
+<div class="sect3">
+<h4 id="ThegroovydocAnttask-link"><a class="anchor" href="#ThegroovydocAnttask-link"></a>2.3.1. link</h4>
+<div class="paragraph">
+<p>Create link to groovydoc/javadoc output at the given URL.</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Attribute</th>
+<th class="tableblock halign-left valign-top">Description</th>
+<th class="tableblock halign-left valign-top">Required</th>
+</tr>
+</thead>
+<tfoot>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">href</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Base URL of external site</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+</tr>
+</tfoot>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">packages</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Comma separated list of package prefixes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="ThegroovydocAnttask-Example1-groovydocAnttask"><a class="anchor" href="#ThegroovydocAnttask-Example1-groovydocAnttask"></a>2.3.2. Example #1 - &lt;groovydoc&gt; Ant task</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;taskdef name           = "groovydoc"
+         classname      = "org.codehaus.groovy.ant.Groovydoc"
+         classpathref   = "path_to_groovy_all"/&gt;
+
+&lt;groovydoc destdir      = "${docsDirectory}/gapi"
+           sourcepath   = "${mainSourceDirectory}"
+           packagenames = "**.*"
+           use          = "true"
+           windowtitle  = "${title}"
+           doctitle     = "${title}"
+           header       = "${title}"
+           footer       = "${docFooter}"
+           overview     = "src/main/overview.html"
+           private      = "false"&gt;
+        &lt;link packages="java.,org.xml.,javax.,org.xml." href="http://docs.oracle.com/javase/8/docs/api/"/&gt;
+        &lt;link packages="org.apache.tools.ant."          href="http://docs.groovy-lang.org/docs/ant/api/"/&gt;
+        &lt;link packages="org.junit.,junit.framework."    href="http://junit.org/junit4/javadoc/latest/"/&gt;
+        &lt;link packages="groovy.,org.codehaus.groovy."   href="http://docs.groovy-lang.org/latest/html/api/"/&gt;
+        &lt;link packages="org.codehaus.gmaven."           href="http://groovy.github.io/gmaven/apidocs/"/&gt;
+&lt;/groovydoc&gt;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="ThegroovydocAnttask-Example2-ExecutinggroovydocfromGroovy"><a class="anchor" href="#ThegroovydocAnttask-Example2-ExecutinggroovydocfromGroovy"></a>2.3.3. Example #2 - Executing &lt;groovydoc&gt; from Groovy</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def ant = new AntBuilder()
+ant.taskdef(name: "groovydoc", classname: "org.codehaus.groovy.ant.Groovydoc")
+ant.groovydoc(
+    destdir      : "${docsDirectory}/gapi",
+    sourcepath   : "${mainSourceDirectory}",
+    packagenames : "**.*",
+    use          : "true",
+    windowtitle  : "${title}",
+    doctitle     : "${title}",
+    header       : "${title}",
+    footer       : "${docFooter}",
+    overview     : "src/main/overview.html",
+    private      : "false") {
+        link(packages:"java.,org.xml.,javax.,org.xml.",href:"http://docs.oracle.com/javase/8/docs/api/")
+        link(packages:"groovy.,org.codehaus.groovy.",  href:"http://docs.groovy-lang.org/latest/html/api/")
+        link(packages:"org.apache.tools.ant.",         href:"http://docs.groovy-lang.org/docs/ant/api/")
+        link(packages:"org.junit.,junit.framework.",   href:"http://junit.org/junit4/javadoc/latest/")
+        link(packages:"org.codehaus.gmaven.",          href:"http://groovy.github.io/gmaven/apidocs/")
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_custom_templates"><a class="anchor" href="#_custom_templates"></a>2.4. Custom templates</h3>
+<div class="paragraph">
+<p>The <code>groovydoc</code> Ant task supports custom templates, but it requires two steps:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>A custom groovydoc class</p>
+</li>
+<li>
+<p>A new groovydoc task definition</p>
+</li>
+</ol>
+</div>
+<div class="sect3">
+<h4 id="_custom_groovydoc_class"><a class="anchor" href="#_custom_groovydoc_class"></a>2.4.1. Custom Groovydoc class</h4>
+<div class="paragraph">
+<p>The first step requires you to extend the <code>Groovydoc</code> class, like in the following example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">package org.codehaus.groovy.tools.groovydoc;
+
+import org.codehaus.groovy.ant.Groovydoc;
+
+/**
+ * Overrides GroovyDoc's default class template - for testing purpose only.
+ *
+ * @author Andre Steingress
+ */
+public class CustomGroovyDoc extends Groovydoc {
+
+    @Override
+    protected String[] getClassTemplates() {
+        return new String[]{"org/codehaus/groovy/tools/groovydoc/testfiles/classDocName.html"};
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can override the following methods:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>getClassTemplates</code> for class-level templates</p>
+</li>
+<li>
+<p><code>getPackageTemplates</code> for package-level templates</p>
+</li>
+<li>
+<p><code>getDocTemplates</code> for top-level templates</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>You can find the list of default templates in the <code>org.codehaus.groovy.tools.groovydoc.gstringTemplates.GroovyDocTemplateInfo</code>
+class.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_using_the_custom_groovydoc_task"><a class="anchor" href="#_using_the_custom_groovydoc_task"></a>2.4.2. Using the custom groovydoc task</h4>
+<div class="paragraph">
+<p>Once you&#8217;ve written the class, using it is just a matter of redefining the <code>groovydoc</code> task:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;taskdef name           = "groovydoc"
+         classname      = "org.codehaus.groovy.ant.CustomGroovyDoc"
+         classpathref   = "path_to_groovy_all"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Please note that template customization is provided as is. APIs are subject to change, so you must consider this as a
+fragile feature.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="Groovydoc-GMavenPlus"><a class="anchor" href="#Groovydoc-GMavenPlus"></a>3. GMavenPlus Maven Plugin</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><a href="https://github.com/groovy/GMavenPlus">GMavenPlus</a> is a Maven plugin with goals that
+support GroovyDoc generation.</p>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 3.0.0-alpha-3<br>
+Last updated 2018-06-23 13:44:51 AEST
+</div>
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+<script>prettyPrint()</script>
+</body>
+</html>

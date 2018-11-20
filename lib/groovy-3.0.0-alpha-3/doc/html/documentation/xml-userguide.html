@@ -1,0 +1,1376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.6.1">
+<title>Processing XML</title>
+<link rel="stylesheet" href="./assets/css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+<h1>Processing XML</h1>
+<div class="details">
+<span id="revnumber">version 3.0.0-alpha-3</span>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_parsing_xml">1. Parsing XML</a>
+<ul class="sectlevel2">
+<li><a href="#_xmlparser_and_xmlslurper">1.1. XmlParser and XmlSlurper</a></li>
+<li><a href="#_domcategory">1.2. DOMCategory</a></li>
+</ul>
+</li>
+<li><a href="#_gpath">2. GPath</a>
+<ul class="sectlevel2">
+<li><a href="#_simply_traversing_the_tree">2.1. Simply traversing the tree</a></li>
+<li><a href="#_flexible_navigation_with_children_depthfirst_and_breadthfirst">2.2. Flexible navigation with children (*), depthFirst (**) and breadthFirst</a></li>
+</ul>
+</li>
+<li><a href="#_creating_xml">3. Creating XML</a>
+<ul class="sectlevel2">
+<li><a href="#_markupbuilder">3.1. MarkupBuilder</a></li>
+<li><a href="#_streamingmarkupbuilder">3.2. StreamingMarkupBuilder</a></li>
+<li><a href="#_markupbuilderhelper">3.3. MarkupBuilderHelper</a></li>
+<li><a href="#_domtogroovy">3.4. DOMToGroovy</a></li>
+</ul>
+</li>
+<li><a href="#_manipulating_xml">4. Manipulating XML</a>
+<ul class="sectlevel2">
+<li><a href="#_adding_nodes">4.1. Adding nodes</a></li>
+<li><a href="#_modifying_removing_nodes">4.2. Modifying / Removing nodes</a></li>
+<li><a href="#_printing_xml">4.3. Printing XML</a>
+<ul class="sectlevel3">
+<li><a href="#_xmlutil">4.3.1. XmlUtil</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_parsing_xml"><a class="anchor" href="#_parsing_xml"></a>1. Parsing XML</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_xmlparser_and_xmlslurper"><a class="anchor" href="#_xmlparser_and_xmlslurper"></a>1.1. XmlParser and XmlSlurper</h3>
+<div class="paragraph">
+<p>The most commonly used approach for parsing XML with Groovy is to use
+one of:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>groovy.util.XmlParser</code></p>
+</li>
+<li>
+<p><code>groovy.util.XmlSlurper</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Both have the same approach to parse an xml. Both come with a bunch of
+overloaded parse methods plus some special methods such as <code>parseText</code>,
+parseFile and others. For the next example we will use the <code>parseText</code>
+method. It parses a XML <code>String</code> and recursively converts it to a list
+or map of objects.</p>
+</div>
+<div class="listingblock">
+<div class="title">XmlSlurper</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def text = '''
+    &lt;list&gt;
+        &lt;technology&gt;
+            &lt;name&gt;Groovy&lt;/name&gt;
+        &lt;/technology&gt;
+    &lt;/list&gt;
+'''
+
+def list = new XmlSlurper().parseText(text) <i class="conum" data-value="1"></i><b>(1)</b>
+
+assert list instanceof groovy.util.slurpersupport.GPathResult <i class="conum" data-value="2"></i><b>(2)</b>
+assert list.technology.name == 'Groovy' <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Parsing the XML an returning the root node as a GPathResult</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Checking we&#8217;re using a GPathResult</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Traversing the tree in a GPath style</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="title">XmlParser</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def text = '''
+    &lt;list&gt;
+        &lt;technology&gt;
+            &lt;name&gt;Groovy&lt;/name&gt;
+        &lt;/technology&gt;
+    &lt;/list&gt;
+'''
+
+def list = new XmlParser().parseText(text) <i class="conum" data-value="1"></i><b>(1)</b>
+
+assert list instanceof groovy.util.Node <i class="conum" data-value="2"></i><b>(2)</b>
+assert list.technology.name.text() == 'Groovy' <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Parsing the XML an returning the root node as a Node</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Checking we&#8217;re using a Node</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Traversing the tree in a GPath style</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s see the <strong>similarities</strong> between <code>XMLParser</code> and <code>XMLSlurper</code> first:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Both are based on <code>SAX</code> so they both are low memory footprint</p>
+</li>
+<li>
+<p>Both can update/transform the XML</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>But they have key <strong>differences</strong>:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>XmlSlurper</code> evaluates the structure lazily. So if you update the xml
+you&#8217;ll have to evaluate the whole tree again.</p>
+</li>
+<li>
+<p><code>XmlSlurper</code> returns <code>GPathResult</code> instances when parsing XML</p>
+</li>
+<li>
+<p><code>XmlParser</code> returns <code>Node</code> objects when parsing XML</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>When to use one or the another?</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+There is a discussion at
+<a href="http://stackoverflow.com/questions/7558019/groovy-xmlslurper-vs-xmlparser">StackOverflow</a>. The
+conclusions written here are based partially on this entry.
+</td>
+</tr>
+</table>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>If you want to transform an existing document to another</strong> then
+<code>XmlSlurper</code> will be the choice</p>
+</li>
+<li>
+<p><strong>If you want to update and read at the same time</strong> then <code>XmlParser</code> is
+the choice.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The rationale behind this is that every time you create a node with
+<code>XmlSlurper</code> it won&#8217;t be available until you parse the document again
+with another <code>XmlSlurper</code> instance.  Need to read just a few nodes
+XmlSlurper is for you ".</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>If you just have to read a few nodes</strong> <code>XmlSlurper</code> should be your
+choice, since it will not have to create a complete structure in
+memory"</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>In general both classes perform similar way. Even the way of using
+GPath expressions with them are the same (both use <code>breadthFirst()</code> and
+<code>depthFirst()</code> expressions). So I guess it depends on the write/read
+frequency.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_domcategory"><a class="anchor" href="#_domcategory"></a>1.2. DOMCategory</h3>
+<div class="paragraph">
+<p>There is another way of parsing XML documents with Groovy with the
+used of <code>groovy.xml.dom.DOMCategory</code> which is a category class which
+adds GPath style operations to Java&#8217;s DOM classes.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Java has in-built support for DOM processing of XML using classes
+representing the various parts of XML documents, e.g. <code>Document</code>,
+<code>Element</code>, <code>NodeList</code>, <code>Attr</code> etc. For more information about these classes,
+refer to the respective JavaDocs.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Having a XML like the following:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">  static def CAR_RECORDS = '''
+  &lt;records&gt;
+    &lt;car name='HSV Maloo' make='Holden' year='2006'&gt;
+      &lt;country&gt;Australia&lt;/country&gt;
+      &lt;record type='speed'&gt;Production Pickup Truck with speed of 271kph&lt;/record&gt;
+    &lt;/car&gt;
+    &lt;car name='P50' make='Peel' year='1962'&gt;
+      &lt;country&gt;Isle of Man&lt;/country&gt;
+      &lt;record type='size'&gt;Smallest Street-Legal Car at 99cm wide and 59 kg in weight&lt;/record&gt;
+    &lt;/car&gt;
+    &lt;car name='Royale' make='Bugatti' year='1931'&gt;
+      &lt;country&gt;France&lt;/country&gt;
+      &lt;record type='price'&gt;Most Valuable Car at $15 million&lt;/record&gt;
+    &lt;/car&gt;
+  &lt;/records&gt;
+'''</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can parse it using <code>groovy.xml.DOMBuilder</code> and
+<code>groovy.xml.dom.DOMCategory</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def reader = new StringReader(CAR_RECORDS)
+def doc = DOMBuilder.parse(reader) <i class="conum" data-value="1"></i><b>(1)</b>
+def records = doc.documentElement
+
+use(DOMCategory) { <i class="conum" data-value="2"></i><b>(2)</b>
+    assert records.car.size() == 3
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Parsing the XML</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Creating <code>DOMCategory</code> scope to be able to use helper method calls</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_gpath"><a class="anchor" href="#_gpath"></a>2. GPath</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The most common way of querying XML in Groovy is using <code>GPath</code>:</p>
+</div>
+<div class="paragraph">
+<p><em>GPath is a path expression language integrated into Groovy which
+allows parts of nested structured data to be identified. In this
+sense, it has similar aims and scope as XPath does for XML. The two
+main places where you use GPath expressions is when dealing with
+nested POJOs or when dealing with XML</em></p>
+</div>
+<div class="paragraph">
+<p>It is similar to <a href="http://en.wikipedia.org/wiki/XPath">XPath</a>
+expressions and you can use it not only with XML but also with POJO
+classes. As an example, you can specify a path to an object or element
+of interest:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>a.b.c</code> &#8594; for XML, yields all the <code>&lt;c&gt;</code> elements inside <code>&lt;b&gt;</code> inside <code>&lt;a&gt;</code></p>
+</li>
+<li>
+<p><code>a.b.c</code> &#8594; all POJOs, yields the <code>&lt;c&gt;</code> properties for all the <code>&lt;b&gt;</code>
+properties of <code>&lt;a&gt;</code> (sort of like a.getB().getC() in JavaBeans)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>For XML, you can also specify attributes, e.g.:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>a["@href"]</code> &#8594; the href attribute of all the a elements</p>
+</li>
+<li>
+<p><code>a.'@href'</code> &#8594; an alternative way of expressing this</p>
+</li>
+<li>
+<p><code>a.@href</code> &#8594; an alternative way of expressing this when using XmlSlurper</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s illustrate this with an example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">static final String books = '''
+    &lt;response version-api="2.0"&gt;
+        &lt;value&gt;
+            &lt;books&gt;
+                &lt;book available="20" id="1"&gt;
+                    &lt;title&gt;Don Xijote&lt;/title&gt;
+                    &lt;author id="1"&gt;Manuel De Cervantes&lt;/author&gt;
+                &lt;/book&gt;
+                &lt;book available="14" id="2"&gt;
+                    &lt;title&gt;Catcher in the Rye&lt;/title&gt;
+                   &lt;author id="2"&gt;JD Salinger&lt;/author&gt;
+               &lt;/book&gt;
+               &lt;book available="13" id="3"&gt;
+                   &lt;title&gt;Alice in Wonderland&lt;/title&gt;
+                   &lt;author id="3"&gt;Lewis Carroll&lt;/author&gt;
+               &lt;/book&gt;
+               &lt;book available="5" id="4"&gt;
+                   &lt;title&gt;Don Xijote&lt;/title&gt;
+                   &lt;author id="4"&gt;Manuel De Cervantes&lt;/author&gt;
+               &lt;/book&gt;
+           &lt;/books&gt;
+       &lt;/value&gt;
+    &lt;/response&gt;
+'''</code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_simply_traversing_the_tree"><a class="anchor" href="#_simply_traversing_the_tree"></a>2.1. Simply traversing the tree</h3>
+<div class="paragraph">
+<p>First thing we could do is to get a value using POJO&#8217;s notation. Let&#8217;s
+get the first book&#8217;s author&#8217;s name</p>
+</div>
+<div class="listingblock">
+<div class="title">Getting node value</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def response = new XmlSlurper().parseText(books)
+def authorResult = response.value.books.book[0].author
+
+assert authorResult.text() == 'Manuel De Cervantes'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>First we parse the document with <code>XmlSlurper</code> and the we have to
+consider the returning value as the root of the XML document, so in
+this case is "response".</p>
+</div>
+<div class="paragraph">
+<p>That&#8217;s why we start traversing the document from response and then
+<code>value.books.book[0].author</code>. Note that in <code>XPath</code> the node arrays starts
+in [1] instead of [0], but because <code>GPath</code> is Java-based it begins at
+index 0.</p>
+</div>
+<div class="paragraph">
+<p>In the end we&#8217;ll have the instance of the <code>author</code> node and because we
+wanted the text inside that node we should be calling the <code>text()</code>
+method.  The <code>author</code> node is an instance of <code>GPathResult</code> type and
+<code>text()</code> a method giving us the content of that node as a String.</p>
+</div>
+<div class="paragraph">
+<p>When using <code>GPath</code> with an xml parsed with <code>XmlSlurper</code> we&#8217;ll have as a
+result a <code>GPathResult</code> object. <code>GPathResult</code> has many other convenient
+methods to convert the text inside a node to any other type such as:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>toInteger()</code></p>
+</li>
+<li>
+<p><code>toFloat()</code></p>
+</li>
+<li>
+<p><code>toBigInteger()</code></p>
+</li>
+<li>
+<p>&#8230;&#8203;</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>All these methods try to convert a <code>String</code> to the appropriate type.</p>
+</div>
+<div class="paragraph">
+<p>If we were using a XML parsed with <code>XmlParser</code> we could be dealing with
+instances of type <code>Node</code>. But still all the actions applied to
+<code>GPathResult</code> in these examples could be applied to a Node as
+well. Creators of both parsers took into account <code>GPath</code> compatibility.</p>
+</div>
+<div class="paragraph">
+<p>Next step is to get the some values from a given node&#8217;s attribute. In the following sample
+we want to get the first book&#8217;s author&#8217;s id. We&#8217;ll be using two different approaches. Let&#8217;s see the code first:</p>
+</div>
+<div class="listingblock">
+<div class="title">Getting an attribute&#8217;s value</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def response = new XmlSlurper().parseText(books)
+
+def book = response.value.books.book[0] <i class="conum" data-value="1"></i><b>(1)</b>
+def bookAuthorId1 = book.@id <i class="conum" data-value="2"></i><b>(2)</b>
+def bookAuthorId2 = book['@id'] <i class="conum" data-value="3"></i><b>(3)</b>
+
+assert bookAuthorId1 == '1' <i class="conum" data-value="4"></i><b>(4)</b>
+assert bookAuthorId1.toInteger() == 1 <i class="conum" data-value="5"></i><b>(5)</b>
+assert bookAuthorId1 == bookAuthorId2</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Getting the first book node</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Getting the book&#8217;s id attribute <code>@id</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Getting the book&#8217;s id attribute with <code>map notation</code> <code>['@id']</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Getting the value as a String</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>Getting the value of the attribute as an <code>Integer</code></td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>As you can see there are two types of notations to get attributes,
+the</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><em>direct notation</em> with <code>@nameoftheattribute</code></p>
+</li>
+<li>
+<p><em>map notation</em> using <code>['@nameoftheattribute']</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Both of them are equally valid.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_flexible_navigation_with_children_depthfirst_and_breadthfirst"><a class="anchor" href="#_flexible_navigation_with_children_depthfirst_and_breadthfirst"></a>2.2. Flexible navigation with children (*), depthFirst (**) and breadthFirst</h3>
+<div class="paragraph">
+<p>If you ever have used XPath, you may have used expressions like:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>/following-sibling::othernode</code> : Look for a node "othernode" in the same level</p>
+</li>
+<li>
+<p><code>//</code> : Look everywhere</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>More or less we have their counterparts in GPath with the shortcuts <code>*</code> (aka <code>children()</code>) and <code>**</code> (aka <code>depthFirst()</code>).</p>
+</div>
+<div class="paragraph">
+<p>The first example shows a simple use of <code>*</code>, which only iterates over the direct children of the node.</p>
+</div>
+<div class="listingblock">
+<div class="title">Using *</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def response = new XmlSlurper().parseText(books)
+
+// .'*' could be replaced by .children()
+def catcherInTheRye = response.value.books.'*'.find { node-&gt;
+    // node.@id == 2 could be expressed as node['@id'] == 2
+    node.name() == 'book' &amp;&amp; node.@id == '2'
+}
+
+assert catcherInTheRye.title.text() == 'Catcher in the Rye'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This test searches for any child nodes of the "books" node matching the given
+condition. In a bit more detail, the expression says: <em>Look for any node with
+a tag name equal to 'book' having an id with a value of '2' directly under
+the 'books' node</em>.</p>
+</div>
+<div class="paragraph">
+<p>This operation roughly corresponds to the <code>breadthFirst()</code> method, except that
+it only stops at <strong>one level</strong> instead of continuing to the inner levels.</p>
+</div>
+<div class="paragraph">
+<p>What if we would like to look for a given value
+without having to know exactly where it is. Let&#8217;s say that the
+only thing we know is the id of the author "Lewis Carroll" . How are
+we going to be able to find that book? Using <code>**</code> is the solution:</p>
+</div>
+<div class="listingblock">
+<div class="title">Using **</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def response = new XmlSlurper().parseText(books)
+
+// .'**' could be replaced by .depthFirst()
+def bookId = response.'**'.find { book-&gt;
+    book.author.text() == 'Lewis Carroll'
+}.@id
+
+assert bookId == 3</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>**</code> is the same as looking for something <em>everywhere in the
+tree from this point down</em>. In this case, we&#8217;ve used the method
+<code>find(Closure cl)</code> to find just the first occurrence.</p>
+</div>
+<div class="paragraph">
+<p>What if we want to collect all book&#8217;s titles? That&#8217;s easy, just use <code>findAll</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def response = new XmlSlurper().parseText(books)
+
+def titles = response.'**'.findAll{ node-&gt; node.name() == 'title' }*.text()
+
+assert titles.size() == 4</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In the last two examples, <code>**</code> is used as a shortcut for the <code>depthFirst()</code>
+method. It goes as far down the tree as it can while navigating down the
+tree from a given node. The <code>breadthFirst()</code> method finishes off all nodes
+on a given level before traversing down to the next level.</p>
+</div>
+<div class="paragraph">
+<p>The following example shows the difference between these two methods:</p>
+</div>
+<div class="listingblock">
+<div class="title">depthFirst() vs .breadthFirst</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def response = new XmlSlurper().parseText(books)
+def nodeName = { node -&gt; node.name() }
+def withId2or3 = { node -&gt; node.@id in [2, 3] }
+
+assert ['book', 'author', 'book', 'author'] ==
+        response.value.books.depthFirst().findAll(withId2or3).collect(nodeName)
+assert ['book', 'book', 'author', 'author'] ==
+        response.value.books.breadthFirst().findAll(withId2or3).collect(nodeName)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In this example, we search for any nodes with an id attribute with value 2 or 3.
+There are both <code>book</code> and <code>author</code> nodes that match that criteria. The different
+traversal orders will find the same nodes in each case but in different orders
+corresponding to how the tree was traversed.</p>
+</div>
+<div class="paragraph">
+<p>It is worth mentioning again that there are some useful methods
+converting a node&#8217;s value to an integer, float, etc. Those methods
+could be convenient when doing comparisons like this:</p>
+</div>
+<div class="listingblock">
+<div class="title">helpers</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def response = new XmlSlurper().parseText(books)
+
+def titles = response.value.books.book.findAll{book-&gt;
+ /* You can use toInteger() over the GPathResult object */
+    book.@id.toInteger() &gt; 2
+}*.title
+
+assert titles.size() == 2</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In this case the number 2 has been hardcoded but imagine that value
+could have come from any other source (database&#8230;&#8203; etc.).</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_creating_xml"><a class="anchor" href="#_creating_xml"></a>3. Creating XML</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The most commonly used approach for creating XML with Groovy is to use
+a builder, i.e. one of:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>groovy.xml.MarkupBuilder</code></p>
+</li>
+<li>
+<p><code>groovy.xml.StreamingMarkupBuilder</code></p>
+</li>
+</ul>
+</div>
+<div class="sect2">
+<h3 id="_markupbuilder"><a class="anchor" href="#_markupbuilder"></a>3.1. MarkupBuilder</h3>
+<div class="paragraph">
+<p>Here is an example of using Groovy&#8217;s MarkupBuilder to create a new XML file:</p>
+</div>
+<div class="listingblock">
+<div class="title">Creating Xml with MarkupBuilder</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def writer = new StringWriter()
+def xml = new MarkupBuilder(writer) <i class="conum" data-value="1"></i><b>(1)</b>
+
+xml.records() { <i class="conum" data-value="2"></i><b>(2)</b>
+    car(name:'HSV Maloo', make:'Holden', year:2006) {
+        country('Australia')
+        record(type:'speed', 'Production Pickup Truck with speed of 271kph')
+    }
+    car(name:'Royale', make:'Bugatti', year:1931) {
+        country('France')
+        record(type:'price', 'Most Valuable Car at $15 million')
+    }
+}
+
+def records = new XmlSlurper().parseText(writer.toString()) <i class="conum" data-value="3"></i><b>(3)</b>
+
+assert records.car.first().name.text() == 'HSV Maloo'
+assert records.car.last().name.text() == 'Royale'</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Create an instance of <code>MarkupBuilder</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Start creating the XML tree</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Create an instance of <code>XmlSlurper</code> to traverse and test the
+generated XML</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s take a look a little bit closer:</p>
+</div>
+<div class="listingblock">
+<div class="title">Creating XML elements</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def xmlString = "&lt;movie&gt;the godfather&lt;/movie&gt;" <i class="conum" data-value="1"></i><b>(1)</b>
+
+def xmlWriter = new StringWriter() <i class="conum" data-value="2"></i><b>(2)</b>
+def xmlMarkup = new MarkupBuilder(xmlWriter)
+
+xmlMarkup.movie("the godfather") <i class="conum" data-value="3"></i><b>(3)</b>
+
+assert xmlString == xmlWriter.toString() <i class="conum" data-value="4"></i><b>(4)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>We&#8217;re creating a reference string to compare against</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The <code>xmlWriter</code> instance is used by <code>MarkupBuilder</code> to convert the
+xml representation to a String instance eventually</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>The <code>xmlMarkup.movie(&#8230;&#8203;)</code> call will create a XML node with a tag
+called <code>movie</code> and with content <code>the godfather</code>.</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="title">Creating XML elements with attributes</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def xmlString = "&lt;movie id='2'&gt;the godfather&lt;/movie&gt;"
+
+def xmlWriter = new StringWriter()
+def xmlMarkup = new MarkupBuilder(xmlWriter)
+
+xmlMarkup.movie(id: "2", "the godfather") <i class="conum" data-value="1"></i><b>(1)</b>
+
+assert xmlString == xmlWriter.toString()</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>This time in order to create both attributes and node content you
+can create as many map entries as you like and finally add a value
+to set the node&#8217;s content</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The value could be any <code>Object</code>, the value will be serialized to its
+<code>String</code> representation.
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="title">Creating XML nested elements</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def xmlWriter = new StringWriter()
+def xmlMarkup = new MarkupBuilder(xmlWriter)
+
+xmlMarkup.movie(id: 2) { <i class="conum" data-value="1"></i><b>(1)</b>
+    name("the godfather")
+}
+
+def movie = new XmlSlurper().parseText(xmlWriter.toString())
+
+assert movie.@id == 2
+assert movie.name.text() == 'the godfather'</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>A closure represents the children elements of a given node. Notice
+this time instead of using a String for the attribute we&#8217;re using a
+number.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Sometimes you may want to use a specific namespace in your xml documents:</p>
+</div>
+<div class="listingblock">
+<div class="title">Namespace aware</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def xmlWriter = new StringWriter()
+def xmlMarkup = new MarkupBuilder(xmlWriter)
+
+xmlMarkup
+    .'x:movies'('xmlns:x':'http://www.groovy-lang.org') { <i class="conum" data-value="1"></i><b>(1)</b>
+        'x:movie'(id: 1, 'the godfather')
+        'x:movie'(id: 2, 'ronin')
+    }
+
+def movies =
+    new XmlSlurper() <i class="conum" data-value="2"></i><b>(2)</b>
+        .parseText(xmlWriter.toString())
+        .declareNamespace(x:'http://www.groovy-lang.org')
+
+assert movies.'x:movie'.last().@id == 2
+assert movies.'x:movie'.last().text() == 'ronin'</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Creating a node with a given namespace <code>xmlns:x</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Creating a <code>XmlSlurper</code> registering the namespace to be able to
+test the XML we just created</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>What about having some more meaningful example. We may want to
+generate more elements, to have some logic when creating our XML:</p>
+</div>
+<div class="listingblock">
+<div class="title">Mix code</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def xmlWriter = new StringWriter()
+def xmlMarkup = new MarkupBuilder(xmlWriter)
+
+xmlMarkup
+    .'x:movies'('xmlns:x':'http://www.groovy-lang.org') {
+        (1..3).each { n -&gt; <i class="conum" data-value="1"></i><b>(1)</b>
+            'x:movie'(id: n, "the godfather $n")
+            if (n % 2 == 0) { <i class="conum" data-value="2"></i><b>(2)</b>
+                'x:movie'(id: n, "the godfather $n (Extended)")
+            }
+        }
+    }
+
+def movies =
+    new XmlSlurper()
+        .parseText(xmlWriter.toString())
+        .declareNamespace(x:'http://www.groovy-lang.org')
+
+assert movies.'x:movie'.size() == 4
+assert movies.'x:movie'*.text().every { name -&gt; name.startsWith('the')}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Generating elements from a range</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Using a conditional for creating a given element</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Of course the instance of a builder can be passed as a parameter to
+refactor/modularize your code:</p>
+</div>
+<div class="listingblock">
+<div class="title">Mix code</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def xmlWriter = new StringWriter()
+def xmlMarkup = new MarkupBuilder(xmlWriter)
+
+<i class="conum" data-value="1"></i><b>(1)</b>
+Closure&lt;MarkupBuilder&gt; buildMovieList = { MarkupBuilder builder -&gt;
+    (1..3).each { n -&gt;
+        builder.'x:movie'(id: n, "the godfather $n")
+        if (n % 2 == 0) {
+            builder.'x:movie'(id: n, "the godfather $n (Extended)")
+        }
+    }
+
+    return builder
+}
+
+xmlMarkup.'x:movies'('xmlns:x':'http://www.groovy-lang.org') {
+    buildMovieList(xmlMarkup) <i class="conum" data-value="2"></i><b>(2)</b>
+}
+
+def movies =
+    new XmlSlurper()
+        .parseText(xmlWriter.toString())
+        .declareNamespace(x:'http://www.groovy-lang.org')
+
+assert movies.'x:movie'.size() == 4
+assert movies.'x:movie'*.text().every { name -&gt; name.startsWith('the')}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>In this case we&#8217;ve created a Closure to handle the creation of a list of movies</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Just using the <code>buildMovieList</code> function when necessary</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_streamingmarkupbuilder"><a class="anchor" href="#_streamingmarkupbuilder"></a>3.2. StreamingMarkupBuilder</h3>
+<div class="paragraph">
+<p>The class <code>groovy.xml.StreamingMarkupBuilder</code> is a builder class for
+creating XML markup. This implementation uses a
+<code>groovy.xml.streamingmarkupsupport.StreamingMarkupWriter</code> to handle
+output.</p>
+</div>
+<div class="listingblock">
+<div class="title">Using StreamingMarkupBuilder</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def xml = new StreamingMarkupBuilder().bind { <i class="conum" data-value="1"></i><b>(1)</b>
+    records {
+        car(name:'HSV Maloo', make:'Holden', year:2006) { <i class="conum" data-value="2"></i><b>(2)</b>
+            country('Australia')
+            record(type:'speed', 'Production Pickup Truck with speed of 271kph')
+        }
+        car(name:'P50', make:'Peel', year:1962) {
+            country('Isle of Man')
+            record(type:'size', 'Smallest Street-Legal Car at 99cm wide and 59 kg in weight')
+        }
+        car(name:'Royale', make:'Bugatti', year:1931) {
+            country('France')
+            record(type:'price', 'Most Valuable Car at $15 million')
+        }
+    }
+}
+
+def records = new XmlSlurper().parseText(xml.toString()) <i class="conum" data-value="3"></i><b>(3)</b>
+
+assert records.car.size() == 3
+assert records.car.find { it.@name == 'P50' }.country.text() == 'Isle of Man'</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Note that <code>StreamingMarkupBuilder.bind</code> returns a <code>Writable</code>
+instance that may be used to stream the markup to a Writer</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>We&#8217;re capturing the output in a String to parse it again an check
+the structure of the generated XML with <code>XmlSlurper</code>.</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_markupbuilderhelper"><a class="anchor" href="#_markupbuilderhelper"></a>3.3. MarkupBuilderHelper</h3>
+<div class="paragraph">
+<p>The <code>groovy.xml.MarkupBuilderHelper</code> is, as its name reflects, a
+helper for <code>groovy.xml.MarkupBuilder</code>.</p>
+</div>
+<div class="paragraph">
+<p>This helper normally can be accessed from within an instance of class
+<code>groovy.xml.MarkupBuilder</code> or an instance of
+<code>groovy.xml.StreamingMarkupBuilder</code>.</p>
+</div>
+<div class="paragraph">
+<p>This helper could be handy in situations when you may want to:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Produce a comment in the output</p>
+</li>
+<li>
+<p>Produce an XML processing instruction in the output</p>
+</li>
+<li>
+<p>Produce an XML declaration in the output</p>
+</li>
+<li>
+<p>Print data in the body of the current tag, escaping XML entities</p>
+</li>
+<li>
+<p>Print data in the body of the current tag</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>In both <code>MarkupBuilder</code> and <code>StreamingMarkupBuilder</code> this helper is
+accessed by the property <code>mkp</code>:</p>
+</div>
+<div class="listingblock">
+<div class="title">Using MarkupBuilder&#8217;s 'mkp'</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def xmlWriter = new StringWriter()
+def xmlMarkup = new MarkupBuilder(xmlWriter).rules {
+    mkp.comment('THIS IS THE MAIN RULE') <i class="conum" data-value="1"></i><b>(1)</b>
+    rule(sentence: mkp.yield('3 &gt; n')) <i class="conum" data-value="2"></i><b>(2)</b>
+}
+
+<i class="conum" data-value="3"></i><b>(3)</b>
+assert xmlWriter.toString().contains('3 &amp;gt; n')
+assert xmlWriter.toString().contains('&lt;!-- THIS IS THE MAIN RULE --&gt;')</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Using <code>mkp</code> to create a comment in the XML</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Using <code>mkp</code> to generate an escaped value</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Checking both assumptions were true</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Here is another example to show the use of <code>mkp</code> property accessible
+from within the <code>bind</code> method scope when using
+<code>StreamingMarkupBuilder</code>:</p>
+</div>
+<div class="listingblock">
+<div class="title">Using StreamingMarkupBuilder&#8217;s 'mkp'</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def xml = new StreamingMarkupBuilder().bind {
+    records {
+        car(name: mkp.yield('3 &lt; 5')) <i class="conum" data-value="1"></i><b>(1)</b>
+        car(name: mkp.yieldUnescaped('1 &lt; 3')) <i class="conum" data-value="2"></i><b>(2)</b>
+    }
+}
+
+assert xml.toString().contains('3 &amp;lt; 5')
+assert xml.toString().contains('1 &lt; 3')</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>If we want to generate a escaped value for the name attribute with
+<code>mkp.yield</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Checking the values later on with <code>XmlSlurper</code></td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_domtogroovy"><a class="anchor" href="#_domtogroovy"></a>3.4. DOMToGroovy</h3>
+<div class="paragraph">
+<p>Suppose we have an existing XML document and we want to automate
+generation of the markup without having to type it all in? We just
+need to use <code>org.codehaus.groovy.tools.xml.DOMToGroovy</code> as shown in
+the following example:</p>
+</div>
+<div class="listingblock">
+<div class="title">Building MarkupBuilder from DOMToGroovy</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def songs  = """
+    &lt;songs&gt;
+      &lt;song&gt;
+        &lt;title&gt;Here I go&lt;/title&gt;
+        &lt;band&gt;Whitesnake&lt;/band&gt;
+      &lt;/song&gt;
+    &lt;/songs&gt;
+"""
+
+def builder     =
+    javax.xml.parsers.DocumentBuilderFactory.newInstance().newDocumentBuilder()
+
+    def inputStream = new ByteArrayInputStream(songs.bytes)
+    def document    = builder.parse(inputStream)
+    def output      = new StringWriter()
+    def converter   = new DomToGroovy(new PrintWriter(output)) <i class="conum" data-value="1"></i><b>(1)</b>
+
+    converter.print(document) <i class="conum" data-value="2"></i><b>(2)</b>
+
+    String xmlRecovered  =
+        new GroovyShell()
+        .evaluate("""
+           def writer = new StringWriter()
+           def builder = new groovy.xml.MarkupBuilder(writer)
+           builder.${output}
+
+           return writer.toString()
+        """) <i class="conum" data-value="3"></i><b>(3)</b>
+
+    assert new XmlSlurper().parseText(xmlRecovered).song.title.text() == 'Here I go' <i class="conum" data-value="4"></i><b>(4)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Creating <code>DOMToGroovy</code> instance</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Converts the XML to <code>MarkupBuilder</code> calls which are available in the output <code>StringWriter</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Using <code>output</code> variable to create the whole MarkupBuilder</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Back to XML string</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_manipulating_xml"><a class="anchor" href="#_manipulating_xml"></a>4. Manipulating XML</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In this chapter you&#8217;ll see the different ways of adding / modifying /
+removing nodes using <code>XmlSlurper</code> or <code>XmlParser</code>. The xml we are going
+to be handling is the following:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def xml = """
+&lt;response version-api="2.0"&gt;
+    &lt;value&gt;
+        &lt;books&gt;
+            &lt;book id="2"&gt;
+                &lt;title&gt;Don Xijote&lt;/title&gt;
+                &lt;author id="1"&gt;Manuel De Cervantes&lt;/author&gt;
+            &lt;/book&gt;
+        &lt;/books&gt;
+    &lt;/value&gt;
+&lt;/response&gt;
+"""</code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_adding_nodes"><a class="anchor" href="#_adding_nodes"></a>4.1. Adding nodes</h3>
+<div class="paragraph">
+<p>The main difference between <code>XmlSlurper</code> and <code>XmlParser</code> is that when
+former creates the nodes they won&#8217;t be available until the document&#8217;s
+been evaluated again, so you should parse the transformed document
+again in order to be able to see the new nodes. So keep that in mind
+when choosing any of both approaches.</p>
+</div>
+<div class="paragraph">
+<p>If you needed to see a node right after creating it then <code>XmlParser</code>
+should be your choice, but if you&#8217;re planning to do many changes to
+the XML and send the result to another process maybe <code>XmlSlurper</code> would
+be more efficient.</p>
+</div>
+<div class="paragraph">
+<p>You can&#8217;t create a new node directly using the <code>XmlSlurper</code> instance,
+but you can with <code>XmlParser</code>. The way of creating a new node from
+XmlParser is through its method <code>createNode(..)</code></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def parser = new XmlParser()
+def response = parser.parseText(xml)
+def numberOfResults = parser.createNode(
+    response,
+    new QName("numberOfResults"),
+    [:]
+)
+
+numberOfResults.value = "1"
+assert response.numberOfResults.text() == "1"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>createNode()</code> method receives the following parameters:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>parent node (could be null)</p>
+</li>
+<li>
+<p>The qualified name for the tag (In this case we only use the local
+part without any namespace). We&#8217;re using an instance of
+<code>groovy.xml.QName</code></p>
+</li>
+<li>
+<p>A map with the tag&#8217;s attributes (None in this particular case)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Anyway you won&#8217;t normally be creating a node from the parser instance
+but from the parsed XML instance. That is from a <code>Node</code> or a
+<code>GPathResult</code> instance.</p>
+</div>
+<div class="paragraph">
+<p>Take a look at the next example. We are parsing the xml with <code>XmlParser</code>
+and then creating a new node from the parsed document&#8217;s instance
+(Notice the method here is slightly different in the way it receives
+the parameters):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def parser = new XmlParser()
+def response = parser.parseText(xml)
+
+response.appendNode(
+    new QName("numberOfResults"),
+    [:],
+    "1"
+)
+
+response.numberOfResults.text() == "1"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When using <code>XmlSlurper</code>, <code>GPathResult</code> instances don&#8217;t have <code>createNode()</code>
+method.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_modifying_removing_nodes"><a class="anchor" href="#_modifying_removing_nodes"></a>4.2. Modifying / Removing nodes</h3>
+<div class="paragraph">
+<p>We know how to parse the document, add new nodes, now I want to change
+a given node&#8217;s content. Let&#8217;s start using <code>XmlParser</code> and <code>Node</code>. This
+example changes the first book information to actually another book.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">   def response = new XmlParser().parseText(xml)
+
+/* Use the same syntax as groovy.xml.MarkupBuilder */
+   response.value.books.book[0].replaceNode{ <i class="conum" data-value="1"></i><b>(1)</b>
+       book(id:"3"){
+           title("To Kill a Mockingbird")
+           author(id:"3","Harper Lee")
+       }
+   }
+
+   def newNode = response.value.books.book[0]
+
+   assert newNode.name() == "book"
+   assert newNode.@id == "3"
+   assert newNode.title.text() == "To Kill a Mockingbird"
+   assert newNode.author.text() == "Harper Lee"
+   assert newNode.author.@id.first() == "3"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When using <code>replaceNode()</code> the closure we pass as parameter should
+follow the same rules as if we were using <code>groovy.xml.MarkupBuilder</code>:</p>
+</div>
+<div class="paragraph">
+<p>Here&#8217;s the same example using <code>XmlSlurper</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def response = new XmlSlurper().parseText(books)
+
+/* Use the same syntax as groovy.xml.MarkupBuilder */
+response.value.books.book[0].replaceNode{
+    book(id:"3"){
+        title("To Kill a Mockingbird")
+        author(id:"3","Harper Lee")
+    }
+}
+
+assert response.value.books.book[0].title.text() == "Don Xijote"
+
+/* That mkp is a special namespace used to escape away from the normal building mode
+   of the builder and get access to helper markup methods
+   'yield', 'pi', 'comment', 'out', 'namespaces', 'xmlDeclaration' and
+   'yieldUnescaped' */
+def result = new StreamingMarkupBuilder().bind { mkp.yield response }.toString()
+def changedResponse = new XmlSlurper().parseText(result)
+
+assert changedResponse.value.books.book[0].title.text() == "To Kill a Mockingbird"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Notice how using <code>XmlSlurper</code> we have to parse the transformed document
+again in order to find the created nodes. In this particular example
+could be a little bit annoying isn&#8217;t it?</p>
+</div>
+<div class="paragraph">
+<p>Finally both parsers also use the same approach for adding a new
+attribute to a given attribute. This time again the difference is
+whether you want the new nodes to be available right away or
+not. First <code>XmlParser</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def parser = new XmlParser()
+def response = parser.parseText(xml)
+
+response.@numberOfResults = "1"
+
+assert response.@numberOfResults == "1"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And <code>XmlSlurper</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def response = new XmlSlurper().parseText(books)
+response.@numberOfResults = "2"
+
+assert response.@numberOfResults == "2"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When using <code>XmlSlurper</code>, adding a new attribute does <strong>not</strong> require you to perform a new evaluation.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_printing_xml"><a class="anchor" href="#_printing_xml"></a>4.3. Printing XML</h3>
+<div class="sect3">
+<h4 id="_xmlutil"><a class="anchor" href="#_xmlutil"></a>4.3.1. XmlUtil</h4>
+<div class="paragraph">
+<p>Sometimes is useful to get not only the value of a given node but the
+node itself (for instance to add this node to another XML).</p>
+</div>
+<div class="paragraph">
+<p>For that you can use <code>groovy.xml.XmlUtil</code> class. It has several static
+methods to serialize the xml fragment from several type of sources
+(Node, GPathResult, String&#8230;&#8203;)</p>
+</div>
+<div class="listingblock">
+<div class="title">Getting a node as a string</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def response = new XmlParser().parseText(xml)
+def nodeToSerialize = response.'**'.find {it.name() == 'author'}
+def nodeAsText = XmlUtil.serialize(nodeToSerialize)
+
+assert nodeAsText ==
+    XmlUtil.serialize('&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;author id="1"&gt;Manuel De Cervantes&lt;/author&gt;')</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 3.0.0-alpha-3<br>
+Last updated 2018-06-23 13:44:32 AEST
+</div>
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+<script>prettyPrint()</script>
+</body>
+</html>

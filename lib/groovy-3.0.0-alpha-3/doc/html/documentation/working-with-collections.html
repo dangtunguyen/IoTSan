@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.6.1">
+<title>Working with collections</title>
+<link rel="stylesheet" href="./assets/css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+<h1>Working with collections</h1>
+<div class="details">
+<span id="revnumber">version 3.0.0-alpha-3</span>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#Collections-Lists">1. Lists</a>
+<ul class="sectlevel2">
+<li><a href="#_list_literals">1.1. List literals</a></li>
+<li><a href="#_list_as_a_boolean_expression">1.2. List as a boolean expression</a></li>
+<li><a href="#_iterating_on_a_list">1.3. Iterating on a list</a></li>
+<li><a href="#_manipulating_lists">1.4. Manipulating lists</a>
+<ul class="sectlevel3">
+<li><a href="#List-Filtering">1.4.1. Filtering and searching</a></li>
+<li><a href="#_adding_or_removing_elements">1.4.2. Adding or removing elements</a></li>
+<li><a href="#_set_operations">1.4.3. Set operations</a></li>
+<li><a href="#_sorting">1.4.4. Sorting</a></li>
+<li><a href="#_duplicating_elements">1.4.5. Duplicating elements</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#Collections-Maps">2. Maps</a>
+<ul class="sectlevel2">
+<li><a href="#_map_literals">2.1. Map literals</a></li>
+<li><a href="#_map_property_notation">2.2. Map property notation</a></li>
+<li><a href="#_iterating_on_maps">2.3. Iterating on maps</a></li>
+<li><a href="#_manipulating_maps">2.4. Manipulating maps</a>
+<ul class="sectlevel3">
+<li><a href="#_adding_or_removing_elements_2">2.4.1. Adding or removing elements</a></li>
+<li><a href="#JN1035-Maps-Collectionviewsofamap">2.4.2. Keys, values and entries</a></li>
+<li><a href="#_filtering_and_searching">2.4.3. Filtering and searching</a></li>
+<li><a href="#Maps-Grouping">2.4.4. Grouping</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#Collections-Ranges">3. Ranges</a></li>
+<li><a href="#_syntax_enhancements_for_collections">4. Syntax enhancements for collections</a>
+<ul class="sectlevel2">
+<li><a href="#_gpath_support">4.1. GPath support</a></li>
+<li><a href="#_spread_operator">4.2. Spread operator</a></li>
+<li><a href="#Collections-Gettingefficientwiththestar-dotoperator">4.3. The star-dot `*.' operator</a></li>
+<li><a href="#Collections-Slicingwiththesubscriptoperator">4.4. Slicing with the subscript operator</a></li>
+</ul>
+</li>
+<li><a href="#Collections-EnhancedCollectionMethods">5. Enhanced Collection Methods</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Groovy provides native support for various collection types, including <a href="#Collections-Lists">lists</a>,
+<a href="#Collections-Maps">maps</a> or <a href="#Collections-Ranges">ranges</a>. Most of those are based on the Java
+collection types and decorated with additional methods found in the <a href="http://www.groovy-lang.org/gdk.html">Groovy development kit</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="Collections-Lists"><a class="anchor" href="#Collections-Lists"></a>1. Lists</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_list_literals"><a class="anchor" href="#_list_literals"></a>1.1. List literals</h3>
+<div class="paragraph">
+<p>You can create lists as follows. Notice that <code>[]</code> is the empty list
+expression.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def list = [5, 6, 7, 8]
+assert list.get(2) == 7
+assert list[2] == 7
+assert list instanceof java.util.List
+
+def emptyList = []
+assert emptyList.size() == 0
+emptyList.add(5)
+assert emptyList.size() == 1</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Each list expression creates an implementation of <a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html">java.util.List</a>.</p>
+</div>
+<div class="paragraph">
+<p>Of course lists can be used as a source to construct another list:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def list1 = ['a', 'b', 'c']
+//construct a new list, seeded with the same items as in list1
+def list2 = new ArrayList&lt;String&gt;(list1)
+
+assert list2 == list1 // == checks that each corresponding element is the same
+
+// clone() can also be called
+def list3 = list1.clone()
+assert list3 == list1</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A list is an ordered collection of objects:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def list = [5, 6, 7, 8]
+assert list.size() == 4
+assert list.getClass() == ArrayList     // the specific kind of list being used
+
+assert list[2] == 7                     // indexing starts at 0
+assert list.getAt(2) == 7               // equivalent method to subscript operator []
+assert list.get(2) == 7                 // alternative method
+
+list[2] = 9
+assert list == [5, 6, 9, 8,]           // trailing comma OK
+
+list.putAt(2, 10)                       // equivalent method to [] when value being changed
+assert list == [5, 6, 10, 8]
+assert list.set(2, 11) == 10            // alternative method that returns old value
+assert list == [5, 6, 11, 8]
+
+assert ['a', 1, 'a', 'a', 2.5, 2.5f, 2.5d, 'hello', 7g, null, 9 as byte]
+//objects can be of different types; duplicates allowed
+
+assert [1, 2, 3, 4, 5][-1] == 5             // use negative indices to count from the end
+assert [1, 2, 3, 4, 5][-2] == 4
+assert [1, 2, 3, 4, 5].getAt(-2) == 4       // getAt() available with negative index...
+try {
+    [1, 2, 3, 4, 5].get(-2)                 // but negative index not allowed with get()
+    assert false
+} catch (e) {
+    assert e instanceof IndexOutOfBoundsException
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_list_as_a_boolean_expression"><a class="anchor" href="#_list_as_a_boolean_expression"></a>1.2. List as a boolean expression</h3>
+<div class="paragraph">
+<p>Lists can be evaluated as a <code>boolean</code> value:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">assert ![]             // an empty list evaluates as false
+
+//all other lists, irrespective of contents, evaluate as true
+assert [1] &amp;&amp; ['a'] &amp;&amp; [0] &amp;&amp; [0.0] &amp;&amp; [false] &amp;&amp; [null]</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_iterating_on_a_list"><a class="anchor" href="#_iterating_on_a_list"></a>1.3. Iterating on a list</h3>
+<div class="paragraph">
+<p>Iterating on elements of a list is usually done calling the <code>each</code> and <code>eachWithIndex</code> methods, which execute code on each
+item of a list:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">[1, 2, 3].each {
+    println "Item: $it" // `it` is an implicit parameter corresponding to the current element
+}
+['a', 'b', 'c'].eachWithIndex { it, i -&gt; // `it` is the current element, while `i` is the index
+    println "$i: $it"
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In addition to iterating, it is often useful to create a new list by transforming each of its elements into
+something else. This operation, often called mapping, is done in Groovy thanks to the <code>collect</code> method:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">assert [1, 2, 3].collect { it * 2 } == [2, 4, 6]
+
+// shortcut syntax instead of collect
+assert [1, 2, 3]*.multiply(2) == [1, 2, 3].collect { it.multiply(2) }
+
+def list = [0]
+// it is possible to give `collect` the list which collects the elements
+assert [1, 2, 3].collect(list) { it * 2 } == [0, 2, 4, 6]
+assert list == [0, 2, 4, 6]</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_manipulating_lists"><a class="anchor" href="#_manipulating_lists"></a>1.4. Manipulating lists</h3>
+<div class="sect3">
+<h4 id="List-Filtering"><a class="anchor" href="#List-Filtering"></a>1.4.1. Filtering and searching</h4>
+<div class="paragraph">
+<p>The <a href="http://www.groovy-lang.org/gdk.html">Groovy development kit</a> contains a lot of methods on collections that enhance
+the standard collections with pragmatic methods, some of which are illustrated here:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">assert [1, 2, 3].find { it &gt; 1 } == 2           // find 1st element matching criteria
+assert [1, 2, 3].findAll { it &gt; 1 } == [2, 3]   // find all elements matching critieria
+assert ['a', 'b', 'c', 'd', 'e'].findIndexOf {      // find index of 1st element matching criteria
+    it in ['c', 'e', 'g']
+} == 2
+
+assert ['a', 'b', 'c', 'd', 'c'].indexOf('c') == 2  // index returned
+assert ['a', 'b', 'c', 'd', 'c'].indexOf('z') == -1 // index -1 means value not in list
+assert ['a', 'b', 'c', 'd', 'c'].lastIndexOf('c') == 4
+
+assert [1, 2, 3].every { it &lt; 5 }               // returns true if all elements match the predicate
+assert ![1, 2, 3].every { it &lt; 3 }
+assert [1, 2, 3].any { it &gt; 2 }                 // returns true if any element matches the predicate
+assert ![1, 2, 3].any { it &gt; 3 }
+
+assert [1, 2, 3, 4, 5, 6].sum() == 21                // sum anything with a plus() method
+assert ['a', 'b', 'c', 'd', 'e'].sum {
+    it == 'a' ? 1 : it == 'b' ? 2 : it == 'c' ? 3 : it == 'd' ? 4 : it == 'e' ? 5 : 0
+    // custom value to use in sum
+} == 15
+assert ['a', 'b', 'c', 'd', 'e'].sum { ((char) it) - ((char) 'a') } == 10
+assert ['a', 'b', 'c', 'd', 'e'].sum() == 'abcde'
+assert [['a', 'b'], ['c', 'd']].sum() == ['a', 'b', 'c', 'd']
+
+// an initial value can be provided
+assert [].sum(1000) == 1000
+assert [1, 2, 3].sum(1000) == 1006
+
+assert [1, 2, 3].join('-') == '1-2-3'           // String joining
+assert [1, 2, 3].inject('counting: ') {
+    str, item -&gt; str + item                     // reduce operation
+} == 'counting: 123'
+assert [1, 2, 3].inject(0) { count, item -&gt;
+    count + item
+} == 6</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And here is idiomatic Groovy code for finding the maximum and minimum in a collection:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def list = [9, 4, 2, 10, 5]
+assert list.max() == 10
+assert list.min() == 2
+
+// we can also compare single characters, as anything comparable
+assert ['x', 'y', 'a', 'z'].min() == 'a'
+
+// we can use a closure to specify the sorting behaviour
+def list2 = ['abc', 'z', 'xyzuvw', 'Hello', '321']
+assert list2.max { it.size() } == 'xyzuvw'
+assert list2.min { it.size() } == 'z'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In addition to closures, you can use a <code>Comparator</code> to define the comparison criteria:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Comparator mc = { a, b -&gt; a == b ? 0 : (a &lt; b ? -1 : 1) }
+
+def list = [7, 4, 9, -6, -1, 11, 2, 3, -9, 5, -13]
+assert list.max(mc) == 11
+assert list.min(mc) == -13
+
+Comparator mc2 = { a, b -&gt; a == b ? 0 : (Math.abs(a) &lt; Math.abs(b)) ? -1 : 1 }
+
+
+assert list.max(mc2) == -13
+assert list.min(mc2) == -1
+
+assert list.max { a, b -&gt; a.equals(b) ? 0 : Math.abs(a) &lt; Math.abs(b) ? -1 : 1 } == -13
+assert list.min { a, b -&gt; a.equals(b) ? 0 : Math.abs(a) &lt; Math.abs(b) ? -1 : 1 } == -1</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_adding_or_removing_elements"><a class="anchor" href="#_adding_or_removing_elements"></a>1.4.2. Adding or removing elements</h4>
+<div class="paragraph">
+<p>We can use <code>[]</code> to assign a new empty list and <code>&lt;&lt;</code> to append items to it:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def list = []
+assert list.empty
+
+list &lt;&lt; 5
+assert list.size() == 1
+
+list &lt;&lt; 7 &lt;&lt; 'i' &lt;&lt; 11
+assert list == [5, 7, 'i', 11]
+
+list &lt;&lt; ['m', 'o']
+assert list == [5, 7, 'i', 11, ['m', 'o']]
+
+//first item in chain of &lt;&lt; is target list
+assert ([1, 2] &lt;&lt; 3 &lt;&lt; [4, 5] &lt;&lt; 6) == [1, 2, 3, [4, 5], 6]
+
+//using leftShift is equivalent to using &lt;&lt;
+assert ([1, 2, 3] &lt;&lt; 4) == ([1, 2, 3].leftShift(4))</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>We can add to a list in many ways:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">assert [1, 2] + 3 + [4, 5] + 6 == [1, 2, 3, 4, 5, 6]
+// equivalent to calling the `plus` method
+assert [1, 2].plus(3).plus([4, 5]).plus(6) == [1, 2, 3, 4, 5, 6]
+
+def a = [1, 2, 3]
+a += 4      // creates a new list and assigns it to `a`
+a += [5, 6]
+assert a == [1, 2, 3, 4, 5, 6]
+
+assert [1, *[222, 333], 456] == [1, 222, 333, 456]
+assert [*[1, 2, 3]] == [1, 2, 3]
+assert [1, [2, 3, [4, 5], 6], 7, [8, 9]].flatten() == [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+def list = [1, 2]
+list.add(3)
+list.addAll([5, 4])
+assert list == [1, 2, 3, 5, 4]
+
+list = [1, 2]
+list.add(1, 3) // add 3 just before index 1
+assert list == [1, 3, 2]
+
+list.addAll(2, [5, 4]) //add [5,4] just before index 2
+assert list == [1, 3, 5, 4, 2]
+
+list = ['a', 'b', 'z', 'e', 'u', 'v', 'g']
+list[8] = 'x' // the [] operator is growing the list as needed
+// nulls inserted if required
+assert list == ['a', 'b', 'z', 'e', 'u', 'v', 'g', null, 'x']</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>It is however important that the <code>+</code> operator on a list is <strong>not mutating</strong>. Compared to <code>&lt;&lt;</code>, it will create a new
+list, which is often not what you want and can lead to performance issues.</p>
+</div>
+<div class="paragraph">
+<p>The <a href="http://www.groovy-lang.org/gdk.html">Groovy development kit</a> also contains methods allowing you to easily remove elements from a list by value:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">assert ['a','b','c','b','b'] - 'c' == ['a','b','b','b']
+assert ['a','b','c','b','b'] - 'b' == ['a','c']
+assert ['a','b','c','b','b'] - ['b','c'] == ['a']
+
+def list = [1,2,3,4,3,2,1]
+list -= 3           // creates a new list by removing `3` from the original one
+assert list == [1,2,4,2,1]
+assert ( list -= [2,4] ) == [1,1]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>It is also possible to remove an element by passing its index to the <code>remove</code> method, in which case the list is mutated:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def list = ['a','b','c','d','e','f','b','b','a']
+assert list.remove(2) == 'c'        // remove the third element, and return it
+assert list == ['a','b','d','e','f','b','b','a']</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In case you only want to remove the first element having the same value in a list, instead of removing all
+elements, you can call the <code>remove</code> method passing the value:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def list= ['a','b','c','b','b']
+assert list.remove('c')             // remove 'c', and return true because element removed
+assert list.remove('b')             // remove first 'b', and return true because element removed
+
+assert ! list.remove('z')           // return false because no elements removed
+assert list == ['a','b','b']</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As you can see, there are two <code>remove</code> methods available.  One that takes an integer and removes an element
+by its index, and another that will remove the first element that matches the passed value.  So what should we
+do when we have a list of integers?  In this case, you may wish to use <code>removeAt</code> to remove an element by its
+index, and <code>removeElement</code> to remove the first element that matches a value.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def list = [1,2,3,4,5,6,2,2,1]
+
+assert list.remove(2) == 3          // this removes the element at index 2, and returns it
+assert list == [1,2,4,5,6,2,2,1]
+
+assert list.removeElement(2)        // remove first 2 and return true
+assert list == [1,4,5,6,2,2,1]
+
+assert ! list.removeElement(8)      // return false because 8 is not in the list
+assert list == [1,4,5,6,2,2,1]
+
+assert list.removeAt(1) == 4        // remove element at index 1, and return it
+assert list == [1,5,6,2,2,1]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Of course, <code>removeAt</code> and <code>removeElement</code> will work with lists of any type.</p>
+</div>
+<div class="paragraph">
+<p>Additionally, removing all the elements in a list can be done by calling the <code>clear</code> method:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def list= ['a',2,'c',4]
+list.clear()
+assert list == []</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_set_operations"><a class="anchor" href="#_set_operations"></a>1.4.3. Set operations</h4>
+<div class="paragraph">
+<p>The <a href="http://www.groovy-lang.org/gdk.html">Groovy development kit</a> also includes methods making it easy to reason on sets:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">assert 'a' in ['a','b','c']             // returns true if an element belongs to the list
+assert ['a','b','c'].contains('a')      // equivalent to the `contains` method in Java
+assert [1,3,4].containsAll([1,4])       // `containsAll` will check that all elements are found
+
+assert [1,2,3,3,3,3,4,5].count(3) == 4  // count the number of elements which have some value
+assert [1,2,3,3,3,3,4,5].count {
+    it%2==0                             // count the number of elements which match the predicate
+} == 2
+
+assert [1,2,4,6,8,10,12].intersect([1,3,6,9,12]) == [1,6,12]
+
+assert [1,2,3].disjoint( [4,6,9] )
+assert ![1,2,3].disjoint( [2,4,6] )</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_sorting"><a class="anchor" href="#_sorting"></a>1.4.4. Sorting</h4>
+<div class="paragraph">
+<p>Working with collections often implies sorting. Groovy offers a variety of options to sort lists,
+from using closures to comparators, as in the following examples:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">assert [6, 3, 9, 2, 7, 1, 5].sort() == [1, 2, 3, 5, 6, 7, 9]
+
+def list = ['abc', 'z', 'xyzuvw', 'Hello', '321']
+assert list.sort {
+    it.size()
+} == ['z', 'abc', '321', 'Hello', 'xyzuvw']
+
+def list2 = [7, 4, -6, -1, 11, 2, 3, -9, 5, -13]
+assert list2.sort { a, b -&gt; a == b ? 0 : Math.abs(a) &lt; Math.abs(b) ? -1 : 1 } ==
+        [-1, 2, 3, 4, 5, -6, 7, -9, 11, -13]
+
+Comparator mc = { a, b -&gt; a == b ? 0 : Math.abs(a) &lt; Math.abs(b) ? -1 : 1 }
+
+// JDK 8+ only
+// list2.sort(mc)
+// assert list2 == [-1, 2, 3, 4, 5, -6, 7, -9, 11, -13]
+
+def list3 = [6, -3, 9, 2, -7, 1, 5]
+
+Collections.sort(list3)
+assert list3 == [-7, -3, 1, 2, 5, 6, 9]
+
+Collections.sort(list3, mc)
+assert list3 == [1, 2, -3, 5, 6, -7, 9]</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_duplicating_elements"><a class="anchor" href="#_duplicating_elements"></a>1.4.5. Duplicating elements</h4>
+<div class="paragraph">
+<p>The <a href="http://www.groovy-lang.org/gdk.html">Groovy development kit</a> also takes advantage of operator overloading to provide methods allowing duplication of elements
+of a list:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">assert [1, 2, 3] * 3 == [1, 2, 3, 1, 2, 3, 1, 2, 3]
+assert [1, 2, 3].multiply(2) == [1, 2, 3, 1, 2, 3]
+assert Collections.nCopies(3, 'b') == ['b', 'b', 'b']
+
+// nCopies from the JDK has different semantics than multiply for lists
+assert Collections.nCopies(2, [1, 2]) == [[1, 2], [1, 2]] //not [1,2,1,2]</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="Collections-Maps"><a class="anchor" href="#Collections-Maps"></a>2. Maps</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_map_literals"><a class="anchor" href="#_map_literals"></a>2.1. Map literals</h3>
+<div class="paragraph">
+<p>In Groovy, maps (also known as associative arrays) can be created using the map literal syntax: <code>[:]</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def map = [name: 'Gromit', likes: 'cheese', id: 1234]
+assert map.get('name') == 'Gromit'
+assert map.get('id') == 1234
+assert map['name'] == 'Gromit'
+assert map['id'] == 1234
+assert map instanceof java.util.Map
+
+def emptyMap = [:]
+assert emptyMap.size() == 0
+emptyMap.put("foo", 5)
+assert emptyMap.size() == 1
+assert emptyMap.get("foo") == 5</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Map keys are strings by default: <code>[a:1]</code> is equivalent to <code>['a':1]</code>. This can be confusing if you define a variable
+named <code>a</code> and that you want the <strong>value</strong> of <code>a</code> to be the key in your map. If this is the case, then you <strong>must</strong> escape
+the key by adding parenthesis, like in the following example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def a = 'Bob'
+def ages = [a: 43]
+assert ages['Bob'] == null // `Bob` is not found
+assert ages['a'] == 43     // because `a` is a literal!
+
+ages = [(a): 43]            // now we escape `a` by using parenthesis
+assert ages['Bob'] == 43   // and the value is found!</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In addition to map literals, it is possible, to get a new copy of a map, to clone it:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def map = [
+        simple : 123,
+        complex: [a: 1, b: 2]
+]
+def map2 = map.clone()
+assert map2.get('simple') == map.get('simple')
+assert map2.get('complex') == map.get('complex')
+map2.get('complex').put('c', 3)
+assert map.get('complex').get('c') == 3</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The resulting map is a <strong>shallow</strong> copy of the original one, as illustrated in the previous example.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_map_property_notation"><a class="anchor" href="#_map_property_notation"></a>2.2. Map property notation</h3>
+<div class="paragraph">
+<p>Maps also act like beans so you can use the property notation to get/set
+items inside the <code>Map</code> as long as the keys are strings which are valid
+Groovy identifiers:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def map = [name: 'Gromit', likes: 'cheese', id: 1234]
+assert map.name == 'Gromit'     // can be used instead of map.get('name')
+assert map.id == 1234
+
+def emptyMap = [:]
+assert emptyMap.size() == 0
+emptyMap.foo = 5
+assert emptyMap.size() == 1
+assert emptyMap.foo == 5</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note: by design <code>map.foo</code> will always look for the key <code>foo</code> in the map. This
+means <code>foo.class</code> will return <code>null</code> on a map that doesn&#8217;t contain the <code>class</code> key. Should you really want to know
+the class, then you must use <code>getClass()</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def map = [name: 'Gromit', likes: 'cheese', id: 1234]
+assert map.class == null
+assert map.get('class') == null
+assert map.getClass() == LinkedHashMap // this is probably what you want
+
+map = [1      : 'a',
+       (true) : 'p',
+       (false): 'q',
+       (null) : 'x',
+       'null' : 'z']
+assert map.containsKey(1) // 1 is not an identifier so used as is
+assert map.true == null
+assert map.false == null
+assert map.get(true) == 'p'
+assert map.get(false) == 'q'
+assert map.null == 'z'
+assert map.get(null) == 'x'</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_iterating_on_maps"><a class="anchor" href="#_iterating_on_maps"></a>2.3. Iterating on maps</h3>
+<div class="paragraph">
+<p>As usual in the <a href="http://www.groovy-lang.org/gdk.html">Groovy development kit</a>, idiomatic iteration on maps makes use of the <code>each</code> and <code>eachWithIndex</code> methods.
+It&#8217;s worth noting that maps created using the map literal notation are <strong>ordered</strong>, that is to say that if you iterate
+on map entries, it is guaranteed that the entries will be returned in the same order they were added in the map.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def map = [
+        Bob  : 42,
+        Alice: 54,
+        Max  : 33
+]
+
+// `entry` is a map entry
+map.each { entry -&gt;
+    println "Name: $entry.key Age: $entry.value"
+}
+
+// `entry` is a map entry, `i` the index in the map
+map.eachWithIndex { entry, i -&gt;
+    println "$i - Name: $entry.key Age: $entry.value"
+}
+
+// Alternatively you can use key and value directly
+map.each { key, value -&gt;
+    println "Name: $key Age: $value"
+}
+
+// Key, value and i as the index in the map
+map.eachWithIndex { key, value, i -&gt;
+    println "$i - Name: $key Age: $value"
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_manipulating_maps"><a class="anchor" href="#_manipulating_maps"></a>2.4. Manipulating maps</h3>
+<div class="sect3">
+<h4 id="_adding_or_removing_elements_2"><a class="anchor" href="#_adding_or_removing_elements_2"></a>2.4.1. Adding or removing elements</h4>
+<div class="paragraph">
+<p>Adding an element to a map can be done either using the <code>put</code> method, the subscript operator or using <code>putAll</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def defaults = [1: 'a', 2: 'b', 3: 'c', 4: 'd']
+def overrides = [2: 'z', 5: 'x', 13: 'x']
+
+def result = new LinkedHashMap(defaults)
+result.put(15, 't')
+result[17] = 'u'
+result.putAll(overrides)
+assert result == [1: 'a', 2: 'z', 3: 'c', 4: 'd', 5: 'x', 13: 'x', 15: 't', 17: 'u']</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Removing all the elements of a map can be done by calling the <code>clear</code> method:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def m = [1:'a', 2:'b']
+assert m.get(1) == 'a'
+m.clear()
+assert m == [:]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Maps generated using the map literal syntax are using the object <code>equals</code> and <code>hashcode</code> methods. This means that
+you should <strong>never</strong> use an object which hash code is subject to change over time, or you wouldn&#8217;t be able to get
+the associated value back.</p>
+</div>
+<div class="paragraph">
+<p>It is also worth noting that you should <strong>never</strong> use a <code>GString</code> as the key of a map, because the hash code of a <code>GString</code>
+is not the same as the hash code of an equivalent <code>String</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def key = 'some key'
+def map = [:]
+def gstringKey = "${key.toUpperCase()}"
+map.put(gstringKey,'value')
+assert map.get('SOME KEY') == null</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="JN1035-Maps-Collectionviewsofamap"><a class="anchor" href="#JN1035-Maps-Collectionviewsofamap"></a>2.4.2. Keys, values and entries</h4>
+<div class="paragraph">
+<p>We can inspect the keys, values, and entries in a view:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def map = [1:'a', 2:'b', 3:'c']
+
+def entries = map.entrySet()
+entries.each { entry -&gt;
+  assert entry.key in [1,2,3]
+  assert entry.value in ['a','b','c']
+}
+
+def keys = map.keySet()
+assert keys == [1,2,3] as Set</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Mutating values returned by the view (be it a map entry, a key or a value) is highly discouraged because success
+of the operation directly depends on the type of the map being manipulated. In particular, Groovy relies on collections
+from the JDK that in general make no guarantee that a collection can safely be manipulated through <code>keySet</code>, <code>entrySet</code>, or
+<code>values</code>.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_filtering_and_searching"><a class="anchor" href="#_filtering_and_searching"></a>2.4.3. Filtering and searching</h4>
+<div class="paragraph">
+<p>The <a href="http://www.groovy-lang.org/gdk.html">Groovy development kit</a> contains filtering, searching and collecting methods similar to those found
+for <a href="#List-Filtering">lists</a>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def people = [
+    1: [name:'Bob', age: 32, gender: 'M'],
+    2: [name:'Johnny', age: 36, gender: 'M'],
+    3: [name:'Claire', age: 21, gender: 'F'],
+    4: [name:'Amy', age: 54, gender:'F']
+]
+
+def bob = people.find { it.value.name == 'Bob' } // find a single entry
+def females = people.findAll { it.value.gender == 'F' }
+
+// both return entries, but you can use collect to retrieve the ages for example
+def ageOfBob = bob.value.age
+def agesOfFemales = females.collect {
+    it.value.age
+}
+
+assert ageOfBob == 32
+assert agesOfFemales == [21,54]
+
+// but you could also use a key/pair value as the parameters of the closures
+def agesOfMales = people.findAll { id, person -&gt;
+    person.gender == 'M'
+}.collect { id, person -&gt;
+    person.age
+}
+assert agesOfMales == [32, 36]
+
+// `every` returns true if all entries match the predicate
+assert people.every { id, person -&gt;
+    person.age &gt; 18
+}
+
+// `any` returns true if any entry matches the predicate
+
+assert people.any { id, person -&gt;
+    person.age == 54
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="Maps-Grouping"><a class="anchor" href="#Maps-Grouping"></a>2.4.4. Grouping</h4>
+<div class="paragraph">
+<p>We can group a list into a map using some criteria:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">assert ['a', 7, 'b', [2, 3]].groupBy {
+    it.class
+} == [(String)   : ['a', 'b'],
+      (Integer)  : [7],
+      (ArrayList): [[2, 3]]
+]
+
+assert [
+        [name: 'Clark', city: 'London'], [name: 'Sharma', city: 'London'],
+        [name: 'Maradona', city: 'LA'], [name: 'Zhang', city: 'HK'],
+        [name: 'Ali', city: 'HK'], [name: 'Liu', city: 'HK'],
+].groupBy { it.city } == [
+        London: [[name: 'Clark', city: 'London'],
+                 [name: 'Sharma', city: 'London']],
+        LA    : [[name: 'Maradona', city: 'LA']],
+        HK    : [[name: 'Zhang', city: 'HK'],
+                 [name: 'Ali', city: 'HK'],
+                 [name: 'Liu', city: 'HK']],
+]</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="Collections-Ranges"><a class="anchor" href="#Collections-Ranges"></a>3. Ranges</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Ranges allow you to create a list of sequential values. These can be
+used as <code>List</code> since
+<a href="http://docs.groovy-lang.org/latest/html/api/groovy/lang/Range.html">Range</a> extends
+<a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html">java.util.List</a>.</p>
+</div>
+<div class="paragraph">
+<p>Ranges defined with the <code>..</code> notation are inclusive (that is the list
+contains the from and to value).</p>
+</div>
+<div class="paragraph">
+<p>Ranges defined with the <code>..&lt;</code> notation are half-open, they include the
+first value but not the last value.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// an inclusive range
+def range = 5..8
+assert range.size() == 4
+assert range.get(2) == 7
+assert range[2] == 7
+assert range instanceof java.util.List
+assert range.contains(5)
+assert range.contains(8)
+
+// lets use a half-open range
+range = 5..&lt;8
+assert range.size() == 3
+assert range.get(2) == 7
+assert range[2] == 7
+assert range instanceof java.util.List
+assert range.contains(5)
+assert !range.contains(8)
+
+//get the end points of the range without using indexes
+range = 1..10
+assert range.from == 1
+assert range.to == 10</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note that int ranges are implemented efficiently, creating a lightweight
+Java object containing a from and to value.</p>
+</div>
+<div class="paragraph">
+<p>Ranges can be used for any Java object which implements java.lang.Comparable
+for comparison and also have methods <code>next()</code> and <code>previous()</code> to return the
+next / previous item in the range. For example, you can create a range of <code>String</code> elements:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// an inclusive range
+def range = 'a'..'d'
+assert range.size() == 4
+assert range.get(2) == 'c'
+assert range[2] == 'c'
+assert range instanceof java.util.List
+assert range.contains('a')
+assert range.contains('d')
+assert !range.contains('e')</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can iterate on a range using a classic <code>for</code> loop:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">for (i in 1..10) {
+    println "Hello ${i}"
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>but alternatively you can achieve the same effect in a more Groovy idiomatic style, by iterating a range
+with <code>each</code> method:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">(1..10).each { i -&gt;
+    println "Hello ${i}"
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Ranges can be also used in the <code>switch</code> statement:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">switch (years) {
+    case 1..10: interestRate = 0.076; break;
+    case 11..25: interestRate = 0.052; break;
+    default: interestRate = 0.037;
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_syntax_enhancements_for_collections"><a class="anchor" href="#_syntax_enhancements_for_collections"></a>4. Syntax enhancements for collections</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_gpath_support"><a class="anchor" href="#_gpath_support"></a>4.1. GPath support</h3>
+<div class="paragraph">
+<p>Thanks to the support of property notation for both lists and maps, Groovy provides syntactic sugar making it
+really easy to deal with nested collections, as illustrated in the following examples:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def listOfMaps = [['a': 11, 'b': 12], ['a': 21, 'b': 22]]
+assert listOfMaps.a == [11, 21] //GPath notation
+assert listOfMaps*.a == [11, 21] //spread dot notation
+
+listOfMaps = [['a': 11, 'b': 12], ['a': 21, 'b': 22], null]
+assert listOfMaps*.a == [11, 21, null] // caters for null values
+assert listOfMaps*.a == listOfMaps.collect { it?.a } //equivalent notation
+// But this will only collect non-null values
+assert listOfMaps.a == [11,21]</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_spread_operator"><a class="anchor" href="#_spread_operator"></a>4.2. Spread operator</h3>
+<div class="paragraph">
+<p>The spread operator can be used to "inline" a collection into another. It is syntactic sugar which often avoids calls
+to <code>putAll</code> and facilitates the realization of one-liners:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">assert [ 'z': 900,
+         *: ['a': 100, 'b': 200], 'a': 300] == ['a': 300, 'b': 200, 'z': 900]
+//spread map notation in map definition
+assert [*: [3: 3, *: [5: 5]], 7: 7] == [3: 3, 5: 5, 7: 7]
+
+def f = { [1: 'u', 2: 'v', 3: 'w'] }
+assert [*: f(), 10: 'zz'] == [1: 'u', 10: 'zz', 2: 'v', 3: 'w']
+//spread map notation in function arguments
+f = { map -&gt; map.c }
+assert f(*: ['a': 10, 'b': 20, 'c': 30], 'e': 50) == 30
+
+f = { m, i, j, k -&gt; [m, i, j, k] }
+//using spread map notation with mixed unnamed and named arguments
+assert f('e': 100, *[4, 5], *: ['a': 10, 'b': 20, 'c': 30], 6) ==
+        [["e": 100, "b": 20, "c": 30, "a": 10], 4, 5, 6]</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="Collections-Gettingefficientwiththestar-dotoperator"><a class="anchor" href="#Collections-Gettingefficientwiththestar-dotoperator"></a>4.3. The star-dot `*.' operator</h3>
+<div class="paragraph">
+<p>The "star-dot" operator is a shortcut operator allowing you to call a method or a property on all elements of a
+collection:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">assert [1, 3, 5] == ['a', 'few', 'words']*.size()
+
+class Person {
+    String name
+    int age
+}
+def persons = [new Person(name:'Hugo', age:17), new Person(name:'Sandra',age:19)]
+assert [17, 19] == persons*.age</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="Collections-Slicingwiththesubscriptoperator"><a class="anchor" href="#Collections-Slicingwiththesubscriptoperator"></a>4.4. Slicing with the subscript operator</h3>
+<div class="paragraph">
+<p>You can index into lists, arrays, maps using the subscript expression. It is interesting that strings
+are considered as special kinds of collections in that context:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def text = 'nice cheese gromit!'
+def x = text[2]
+
+assert x == 'c'
+assert x.class == String
+
+def sub = text[5..10]
+assert sub == 'cheese'
+
+def list = [10, 11, 12, 13]
+def answer = list[2,3]
+assert answer == [12,13]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Notice that you can use ranges to extract part of a collection:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">list = 100..200
+sub = list[1, 3, 20..25, 33]
+assert sub == [101, 103, 120, 121, 122, 123, 124, 125, 133]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The subscript operator can be used to update an existing collection (for collection type which are not immutable):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">list = ['a','x','x','d']
+list[1..2] = ['b','c']
+assert list == ['a','b','c','d']</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>It is worth noting that negative indices are allowed, to extract more easily from the end of a collection:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">text = "nice cheese gromit!"
+x = text[-1]
+assert x == "!"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can use negative indices to count from the end of the List, array,
+String etc.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def name = text[-7..-2]
+assert name == "gromit"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Eventually, if you use a backwards range (the starting index is greater than
+the end index), then the answer is reversed.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">text = "nice cheese gromit!"
+name = text[3..1]
+assert name == "eci"</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="Collections-EnhancedCollectionMethods"><a class="anchor" href="#Collections-EnhancedCollectionMethods"></a>5. Enhanced Collection Methods</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In addition to <a href="#Collections-Lists">lists</a>, <a href="#Collections-Maps">maps</a> or <a href="#Collections-Ranges">ranges</a>, Groovy offers
+a lot of additional methods for filtering, collecting, grouping, counting, &#8230;&#8203; which are directly available on either
+collections or more easily iterables.</p>
+</div>
+<div class="paragraph">
+<p>In particular, we invite you to read the <a href="http://www.groovy-lang.org/gdk.html">Groovy development kit</a> API docs and specifically:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>methods added to <code>Iterable</code> can be found <a href="http://docs.groovy-lang.org/latest/html/groovy-jdk/java/lang/Iterable.html">here</a></p>
+</li>
+<li>
+<p>methods added to <code>Iterator</code> can be found <a href="http://docs.groovy-lang.org/latest/html/groovy-jdk/java/util/Iterator.html">here</a></p>
+</li>
+<li>
+<p>methods added to <code>Collection</code> can be found <a href="http://docs.groovy-lang.org/latest/html/groovy-jdk/java/util/Collection.html">here</a></p>
+</li>
+<li>
+<p>methods added to <code>List</code> can be found <a href="http://docs.groovy-lang.org/latest/html/groovy-jdk/java/util/List.html">here</a></p>
+</li>
+<li>
+<p>methods added to <code>Map</code> can be found <a href="http://docs.groovy-lang.org/latest/html/groovy-jdk/java/util/Map.html">here</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 3.0.0-alpha-3<br>
+Last updated 2018-06-23 13:44:46 AEST
+</div>
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+<script>prettyPrint()</script>
+</body>
+</html>

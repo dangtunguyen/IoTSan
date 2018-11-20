@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.6.1">
+<title>Getting started</title>
+<link rel="stylesheet" href="./assets/css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+<h1>Getting started</h1>
+<div class="details">
+<span id="revnumber">version 3.0.0-alpha-3</span>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_download">1. Download</a>
+<ul class="sectlevel2">
+<li><a href="#_stable">1.1. Stable</a></li>
+<li><a href="#_snapshots">1.2. Snapshots</a></li>
+<li><a href="#_prerequisites">1.3. Prerequisites</a></li>
+</ul>
+</li>
+<li><a href="#_maven_repository">2. Maven Repository</a>
+<ul class="sectlevel2">
+<li><a href="#_stable_release">2.1. Stable Release</a></li>
+</ul>
+</li>
+<li><a href="#SDKMAN">3. SDKMAN! (The Software Development Kit Manager)</a></li>
+<li><a href="#_other_ways_to_get_groovy">4. Other ways to get Groovy</a>
+<ul class="sectlevel2">
+<li><a href="#_installation_on_mac_os_x">4.1. Installation on Mac OS X</a>
+<ul class="sectlevel3">
+<li><a href="#_macports">4.1.1. MacPorts</a></li>
+<li><a href="#_homebrew">4.1.2. Homebrew</a></li>
+</ul>
+</li>
+<li><a href="#_installation_on_windows">4.2. Installation on Windows</a></li>
+<li><a href="#_other_distributions">4.3. Other Distributions</a></li>
+<li><a href="#_source_code">4.4. Source Code</a></li>
+<li><a href="#_ide_plugin">4.5. IDE plugin</a></li>
+</ul>
+</li>
+<li><a href="#_install_binary">5. Install Binary</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_download"><a class="anchor" href="#_download"></a>1. Download</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In this download area, you will be able to download the distribution (binary and source), the Windows installer and the documentation for <strong>Groovy</strong>.</p>
+</div>
+<div class="paragraph">
+<p>For a quick and effortless start on Mac OSX, Linux or Cygwin, you can use <a href="http://sdkman.io/">SDKMAN!</a> (The Software Development Kit Manager) to download and configure any <strong>Groovy</strong> version of your choice. Basic <a href="#SDKMAN">instructions</a> can be found below.</p>
+</div>
+<div class="sect2">
+<h3 id="_stable"><a class="anchor" href="#_stable"></a>1.1. Stable</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Download zip</strong>: <a href="https://bintray.com/artifact/download/groovy/maven/apache-groovy-binary-3.0.0-alpha-3.zip"><strong>Binary Release</strong></a> | <a href="https://bintray.com/artifact/download/groovy/maven/groovy-src-3.0.0-alpha-3.zip">Source Release</a></p>
+</li>
+<li>
+<p><strong>Download documentation</strong>: <a href="https://bintray.com/artifact/download/groovy/maven/apache-groovy-docs-3.0.0-alpha-3.zip"><strong>JavaDoc and zipped online documentation</strong></a></p>
+</li>
+<li>
+<p><strong>Combined binary / source / documentation bundle</strong>: <a href="https://bintray.com/artifact/download/groovy/maven/apache-groovy-sdk-3.0.0-alpha-3.zip"><strong>Distribution bundle</strong></a></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>You can learn more about this version in the <a href="http://groovy-lang.org/releasenotes/groovy-3.0.html">release notes</a> or in the <a href="http://groovy-lang.org/changelogs/changelog-3.0.0-alpha-3.html">changelog</a>.</p>
+</div>
+<div class="paragraph">
+<p>If you plan on using invokedynamic support, <a href="invokedynamic-support.html">read those notes</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_snapshots"><a class="anchor" href="#_snapshots"></a>1.2. Snapshots</h3>
+<div class="paragraph">
+<p>For those who want to test the very latest versions of Groovy and live on the bleeding edge, you can use our <a href="https://oss.jfrog.org/oss-snapshot-local/org/codehaus/groovy">snapshot builds</a>. As soon as a build succeeds on our continuous integration server a snapshot is deployed to Artifactory&#8217;s OSS snapshot repository.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_prerequisites"><a class="anchor" href="#_prerequisites"></a>1.3. Prerequisites</h3>
+<div class="paragraph">
+<p>Groovy 3.0 requires Java 6+ with full support up to Java 8.
+There are currently some known issues for some aspects when using Java 9 snapshots.
+The <code>groovy-nio</code> module requires Java 7+.
+Using Groovy&#8217;s invokeDynamic features require Java 7+ but we recommend Java 8.</p>
+</div>
+<div class="paragraph">
+<p>The Groovy CI server is also useful to look at to confirm supported Java versions for different Groovy releases.
+The test suite (getting close to 10000 tests) runs for the currently supported streams of Groovy across
+all the main versions of Java each stream supports.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_maven_repository"><a class="anchor" href="#_maven_repository"></a>2. Maven Repository</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>If you wish to embed Groovy in your application, you may just prefer to point to your favourite maven repositories or the <a href="https://oss.jfrog.org/oss-release-local/org/codehaus/groovy">JCenter maven repository</a>.</p>
+</div>
+<div class="sect2">
+<h3 id="_stable_release"><a class="anchor" href="#_stable_release"></a>2.1. Stable Release</h3>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Gradle</th>
+<th class="tableblock halign-left valign-top">Maven</th>
+<th class="tableblock halign-left valign-top">Explanation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">&#39;org.codehaus.groovy:groovy:3.0.0-alpha-3'</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">&lt;groupId&gt;org.codehaus.groovy&lt;/groupId&gt;
+&lt;artifactId&gt;groovy&lt;/artifactId&gt;
+&lt;version&gt;3.0.0-alpha-3&lt;/version&gt;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Just the core of groovy without the modules (see below).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">&#39;org.codehaus.groovy:groovy-$module:3.0.0-alpha-3'</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">&lt;groupId&gt;org.codehaus.groovy&lt;/groupId&gt;
+&lt;artifactId&gt;groovy-$module&lt;/artifactId&gt;
+&lt;version&gt;3.0.0-alpha-3&lt;/version&gt;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"$module" stands for the different optional groovy modules "ant", "bsf", "console", "docgenerator", "groovydoc", "groovysh", "jmx", "json", "jsr223", "servlet", "sql", "swing", "test", "testng" and "xml". Example: &lt;artifactId&gt;groovy-sql&lt;/artifactId&gt;</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">&#39;org.codehaus.groovy:groovy-all:3.0.0-alpha-3'</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">&lt;groupId&gt;org.codehaus.groovy&lt;/groupId&gt;
+&lt;artifactId&gt;groovy-all&lt;/artifactId&gt;
+&lt;version&gt;3.0.0-alpha-3&lt;/version&gt;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The core plus all the modules. Optional dependencies are marked as optional. You may need to include some of the optional dependencies to use some features of Groovy, e.g. AntBuilder, GroovyMBeans, etc.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>To use the <a href="invokedynamic-support.html">InvokeDynamic</a> version of the jars just append &#39;:indy' for Gradle or &lt;classifier&gt;indy&lt;/classifier&gt; for Maven.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="SDKMAN"><a class="anchor" href="#SDKMAN"></a>3. SDKMAN! (The Software Development Kit Manager)</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This tool makes installing Groovy on any Bash platform (Mac OSX, Linux, Cygwin, Solaris or FreeBSD) very easy.</p>
+</div>
+<div class="paragraph">
+<p>Simply open a new terminal and enter:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-shell" data-lang="shell">$ curl -s get.sdkman.io | bash</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Follow the instructions on-screen to complete installation.</p>
+</div>
+<div class="paragraph">
+<p>Open a new terminal or type the command:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-shell" data-lang="shell">$ source "$HOME/.sdkman/bin/sdkman-init.sh"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then install the latest stable Groovy:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-shell" data-lang="shell">$ sdk install groovy</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After installation is complete and you&#8217;ve made it your default version, test it with:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-shell" data-lang="shell">$ groovy -version</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>That&#8217;s all there is to it!</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_other_ways_to_get_groovy"><a class="anchor" href="#_other_ways_to_get_groovy"></a>4. Other ways to get Groovy</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_installation_on_mac_os_x"><a class="anchor" href="#_installation_on_mac_os_x"></a>4.1. Installation on Mac OS X</h3>
+<div class="sect3">
+<h4 id="_macports"><a class="anchor" href="#_macports"></a>4.1.1. MacPorts</h4>
+<div class="paragraph">
+<p>If you&#8217;re on MacOS and have <a href="http://www.macports.org">MacPorts</a> installed, you can run:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-shell" data-lang="shell">sudo port install groovy</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_homebrew"><a class="anchor" href="#_homebrew"></a>4.1.2. Homebrew</h4>
+<div class="paragraph">
+<p>If you&#8217;re on MacOS and have <a href="http://mxcl.github.com/homebrew">Homebrew</a> installed, you can run:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-shell" data-lang="shell">brew install groovy</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_installation_on_windows"><a class="anchor" href="#_installation_on_windows"></a>4.2. Installation on Windows</h3>
+<div class="paragraph">
+<p>If you&#8217;re on Windows, you can also use the <a href="TODO-Windows+NSIS-Installer">NSIS Windows installer</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_other_distributions"><a class="anchor" href="#_other_distributions"></a>4.3. Other Distributions</h3>
+<div class="paragraph">
+<p>You may download other distributions of Groovy from <a href="https://bintray.com/groovy/maven">this site</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_source_code"><a class="anchor" href="#_source_code"></a>4.4. Source Code</h3>
+<div class="paragraph">
+<p>If you prefer to live on the bleeding edge, you can also grab the <a href="https://github.com/apache/groovy">source code from GitHub</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_ide_plugin"><a class="anchor" href="#_ide_plugin"></a>4.5. IDE plugin</h3>
+<div class="paragraph">
+<p>If you are an IDE user, you can just grab the latest <a href="tools-ide.html">IDE plugin</a> and follow the plugin installation instructions.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_install_binary"><a class="anchor" href="#_install_binary"></a>5. Install Binary</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>These instructions describe how to install a binary distribution of <strong>Groovy</strong>.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>First, <a href="#download-groovy">Download</a> a binary distribution of Groovy and unpack it into some file on your local file system.</p>
+</li>
+<li>
+<p>Set your <code>GROOVY_HOME</code> environment variable to the directory you unpacked the distribution.</p>
+</li>
+<li>
+<p>Add <code>GROOVY_HOME/bin</code> to your <code>PATH</code> environment variable.</p>
+</li>
+<li>
+<p>Set your <code>JAVA_HOME</code> environment variable to point to your JDK. On OS X this is <code>/Library/Java/Home</code>, on other unixes its often <code>/usr/java</code> etc. If you&#8217;ve already installed tools like Ant or Maven you&#8217;ve probably already done this step.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>You should now have Groovy installed properly. You can test this by typing the following in a command shell:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-shell" data-lang="shell">groovysh</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Which should create an interactive groovy shell where you can type Groovy statements. Or to run the <a href="#..\..\../subprojects/groovy-console/src/spec/doc/groovy-console.adoc">Swing interactive console</a> type:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-shell" data-lang="shell">groovyConsole</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To run a specific Groovy script type:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-shell" data-lang="shell">groovy SomeScript</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 3.0.0-alpha-3<br>
+Last updated 2018-06-23 13:44:35 AEST
+</div>
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+<script>prettyPrint()</script>
+</body>
+</html>

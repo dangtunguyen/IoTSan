@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.6.1">
+<title>StreamingJsonBuilder</title>
+<link rel="stylesheet" href="./assets/css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+</head>
+<body class="book">
+<div id="header">
+<h1>StreamingJsonBuilder</h1>
+<div class="details">
+<span id="revnumber">version 3.0.0-alpha-3</span>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Unlike <code>JsonBuilder</code> which creates a data structure in memory, which is handy in those situations where you want to alter the structure programmatically before output,
+<code>StreamingJsonBuilder</code> directly streams to a writer without any intermediate memory data structure.
+If you do not need to modify the structure and want a more memory-efficient approach, use <code>StreamingJsonBuilder</code>.</p>
+</div>
+<div class="paragraph">
+<p>The usage of <code>StreamingJsonBuilder</code> is similar to <code>JsonBuilder</code>. In order to create this Json string:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">String carRecords = '''
+    {
+        "records": {
+        "car": {
+            "name": "HSV Maloo",
+            "make": "Holden",
+            "year": 2006,
+            "country": "Australia",
+            "record": {
+              "type": "speed",
+              "description": "production pickup truck with speed of 271kph"
+            }
+          }
+      }
+    }
+'''</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>you use a <code>StreamingJsonBuilder</code> like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">StringWriter writer = new StringWriter()
+StreamingJsonBuilder builder = new StreamingJsonBuilder(writer)
+builder.records {
+  car {
+        name 'HSV Maloo'
+        make 'Holden'
+        year 2006
+        country 'Australia'
+        record {
+            type 'speed'
+            description 'production pickup truck with speed of 271kph'
+        }
+  }
+}
+String json = JsonOutput.prettyPrint(writer.toString())</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>We use <a href="https://github.com/lukas-krecan/JsonUnit">JsonUnit</a> to check the expected result:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">JsonAssert.assertJsonEquals(json, carRecords)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you need to customize the generated output you can pass a <code>JsonGenerator</code> instance when creating a <code>StreamingJsonBuilder</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def generator = new JsonGenerator.Options()
+        .excludeNulls()
+        .excludeFieldsByName('make', 'country', 'record')
+        .excludeFieldsByType(Number)
+        .addConverter(URL) { url -&gt; "http://groovy-lang.org" }
+        .build()
+
+StringWriter writer = new StringWriter()
+StreamingJsonBuilder builder = new StreamingJsonBuilder(writer, generator)
+
+builder.records {
+  car {
+        name 'HSV Maloo'
+        make 'Holden'
+        year 2006
+        country 'Australia'
+        homepage new URL('http://example.org')
+        record {
+            type 'speed'
+            description 'production pickup truck with speed of 271kph'
+        }
+  }
+}
+
+assert writer.toString() == '{"records":{"car":{"name":"HSV Maloo","homepage":"http://groovy-lang.org"}}}'</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 3.0.0-alpha-3<br>
+Last updated 2018-06-23 13:44:42 AEST
+</div>
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+<script>prettyPrint()</script>
+</body>
+</html>

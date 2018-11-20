@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.6.1">
+<title>Program structure</title>
+<link rel="stylesheet" href="./assets/css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+<h1>Program structure</h1>
+<div class="details">
+<span id="revnumber">version 3.0.0-alpha-3</span>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_package_names">1. Package names</a></li>
+<li><a href="#_imports">2. Imports</a>
+<ul class="sectlevel2">
+<li><a href="#_default_imports">2.1. Default imports</a></li>
+<li><a href="#_simple_import">2.2. Simple import</a></li>
+<li><a href="#_star_import">2.3. Star import</a></li>
+<li><a href="#_static_import">2.4. Static import</a></li>
+<li><a href="#_static_import_aliasing">2.5. Static import aliasing</a></li>
+<li><a href="#_static_star_import">2.6. Static star import</a></li>
+<li><a href="#_import_aliasing">2.7. Import aliasing</a></li>
+</ul>
+</li>
+<li><a href="#_scripts_versus_classes">3. Scripts versus classes</a>
+<ul class="sectlevel2">
+<li><a href="#_public_static_void_main_vs_script">3.1. public static void main vs script</a></li>
+<li><a href="#_script_class">3.2. Script class</a></li>
+<li><a href="#_methods">3.3. Methods</a></li>
+<li><a href="#_variables">3.4. Variables</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>This chapter covers the program structure of the Groovy programming language.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_package_names"><a class="anchor" href="#_package_names"></a>1. Package names</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Package names play exactly the same role as in Java. They allows us to separate the code base without any conflicts. Groovy classes must specify their package before the class definition, else the default package is assumed.</p>
+</div>
+<div class="paragraph">
+<p>Defining a package is very similar to Java:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// defining a package named com.yoursite
+package com.yoursite</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To refer to some class <code>Foo</code> in the <code>com.yoursite.com</code> package you will need to use the fully qualified name <code>com.yoursite.com.Foo</code>, or else you can use an <code>import</code> statement as we&#8217;ll see below.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_imports"><a class="anchor" href="#_imports"></a>2. Imports</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In order to refer to any class you need a qualified reference to its package. Groovy follows Java&#8217;s notion of allowing <code>import</code> statement to resolve class references.</p>
+</div>
+<div class="paragraph">
+<p>For example, Groovy provides several builder classes, such as <code>MarkupBuilder</code>. <code>MarkupBuilder</code> is inside the package <code>groovy.xml</code> so in order to use this class, you need to <code>import</code> it as shown:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// importing the class MarkupBuilder
+import groovy.xml.MarkupBuilder
+
+// using the imported class to create an object
+def xml = new MarkupBuilder()
+
+assert xml != null</code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_default_imports"><a class="anchor" href="#_default_imports"></a>2.1. Default imports</h3>
+<div class="paragraph">
+<p>Default imports are the imports that Groovy language provides by default. For example look at the following code:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">new Date()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The same code in Java needs an import statement to <code>Date</code> class like this: import java.util.Date. Groovy by default imports these classes for you.</p>
+</div>
+<div class="paragraph">
+<p>The below imports are added by groovy for you:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import java.lang.*
+import java.util.*
+import java.io.*
+import java.net.*
+import groovy.lang.*
+import groovy.util.*
+import java.math.BigInteger
+import java.math.BigDecimal</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This is done because the classes from these packages are most commonly used. By importing these boilerplate code is reduced.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_simple_import"><a class="anchor" href="#_simple_import"></a>2.2. Simple import</h3>
+<div class="paragraph">
+<p>A simple import is an import statement where you fully define the class name along with the package. For example the import statement import groovy.xml.MarkupBuilder in the code below is a simple import which directly refers to a class inside a package.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// importing the class MarkupBuilder
+import groovy.xml.MarkupBuilder
+
+// using the imported class to create an object
+def xml = new MarkupBuilder()
+
+assert xml != null</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_star_import"><a class="anchor" href="#_star_import"></a>2.3. Star import</h3>
+<div class="paragraph">
+<p>Groovy, like Java, provides a special way to import all classes from a package using <code>*</code>, the so called star import. <code>MarkupBuilder</code> is a class which is in package <code>groovy.xml</code>, alongside another class called <code>StreamingMarkupBuilder</code>. In case you need to use both classes, you can do:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import groovy.xml.MarkupBuilder
+import groovy.xml.StreamingMarkupBuilder
+
+def markupBuilder = new MarkupBuilder()
+
+assert markupBuilder != null
+
+assert new StreamingMarkupBuilder() != null</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>That&#8217;s perfectly valid code. But with a <code>*</code> import, we can achieve the same effect with just one line. The star imports all the classes under package <code>groovy.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import groovy.xml.*
+
+def markupBuilder = new MarkupBuilder()
+
+assert markupBuilder != null
+
+assert new StreamingMarkupBuilder() != null</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>One problem with <code>*</code> imports is that they can clutter your local namespace. But with the kinds of aliasing provided by Groovy, this can be solved easily.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_static_import"><a class="anchor" href="#_static_import"></a>2.4. Static import</h3>
+<div class="paragraph">
+<p>Groovy&#8217;s static import capability allows you to reference imported classes as if they were static methods in your own class:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import static Boolean.FALSE
+
+assert !FALSE //use directly, without Boolean prefix!</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This is similar to Java&#8217;s static import capability but is a more dynamic than Java in that it allows you to define methods with the same name as an imported method as long as you have different types:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import static java.lang.String.format <i class="conum" data-value="1"></i><b>(1)</b>
+
+class SomeClass {
+
+    String format(Integer i) { <i class="conum" data-value="2"></i><b>(2)</b>
+        i.toString()
+    }
+
+    static void main(String[] args) {
+        assert format('String') == 'String' <i class="conum" data-value="3"></i><b>(3)</b>
+        assert new SomeClass().format(Integer.valueOf(1)) == '1'
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>static import of method</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>declaration of method with same name as method statically imported above, but with a different parameter type</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>compile error in java, but is valid groovy code</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>If you have the same types, the imported class takes precedence.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_static_import_aliasing"><a class="anchor" href="#_static_import_aliasing"></a>2.5. Static import aliasing</h3>
+<div class="paragraph">
+<p>Static imports with the <code>as</code> keyword provide an elegant solution to namespace problems. Suppose you want to get a <code>Calendar</code> instance, using its <code>getInstance()</code> method. It&#8217;s a static method, so we can use a static import. But instead of calling <code>getInstance()</code> every time, which can be misleading when separated from its class name, we can import it with an alias, to increase code readability:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import static Calendar.getInstance as now
+
+assert now().class == Calendar.getInstance().class</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now, that&#8217;s clean!</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_static_star_import"><a class="anchor" href="#_static_star_import"></a>2.6. Static star import</h3>
+<div class="paragraph">
+<p>A static star import is very similar to the regular star import. It will import all the static methods from the given class.</p>
+</div>
+<div class="paragraph">
+<p>For example, lets say we need to calculate sines and cosines for our application.
+The class <code>java.lang.Math</code> has static methods named <code>sin</code> and <code>cos</code> which fit our need. With the help of a static star import, we can do:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import static java.lang.Math.*
+
+assert sin(0) == 0.0
+assert cos(0) == 1.0</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As you can see, we were able to access the methods <code>sin</code> and <code>cos</code> directly, without the <code>Math.</code> prefix.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_import_aliasing"><a class="anchor" href="#_import_aliasing"></a>2.7. Import aliasing</h3>
+<div class="paragraph">
+<p>With type aliasing, we can refer to a fully qualified class name using a name of our choice. This can be done with the <code>as</code> keyword, as before.</p>
+</div>
+<div class="paragraph">
+<p>For example we can import <code>java.sql.Date</code> as <code>SQLDate</code> and use it in the same file as <code>java.util.Date</code> without having to use the fully qualified name of either class:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import java.util.Date
+import java.sql.Date as SQLDate
+
+Date utilDate = new Date(1000L)
+SQLDate sqlDate = new SQLDate(1000L)
+
+assert utilDate instanceof java.util.Date
+assert sqlDate instanceof java.sql.Date</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_scripts_versus_classes"><a class="anchor" href="#_scripts_versus_classes"></a>3. Scripts versus classes</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_public_static_void_main_vs_script"><a class="anchor" href="#_public_static_void_main_vs_script"></a>3.1. public static void main vs script</h3>
+<div class="paragraph">
+<p>Groovy supports both scripts and classes. Take the following code for example:</p>
+</div>
+<div class="listingblock">
+<div class="title">Main.groovy</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Main {                                    <i class="conum" data-value="1"></i><b>(1)</b>
+    static void main(String... args) {          <i class="conum" data-value="2"></i><b>(2)</b>
+        println 'Groovy world!'                 <i class="conum" data-value="3"></i><b>(3)</b>
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>define a <code>Main</code> class, the name is arbitrary</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>the <code>public static void main(String[])</code> method is usable as the main method of the class</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>the main body of the method</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>This is typical code that you would find coming from Java, where code <strong>has</strong> to be embedded into a class to be executable.
+Groovy makes it easier, the following code is equivalent:</p>
+</div>
+<div class="listingblock">
+<div class="title">Main.groovy</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">println 'Groovy world!'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A script can be considered as a class without needing to declare it, with some differences.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_script_class"><a class="anchor" href="#_script_class"></a>3.2. Script class</h3>
+<div class="paragraph">
+<p>A <a href="http://docs.groovy-lang.org/3.0.0-alpha-3/html/gapi/index.html?groovy/lang/Script.html">script</a> is always compiled into a class. The Groovy compiler will compile the class for you,
+with the body of the script copied into a <code>run</code> method. The previous example is therefore compiled as if it was the
+following:</p>
+</div>
+<div class="listingblock">
+<div class="title">Main.groovy</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import org.codehaus.groovy.runtime.InvokerHelper
+class Main extends Script {                     <i class="conum" data-value="1"></i><b>(1)</b>
+    def run() {                                 <i class="conum" data-value="2"></i><b>(2)</b>
+        println 'Groovy world!'                 <i class="conum" data-value="3"></i><b>(3)</b>
+    }
+    static void main(String[] args) {           <i class="conum" data-value="4"></i><b>(4)</b>
+        InvokerHelper.runScript(Main, args)     <i class="conum" data-value="5"></i><b>(5)</b>
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The <code>Main</code> class extends the <code>groovy.lang.Script</code> class</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td><code>groovy.lang.Script</code> requires a <code>run</code> method returning a value</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>the script body goes into the <code>run</code> method</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>the <code>main</code> method is automatically generated</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>and delegates the execution of the script on the <code>run</code> method</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>If the script is in a file, then the base name of the file is used to determine the name of the generated script class.
+In this example, if the name of the file is <code>Main.groovy</code>, then the script class is going to be <code>Main</code>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_methods"><a class="anchor" href="#_methods"></a>3.3. Methods</h3>
+<div class="paragraph">
+<p>It is possible to define methods into a script, as illustrated here:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">int fib(int n) {
+    n &lt; 2 ? 1 : fib(n-1) + fib(n-2)
+}
+assert fib(10)==89</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can also mix methods and code. The generated script class will carry all methods into the script class, and
+assemble all script bodies into the <code>run</code> method:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">println 'Hello'                                 <i class="conum" data-value="1"></i><b>(1)</b>
+
+int power(int n) { 2**n }                       <i class="conum" data-value="2"></i><b>(2)</b>
+
+println "2^6==${power(6)}"                      <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>script begins</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>a method is defined within the script body</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>and script continues</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>This code is internally converted into:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import org.codehaus.groovy.runtime.InvokerHelper
+class Main extends Script {
+    int power(int n) { 2** n}                   <i class="conum" data-value="1"></i><b>(1)</b>
+    def run() {
+        println 'Hello'                         <i class="conum" data-value="2"></i><b>(2)</b>
+        println "2^6==${power(6)}"              <i class="conum" data-value="3"></i><b>(3)</b>
+    }
+    static void main(String[] args) {
+        InvokerHelper.runScript(Main, args)
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>the <code>power</code> method is copied as is into the generated script class</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>first statement is copied into the <code>run</code> method</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>second statement is copied into the <code>run</code> method</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Even if Groovy creates a class from your script, it is totally transparent for the user. In particular, scripts
+are compiled to bytecode, and line numbers are preserved. This implies that if an exception is thrown in a script,
+the stack trace will show line numbers corresponding to the original script, not the generated code that we have shown.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_variables"><a class="anchor" href="#_variables"></a>3.4. Variables</h3>
+<div class="paragraph">
+<p>Variables in a script do not require a type definition. This means that this script:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">int x = 1
+int y = 2
+assert x+y == 3</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>will behave the same as:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">x = 1
+y = 2
+assert x+y == 3</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>However there is a semantic difference between the two:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>if the variable is declared as in the first example, it is a <em>local variable</em>. It will be declared in the <code>run</code>
+method that the compiler will generate and will <strong>not</strong> be visible outside of the script main body. In particular, such
+a variable will <strong>not</strong> be visible in other methods of the script</p>
+</li>
+<li>
+<p>if the variable is undeclared, it goes into the <a href="http://docs.groovy-lang.org/3.0.0-alpha-3/html/gapi/index.html?groovy/lang/Script.html#getBinding()">script binding</a>. The binding is
+visible from the methods, and is especially important if you use a script to interact with an application and need to
+share data between the script and the application. Readers might refer to the
+<a href="guide-integrating.html#_integrating_groovy_in_a_java_application">integration guide</a> for more information.</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+If you want a variable to become a field of the class without going into the <code>Binding</code>, you can use the
+<a href="core-metaprogramming.html#xform-Field">@Field annotation</a>.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 3.0.0-alpha-3<br>
+Last updated 2018-06-23 13:44:41 AEST
+</div>
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+<script>prettyPrint()</script>
+</body>
+</html>

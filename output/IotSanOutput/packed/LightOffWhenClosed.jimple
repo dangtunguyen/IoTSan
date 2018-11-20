@@ -238,11 +238,11 @@ public class LightOffWhenClosed extends java.lang.Object
     public void contactClosedEvtHandler()
     {
         LightOffWhenClosed JJJCTEMP$0;
-        STSwitch _static_LightOffWhenClosed_switch1, m12_9_JJJCTEMP$0;
+        STSwitch _static_LightOffWhenClosed_switch1, m6_9_JJJCTEMP$0;
 
         JJJCTEMP$0 := @this;
-        m12_9_JJJCTEMP$0 = _static_LightOffWhenClosed_switch1;
-        m12_9_JJJCTEMP$0.[STSwitch.STCommand_STSwitch_off:boolean] = 1;
+        m6_9_JJJCTEMP$0 = _static_LightOffWhenClosed_switch1;
+        m6_9_JJJCTEMP$0.[STSwitch.STCommand_STSwitch_off:boolean] = 1;
         goto label0;
 
      label0:

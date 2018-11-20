@@ -882,9 +882,18 @@ typedef STRelHumMeas_arr { byte length; STRelHumMeas_rec element[MAX_ARRAY_SIZE]
 /*************** Start of devices declaration ****************/
 hidden byte doorLock_STLock;
 hidden byte tomPresence_STPresSensor;
+hidden byte frontDoorSensor_STMotionSensor;
+hidden byte livingRoomBulb_STSwitch;
+hidden byte bedRoomBulb_STSwitch;
+hidden byte livingRoomSensor_STMotionSensor;
+hidden byte bedRoomSensor_STMotionSensor;
+hidden byte bedRoomDoor_STContactSensor;
 
 STLock_arr _g_STLockArr;
 STPresSensor_arr _g_STPresSensorArr;
+STMotionSensor_arr _g_STMotionSensorArr;
+STSwitch_arr _g_STSwitchArr;
+STContactSensor_arr _g_STContactSensorArr;
 
 byte STCurrentSystemTime;
 byte STCurrentTemperature;
@@ -892,6 +901,7 @@ STNetworkManager_rec _STNetworkManager;
 bool httpPostAllowed = false;
 STLocation_rec location;
 hidden byte UnlockDoor_location; /* location's broadcast channel index */
+hidden byte GoodNight_location; /* location's broadcast channel index */
 /*************** End of devices declaration ******************/
 
 /*************** Start of global variables of smart apps *****/
@@ -899,8 +909,25 @@ hidden STApp_rec AutoModeChange_app;
 hidden STPresSensor_arr AutoModeChange_people;   
 hidden type_95 AutoModeChange_newMode1;   
 hidden type_95 AutoModeChange_newMode2;   
+hidden STApp_rec GoodNight_app;   
+hidden STMotionSensor_arr GoodNight_motionSensors;   
+hidden type_95 GoodNight_minutes;   
+hidden type_95 GoodNight_timeOfDay;   
+hidden STSwitch_arr GoodNight_switches;   
+hidden type_95 GoodNight_newMode;   
+hidden type_95 GoodNight_recipients;   
+hidden type_95 GoodNight_sendPushMessage;   
+hidden type_95 GoodNight_phoneNumber;   
+hidden type_95 GoodNight_modeStartTime;   
+hidden STApp_rec LightFollowsMe_app;   
+hidden STMotionSensor_rec LightFollowsMe_motion1;   
+hidden type_95 LightFollowsMe_minutes1;   
+hidden STSwitch_arr LightFollowsMe_switches;   
 hidden STApp_rec UnlockDoor_app;   
 hidden STLock_arr UnlockDoor_locks;   
+hidden STApp_rec LightOffWhenClosed_app;   
+hidden STContactSensor_rec LightOffWhenClosed_contact1;   
+hidden STSwitch_rec LightOffWhenClosed_switch1;   
 /*************** End of global variables of smart apps *******/
 
 /*************** Start of assignment methods *****************/
@@ -1811,18 +1838,18 @@ inline assign_int_arr(arr1, arr2)
 /*************** End of assignment methods *******************/
 
 /*************** Start of event handler inline methods *******/
-hidden STPresSensor_rec m0_person;   
+hidden STPresSensor_rec m14_person;   
 inline AutoModeChange_presenceEvtHandler(evt) {
-   type_95 m0_result;   
-   type_95 m1_mode;   
-   type_95 m0_index2;   
-   type_95 m0__ret;   
-   type_95 m0_JJJCTEMP_5;   
+   type_95 m14_result;   
+   type_95 m14_index5;   
+   type_95 m13_mode;   
+   type_95 m14__ret;   
+   type_95 m14_JJJCTEMP_5;   
    STEvent_rec _ST_Command;
 
    /* Default initialization */
    d_step {
-      m0_person.isAlive = 0;
+      m14_person.isAlive = 0;
       _ST_Command.id = evt.id;
       _ST_Command.physical = 0;
    }
@@ -1854,7 +1881,7 @@ loc_7:
    atomic { 
       skip;
       d_step {
-         m1_mode = AutoModeChange_newMode2;
+         m13_mode = AutoModeChange_newMode2;
       }
       skip;
       goto loc_8;
@@ -1862,33 +1889,33 @@ loc_7:
 loc_8:
    if
    :: atomic { 
-         (m1_mode != 1400)-> 
+         (m13_mode != 1400)-> 
          goto loc_9;
       }
    :: atomic { 
-         (! (m1_mode != 1400))-> 
+         (! (m13_mode != 1400))-> 
          goto loc_16;
       }
    fi;
 loc_9:
    if
    :: atomic { 
-         (m1_mode != 1401)-> 
+         (m13_mode != 1401)-> 
          goto loc_10;
       }
    :: atomic { 
-         (! (m1_mode != 1401))-> 
+         (! (m13_mode != 1401))-> 
          goto loc_14;
       }
    fi;
 loc_10:
    if
    :: atomic { 
-         (m1_mode != 1402)-> 
+         (m13_mode != 1402)-> 
          goto loc_11;
       }
    :: atomic { 
-         (! (m1_mode != 1402))-> 
+         (! (m13_mode != 1402))-> 
          goto loc_13;
       }
    fi;
@@ -1955,8 +1982,8 @@ loc_20:
    atomic { 
       skip;
       d_step {
-         m0_result = 1;
-         m0_index2 = 0;
+         m14_result = 1;
+         m14_index5 = 0;
       }
       skip;
       goto loc_25;
@@ -1965,7 +1992,7 @@ loc_25:
    atomic { 
       skip;
       d_step {
-         m0_JJJCTEMP_5 = AutoModeChange_people.length;
+         m14_JJJCTEMP_5 = AutoModeChange_people.length;
       }
       skip;
       goto loc_26;
@@ -1973,11 +2000,11 @@ loc_25:
 loc_26:
    if
    :: atomic { 
-         (m0_index2 < m0_JJJCTEMP_5)-> 
+         (m14_index5 < m14_JJJCTEMP_5)-> 
          goto loc_27;
       }
    :: atomic { 
-         (! (m0_index2 < m0_JJJCTEMP_5))-> 
+         (! (m14_index5 < m14_JJJCTEMP_5))-> 
          goto loc_33;
       }
    fi;
@@ -1985,8 +2012,8 @@ loc_27:
    atomic { 
       skip;
       d_step {
-         assign_STPresSensor_rec(m0_person, AutoModeChange_people.element[m0_index2]);
-         m0_JJJCTEMP_5 = m0_person.currentPresence;
+         assign_STPresSensor_rec(m14_person, AutoModeChange_people.element[m14_index5]);
+         m14_JJJCTEMP_5 = m14_person.currentPresence;
       }
       skip;
       goto loc_29;
@@ -1994,11 +2021,11 @@ loc_27:
 loc_29:
    if
    :: atomic { 
-         (m0_JJJCTEMP_5 != 19)-> 
+         (m14_JJJCTEMP_5 != 19)-> 
          goto loc_30;
       }
    :: atomic { 
-         (! (m0_JJJCTEMP_5 != 19))-> 
+         (! (m14_JJJCTEMP_5 != 19))-> 
          goto loc_31;
       }
    fi;
@@ -2006,7 +2033,7 @@ loc_30:
    atomic { 
       skip;
       d_step {
-         m0_index2 = (m0_index2 + 1);
+         m14_index5 = (m14_index5 + 1);
       }
       skip;
       goto loc_25;
@@ -2015,7 +2042,7 @@ loc_31:
    atomic { 
       skip;
       d_step {
-         m0_result = 0;
+         m14_result = 0;
       }
       skip;
       goto loc_33;
@@ -2024,8 +2051,8 @@ loc_33:
    atomic { 
       skip;
       d_step {
-         m0__ret = m0_result;
-         m0_index2 = m0__ret;
+         m14__ret = m14_result;
+         m14_JJJCTEMP_5 = m14__ret;
       }
       skip;
       goto loc_37;
@@ -2033,11 +2060,11 @@ loc_33:
 loc_37:
    if
    :: atomic { 
-         (m0_index2 == 0)-> 
+         (m14_JJJCTEMP_5 == 0)-> 
          goto loc_19;
       }
    :: atomic { 
-         (! (m0_index2 == 0))-> 
+         (! (m14_JJJCTEMP_5 == 0))-> 
          goto loc_38;
       }
    fi;
@@ -2045,7 +2072,7 @@ loc_38:
    atomic { 
       skip;
       d_step {
-         m1_mode = AutoModeChange_newMode1;
+         m13_mode = AutoModeChange_newMode1;
       }
       skip;
       goto loc_39;
@@ -2053,33 +2080,33 @@ loc_38:
 loc_39:
    if
    :: atomic { 
-         (m1_mode != 1400)-> 
+         (m13_mode != 1400)-> 
          goto loc_40;
       }
    :: atomic { 
-         (! (m1_mode != 1400))-> 
+         (! (m13_mode != 1400))-> 
          goto loc_47;
       }
    fi;
 loc_40:
    if
    :: atomic { 
-         (m1_mode != 1401)-> 
+         (m13_mode != 1401)-> 
          goto loc_41;
       }
    :: atomic { 
-         (! (m1_mode != 1401))-> 
+         (! (m13_mode != 1401))-> 
          goto loc_45;
       }
    fi;
 loc_41:
    if
    :: atomic { 
-         (m1_mode != 1402)-> 
+         (m13_mode != 1402)-> 
          goto loc_42;
       }
    :: atomic { 
-         (! (m1_mode != 1402))-> 
+         (! (m13_mode != 1402))-> 
          goto loc_44;
       }
    fi;
@@ -2125,17 +2152,11 @@ loc_47:
 done: skip;
 }
 
-hidden STLock_rec it;   
-hidden STLock_rec m2_0_JJJCTEMP_0;   
-inline UnlockDoor_changedLocationModeEvtHandler(evt) {
-   type_95 index0;   
-   type_95 JJJCTEMP_4;   
+inline GoodNight_installedEvtHandler(evt) {
    STEvent_rec _ST_Command;
 
    /* Default initialization */
    d_step {
-      it.isAlive = 0;
-      m2_0_JJJCTEMP_0.isAlive = 0;
       _ST_Command.id = evt.id;
       _ST_Command.physical = 0;
    }
@@ -2143,45 +2164,1724 @@ loc_50:
    atomic { 
       skip;
       d_step {
-         index0 = 0;
+         skip;
+      }
+      skip;
+      goto loc_51;
+   }
+loc_51:
+   if
+   :: atomic { 
+         (GoodNight_modeStartTime != 0)-> 
+         goto loc_52;
+      }
+   :: atomic { 
+         (! (GoodNight_modeStartTime != 0))-> 
+         goto loc_55;
+      }
+   fi;
+loc_52:
+   atomic { 
+      skip;
+      d_step {
+         skip;
+      }
+      skip;
+      goto loc_54;
+   }
+loc_54:
+   goto done;
+loc_55:
+   atomic { 
+      skip;
+      d_step {
+         GoodNight_modeStartTime = 0;
       }
       skip;
       goto loc_52;
    }
-loc_52:
+done: skip;
+}
+
+hidden STMotionSensor_rec m10_it;   
+hidden STState_arr m10_collectResult1;   
+hidden STState_rec m10_findResult1;   
+hidden STState_arr m10_states;   
+hidden STSwitch_rec m11_it;   
+hidden STState_rec m10_m4_8__ret;   
+hidden STState_rec m10_sensor;   
+hidden STMotionSensor_rec m10_m4_8_JJJCTEMP_0;   
+hidden STState_rec m10_it_0;   
+inline GoodNight_switchOffEvtHandler(evt) {
+   type_95 m8_startTime;   
+   type_95 m7__ret;   
+   type_95 m12_m13_mode;   
+   type_95 m10_index4;   
+   type_95 m10_index3;   
+   type_95 m11__ret;   
+   type_95 m11_index2;   
+   type_95 m10_threshold;   
+   type_95 m8_m9_startTime;   
+   type_95 m8__ret;   
+   type_95 m8_modeStartTime;   
+   type_95 m10_m5__ret;   
+   type_95 m10_elapsed;   
+   type_95 m8_m9_timeVal;   
+   type_95 m8_t0;   
+   type_95 m10__ret;   
+   type_95 m8_m5__ret;   
+   type_95 m8_m9_timeZone;   
+   type_95 m10_m4_8_attributeName;   
+   type_95 m11_result;   
+   type_95 m8_m9__ret;   
+   type_95 m11_JJJCTEMP_5;   
+   STEvent_rec _ST_Command;
+
+   /* Default initialization */
+   d_step {
+      m10_it.isAlive = 0;
+      m10_collectResult1.length = 0;
+      m10_findResult1.isAlive = 0;
+      m10_states.length = 0;
+      m11_it.isAlive = 0;
+      m10_m4_8__ret.isAlive = 0;
+      m10_sensor.isAlive = 0;
+      m10_m4_8_JJJCTEMP_0.isAlive = 0;
+      m10_it_0.isAlive = 0;
+      _ST_Command.id = evt.id;
+      _ST_Command.physical = 0;
+   }
+loc_59:
+   atomic { 
+      skip;
+      d_step {
+         skip;
+      }
+      skip;
+      goto loc_60;
+   }
+loc_60:
+   if
+   :: atomic { 
+         (location.mode == GoodNight_newMode)-> 
+         goto loc_61;
+      }
+   :: atomic { 
+         (! (location.mode == GoodNight_newMode))-> 
+         goto loc_175;
+      }
+   fi;
+loc_61:
+   atomic { 
+      skip;
+      d_step {
+         m7__ret = 0;
+         m8_startTime = m7__ret;
+      }
+      skip;
+      goto loc_64;
+   }
+loc_64:
+   atomic { 
+      skip;
+      d_step {
+         skip;
+      }
+      skip;
+      goto loc_65;
+   }
+loc_65:
+   if
+   :: atomic { 
+         (m8_startTime == 0)-> 
+         goto loc_66;
+      }
+   :: atomic { 
+         (! (m8_startTime == 0))-> 
+         goto loc_67;
+      }
+   fi;
+loc_66:
+   goto done;
+loc_67:
+   atomic { 
+      skip;
+      d_step {
+         m8_m5__ret = (STCurrentSystemTime * 3600000);
+         m8_t0 = m8_m5__ret;
+         m8_m5__ret = (STCurrentSystemTime * 3600000);
+         m8_modeStartTime = m8_m5__ret;
+         m8_m9_startTime = m8_modeStartTime;
+         m8_m9_timeVal = GoodNight_timeOfDay;
+         m8_m9_timeZone = location.timeZone;
+         m8_m9__ret = (m8_m9_timeVal * 3600000);
+         m8_startTime = m8_m9__ret;
+      }
+      skip;
+      goto loc_83;
+   }
+loc_83:
+   if
+   :: atomic { 
+         (m8_t0 < m8_startTime)-> 
+         goto loc_84;
+      }
+   :: atomic { 
+         (! (m8_t0 < m8_startTime))-> 
+         goto loc_172;
+      }
+   fi;
+loc_84:
+   atomic { 
+      skip;
+      d_step {
+         m8__ret = 0;
+         m8_startTime = m8__ret;
+      }
+      skip;
+      goto loc_87;
+   }
+loc_87:
+   atomic { 
+      skip;
+      d_step {
+         skip;
+      }
+      skip;
+      goto loc_88;
+   }
+loc_88:
+   if
+   :: atomic { 
+         (m8_startTime == 0)-> 
+         goto loc_66;
+      }
+   :: atomic { 
+         (! (m8_startTime == 0))-> 
+         goto loc_89;
+      }
+   fi;
+loc_89:
+   atomic { 
+      skip;
+      d_step {
+         m10_threshold = (1000 * 60);
+         m10_threshold = (m10_threshold * GoodNight_minutes);
+         m10_threshold = (m10_threshold - 1000);
+         m10_index3 = 0;
+      }
+      skip;
+      goto loc_95;
+   }
+loc_95:
+   atomic { 
+      skip;
+      d_step {
+         m8_startTime = GoodNight_motionSensors.length;
+      }
+      skip;
+      goto loc_96;
+   }
+loc_96:
+   if
+   :: atomic { 
+         (m10_index3 < m8_startTime)-> 
+         goto loc_97;
+      }
+   :: atomic { 
+         (! (m10_index3 < m8_startTime))-> 
+         goto loc_106;
+      }
+   fi;
+loc_97:
+   atomic { 
+      skip;
+      d_step {
+         assign_STMotionSensor_rec(m10_it, GoodNight_motionSensors.element[m10_index3]);
+         assign_STMotionSensor_rec(m10_m4_8_JJJCTEMP_0, m10_it);
+         m10_m4_8_attributeName = 11;
+         assign_STState_rec(m10_m4_8__ret, m10_m4_8_JJJCTEMP_0.motionState);
+         assign_STState_rec(m10_m4_8__ret, m10_m4_8__ret);
+         m10_collectResult1.length++;
+         assign_STState_rec(m10_collectResult1.element[m10_index3], m10_m4_8__ret);
+         m10_index3 = (m10_index3 + 1);
+      }
+      skip;
+      goto loc_95;
+   }
+loc_106:
+   atomic { 
+      skip;
+      d_step {
+         assign_STState_arr(m10_states, m10_collectResult1);
+      }
+      skip;
+      goto loc_107;
+   }
+loc_107:
+   if
+   :: atomic { 
+         (m10_states.length == 0)-> 
+         goto loc_108;
+      }
+   :: atomic { 
+         (! (m10_states.length == 0))-> 
+         goto loc_145;
+      }
+   fi;
+loc_108:
+   atomic { 
+      skip;
+      d_step {
+         m10__ret = 1;
+         m8_startTime = m10__ret;
+      }
+      skip;
+      goto loc_111;
+   }
+loc_111:
+   atomic { 
+      skip;
+      d_step {
+         skip;
+      }
+      skip;
+      goto loc_112;
+   }
+loc_112:
+   if
+   :: atomic { 
+         (m8_startTime == 0)-> 
+         goto loc_66;
+      }
+   :: atomic { 
+         (! (m8_startTime == 0))-> 
+         goto loc_113;
+      }
+   fi;
+loc_113:
+   atomic { 
+      skip;
+      d_step {
+         m11_result = 1;
+         m11_index2 = 0;
+      }
+      skip;
+      goto loc_118;
+   }
+loc_118:
+   atomic { 
+      skip;
+      d_step {
+         m11_JJJCTEMP_5 = GoodNight_switches.length;
+      }
+      skip;
+      goto loc_119;
+   }
+loc_119:
+   if
+   :: atomic { 
+         (m11_index2 < m11_JJJCTEMP_5)-> 
+         goto loc_120;
+      }
+   :: atomic { 
+         (! (m11_index2 < m11_JJJCTEMP_5))-> 
+         goto loc_126;
+      }
+   fi;
+loc_120:
+   atomic { 
+      skip;
+      d_step {
+         assign_STSwitch_rec(m11_it, GoodNight_switches.element[m11_index2]);
+         m11_JJJCTEMP_5 = m11_it.currentSwitch;
+      }
+      skip;
+      goto loc_122;
+   }
+loc_122:
+   if
+   :: atomic { 
+         (m11_JJJCTEMP_5 != 15)-> 
+         goto loc_123;
+      }
+   :: atomic { 
+         (! (m11_JJJCTEMP_5 != 15))-> 
+         goto loc_124;
+      }
+   fi;
+loc_123:
+   atomic { 
+      skip;
+      d_step {
+         m11_index2 = (m11_index2 + 1);
+      }
+      skip;
+      goto loc_118;
+   }
+loc_124:
+   atomic { 
+      skip;
+      d_step {
+         m11_result = 0;
+      }
+      skip;
+      goto loc_126;
+   }
+loc_126:
+   atomic { 
+      skip;
+      d_step {
+         m11__ret = m11_result;
+         m8_startTime = m11__ret;
+      }
+      skip;
+      goto loc_130;
+   }
+loc_130:
+   if
+   :: atomic { 
+         (m8_startTime == 0)-> 
+         goto loc_66;
+      }
+   :: atomic { 
+         (! (m8_startTime == 0))-> 
+         goto loc_131;
+      }
+   fi;
+loc_131:
+   atomic { 
+      skip;
+      d_step {
+         m12_m13_mode = GoodNight_newMode;
+      }
+      skip;
+      goto loc_133;
+   }
+loc_133:
+   if
+   :: atomic { 
+         (m12_m13_mode != 1400)-> 
+         goto loc_134;
+      }
+   :: atomic { 
+         (! (m12_m13_mode != 1400))-> 
+         goto loc_143;
+      }
+   fi;
+loc_134:
+   if
+   :: atomic { 
+         (m12_m13_mode != 1401)-> 
+         goto loc_135;
+      }
+   :: atomic { 
+         (! (m12_m13_mode != 1401))-> 
+         goto loc_141;
+      }
+   fi;
+loc_135:
+   if
+   :: atomic { 
+         (m12_m13_mode != 1402)-> 
+         goto loc_136;
+      }
+   :: atomic { 
+         (! (m12_m13_mode != 1402))-> 
+         goto loc_140;
+      }
+   fi;
+loc_136:
+   atomic { 
+      skip;
+      d_step {
+         skip;
+      }
+      skip;
+      goto loc_66;
+   }
+loc_140:
+   atomic { 
+      skip;
+      d_step {
+         _ST_Command.EvtType = Night;
+         HandleLocationEvt(_ST_Command);
+      }
+      skip;
+      goto loc_136;
+   }
+loc_141:
+   atomic { 
+      skip;
+      d_step {
+         _ST_Command.EvtType = Away;
+         HandleLocationEvt(_ST_Command);
+      }
+      skip;
+      goto loc_136;
+   }
+loc_143:
+   atomic { 
+      skip;
+      d_step {
+         _ST_Command.EvtType = Home;
+         HandleLocationEvt(_ST_Command);
+      }
+      skip;
+      goto loc_136;
+   }
+loc_145:
+   atomic { 
+      skip;
+      d_step {
+         m10_index4 = 0;
+      }
+      skip;
+      goto loc_147;
+   }
+loc_147:
+   atomic { 
+      skip;
+      d_step {
+         m11_JJJCTEMP_5 = m10_states.length;
+      }
+      skip;
+      goto loc_148;
+   }
+loc_148:
+   if
+   :: atomic { 
+         (m10_index4 < m11_JJJCTEMP_5)-> 
+         goto loc_149;
+      }
+   :: atomic { 
+         (! (m10_index4 < m11_JJJCTEMP_5))-> 
+         goto loc_154;
+      }
+   fi;
+loc_149:
+   atomic { 
+      skip;
+      d_step {
+         assign_STState_rec(m10_it_0, m10_states.element[m10_index4]);
+         m11_JJJCTEMP_5 = m10_it_0.value;
+      }
+      skip;
+      goto loc_151;
+   }
+loc_151:
+   if
+   :: atomic { 
+         (m11_JJJCTEMP_5 != 12)-> 
+         goto loc_152;
+      }
+   :: atomic { 
+         (! (m11_JJJCTEMP_5 != 12))-> 
+         goto loc_153;
+      }
+   fi;
+loc_152:
+   atomic { 
+      skip;
+      d_step {
+         m10_index4 = (m10_index4 + 1);
+      }
+      skip;
+      goto loc_147;
+   }
+loc_153:
+   atomic { 
+      skip;
+      d_step {
+         assign_STState_rec(m10_findResult1, m10_it_0);
+      }
+      skip;
+      goto loc_152;
+   }
+loc_154:
+   if
+   :: atomic { 
+         (m10_findResult1.isAlive == 0)-> 
+         goto loc_155;
+      }
+   :: atomic { 
+         (! (m10_findResult1.isAlive == 0))-> 
+         goto loc_169;
+      }
+   fi;
+loc_155:
+   atomic { 
+      skip;
+      d_step {
+         assign_STState_rec(m10_sensor, m10_states.element[0]);
+         m10_m5__ret = (STCurrentSystemTime * 3600000);
+         m11_JJJCTEMP_5 = m10_m5__ret;
+         m8_startTime = m10_sensor.date;
+         m10_elapsed = (m11_JJJCTEMP_5 - m8_startTime);
+      }
+      skip;
+      goto loc_162;
+   }
+loc_162:
+   if
+   :: atomic { 
+         (m10_elapsed < m10_threshold)-> 
+         goto loc_163;
+      }
+   :: atomic { 
+         (! (m10_elapsed < m10_threshold))-> 
+         goto loc_166;
+      }
+   fi;
+loc_163:
+   atomic { 
+      skip;
+      d_step {
+         m10__ret = 0;
+         m8_startTime = m10__ret;
+      }
+      skip;
+      goto loc_111;
+   }
+loc_166:
+   atomic { 
+      skip;
+      d_step {
+         m10__ret = 1;
+         m8_startTime = m10__ret;
+      }
+      skip;
+      goto loc_111;
+   }
+loc_169:
+   atomic { 
+      skip;
+      d_step {
+         m10__ret = 0;
+         m8_startTime = m10__ret;
+      }
+      skip;
+      goto loc_111;
+   }
+loc_172:
+   atomic { 
+      skip;
+      d_step {
+         m8__ret = 1;
+         m8_startTime = m8__ret;
+      }
+      skip;
+      goto loc_87;
+   }
+loc_175:
+   atomic { 
+      skip;
+      d_step {
+         m7__ret = 1;
+         m8_startTime = m7__ret;
+      }
+      skip;
+      goto loc_64;
+   }
+done: skip;
+}
+
+hidden STState_rec m3_5_m10_it_0;   
+hidden STState_arr m3_5_m10_collectResult1;   
+hidden STState_arr m3_5_m10_states;   
+hidden STState_rec m3_5_m10_m4_5__ret;   
+hidden STMotionSensor_rec m3_5_m10_m4_5_JJJCTEMP_0;   
+hidden STMotionSensor_rec m3_5_m10_it;   
+hidden STState_rec m3_5_m10_sensor;   
+hidden STSwitch_rec m3_5_m11_it;   
+hidden STState_rec m3_5_m10_findResult1;   
+inline GoodNight_motionInactiveEvtHandler(evt) {
+   type_95 m3_5_m12_m13_mode;   
+   type_95 m8_m9_timeZone_0;   
+   type_95 m3_5_m8_t0;   
+   type_95 m8_m9__ret_0;   
+   type_95 m8_m9_startTime_0;   
+   type_95 m3_5_m8_m9__ret;   
+   type_95 m3_5_m7__ret;   
+   type_95 m2_h;   
+   type_95 m3_5_m10_m4_5_attributeName;   
+   type_95 m3_5_m8__ret;   
+   type_95 m3_5_m8_m9_startTime;   
+   type_95 m3_5_m10__ret;   
+   type_95 m3_5_m10_elapsed;   
+   type_95 m8_m9_timeVal_0;   
+   type_95 m2_JJJCTEMP_0;   
+   type_95 m3_5_m10_index4;   
+   type_95 m8_modeStartTime_0;   
+   type_95 m3_5_m10_index3;   
+   type_95 m8_m5__ret_0;   
+   type_95 m3_5_m11__ret;   
+   type_95 m3_5_m8_m9_timeVal;   
+   type_95 m3_5_m8_m5__ret;   
+   type_95 m3_5_m11_result;   
+   type_95 m3_5_m8_m9_timeZone;   
+   type_95 m7__ret_0;   
+   type_95 m3_5_m8_startTime;   
+   type_95 m8_startTime_0;   
+   type_95 m3_5_m8_modeStartTime;   
+   type_95 m8__ret_0;   
+   type_95 m2_amount;   
+   type_95 m3_5_m10_m5__ret;   
+   type_95 m8_t0_0;   
+   type_95 m3_5_m10_threshold;   
+   type_95 m3_5_m11_index2;   
+   type_95 m3_5_m10_JJJCTEMP_13;   
+   STEvent_rec _ST_Command;
+
+   /* Default initialization */
+   d_step {
+      m3_5_m10_it_0.isAlive = 0;
+      m3_5_m10_collectResult1.length = 0;
+      m3_5_m10_states.length = 0;
+      m3_5_m10_m4_5__ret.isAlive = 0;
+      m3_5_m10_m4_5_JJJCTEMP_0.isAlive = 0;
+      m3_5_m10_it.isAlive = 0;
+      m3_5_m10_sensor.isAlive = 0;
+      m3_5_m11_it.isAlive = 0;
+      m3_5_m10_findResult1.isAlive = 0;
+      _ST_Command.id = evt.id;
+      _ST_Command.physical = 0;
+   }
+loc_179:
+   if
+   :: atomic { 
+         (GoodNight_modeStartTime != 0)-> 
+         goto loc_180;
+      }
+   :: atomic { 
+         (! (GoodNight_modeStartTime != 0))-> 
+         goto loc_346;
+      }
+   fi;
+loc_180:
+   atomic { 
+      skip;
+      d_step {
+         skip;
+      }
+      skip;
+      goto loc_181;
+   }
+loc_181:
+   if
+   :: atomic { 
+         (location.mode == GoodNight_newMode)-> 
+         goto loc_182;
+      }
+   :: atomic { 
+         (! (location.mode == GoodNight_newMode))-> 
+         goto loc_343;
+      }
+   fi;
+loc_182:
+   atomic { 
+      skip;
+      d_step {
+         m7__ret_0 = 0;
+         m3_5_m8_m9_startTime = m7__ret_0;
+      }
+      skip;
+      goto loc_185;
+   }
+loc_185:
+   atomic { 
+      skip;
+      d_step {
+         skip;
+      }
+      skip;
+      goto loc_186;
+   }
+loc_186:
+   if
+   :: atomic { 
+         (m3_5_m8_m9_startTime == 0)-> 
+         goto loc_187;
+      }
+   :: atomic { 
+         (! (m3_5_m8_m9_startTime == 0))-> 
+         goto loc_188;
+      }
+   fi;
+loc_187:
+   goto done;
+loc_188:
+   atomic { 
+      skip;
+      d_step {
+         m8_m5__ret_0 = (STCurrentSystemTime * 3600000);
+         m8_t0_0 = m8_m5__ret_0;
+         m8_m5__ret_0 = (STCurrentSystemTime * 3600000);
+         m8_modeStartTime_0 = m8_m5__ret_0;
+         m8_m9_startTime_0 = m8_modeStartTime_0;
+         m8_m9_timeVal_0 = GoodNight_timeOfDay;
+         m8_m9_timeZone_0 = location.timeZone;
+         m8_m9__ret_0 = (m8_m9_timeVal_0 * 3600000);
+         m8_startTime_0 = m8_m9__ret_0;
+      }
+      skip;
+      goto loc_204;
+   }
+loc_204:
+   if
+   :: atomic { 
+         (m8_t0_0 < m8_startTime_0)-> 
+         goto loc_205;
+      }
+   :: atomic { 
+         (! (m8_t0_0 < m8_startTime_0))-> 
+         goto loc_340;
+      }
+   fi;
+loc_205:
+   atomic { 
+      skip;
+      d_step {
+         m8__ret_0 = 0;
+         m3_5_m8_m9_startTime = m8__ret_0;
+      }
+      skip;
+      goto loc_208;
+   }
+loc_208:
+   atomic { 
+      skip;
+      d_step {
+         skip;
+      }
+      skip;
+      goto loc_209;
+   }
+loc_209:
+   if
+   :: atomic { 
+         (m3_5_m8_m9_startTime == 0)-> 
+         goto loc_187;
+      }
+   :: atomic { 
+         (! (m3_5_m8_m9_startTime == 0))-> 
+         goto loc_210;
+      }
+   fi;
+loc_210:
+   atomic { 
+      skip;
+      d_step {
+         m3_5_m8_m9_startTime = (GoodNight_minutes * 60);
+         m2_amount = m3_5_m8_m9_startTime;
+         if 
+         :: ! (3600 == 0) -> 
+            m2_JJJCTEMP_0 = (m2_amount / 3600);
+         :: else -> 
+            assert(0);
+         fi; 
+         m2_h = (m2_JJJCTEMP_0 + 1);
+         m3_5_m8_m9_startTime = STCurrentSystemTime;
+         m3_5_m8_m9_startTime = (m3_5_m8_m9_startTime + m2_h);
+         STCurrentSystemTime = m3_5_m8_m9_startTime;
+      }
+      skip;
+      goto loc_221;
+   }
+loc_221:
+   if
+   :: atomic { 
+         (location.mode == GoodNight_newMode)-> 
+         goto loc_222;
+      }
+   :: atomic { 
+         (! (location.mode == GoodNight_newMode))-> 
+         goto loc_337;
+      }
+   fi;
+loc_222:
+   atomic { 
+      skip;
+      d_step {
+         m3_5_m7__ret = 0;
+         m3_5_m12_m13_mode = m3_5_m7__ret;
+      }
+      skip;
+      goto loc_225;
+   }
+loc_225:
+   atomic { 
+      skip;
+      d_step {
+         skip;
+      }
+      skip;
+      goto loc_226;
+   }
+loc_226:
+   if
+   :: atomic { 
+         (m3_5_m12_m13_mode == 0)-> 
+         goto loc_227;
+      }
+   :: atomic { 
+         (! (m3_5_m12_m13_mode == 0))-> 
+         goto loc_229;
+      }
+   fi;
+loc_227:
+   atomic { 
+      skip;
+      d_step {
+         skip;
+      }
+      skip;
+      goto loc_187;
+   }
+loc_229:
+   atomic { 
+      skip;
+      d_step {
+         m3_5_m8_m5__ret = (STCurrentSystemTime * 3600000);
+         m3_5_m8_t0 = m3_5_m8_m5__ret;
+         m3_5_m8_m5__ret = (STCurrentSystemTime * 3600000);
+         m3_5_m8_modeStartTime = m3_5_m8_m5__ret;
+         m3_5_m8_m9_startTime = m3_5_m8_modeStartTime;
+         m3_5_m8_m9_timeVal = GoodNight_timeOfDay;
+         m3_5_m8_m9_timeZone = location.timeZone;
+         m3_5_m8_m9__ret = (m3_5_m8_m9_timeVal * 3600000);
+         m3_5_m8_startTime = m3_5_m8_m9__ret;
+      }
+      skip;
+      goto loc_245;
+   }
+loc_245:
+   if
+   :: atomic { 
+         (m3_5_m8_t0 < m3_5_m8_startTime)-> 
+         goto loc_246;
+      }
+   :: atomic { 
+         (! (m3_5_m8_t0 < m3_5_m8_startTime))-> 
+         goto loc_334;
+      }
+   fi;
+loc_246:
+   atomic { 
+      skip;
+      d_step {
+         m3_5_m8__ret = 0;
+         m3_5_m10_JJJCTEMP_13 = m3_5_m8__ret;
+      }
+      skip;
+      goto loc_249;
+   }
+loc_249:
+   atomic { 
+      skip;
+      d_step {
+         skip;
+      }
+      skip;
+      goto loc_250;
+   }
+loc_250:
+   if
+   :: atomic { 
+         (m3_5_m10_JJJCTEMP_13 == 0)-> 
+         goto loc_227;
+      }
+   :: atomic { 
+         (! (m3_5_m10_JJJCTEMP_13 == 0))-> 
+         goto loc_251;
+      }
+   fi;
+loc_251:
+   atomic { 
+      skip;
+      d_step {
+         m3_5_m12_m13_mode = (1000 * 60);
+         m3_5_m12_m13_mode = (m3_5_m12_m13_mode * GoodNight_minutes);
+         m3_5_m10_threshold = (m3_5_m12_m13_mode - 1000);
+         m3_5_m10_index3 = 0;
+      }
+      skip;
+      goto loc_257;
+   }
+loc_257:
+   atomic { 
+      skip;
+      d_step {
+         m3_5_m12_m13_mode = GoodNight_motionSensors.length;
+      }
+      skip;
+      goto loc_258;
+   }
+loc_258:
+   if
+   :: atomic { 
+         (m3_5_m10_index3 < m3_5_m12_m13_mode)-> 
+         goto loc_259;
+      }
+   :: atomic { 
+         (! (m3_5_m10_index3 < m3_5_m12_m13_mode))-> 
+         goto loc_268;
+      }
+   fi;
+loc_259:
+   atomic { 
+      skip;
+      d_step {
+         assign_STMotionSensor_rec(m3_5_m10_it, GoodNight_motionSensors.element[m3_5_m10_index3]);
+         assign_STMotionSensor_rec(m3_5_m10_m4_5_JJJCTEMP_0, m3_5_m10_it);
+         m3_5_m10_m4_5_attributeName = 11;
+         assign_STState_rec(m3_5_m10_m4_5__ret, m3_5_m10_m4_5_JJJCTEMP_0.motionState);
+         assign_STState_rec(m3_5_m10_it_0, m3_5_m10_m4_5__ret);
+         m3_5_m10_collectResult1.length++;
+         assign_STState_rec(m3_5_m10_collectResult1.element[m3_5_m10_index3], m3_5_m10_it_0);
+         m3_5_m10_index3 = (m3_5_m10_index3 + 1);
+      }
+      skip;
+      goto loc_257;
+   }
+loc_268:
+   atomic { 
+      skip;
+      d_step {
+         assign_STState_arr(m3_5_m10_states, m3_5_m10_collectResult1);
+      }
+      skip;
+      goto loc_269;
+   }
+loc_269:
+   if
+   :: atomic { 
+         (m3_5_m10_states.length == 0)-> 
+         goto loc_270;
+      }
+   :: atomic { 
+         (! (m3_5_m10_states.length == 0))-> 
+         goto loc_307;
+      }
+   fi;
+loc_270:
+   atomic { 
+      skip;
+      d_step {
+         m3_5_m10__ret = 1;
+         m3_5_m10_JJJCTEMP_13 = m3_5_m10__ret;
+      }
+      skip;
+      goto loc_273;
+   }
+loc_273:
+   atomic { 
+      skip;
+      d_step {
+         skip;
+      }
+      skip;
+      goto loc_274;
+   }
+loc_274:
+   if
+   :: atomic { 
+         (m3_5_m10_JJJCTEMP_13 == 0)-> 
+         goto loc_227;
+      }
+   :: atomic { 
+         (! (m3_5_m10_JJJCTEMP_13 == 0))-> 
+         goto loc_275;
+      }
+   fi;
+loc_275:
+   atomic { 
+      skip;
+      d_step {
+         m3_5_m11_result = 1;
+         m3_5_m11_index2 = 0;
+      }
+      skip;
+      goto loc_280;
+   }
+loc_280:
+   atomic { 
+      skip;
+      d_step {
+         m3_5_m8_m9_startTime = GoodNight_switches.length;
+      }
+      skip;
+      goto loc_281;
+   }
+loc_281:
+   if
+   :: atomic { 
+         (m3_5_m11_index2 < m3_5_m8_m9_startTime)-> 
+         goto loc_282;
+      }
+   :: atomic { 
+         (! (m3_5_m11_index2 < m3_5_m8_m9_startTime))-> 
+         goto loc_288;
+      }
+   fi;
+loc_282:
+   atomic { 
+      skip;
+      d_step {
+         assign_STSwitch_rec(m3_5_m11_it, GoodNight_switches.element[m3_5_m11_index2]);
+         m3_5_m8_m9_startTime = m3_5_m11_it.currentSwitch;
+      }
+      skip;
+      goto loc_284;
+   }
+loc_284:
+   if
+   :: atomic { 
+         (m3_5_m8_m9_startTime != 15)-> 
+         goto loc_285;
+      }
+   :: atomic { 
+         (! (m3_5_m8_m9_startTime != 15))-> 
+         goto loc_286;
+      }
+   fi;
+loc_285:
+   atomic { 
+      skip;
+      d_step {
+         m3_5_m11_index2 = (m3_5_m11_index2 + 1);
+      }
+      skip;
+      goto loc_280;
+   }
+loc_286:
+   atomic { 
+      skip;
+      d_step {
+         m3_5_m11_result = 0;
+      }
+      skip;
+      goto loc_288;
+   }
+loc_288:
+   atomic { 
+      skip;
+      d_step {
+         m3_5_m11__ret = m3_5_m11_result;
+         m3_5_m10_JJJCTEMP_13 = m3_5_m11__ret;
+      }
+      skip;
+      goto loc_292;
+   }
+loc_292:
+   if
+   :: atomic { 
+         (m3_5_m10_JJJCTEMP_13 == 0)-> 
+         goto loc_227;
+      }
+   :: atomic { 
+         (! (m3_5_m10_JJJCTEMP_13 == 0))-> 
+         goto loc_293;
+      }
+   fi;
+loc_293:
+   atomic { 
+      skip;
+      d_step {
+         m3_5_m12_m13_mode = GoodNight_newMode;
+      }
+      skip;
+      goto loc_295;
+   }
+loc_295:
+   if
+   :: atomic { 
+         (m3_5_m12_m13_mode != 1400)-> 
+         goto loc_296;
+      }
+   :: atomic { 
+         (! (m3_5_m12_m13_mode != 1400))-> 
+         goto loc_305;
+      }
+   fi;
+loc_296:
+   if
+   :: atomic { 
+         (m3_5_m12_m13_mode != 1401)-> 
+         goto loc_297;
+      }
+   :: atomic { 
+         (! (m3_5_m12_m13_mode != 1401))-> 
+         goto loc_303;
+      }
+   fi;
+loc_297:
+   if
+   :: atomic { 
+         (m3_5_m12_m13_mode != 1402)-> 
+         goto loc_298;
+      }
+   :: atomic { 
+         (! (m3_5_m12_m13_mode != 1402))-> 
+         goto loc_302;
+      }
+   fi;
+loc_298:
+   atomic { 
+      skip;
+      d_step {
+         skip;
+      }
+      skip;
+      goto loc_227;
+   }
+loc_302:
+   atomic { 
+      skip;
+      d_step {
+         _ST_Command.EvtType = Night;
+         HandleLocationEvt(_ST_Command);
+      }
+      skip;
+      goto loc_298;
+   }
+loc_303:
+   atomic { 
+      skip;
+      d_step {
+         _ST_Command.EvtType = Away;
+         HandleLocationEvt(_ST_Command);
+      }
+      skip;
+      goto loc_298;
+   }
+loc_305:
+   atomic { 
+      skip;
+      d_step {
+         _ST_Command.EvtType = Home;
+         HandleLocationEvt(_ST_Command);
+      }
+      skip;
+      goto loc_298;
+   }
+loc_307:
+   atomic { 
+      skip;
+      d_step {
+         m3_5_m10_index4 = 0;
+      }
+      skip;
+      goto loc_309;
+   }
+loc_309:
+   atomic { 
+      skip;
+      d_step {
+         m3_5_m12_m13_mode = m3_5_m10_states.length;
+      }
+      skip;
+      goto loc_310;
+   }
+loc_310:
+   if
+   :: atomic { 
+         (m3_5_m10_index4 < m3_5_m12_m13_mode)-> 
+         goto loc_311;
+      }
+   :: atomic { 
+         (! (m3_5_m10_index4 < m3_5_m12_m13_mode))-> 
+         goto loc_316;
+      }
+   fi;
+loc_311:
+   atomic { 
+      skip;
+      d_step {
+         assign_STState_rec(m3_5_m10_it_0, m3_5_m10_states.element[m3_5_m10_index4]);
+         m3_5_m12_m13_mode = m3_5_m10_it_0.value;
+      }
+      skip;
+      goto loc_313;
+   }
+loc_313:
+   if
+   :: atomic { 
+         (m3_5_m12_m13_mode != 12)-> 
+         goto loc_314;
+      }
+   :: atomic { 
+         (! (m3_5_m12_m13_mode != 12))-> 
+         goto loc_315;
+      }
+   fi;
+loc_314:
+   atomic { 
+      skip;
+      d_step {
+         m3_5_m10_index4 = (m3_5_m10_index4 + 1);
+      }
+      skip;
+      goto loc_309;
+   }
+loc_315:
+   atomic { 
+      skip;
+      d_step {
+         assign_STState_rec(m3_5_m10_findResult1, m3_5_m10_it_0);
+      }
+      skip;
+      goto loc_314;
+   }
+loc_316:
+   if
+   :: atomic { 
+         (m3_5_m10_findResult1.isAlive == 0)-> 
+         goto loc_317;
+      }
+   :: atomic { 
+         (! (m3_5_m10_findResult1.isAlive == 0))-> 
+         goto loc_331;
+      }
+   fi;
+loc_317:
+   atomic { 
+      skip;
+      d_step {
+         assign_STState_rec(m3_5_m10_sensor, m3_5_m10_states.element[0]);
+         m3_5_m10_m5__ret = (STCurrentSystemTime * 3600000);
+         m3_5_m10_JJJCTEMP_13 = m3_5_m10_m5__ret;
+         m3_5_m12_m13_mode = m3_5_m10_sensor.date;
+         m3_5_m10_elapsed = (m3_5_m10_JJJCTEMP_13 - m3_5_m12_m13_mode);
+      }
+      skip;
+      goto loc_324;
+   }
+loc_324:
+   if
+   :: atomic { 
+         (m3_5_m10_elapsed < m3_5_m10_threshold)-> 
+         goto loc_325;
+      }
+   :: atomic { 
+         (! (m3_5_m10_elapsed < m3_5_m10_threshold))-> 
+         goto loc_328;
+      }
+   fi;
+loc_325:
+   atomic { 
+      skip;
+      d_step {
+         m3_5_m10__ret = 0;
+         m3_5_m10_JJJCTEMP_13 = m3_5_m10__ret;
+      }
+      skip;
+      goto loc_273;
+   }
+loc_328:
+   atomic { 
+      skip;
+      d_step {
+         m3_5_m10__ret = 1;
+         m3_5_m10_JJJCTEMP_13 = m3_5_m10__ret;
+      }
+      skip;
+      goto loc_273;
+   }
+loc_331:
+   atomic { 
+      skip;
+      d_step {
+         m3_5_m10__ret = 0;
+         m3_5_m10_JJJCTEMP_13 = m3_5_m10__ret;
+      }
+      skip;
+      goto loc_273;
+   }
+loc_334:
+   atomic { 
+      skip;
+      d_step {
+         m3_5_m8__ret = 1;
+         m3_5_m10_JJJCTEMP_13 = m3_5_m8__ret;
+      }
+      skip;
+      goto loc_249;
+   }
+loc_337:
+   atomic { 
+      skip;
+      d_step {
+         m3_5_m7__ret = 1;
+         m3_5_m12_m13_mode = m3_5_m7__ret;
+      }
+      skip;
+      goto loc_225;
+   }
+loc_340:
+   atomic { 
+      skip;
+      d_step {
+         m8__ret_0 = 1;
+         m3_5_m8_m9_startTime = m8__ret_0;
+      }
+      skip;
+      goto loc_208;
+   }
+loc_343:
+   atomic { 
+      skip;
+      d_step {
+         m7__ret_0 = 1;
+         m3_5_m8_m9_startTime = m7__ret_0;
+      }
+      skip;
+      goto loc_185;
+   }
+loc_346:
+   atomic { 
+      skip;
+      d_step {
+         GoodNight_modeStartTime = 0;
+      }
+      skip;
+      goto loc_180;
+   }
+done: skip;
+}
+
+inline GoodNight_modeChangeEvtHandler(evt) {
+   type_95 m5__ret;   
+   STEvent_rec _ST_Command;
+
+   /* Default initialization */
+   d_step {
+      _ST_Command.id = evt.id;
+      _ST_Command.physical = 0;
+   }
+loc_348:
+   atomic { 
+      skip;
+      d_step {
+         m5__ret = (STCurrentSystemTime * 3600000);
+         m5__ret = m5__ret;
+         GoodNight_modeStartTime = m5__ret;
+      }
+      skip;
+      goto loc_353;
+   }
+loc_353:
+   goto done;
+done: skip;
+}
+
+hidden STState_rec m3_2_motionState;   
+hidden STSwitch_rec it;   
+hidden STMotionSensor_rec m3_2_m4_2_JJJCTEMP_0;   
+hidden STSwitch_rec m3_2_m6_3_JJJCTEMP_0;   
+hidden STSwitch_rec m1_1_JJJCTEMP_0;   
+hidden STState_rec m3_2_m4_2__ret;   
+hidden STSwitch_rec m3_2_it;   
+inline LightFollowsMe_motionEvtHandler(evt) {
+   type_95 m2_h_0;   
+   type_95 m3_2_m5__ret;   
+   type_95 m2_amount_0;   
+   type_95 index6;   
+   type_95 m2_JJJCTEMP_0_0;   
+   type_95 m3_2_index7;   
+   type_95 m3_2_m4_2_attributeName;   
+   type_95 m3_2_threshold;   
+   type_95 m3_2_elapsed;   
+   type_95 m3_2_JJJCTEMP_9;   
+   type_95 JJJCTEMP_6;   
+   STEvent_rec _ST_Command;
+
+   /* Default initialization */
+   d_step {
+      m3_2_motionState.isAlive = 0;
+      it.isAlive = 0;
+      m3_2_m4_2_JJJCTEMP_0.isAlive = 0;
+      m3_2_m6_3_JJJCTEMP_0.isAlive = 0;
+      m1_1_JJJCTEMP_0.isAlive = 0;
+      m3_2_m4_2__ret.isAlive = 0;
+      m3_2_it.isAlive = 0;
+      _ST_Command.id = evt.id;
+      _ST_Command.physical = 0;
+   }
+loc_355:
+   if
+   :: atomic { 
+         (evt.value != 12)-> 
+         goto loc_356;
+      }
+   :: atomic { 
+         (! (evt.value != 12))-> 
+         goto loc_398;
+      }
+   fi;
+loc_356:
+   if
+   :: atomic { 
+         (evt.value != 13)-> 
+         goto loc_357;
+      }
+   :: atomic { 
+         (! (evt.value != 13))-> 
+         goto loc_358;
+      }
+   fi;
+loc_357:
+   goto done;
+loc_358:
+   atomic { 
+      skip;
+      d_step {
+         m2_h_0 = (LightFollowsMe_minutes1 * 60);
+         m2_amount_0 = m2_h_0;
+         if 
+         :: ! (3600 == 0) -> 
+            m2_JJJCTEMP_0_0 = (m2_amount_0 / 3600);
+         :: else -> 
+            assert(0);
+         fi; 
+         m2_h_0 = (m2_JJJCTEMP_0_0 + 1);
+         m3_2_JJJCTEMP_9 = STCurrentSystemTime;
+         m2_h_0 = (m3_2_JJJCTEMP_9 + m2_h_0);
+         STCurrentSystemTime = m2_h_0;
+         assign_STMotionSensor_rec(m3_2_m4_2_JJJCTEMP_0, LightFollowsMe_motion1);
+         m3_2_m4_2_attributeName = 11;
+         assign_STState_rec(m3_2_m4_2__ret, m3_2_m4_2_JJJCTEMP_0.motionState);
+         assign_STState_rec(m3_2_motionState, m3_2_m4_2__ret);
+         m3_2_JJJCTEMP_9 = m3_2_motionState.value;
+      }
+      skip;
+      goto loc_375;
+   }
+loc_375:
+   if
+   :: atomic { 
+         (m3_2_JJJCTEMP_9 != 13)-> 
+         goto loc_376;
+      }
+   :: atomic { 
+         (! (m3_2_JJJCTEMP_9 != 13))-> 
+         goto loc_378;
+      }
+   fi;
+loc_376:
+   atomic { 
+      skip;
+      d_step {
+         skip;
+      }
+      skip;
+      goto loc_357;
+   }
+loc_378:
+   atomic { 
+      skip;
+      d_step {
+         m3_2_m5__ret = (STCurrentSystemTime * 3600000);
+         m2_h_0 = m3_2_m5__ret;
+         m3_2_JJJCTEMP_9 = m3_2_motionState.date;
+         m3_2_elapsed = (m2_h_0 - m3_2_JJJCTEMP_9);
+         m3_2_JJJCTEMP_9 = (1000 * 60);
+         m3_2_JJJCTEMP_9 = (m3_2_JJJCTEMP_9 * LightFollowsMe_minutes1);
+         m3_2_threshold = (m3_2_JJJCTEMP_9 - 1000);
+      }
+      skip;
+      goto loc_387;
+   }
+loc_387:
+   if
+   :: atomic { 
+         (m3_2_elapsed < m3_2_threshold)-> 
+         goto loc_376;
+      }
+   :: atomic { 
+         (! (m3_2_elapsed < m3_2_threshold))-> 
+         goto loc_388;
+      }
+   fi;
+loc_388:
+   atomic { 
+      skip;
+      d_step {
+         m3_2_index7 = 0;
+      }
+      skip;
+      goto loc_390;
+   }
+loc_390:
+   atomic { 
+      skip;
+      d_step {
+         JJJCTEMP_6 = LightFollowsMe_switches.length;
+      }
+      skip;
+      goto loc_391;
+   }
+loc_391:
+   if
+   :: atomic { 
+         (m3_2_index7 < JJJCTEMP_6)-> 
+         goto loc_392;
+      }
+   :: atomic { 
+         (! (m3_2_index7 < JJJCTEMP_6))-> 
+         goto loc_376;
+      }
+   fi;
+loc_392:
+   atomic { 
+      skip;
+      d_step {
+         assign_STSwitch_rec(m3_2_it, LightFollowsMe_switches.element[m3_2_index7]);
+         assign_STSwitch_rec(m3_2_m6_3_JJJCTEMP_0, m3_2_it);
+         _ST_Command.EvtType = off;
+         HandleSTSwitchEvt(m3_2_m6_3_JJJCTEMP_0.gArrIndex, _ST_Command);
+         m3_2_index7 = (m3_2_index7 + 1);
+      }
+      skip;
+      goto loc_390;
+   }
+loc_398:
+   atomic { 
+      skip;
+      d_step {
+         index6 = 0;
+      }
+      skip;
+      goto loc_400;
+   }
+loc_400:
+   atomic { 
+      skip;
+      d_step {
+         JJJCTEMP_6 = LightFollowsMe_switches.length;
+      }
+      skip;
+      goto loc_401;
+   }
+loc_401:
+   if
+   :: atomic { 
+         (index6 < JJJCTEMP_6)-> 
+         goto loc_402;
+      }
+   :: atomic { 
+         (! (index6 < JJJCTEMP_6))-> 
+         goto loc_408;
+      }
+   fi;
+loc_402:
+   atomic { 
+      skip;
+      d_step {
+         assign_STSwitch_rec(it, LightFollowsMe_switches.element[index6]);
+         assign_STSwitch_rec(m1_1_JJJCTEMP_0, it);
+         _ST_Command.EvtType = on;
+         HandleSTSwitchEvt(m1_1_JJJCTEMP_0.gArrIndex, _ST_Command);
+         index6 = (index6 + 1);
+      }
+      skip;
+      goto loc_400;
+   }
+loc_408:
+   atomic { 
+      skip;
+      d_step {
+         skip;
+      }
+      skip;
+      goto loc_357;
+   }
+done: skip;
+}
+
+hidden STLock_rec it_0;   
+hidden STLock_rec m0_0_JJJCTEMP_0;   
+inline UnlockDoor_changedLocationModeEvtHandler(evt) {
+   type_95 index0;   
+   type_95 JJJCTEMP_4;   
+   STEvent_rec _ST_Command;
+
+   /* Default initialization */
+   d_step {
+      it_0.isAlive = 0;
+      m0_0_JJJCTEMP_0.isAlive = 0;
+      _ST_Command.id = evt.id;
+      _ST_Command.physical = 0;
+   }
+loc_410:
+   atomic { 
+      skip;
+      d_step {
+         index0 = 0;
+      }
+      skip;
+      goto loc_412;
+   }
+loc_412:
    atomic { 
       skip;
       d_step {
          JJJCTEMP_4 = UnlockDoor_locks.length;
       }
       skip;
-      goto loc_53;
+      goto loc_413;
    }
-loc_53:
+loc_413:
    if
    :: atomic { 
          (index0 < JJJCTEMP_4)-> 
-         goto loc_54;
+         goto loc_414;
       }
    :: atomic { 
          (! (index0 < JJJCTEMP_4))-> 
-         goto loc_60;
+         goto loc_420;
       }
    fi;
-loc_54:
+loc_414:
    atomic { 
       skip;
       d_step {
-         assign_STLock_rec(it, UnlockDoor_locks.element[index0]);
-         assign_STLock_rec(m2_0_JJJCTEMP_0, it);
+         assign_STLock_rec(it_0, UnlockDoor_locks.element[index0]);
+         assign_STLock_rec(m0_0_JJJCTEMP_0, it_0);
          _ST_Command.EvtType = unlock;
-         HandleSTLockEvt(m2_0_JJJCTEMP_0.gArrIndex, _ST_Command);
+         HandleSTLockEvt(m0_0_JJJCTEMP_0.gArrIndex, _ST_Command);
          index0 = (index0 + 1);
       }
       skip;
-      goto loc_52;
+      goto loc_412;
    }
-loc_60:
+loc_420:
+   goto done;
+done: skip;
+}
+
+hidden STSwitch_rec m6_9_JJJCTEMP_0;   
+inline LightOffWhenClosed_contactClosedEvtHandler(evt) {
+   STEvent_rec _ST_Command;
+
+   /* Default initialization */
+   d_step {
+      m6_9_JJJCTEMP_0.isAlive = 0;
+      _ST_Command.id = evt.id;
+      _ST_Command.physical = 0;
+   }
+loc_422:
+   atomic { 
+      skip;
+      d_step {
+         assign_STSwitch_rec(m6_9_JJJCTEMP_0, LightOffWhenClosed_switch1);
+         _ST_Command.EvtType = off;
+         HandleSTSwitchEvt(m6_9_JJJCTEMP_0.gArrIndex, _ST_Command);
+      }
+      skip;
+      goto loc_426;
+   }
+loc_426:
    goto done;
 done: skip;
 }
@@ -2242,6 +3942,12 @@ inline ResetGlobalVariables()
 	/* Reset device variables */
 	_g_STLockArr.element[doorLock_STLock].NumReceivedCommands = 0;
 	_g_STPresSensorArr.element[tomPresence_STPresSensor].NumReceivedCommands = 0;
+	_g_STMotionSensorArr.element[frontDoorSensor_STMotionSensor].NumReceivedCommands = 0;
+	_g_STSwitchArr.element[livingRoomBulb_STSwitch].NumReceivedCommands = 0;
+	_g_STSwitchArr.element[bedRoomBulb_STSwitch].NumReceivedCommands = 0;
+	_g_STMotionSensorArr.element[livingRoomSensor_STMotionSensor].NumReceivedCommands = 0;
+	_g_STMotionSensorArr.element[bedRoomSensor_STMotionSensor].NumReceivedCommands = 0;
+	_g_STContactSensorArr.element[bedRoomDoor_STContactSensor].NumReceivedCommands = 0;
 }
 inline ResetDeviceDefaultState()
 {
@@ -2250,6 +3956,18 @@ inline ResetDeviceDefaultState()
 		_g_STLockArr.element[doorLock_STLock].lockState.value = LOCKED;
 		_g_STPresSensorArr.element[tomPresence_STPresSensor].currentPresence = PRESENT;
 		_g_STPresSensorArr.element[tomPresence_STPresSensor].presenceState.value = PRESENT;
+		_g_STMotionSensorArr.element[frontDoorSensor_STMotionSensor].currentMotion = INACTIVE;
+		_g_STMotionSensorArr.element[frontDoorSensor_STMotionSensor].motionState.value = INACTIVE;
+		_g_STSwitchArr.element[livingRoomBulb_STSwitch].currentSwitch = OFF;
+		_g_STSwitchArr.element[livingRoomBulb_STSwitch].switchState.value = OFF;
+		_g_STSwitchArr.element[bedRoomBulb_STSwitch].currentSwitch = OFF;
+		_g_STSwitchArr.element[bedRoomBulb_STSwitch].switchState.value = OFF;
+		_g_STMotionSensorArr.element[livingRoomSensor_STMotionSensor].currentMotion = INACTIVE;
+		_g_STMotionSensorArr.element[livingRoomSensor_STMotionSensor].motionState.value = INACTIVE;
+		_g_STMotionSensorArr.element[bedRoomSensor_STMotionSensor].currentMotion = INACTIVE;
+		_g_STMotionSensorArr.element[bedRoomSensor_STMotionSensor].motionState.value = INACTIVE;
+		_g_STContactSensorArr.element[bedRoomDoor_STContactSensor].currentContact = CLOSED;
+		_g_STContactSensorArr.element[bedRoomDoor_STContactSensor].contactState.value = CLOSED;
 }
 /********* End of utility definitions ******************/
 
@@ -2422,10 +4140,75 @@ inline HandleSTLockEvt(deviceIndex, Evt)
 		fi
 	}
 }
+hidden byte _index2;
+inline HandleSTSwitchEvt(deviceIndex, Evt)
+{
+	byte latestEvtIndex2;
+	short HandleSTSwitchEvt_state;
+
+	d_step {
+		_g_STSwitchArr.element[deviceIndex].isOnline = 1;
+		/* Validate the counter */
+		if
+		:: _g_STSwitchArr.element[deviceIndex].currEvtIndex >= MAX_STORED_EVENTS -> _g_STSwitchArr.element[deviceIndex].currEvtIndex = 0;
+		:: else -> skip;
+		fi
+
+		/* Check conflict commands */
+		getPrevStoredEvtIndex(_g_STSwitchArr.element[deviceIndex].currEvtIndex, latestEvtIndex2);
+		if
+		:: (Evt.physical == 0) && (_g_STSwitchArr.element[deviceIndex].events.element[latestEvtIndex2].id == Evt.id) && (_g_STSwitchArr.element[deviceIndex].events.element[latestEvtIndex2].date == STCurrentSystemTime*3600000) -> 
+			assert(Evt.EvtType == _g_STSwitchArr.element[deviceIndex].events.element[latestEvtIndex2].EvtType);
+		:: else -> skip;
+		fi
+
+		/* Increase number of received commands per event */
+		if
+		:: (Evt.physical == 0) && (_g_STSwitchArr.element[deviceIndex].events.element[latestEvtIndex2].id == 0) || ((_g_STSwitchArr.element[deviceIndex].events.element[latestEvtIndex2].id == Evt.id) && (_g_STSwitchArr.element[deviceIndex].events.element[latestEvtIndex2].date == STCurrentSystemTime*3600000)) -> _g_STSwitchArr.element[deviceIndex].NumReceivedCommands++;
+		:: else -> skip;
+		fi
+		/* Check DOS attack or infinite loop of commands */
+		if
+		:: (_g_STSwitchArr.element[deviceIndex].NumReceivedCommands >= MAX_COMMAND_REPITIONS) -> assert(0);
+		:: else -> skip;
+		fi
+
+		/* Update current state if it is different from latest state */
+		if
+		:: (Evt.EvtType != _g_STSwitchArr.element[deviceIndex].events.element[latestEvtIndex2].EvtType) || (_g_STSwitchArr.element[deviceIndex].events.element[latestEvtIndex2].id == 0) -> {
+			getIntValueFromMtype(Evt.EvtType, HandleSTSwitchEvt_state);
+			_g_STSwitchArr.element[deviceIndex].currentSwitch = HandleSTSwitchEvt_state;
+			_g_STSwitchArr.element[deviceIndex].switchState.value = HandleSTSwitchEvt_state;
+			_g_STSwitchArr.element[deviceIndex].switchState.name = SWITCH;
+			_g_STSwitchArr.element[deviceIndex].switchState.date = STCurrentSystemTime*3600000;
+			_g_STSwitchArr.element[deviceIndex].switchState.isAlive = 1;
+
+			/* Store new state */
+			assign_STState_rec(_g_STSwitchArr.element[deviceIndex].states.element[_g_STSwitchArr.element[deviceIndex].currEvtIndex], _g_STSwitchArr.element[deviceIndex].switchState);
+
+			/* Store the current event */
+			Evt.name = SWITCH;
+			Evt.value = HandleSTSwitchEvt_state;
+			Evt.date = STCurrentSystemTime*3600000;
+			Evt.isAlive = 1;
+			assign_STEvent_rec(_g_STSwitchArr.element[deviceIndex].events.element[_g_STSwitchArr.element[deviceIndex].currEvtIndex], Evt);
+
+			/* Increment the counter */
+			_g_STSwitchArr.element[deviceIndex].currEvtIndex++;
+
+			/* Broadcast the state change event to subscribers */
+			for(_index2 : 0 .. _g_STSwitchArr.element[deviceIndex].NumSubscribers-1) {
+				_g_STSwitchArr.element[deviceIndex].BroadcastChans[_index2] = true;
+			}
+		}
+		:: else -> skip;
+		fi
+	}
+}
 /*************** End of actuator device event handler ********/
 
 /*************** Start of sensor device event handler ********/
-hidden byte _index2;
+hidden byte _index3;
 inline HandleSTPresSensorEvt(deviceIndex, Evt)
 {
 	d_step {
@@ -2452,8 +4235,72 @@ inline HandleSTPresSensorEvt(deviceIndex, Evt)
 		_g_STPresSensorArr.element[deviceIndex].currEvtIndex++;
 
 		/* Broadcast the generated event to subscribers */
-		for(_index2 : 0 .. _g_STPresSensorArr.element[deviceIndex].NumSubscribers-1) {
-			_g_STPresSensorArr.element[deviceIndex].BroadcastChans[_index2] = true;
+		for(_index3 : 0 .. _g_STPresSensorArr.element[deviceIndex].NumSubscribers-1) {
+			_g_STPresSensorArr.element[deviceIndex].BroadcastChans[_index3] = true;
+		}
+	}
+}
+hidden byte _index4;
+inline HandleSTMotionSensorEvt(deviceIndex, Evt)
+{
+	d_step {
+		/* Validate the currEvtIndex */
+		if
+		:: _g_STMotionSensorArr.element[deviceIndex].currEvtIndex >= MAX_STORED_EVENTS -> _g_STMotionSensorArr.element[deviceIndex].currEvtIndex = 0;
+		:: else -> skip;
+		fi
+
+		/* Store the generated event */
+		assign_STEvent_rec(_g_STMotionSensorArr.element[deviceIndex].events.element[_g_STMotionSensorArr.element[deviceIndex].currEvtIndex], Evt);
+
+		/* Update current state */
+		_g_STMotionSensorArr.element[deviceIndex].currentMotion = Evt.value;
+		_g_STMotionSensorArr.element[deviceIndex].motionState.name = Evt.name;
+		_g_STMotionSensorArr.element[deviceIndex].motionState.value = Evt.value;
+		_g_STMotionSensorArr.element[deviceIndex].motionState.date = Evt.date;
+		_g_STMotionSensorArr.element[deviceIndex].motionState.isAlive = 1;
+
+		/* Store new state */
+		assign_STState_rec(_g_STMotionSensorArr.element[deviceIndex].states.element[_g_STMotionSensorArr.element[deviceIndex].currEvtIndex], _g_STMotionSensorArr.element[deviceIndex].motionState);
+
+		/* Increment the counter */
+		_g_STMotionSensorArr.element[deviceIndex].currEvtIndex++;
+
+		/* Broadcast the generated event to subscribers */
+		for(_index4 : 0 .. _g_STMotionSensorArr.element[deviceIndex].NumSubscribers-1) {
+			_g_STMotionSensorArr.element[deviceIndex].BroadcastChans[_index4] = true;
+		}
+	}
+}
+hidden byte _index5;
+inline HandleSTContactSensorEvt(deviceIndex, Evt)
+{
+	d_step {
+		/* Validate the currEvtIndex */
+		if
+		:: _g_STContactSensorArr.element[deviceIndex].currEvtIndex >= MAX_STORED_EVENTS -> _g_STContactSensorArr.element[deviceIndex].currEvtIndex = 0;
+		:: else -> skip;
+		fi
+
+		/* Store the generated event */
+		assign_STEvent_rec(_g_STContactSensorArr.element[deviceIndex].events.element[_g_STContactSensorArr.element[deviceIndex].currEvtIndex], Evt);
+
+		/* Update current state */
+		_g_STContactSensorArr.element[deviceIndex].currentContact = Evt.value;
+		_g_STContactSensorArr.element[deviceIndex].contactState.name = Evt.name;
+		_g_STContactSensorArr.element[deviceIndex].contactState.value = Evt.value;
+		_g_STContactSensorArr.element[deviceIndex].contactState.date = Evt.date;
+		_g_STContactSensorArr.element[deviceIndex].contactState.isAlive = 1;
+
+		/* Store new state */
+		assign_STState_rec(_g_STContactSensorArr.element[deviceIndex].states.element[_g_STContactSensorArr.element[deviceIndex].currEvtIndex], _g_STContactSensorArr.element[deviceIndex].contactState);
+
+		/* Increment the counter */
+		_g_STContactSensorArr.element[deviceIndex].currEvtIndex++;
+
+		/* Broadcast the generated event to subscribers */
+		for(_index5 : 0 .. _g_STContactSensorArr.element[deviceIndex].NumSubscribers-1) {
+			_g_STContactSensorArr.element[deviceIndex].BroadcastChans[_index5] = true;
 		}
 	}
 }
@@ -2461,13 +4308,15 @@ inline HandleSTPresSensorEvt(deviceIndex, Evt)
 
 /*************** Start of events generator *******************/
 hidden byte STPresSensorIndex;
+hidden byte STMotionSensorIndex;
+hidden byte STContactSensorIndex;
 bool eventProcessed, sunriseDone, sunsetDone;
 proctype SmartThings()
 {
 	byte powerMeter;
 	byte evtId;
 	STEvent_rec generatedEvent;
-	byte latestEvtIndex3;
+	byte latestEvtIndex6;
 	bool allEvtsHandled, systemTimeIncrementNeeded;
 
 	d_step {
@@ -2479,6 +4328,9 @@ proctype SmartThings()
 		sunriseDone = false;
 		sunsetDone = false;
 	}
+	GoodNight_installedEvtHandler(generatedEvent);
+	ResetDeviceDefaultState();
+
 	for(evtId : 2 .. MAX_NUM_EVENTS) {
 		d_step {
 			ResetGlobalVariables();
@@ -2540,6 +4392,42 @@ proctype SmartThings()
 			generatedEvent.name = PRESENCE;
 			HandleSTPresSensorEvt(STPresSensorIndex, generatedEvent);
 		}
+		/* Generate events for motion sensors */
+		:: {
+			d_step {
+				STMotionSensorIndex++;
+				/* Validate counter */
+				if
+				:: STMotionSensorIndex >= _g_STMotionSensorArr.length -> STMotionSensorIndex = 0;
+				:: else -> skip;
+				fi
+			}
+
+			if
+			:: generatedEvent.EvtType = inactive; generatedEvent.value = INACTIVE;
+			:: generatedEvent.EvtType = _active; generatedEvent.value = ACTIVE;
+			fi
+			generatedEvent.name = MOTION;
+			HandleSTMotionSensorEvt(STMotionSensorIndex, generatedEvent);
+		}
+		/* Generate events for presence sensor */
+		:: {
+			d_step {
+				STContactSensorIndex++;
+				/* Validate counter */
+				if
+				:: STContactSensorIndex >= _g_STContactSensorArr.length -> STContactSensorIndex = 0;
+				:: else -> skip;
+				fi
+			}
+
+			if
+			:: generatedEvent.EvtType = close; generatedEvent.value = CLOSED;
+			:: generatedEvent.EvtType = open; generatedEvent.value = OPEN;
+			fi
+			generatedEvent.name = CONTACT;
+			HandleSTContactSensorEvt(STContactSensorIndex, generatedEvent);
+		}
 		fi
 
 loc_StartOfEvtHandlers:
@@ -2574,8 +4462,8 @@ loc_StartOfEvtHandlers:
 			 _g_STPresSensorArr.element[AutoModeChange_people.element[0].gArrIndex].BroadcastChans[AutoModeChange_people.element[0].BroadcastChanIndex] = false
 
 			/* Get latest event */
-			getPrevStoredEvtIndex(_g_STPresSensorArr.element[AutoModeChange_people.element[0].gArrIndex].currEvtIndex, latestEvtIndex3);
-			assign_STEvent_rec(generatedEvent, _g_STPresSensorArr.element[AutoModeChange_people.element[0].gArrIndex].events.element[latestEvtIndex3]);
+			getPrevStoredEvtIndex(_g_STPresSensorArr.element[AutoModeChange_people.element[0].gArrIndex].currEvtIndex, latestEvtIndex6);
+			assign_STEvent_rec(generatedEvent, _g_STPresSensorArr.element[AutoModeChange_people.element[0].gArrIndex].events.element[latestEvtIndex6]);
 
 			/* Fetch current data of global variables */
 			d_step {
@@ -2584,6 +4472,213 @@ loc_StartOfEvtHandlers:
 
 			if
 			:: true -> AutoModeChange_presenceEvtHandler(generatedEvent);
+			:: else -> skip;
+			fi
+		}
+		:: else -> skip;
+		fi
+
+		/* Handlers of GoodNight */
+		if
+		:: _g_STMotionSensorArr.element[GoodNight_motionSensors.element[0].gArrIndex].BroadcastChans[GoodNight_motionSensors.element[0].BroadcastChanIndex] == true -> atomic {
+			allEvtsHandled = false;
+			/* Reset broadcast event indicator */
+			 _g_STMotionSensorArr.element[GoodNight_motionSensors.element[0].gArrIndex].BroadcastChans[GoodNight_motionSensors.element[0].BroadcastChanIndex] = false
+
+			/* Get latest event */
+			getPrevStoredEvtIndex(_g_STMotionSensorArr.element[GoodNight_motionSensors.element[0].gArrIndex].currEvtIndex, latestEvtIndex6);
+			assign_STEvent_rec(generatedEvent, _g_STMotionSensorArr.element[GoodNight_motionSensors.element[0].gArrIndex].events.element[latestEvtIndex6]);
+
+			/* Fetch current data of global variables */
+			d_step {
+				assign_STMotionSensor_rec(GoodNight_motionSensors.element[0], _g_STMotionSensorArr.element[frontDoorSensor_STMotionSensor]);
+				assign_STMotionSensor_rec(GoodNight_motionSensors.element[1], _g_STMotionSensorArr.element[livingRoomSensor_STMotionSensor]);
+				assign_STMotionSensor_rec(GoodNight_motionSensors.element[2], _g_STMotionSensorArr.element[bedRoomSensor_STMotionSensor]);
+				assign_STSwitch_rec(GoodNight_switches.element[0], _g_STSwitchArr.element[livingRoomBulb_STSwitch]);
+				assign_STSwitch_rec(GoodNight_switches.element[1], _g_STSwitchArr.element[bedRoomBulb_STSwitch]);
+			}
+
+			if
+			:: generatedEvent.EvtType == _active -> skip;
+			:: generatedEvent.EvtType == inactive -> GoodNight_motionInactiveEvtHandler(generatedEvent);
+			:: else -> skip;
+			fi
+		}
+		:: else -> skip;
+		fi
+		if
+		:: _g_STMotionSensorArr.element[GoodNight_motionSensors.element[1].gArrIndex].BroadcastChans[GoodNight_motionSensors.element[1].BroadcastChanIndex] == true -> atomic {
+			allEvtsHandled = false;
+			/* Reset broadcast event indicator */
+			 _g_STMotionSensorArr.element[GoodNight_motionSensors.element[1].gArrIndex].BroadcastChans[GoodNight_motionSensors.element[1].BroadcastChanIndex] = false
+
+			/* Get latest event */
+			getPrevStoredEvtIndex(_g_STMotionSensorArr.element[GoodNight_motionSensors.element[1].gArrIndex].currEvtIndex, latestEvtIndex6);
+			assign_STEvent_rec(generatedEvent, _g_STMotionSensorArr.element[GoodNight_motionSensors.element[1].gArrIndex].events.element[latestEvtIndex6]);
+
+			/* Fetch current data of global variables */
+			d_step {
+				assign_STMotionSensor_rec(GoodNight_motionSensors.element[0], _g_STMotionSensorArr.element[frontDoorSensor_STMotionSensor]);
+				assign_STMotionSensor_rec(GoodNight_motionSensors.element[1], _g_STMotionSensorArr.element[livingRoomSensor_STMotionSensor]);
+				assign_STMotionSensor_rec(GoodNight_motionSensors.element[2], _g_STMotionSensorArr.element[bedRoomSensor_STMotionSensor]);
+				assign_STSwitch_rec(GoodNight_switches.element[0], _g_STSwitchArr.element[livingRoomBulb_STSwitch]);
+				assign_STSwitch_rec(GoodNight_switches.element[1], _g_STSwitchArr.element[bedRoomBulb_STSwitch]);
+			}
+
+			if
+			:: generatedEvent.EvtType == _active -> skip;
+			:: generatedEvent.EvtType == inactive -> GoodNight_motionInactiveEvtHandler(generatedEvent);
+			:: else -> skip;
+			fi
+		}
+		:: else -> skip;
+		fi
+		if
+		:: _g_STMotionSensorArr.element[GoodNight_motionSensors.element[2].gArrIndex].BroadcastChans[GoodNight_motionSensors.element[2].BroadcastChanIndex] == true -> atomic {
+			allEvtsHandled = false;
+			/* Reset broadcast event indicator */
+			 _g_STMotionSensorArr.element[GoodNight_motionSensors.element[2].gArrIndex].BroadcastChans[GoodNight_motionSensors.element[2].BroadcastChanIndex] = false
+
+			/* Get latest event */
+			getPrevStoredEvtIndex(_g_STMotionSensorArr.element[GoodNight_motionSensors.element[2].gArrIndex].currEvtIndex, latestEvtIndex6);
+			assign_STEvent_rec(generatedEvent, _g_STMotionSensorArr.element[GoodNight_motionSensors.element[2].gArrIndex].events.element[latestEvtIndex6]);
+
+			/* Fetch current data of global variables */
+			d_step {
+				assign_STMotionSensor_rec(GoodNight_motionSensors.element[0], _g_STMotionSensorArr.element[frontDoorSensor_STMotionSensor]);
+				assign_STMotionSensor_rec(GoodNight_motionSensors.element[1], _g_STMotionSensorArr.element[livingRoomSensor_STMotionSensor]);
+				assign_STMotionSensor_rec(GoodNight_motionSensors.element[2], _g_STMotionSensorArr.element[bedRoomSensor_STMotionSensor]);
+				assign_STSwitch_rec(GoodNight_switches.element[0], _g_STSwitchArr.element[livingRoomBulb_STSwitch]);
+				assign_STSwitch_rec(GoodNight_switches.element[1], _g_STSwitchArr.element[bedRoomBulb_STSwitch]);
+			}
+
+			if
+			:: generatedEvent.EvtType == _active -> skip;
+			:: generatedEvent.EvtType == inactive -> GoodNight_motionInactiveEvtHandler(generatedEvent);
+			:: else -> skip;
+			fi
+		}
+		:: else -> skip;
+		fi
+		if
+		:: _g_STSwitchArr.element[GoodNight_switches.element[0].gArrIndex].BroadcastChans[GoodNight_switches.element[0].BroadcastChanIndex] == true -> atomic {
+			allEvtsHandled = false;
+			/* Reset broadcast event indicator */
+			 _g_STSwitchArr.element[GoodNight_switches.element[0].gArrIndex].BroadcastChans[GoodNight_switches.element[0].BroadcastChanIndex] = false
+
+			/* Get latest event */
+			getPrevStoredEvtIndex(_g_STSwitchArr.element[GoodNight_switches.element[0].gArrIndex].currEvtIndex, latestEvtIndex6);
+			assign_STEvent_rec(generatedEvent, _g_STSwitchArr.element[GoodNight_switches.element[0].gArrIndex].events.element[latestEvtIndex6]);
+
+			/* Fetch current data of global variables */
+			d_step {
+				assign_STMotionSensor_rec(GoodNight_motionSensors.element[0], _g_STMotionSensorArr.element[frontDoorSensor_STMotionSensor]);
+				assign_STMotionSensor_rec(GoodNight_motionSensors.element[1], _g_STMotionSensorArr.element[livingRoomSensor_STMotionSensor]);
+				assign_STMotionSensor_rec(GoodNight_motionSensors.element[2], _g_STMotionSensorArr.element[bedRoomSensor_STMotionSensor]);
+				assign_STSwitch_rec(GoodNight_switches.element[0], _g_STSwitchArr.element[livingRoomBulb_STSwitch]);
+				assign_STSwitch_rec(GoodNight_switches.element[1], _g_STSwitchArr.element[bedRoomBulb_STSwitch]);
+			}
+
+			if
+			:: generatedEvent.EvtType == off -> GoodNight_switchOffEvtHandler(generatedEvent);
+			:: else -> skip;
+			fi
+		}
+		:: else -> skip;
+		fi
+		if
+		:: _g_STSwitchArr.element[GoodNight_switches.element[1].gArrIndex].BroadcastChans[GoodNight_switches.element[1].BroadcastChanIndex] == true -> atomic {
+			allEvtsHandled = false;
+			/* Reset broadcast event indicator */
+			 _g_STSwitchArr.element[GoodNight_switches.element[1].gArrIndex].BroadcastChans[GoodNight_switches.element[1].BroadcastChanIndex] = false
+
+			/* Get latest event */
+			getPrevStoredEvtIndex(_g_STSwitchArr.element[GoodNight_switches.element[1].gArrIndex].currEvtIndex, latestEvtIndex6);
+			assign_STEvent_rec(generatedEvent, _g_STSwitchArr.element[GoodNight_switches.element[1].gArrIndex].events.element[latestEvtIndex6]);
+
+			/* Fetch current data of global variables */
+			d_step {
+				assign_STMotionSensor_rec(GoodNight_motionSensors.element[0], _g_STMotionSensorArr.element[frontDoorSensor_STMotionSensor]);
+				assign_STMotionSensor_rec(GoodNight_motionSensors.element[1], _g_STMotionSensorArr.element[livingRoomSensor_STMotionSensor]);
+				assign_STMotionSensor_rec(GoodNight_motionSensors.element[2], _g_STMotionSensorArr.element[bedRoomSensor_STMotionSensor]);
+				assign_STSwitch_rec(GoodNight_switches.element[0], _g_STSwitchArr.element[livingRoomBulb_STSwitch]);
+				assign_STSwitch_rec(GoodNight_switches.element[1], _g_STSwitchArr.element[bedRoomBulb_STSwitch]);
+			}
+
+			if
+			:: generatedEvent.EvtType == off -> GoodNight_switchOffEvtHandler(generatedEvent);
+			:: else -> skip;
+			fi
+		}
+		:: else -> skip;
+		fi
+		if
+		:: location.BroadcastChans[GoodNight_location] == true -> atomic {
+			allEvtsHandled = false;
+			/* Reset broadcast event indicator */
+			location.BroadcastChans[GoodNight_location] = false;
+
+			/* Fetch current data of global variables */
+			d_step {
+				assign_STMotionSensor_rec(GoodNight_motionSensors.element[0], _g_STMotionSensorArr.element[frontDoorSensor_STMotionSensor]);
+				assign_STMotionSensor_rec(GoodNight_motionSensors.element[1], _g_STMotionSensorArr.element[livingRoomSensor_STMotionSensor]);
+				assign_STMotionSensor_rec(GoodNight_motionSensors.element[2], _g_STMotionSensorArr.element[bedRoomSensor_STMotionSensor]);
+				assign_STSwitch_rec(GoodNight_switches.element[0], _g_STSwitchArr.element[livingRoomBulb_STSwitch]);
+				assign_STSwitch_rec(GoodNight_switches.element[1], _g_STSwitchArr.element[bedRoomBulb_STSwitch]);
+			}
+
+			if
+			:: (location.latestEvt.EvtType == Home) || (location.latestEvt.EvtType == Away) || (location.latestEvt.EvtType == Night) -> GoodNight_modeChangeEvtHandler(location.latestEvt);
+			:: else -> skip;
+			fi
+		}
+		:: else -> skip;
+		fi
+
+		/* Handlers of LightOffWhenClosed */
+		if
+		:: _g_STContactSensorArr.element[LightOffWhenClosed_contact1.gArrIndex].BroadcastChans[LightOffWhenClosed_contact1.BroadcastChanIndex] == true -> atomic {
+			allEvtsHandled = false;
+			/* Reset broadcast event indicator */
+			 _g_STContactSensorArr.element[LightOffWhenClosed_contact1.gArrIndex].BroadcastChans[LightOffWhenClosed_contact1.BroadcastChanIndex] = false
+
+			/* Get latest event */
+			getPrevStoredEvtIndex(_g_STContactSensorArr.element[LightOffWhenClosed_contact1.gArrIndex].currEvtIndex, latestEvtIndex6);
+			assign_STEvent_rec(generatedEvent, _g_STContactSensorArr.element[LightOffWhenClosed_contact1.gArrIndex].events.element[latestEvtIndex6]);
+
+			/* Fetch current data of global variables */
+			d_step {
+				assign_STContactSensor_rec(LightOffWhenClosed_contact1, _g_STContactSensorArr.element[bedRoomDoor_STContactSensor]);
+				assign_STSwitch_rec(LightOffWhenClosed_switch1, _g_STSwitchArr.element[bedRoomBulb_STSwitch]);
+			}
+
+			if
+			:: generatedEvent.EvtType == close -> LightOffWhenClosed_contactClosedEvtHandler(generatedEvent);
+			:: else -> skip;
+			fi
+		}
+		:: else -> skip;
+		fi
+
+		/* Handlers of LightFollowsMe */
+		if
+		:: _g_STMotionSensorArr.element[LightFollowsMe_motion1.gArrIndex].BroadcastChans[LightFollowsMe_motion1.BroadcastChanIndex] == true -> atomic {
+			allEvtsHandled = false;
+			/* Reset broadcast event indicator */
+			 _g_STMotionSensorArr.element[LightFollowsMe_motion1.gArrIndex].BroadcastChans[LightFollowsMe_motion1.BroadcastChanIndex] = false
+
+			/* Get latest event */
+			getPrevStoredEvtIndex(_g_STMotionSensorArr.element[LightFollowsMe_motion1.gArrIndex].currEvtIndex, latestEvtIndex6);
+			assign_STEvent_rec(generatedEvent, _g_STMotionSensorArr.element[LightFollowsMe_motion1.gArrIndex].events.element[latestEvtIndex6]);
+
+			/* Fetch current data of global variables */
+			d_step {
+				assign_STMotionSensor_rec(LightFollowsMe_motion1, _g_STMotionSensorArr.element[livingRoomSensor_STMotionSensor]);
+				assign_STSwitch_rec(LightFollowsMe_switches.element[0], _g_STSwitchArr.element[livingRoomBulb_STSwitch]);
+			}
+
+			if
+			:: true -> LightFollowsMe_motionEvtHandler(generatedEvent);
 			:: else -> skip;
 			fi
 		}
@@ -2639,6 +4734,78 @@ init {
 		_g_STPresSensorArr.element[tomPresence_STPresSensor].presenceState.value = PRESENT;
 		_g_STPresSensorArr.length++;
 		gDeviceId++;
+		frontDoorSensor_STMotionSensor = _g_STMotionSensorArr.length;
+		_g_STMotionSensorArr.element[frontDoorSensor_STMotionSensor].id = gDeviceId;
+		_g_STMotionSensorArr.element[frontDoorSensor_STMotionSensor].gArrIndex = frontDoorSensor_STMotionSensor;
+		_g_STMotionSensorArr.element[frontDoorSensor_STMotionSensor].NumSubscribers = 0;
+		_g_STMotionSensorArr.element[frontDoorSensor_STMotionSensor].events.length = MAX_STORED_EVENTS;
+		_g_STMotionSensorArr.element[frontDoorSensor_STMotionSensor].states.length = MAX_STORED_EVENTS;
+		_g_STMotionSensorArr.element[frontDoorSensor_STMotionSensor].isAlive = 1;
+		_g_STMotionSensorArr.element[frontDoorSensor_STMotionSensor].isOnline = 1;
+		_g_STMotionSensorArr.element[frontDoorSensor_STMotionSensor].currentMotion = INACTIVE;
+		_g_STMotionSensorArr.element[frontDoorSensor_STMotionSensor].motionState.value = INACTIVE;
+		_g_STMotionSensorArr.length++;
+		gDeviceId++;
+		livingRoomBulb_STSwitch = _g_STSwitchArr.length;
+		_g_STSwitchArr.element[livingRoomBulb_STSwitch].id = gDeviceId;
+		_g_STSwitchArr.element[livingRoomBulb_STSwitch].gArrIndex = livingRoomBulb_STSwitch;
+		_g_STSwitchArr.element[livingRoomBulb_STSwitch].NumSubscribers = 0;
+		_g_STSwitchArr.element[livingRoomBulb_STSwitch].events.length = MAX_STORED_EVENTS;
+		_g_STSwitchArr.element[livingRoomBulb_STSwitch].states.length = MAX_STORED_EVENTS;
+		_g_STSwitchArr.element[livingRoomBulb_STSwitch].isAlive = 1;
+		_g_STSwitchArr.element[livingRoomBulb_STSwitch].isOnline = 1;
+		_g_STSwitchArr.element[livingRoomBulb_STSwitch].currentSwitch = OFF;
+		_g_STSwitchArr.element[livingRoomBulb_STSwitch].switchState.value = OFF;
+		_g_STSwitchArr.length++;
+		gDeviceId++;
+		bedRoomBulb_STSwitch = _g_STSwitchArr.length;
+		_g_STSwitchArr.element[bedRoomBulb_STSwitch].id = gDeviceId;
+		_g_STSwitchArr.element[bedRoomBulb_STSwitch].gArrIndex = bedRoomBulb_STSwitch;
+		_g_STSwitchArr.element[bedRoomBulb_STSwitch].NumSubscribers = 0;
+		_g_STSwitchArr.element[bedRoomBulb_STSwitch].events.length = MAX_STORED_EVENTS;
+		_g_STSwitchArr.element[bedRoomBulb_STSwitch].states.length = MAX_STORED_EVENTS;
+		_g_STSwitchArr.element[bedRoomBulb_STSwitch].isAlive = 1;
+		_g_STSwitchArr.element[bedRoomBulb_STSwitch].isOnline = 1;
+		_g_STSwitchArr.element[bedRoomBulb_STSwitch].currentSwitch = OFF;
+		_g_STSwitchArr.element[bedRoomBulb_STSwitch].switchState.value = OFF;
+		_g_STSwitchArr.length++;
+		gDeviceId++;
+		livingRoomSensor_STMotionSensor = _g_STMotionSensorArr.length;
+		_g_STMotionSensorArr.element[livingRoomSensor_STMotionSensor].id = gDeviceId;
+		_g_STMotionSensorArr.element[livingRoomSensor_STMotionSensor].gArrIndex = livingRoomSensor_STMotionSensor;
+		_g_STMotionSensorArr.element[livingRoomSensor_STMotionSensor].NumSubscribers = 0;
+		_g_STMotionSensorArr.element[livingRoomSensor_STMotionSensor].events.length = MAX_STORED_EVENTS;
+		_g_STMotionSensorArr.element[livingRoomSensor_STMotionSensor].states.length = MAX_STORED_EVENTS;
+		_g_STMotionSensorArr.element[livingRoomSensor_STMotionSensor].isAlive = 1;
+		_g_STMotionSensorArr.element[livingRoomSensor_STMotionSensor].isOnline = 1;
+		_g_STMotionSensorArr.element[livingRoomSensor_STMotionSensor].currentMotion = INACTIVE;
+		_g_STMotionSensorArr.element[livingRoomSensor_STMotionSensor].motionState.value = INACTIVE;
+		_g_STMotionSensorArr.length++;
+		gDeviceId++;
+		bedRoomSensor_STMotionSensor = _g_STMotionSensorArr.length;
+		_g_STMotionSensorArr.element[bedRoomSensor_STMotionSensor].id = gDeviceId;
+		_g_STMotionSensorArr.element[bedRoomSensor_STMotionSensor].gArrIndex = bedRoomSensor_STMotionSensor;
+		_g_STMotionSensorArr.element[bedRoomSensor_STMotionSensor].NumSubscribers = 0;
+		_g_STMotionSensorArr.element[bedRoomSensor_STMotionSensor].events.length = MAX_STORED_EVENTS;
+		_g_STMotionSensorArr.element[bedRoomSensor_STMotionSensor].states.length = MAX_STORED_EVENTS;
+		_g_STMotionSensorArr.element[bedRoomSensor_STMotionSensor].isAlive = 1;
+		_g_STMotionSensorArr.element[bedRoomSensor_STMotionSensor].isOnline = 1;
+		_g_STMotionSensorArr.element[bedRoomSensor_STMotionSensor].currentMotion = INACTIVE;
+		_g_STMotionSensorArr.element[bedRoomSensor_STMotionSensor].motionState.value = INACTIVE;
+		_g_STMotionSensorArr.length++;
+		gDeviceId++;
+		bedRoomDoor_STContactSensor = _g_STContactSensorArr.length;
+		_g_STContactSensorArr.element[bedRoomDoor_STContactSensor].id = gDeviceId;
+		_g_STContactSensorArr.element[bedRoomDoor_STContactSensor].gArrIndex = bedRoomDoor_STContactSensor;
+		_g_STContactSensorArr.element[bedRoomDoor_STContactSensor].NumSubscribers = 0;
+		_g_STContactSensorArr.element[bedRoomDoor_STContactSensor].events.length = MAX_STORED_EVENTS;
+		_g_STContactSensorArr.element[bedRoomDoor_STContactSensor].states.length = MAX_STORED_EVENTS;
+		_g_STContactSensorArr.element[bedRoomDoor_STContactSensor].isAlive = 1;
+		_g_STContactSensorArr.element[bedRoomDoor_STContactSensor].isOnline = 1;
+		_g_STContactSensorArr.element[bedRoomDoor_STContactSensor].currentContact = CLOSED;
+		_g_STContactSensorArr.element[bedRoomDoor_STContactSensor].contactState.value = CLOSED;
+		_g_STContactSensorArr.length++;
+		gDeviceId++;
 
 		/* Initialization for UnlockDoor */
 		UnlockDoor_locks.length = 1;
@@ -2656,6 +4823,48 @@ init {
 		/* Other input info assignment */
 		AutoModeChange_newMode1 = 1401;
 		AutoModeChange_newMode2 = 1400;
+
+		/* Initialization for GoodNight */
+		GoodNight_motionSensors.length = 3;
+		assign_STMotionSensor_rec(GoodNight_motionSensors.element[0], _g_STMotionSensorArr.element[frontDoorSensor_STMotionSensor]);
+		GoodNight_motionSensors.element[0].BroadcastChanIndex = _g_STMotionSensorArr.element[frontDoorSensor_STMotionSensor].NumSubscribers;
+		_g_STMotionSensorArr.element[frontDoorSensor_STMotionSensor].NumSubscribers++;
+		assign_STMotionSensor_rec(GoodNight_motionSensors.element[1], _g_STMotionSensorArr.element[livingRoomSensor_STMotionSensor]);
+		GoodNight_motionSensors.element[1].BroadcastChanIndex = _g_STMotionSensorArr.element[livingRoomSensor_STMotionSensor].NumSubscribers;
+		_g_STMotionSensorArr.element[livingRoomSensor_STMotionSensor].NumSubscribers++;
+		assign_STMotionSensor_rec(GoodNight_motionSensors.element[2], _g_STMotionSensorArr.element[bedRoomSensor_STMotionSensor]);
+		GoodNight_motionSensors.element[2].BroadcastChanIndex = _g_STMotionSensorArr.element[bedRoomSensor_STMotionSensor].NumSubscribers;
+		_g_STMotionSensorArr.element[bedRoomSensor_STMotionSensor].NumSubscribers++;
+		GoodNight_switches.length = 2;
+		assign_STSwitch_rec(GoodNight_switches.element[0], _g_STSwitchArr.element[livingRoomBulb_STSwitch]);
+		GoodNight_switches.element[0].BroadcastChanIndex = _g_STSwitchArr.element[livingRoomBulb_STSwitch].NumSubscribers;
+		_g_STSwitchArr.element[livingRoomBulb_STSwitch].NumSubscribers++;
+		assign_STSwitch_rec(GoodNight_switches.element[1], _g_STSwitchArr.element[bedRoomBulb_STSwitch]);
+		GoodNight_switches.element[1].BroadcastChanIndex = _g_STSwitchArr.element[bedRoomBulb_STSwitch].NumSubscribers;
+		_g_STSwitchArr.element[bedRoomBulb_STSwitch].NumSubscribers++;
+		/* Broadcast channel index of location assignment */
+		GoodNight_location = location.NumSubscribers;
+		location.NumSubscribers++;
+		/* Other input info assignment */
+		GoodNight_minutes = 30;
+		GoodNight_newMode = 1402;
+		GoodNight_sendPushMessage = 1501;
+
+		/* Initialization for LightOffWhenClosed */
+		assign_STContactSensor_rec(LightOffWhenClosed_contact1, _g_STContactSensorArr.element[bedRoomDoor_STContactSensor]);
+		LightOffWhenClosed_contact1.BroadcastChanIndex = _g_STContactSensorArr.element[bedRoomDoor_STContactSensor].NumSubscribers;
+		_g_STContactSensorArr.element[bedRoomDoor_STContactSensor].NumSubscribers++;
+		assign_STSwitch_rec(LightOffWhenClosed_switch1, _g_STSwitchArr.element[bedRoomBulb_STSwitch]);
+		/* Other input info assignment */
+
+		/* Initialization for LightFollowsMe */
+		assign_STMotionSensor_rec(LightFollowsMe_motion1, _g_STMotionSensorArr.element[livingRoomSensor_STMotionSensor]);
+		LightFollowsMe_motion1.BroadcastChanIndex = _g_STMotionSensorArr.element[livingRoomSensor_STMotionSensor].NumSubscribers;
+		_g_STMotionSensorArr.element[livingRoomSensor_STMotionSensor].NumSubscribers++;
+		LightFollowsMe_switches.length = 1;
+		assign_STSwitch_rec(LightFollowsMe_switches.element[0], _g_STSwitchArr.element[livingRoomBulb_STSwitch]);
+		/* Other input info assignment */
+		LightFollowsMe_minutes1 = 10;
 
 		/* Start all of the processes */
 		run SmartThings();

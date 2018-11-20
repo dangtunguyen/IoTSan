@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.6.1">
+<title>JUnit 5</title>
+<link rel="stylesheet" href="./assets/css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_junit_5">1. JUnit 5</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_junit_5"><a class="anchor" href="#_junit_5"></a>1. JUnit 5</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Much of the approach and helper classes described under JUnit4 apply when using JUnit5 however JUnit5
+uses some slightly different class annotations when writing your tests. See the <a href="http://junit.org">JUnit5</a> documentation
+for more details.</p>
+</div>
+<div class="paragraph">
+<p>Create your test classes as per normal JUnit5 guidelines as shown in this example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class MyTest {
+  @Test
+  void streamSum() {
+    assertTrue(Stream.of(1, 2, 3)
+      .mapToInt(i -&gt; i)
+      .sum() &gt; 5, () -&gt; "Sum should be greater than 5")
+  }
+
+  @RepeatedTest(value=2, name = "{displayName} {currentRepetition}/{totalRepetitions}")
+  void streamSumRepeated() {
+    assert Stream.of(1, 2, 3).mapToInt(i -&gt; i).sum() == 6
+  }
+
+  private boolean isPalindrome(s) { s == s.reverse()  }
+
+  @ParameterizedTest                                                              <i class="conum" data-value="1"></i><b>(1)</b>
+  @ValueSource(strings = [ "racecar", "radar", "able was I ere I saw elba" ])
+  void palindromes(String candidate) {
+    assert isPalindrome(candidate)
+  }
+
+  @TestFactory
+  def dynamicTestCollection() {[
+    dynamicTest("Add test") { -&gt; assert 1 + 1 == 2 },
+    dynamicTest("Multiply Test", () -&gt; { assert 2 * 3 == 6 })
+  ]}
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>This test requires the additional <code>org.junit.jupiter:junit-jupiter-params</code> dependency if not already in your project.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>You can run the tests in your IDE or build tool if it supports and is configured for JUnit5.
+If you run the above test in the GroovyConsole or via the <code>groovy</code> command, you will see a short text summary of the
+result of running the test:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>JUnit5 launcher: passed=8, failed=0, skipped=0, time=246ms</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>More detailed information is available at the <code>FINE</code> logging level. You can configure your logging to display such
+information or do it programmatically as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@BeforeAll
+static void init() {
+  def logger = Logger.getLogger(LoggingListener.name)
+  logger.level = Level.FINE
+  logger.addHandler(new ConsoleHandler(level: Level.FINE))
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 3.0.0-alpha-3<br>
+Last updated 2018-06-23 13:44:36 AEST
+</div>
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+<script>prettyPrint()</script>
+</body>
+</html>

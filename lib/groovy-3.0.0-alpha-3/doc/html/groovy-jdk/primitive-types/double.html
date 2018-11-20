@@ -1,0 +1,1029 @@
+<!--
+
+     Licensed to the Apache Software Foundation (ASF) under one
+     or more contributor license agreements.  See the NOTICE file
+     distributed with this work for additional information
+     regarding copyright ownership.  The ASF licenses this file
+     to you under the Apache License, Version 2.0 (the
+     "License"); you may not use this file except in compliance
+     with the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing,
+     software distributed under the License is distributed on an
+     "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+     specific language governing permissions and limitations
+     under the License.
+
+-->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>double (Groovy JDK enhancements)</title>
+    
+    <link rel="stylesheet" type="text/css" href="../stylesheet.css" title="Style">
+    <script type="text/javascript">
+        function windowTitle() {
+            parent.document.title = document.title;
+        }
+    </script>
+</head>
+
+<body class="center" onload="windowTitle();">
+
+    <!-- ========== START OF NAVBAR ========== -->
+    <a name="navbar_top"><!-- --></a>
+
+    <div class="topNav">
+        <ul class="navList" title="Navigation">
+            <li><a href="../overview-summary.html">Overview</a></li>
+            <li><a href="package-summary.html">Package</a></li>
+            <li class="navBarCell1Rev">Class</li>
+            <li><a href="../index-all.html">Index</a></li>
+        </ul>
+    </div>
+
+    <!-- =========== END OF NAVBAR =========== -->
+
+    <!-- ======== START OF class DATA ======== -->
+
+    <div class="header">
+        <div class="subTitle">Package: <strong>primitive-types</strong></div>
+        <h2>Class double</h2>
+    </div>
+
+    <div class="contentContainer">
+
+    <!-- ========== METHOD SUMMARY =========== -->
+
+        <a name="method_summary"><!-- --></a>
+
+        <div class="summary">
+            <ul class="blockList">
+                <li class="blockList">
+                    <ul class="blockList">
+                        <li class="blockList">
+                            <h3>Methods Summary</h3>
+                            <table border="0" cellpadding="3" cellspacing="0" class="overviewSummary">
+                               <caption><span>Methods</span><span class="tabEnd">&nbsp;</span></caption>
+                                <tbody>
+                                    <tr>
+                                        <th>Return type</th>
+                                        <th>Name and parameters</th>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code>boolean</code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#asBoolean()">asBoolean</a></strong>()</code>
+                                            <br>
+                                            Coerces a double array to a boolean value.
+
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="rawColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code>boolean</code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#contains(java.lang.Object)">contains</a></strong>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="Class in java.lang">Object</a> value)</code>
+                                            <br>
+                                            Checks whether the array contains the given value.
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Number.html" title="Class in java.lang">Number</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#count(java.lang.Object)">count</a></strong>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="Class in java.lang">Object</a> value)</code>
+                                            <br>
+                                            Counts the number of occurrences of the given value inside this array.
+
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="rawColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code>void</code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#downto(java.lang.Number, groovy.lang.Closure)">downto</a></strong>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Number.html" title="Class in java.lang">Number</a> to, <a href="http://docs.groovy-lang.org/latest/html/gapi/groovy/lang/Closure.html" title="Class in groovy.lang">Closure</a> closure)</code>
+                                            <br>
+                                            Iterates from this number down to the given number, inclusive,
+decrementing by one each time.
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="Class in java.util">Collection</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#flatten()">flatten</a></strong>()</code>
+                                            <br>
+                                            Flatten an array.  
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="rawColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="Class in java.util">List</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#getAt(groovy.lang.IntRange)">getAt</a></strong>(<a href="http://docs.groovy-lang.org/latest/html/gapi/groovy/lang/IntRange.html" title="Class in groovy.lang">IntRange</a> range)</code>
+                                            <br>
+                                            Support the subscript operator with an IntRange for a double array
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="Class in java.util">List</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#getAt(groovy.lang.ObjectRange)">getAt</a></strong>(<a href="http://docs.groovy-lang.org/latest/html/gapi/groovy/lang/ObjectRange.html" title="Class in groovy.lang">ObjectRange</a> range)</code>
+                                            <br>
+                                            Support the subscript operator with an ObjectRange for a double array
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="rawColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="Class in java.util">List</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#getAt(groovy.lang.Range)">getAt</a></strong>(<a href="http://docs.groovy-lang.org/latest/html/gapi/groovy/lang/Range.html" title="Class in groovy.lang">Range</a> range)</code>
+                                            <br>
+                                            Support the subscript operator with a range for a double array
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="Class in java.util">List</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#getAt(java.util.Collection)">getAt</a></strong>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="Class in java.util">Collection</a> indices)</code>
+                                            <br>
+                                            Support the subscript operator with a collection for a double array
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="rawColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="Class in java.lang">String</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#join(java.lang.String)">join</a></strong>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="Class in java.lang">String</a> separator)</code>
+                                            <br>
+                                            Concatenates the string representation of each
+items in this array, with the given String as a separator between each
+item.
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code>int</code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#size()">size</a></strong>()</code>
+                                            <br>
+                                            Allows arrays to behave similar to collections.
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="rawColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/stream/Stream.html" title="Class in java.util.stream">Stream</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#stream()">stream</a></strong>()</code>
+                                            <br>
+                                            Returns a sequential Stream with the specified array as its
+source.
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code>double</code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#sum()">sum</a></strong>()</code>
+                                            <br>
+                                            Sums the items in an array.
+
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="rawColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code>double</code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#sum(double)">sum</a></strong>(double initialValue)</code>
+                                            <br>
+                                            Sums the items in an array, adding the result to some initial value.
+
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code>double[]</code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#swap(int, int)">swap</a></strong>(int i, int j)</code>
+                                            <br>
+                                            Swaps two elements at the specified positions.
+
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="rawColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="Class in java.util">List</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#toList()">toList</a></strong>()</code>
+                                            <br>
+                                            Converts this array to a List of the same size, with each element
+added to the list.
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="Class in java.util">Set</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#toSet()">toSet</a></strong>()</code>
+                                            <br>
+                                            Converts this array to a Set, with each unique element
+added to the set.
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="rawColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="Class in java.lang">String</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#toString()">toString</a></strong>()</code>
+                                            <br>
+                                            Returns the string representation of the given array.
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code>void</code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#upto(java.lang.Number, groovy.lang.Closure)">upto</a></strong>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Number.html" title="Class in java.lang">Number</a> to, <a href="http://docs.groovy-lang.org/latest/html/gapi/groovy/lang/Closure.html" title="Class in groovy.lang">Closure</a> closure)</code>
+                                            <br>
+                                            Iterates from this number up to the given number, inclusive,
+incrementing by one each time.
+                                        </td>
+                                    </tr>
+                                    
+                                </tbody>
+                            </table>
+                        </li>
+                        
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+    <!-- ============ METHOD DETAIL ========== -->
+
+    <a name="method_detail"><!-- --></a>
+
+
+        <div class="details">
+            <ul class="blockList">
+                <li class="blockList">
+                    <ul class="blockList">
+                        <li class="blockList">
+                            <h3>Methods Detail</h3>
+
+                            
+                            <a name="asBoolean()"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public boolean <b>asBoolean</b>()</h4>
+
+                                    <p>Coerces a double array to a boolean value.
+A double array is false if the array is of length 0,
+and true otherwise.</p>
+
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>the array's boolean value</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>1.7.4</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="contains(java.lang.Object)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public boolean <b>contains</b>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="Class in java.lang">Object</a> value)</h4>
+
+                                    <p>Checks whether the array contains the given value.</p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>value</code> -  the value being searched for</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>true if the array contains the value</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>1.8.6</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="count(java.lang.Object)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Number.html" title="Class in java.lang">Number</a> <b>count</b>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="Class in java.lang">Object</a> value)</h4>
+
+                                    <p>Counts the number of occurrences of the given value inside this array.
+Comparison is done using Groovy's == operator (using
+<code>compareTo(value) == 0</code> or <code>equals(value)</code> ).</p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>value</code> -  the value being searched for</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>the number of occurrences</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>1.6.4</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="downto(java.lang.Number, groovy.lang.Closure)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public void <b>downto</b>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Number.html" title="Class in java.lang">Number</a> to, <a href="http://docs.groovy-lang.org/latest/html/gapi/groovy/lang/Closure.html" title="Class in groovy.lang">Closure</a> closure)</h4>
+
+                                    <p>Iterates from this number down to the given number, inclusive,
+decrementing by one each time.</p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>to</code> -  the end number</dd>
+                                        
+                                        <dd><code>closure</code> -  the code to execute for each number</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>1.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="flatten()"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="Class in java.util">Collection</a> <b>flatten</b>()</h4>
+
+                                    <p>Flatten an array.  This array and any nested arrays or
+collections have their contents (recursively) added to the new collection.</p>
+
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>a flattened Collection</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>1.6.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="getAt(groovy.lang.IntRange)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="Class in java.util">List</a> <b>getAt</b>(<a href="http://docs.groovy-lang.org/latest/html/gapi/groovy/lang/IntRange.html" title="Class in groovy.lang">IntRange</a> range)</h4>
+
+                                    <p>Support the subscript operator with an IntRange for a double array</p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>range</code> -  an IntRange indicating the indices for the items to retrieve</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>list of the retrieved doubles</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>1.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="getAt(groovy.lang.ObjectRange)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="Class in java.util">List</a> <b>getAt</b>(<a href="http://docs.groovy-lang.org/latest/html/gapi/groovy/lang/ObjectRange.html" title="Class in groovy.lang">ObjectRange</a> range)</h4>
+
+                                    <p>Support the subscript operator with an ObjectRange for a double array</p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>range</code> -  an ObjectRange indicating the indices for the items to retrieve</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>list of the retrieved doubles</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>1.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="getAt(groovy.lang.Range)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="Class in java.util">List</a> <b>getAt</b>(<a href="http://docs.groovy-lang.org/latest/html/gapi/groovy/lang/Range.html" title="Class in groovy.lang">Range</a> range)</h4>
+
+                                    <p>Support the subscript operator with a range for a double array</p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>range</code> -  a range indicating the indices for the items to retrieve</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>list of the retrieved doubles</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>1.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="getAt(java.util.Collection)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="Class in java.util">List</a> <b>getAt</b>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="Class in java.util">Collection</a> indices)</h4>
+
+                                    <p>Support the subscript operator with a collection for a double array</p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>indices</code> -  a collection of indices for the items to retrieve</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>list of the doubles at the given indices</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>1.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="join(java.lang.String)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="Class in java.lang">String</a> <b>join</b>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="Class in java.lang">String</a> separator)</h4>
+
+                                    <p>Concatenates the string representation of each
+items in this array, with the given String as a separator between each
+item.</p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>separator</code> -  a String separator</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>the joined String</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>2.4.1</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="size()"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public int <b>size</b>()</h4>
+
+                                    <p>Allows arrays to behave similar to collections.</p>
+
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>the length of the array</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>1.0</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>See Also:</b></dt>
+                                        
+                                        <dd><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/reflect/Array.html#getLength(java.lang.Object)" title="Class in java.lang.reflect">Array#getLength(java.lang.Object)</a></dd>
+                                        
+                                    </dl>
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="stream()"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/util/stream/Stream.html" title="Class in java.util.stream">Stream</a> <b>stream</b>()</h4>
+
+                                    <p>Returns a sequential Stream with the specified array as its
+source.</p>
+
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>a <code>Stream</code> for the array</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="sum()"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public double <b>sum</b>()</h4>
+
+                                    <p>Sums the items in an array.
+<pre class="groovyTestCase">assert (1+2+3+4 as double) == ([1,2,3,4] as double[]).sum()</pre></p>
+
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>The sum of all of the items</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>2.4.2</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="sum(double)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public double <b>sum</b>(double initialValue)</h4>
+
+                                    <p>Sums the items in an array, adding the result to some initial value.
+<pre class="groovyTestCase">assert (5+1+2+3+4 as double) == ([1,2,3,4] as double[]).sum(5)</pre></p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>initialValue</code> -  the items in the array will be summed to this initial value</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>The sum of all of the items.</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>2.4.2</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="swap(int, int)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public double[] <b>swap</b>(int i, int j)</h4>
+
+                                    <p>Swaps two elements at the specified positions.
+<p>
+Example:
+<pre class="groovyTestCase">
+assert ([1, 3, 2, 4] as double[]) == ([1, 2, 3, 4] as double[]).swap(1, 2)
+</pre></p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>i</code> -  a position</dd>
+                                        
+                                        <dd><code>j</code> -  a position</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>self</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>2.4.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="toList()"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="Class in java.util">List</a> <b>toList</b>()</h4>
+
+                                    <p>Converts this array to a List of the same size, with each element
+added to the list.</p>
+
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>a list containing the contents of this array.</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>1.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="toSet()"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="Class in java.util">Set</a> <b>toSet</b>()</h4>
+
+                                    <p>Converts this array to a Set, with each unique element
+added to the set.</p>
+
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>a set containing the unique contents of this array.</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>1.8.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="toString()"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="Class in java.lang">String</a> <b>toString</b>()</h4>
+
+                                    <p>Returns the string representation of the given array.</p>
+
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>the string representation</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>1.6.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="upto(java.lang.Number, groovy.lang.Closure)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public void <b>upto</b>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Number.html" title="Class in java.lang">Number</a> to, <a href="http://docs.groovy-lang.org/latest/html/gapi/groovy/lang/Closure.html" title="Class in groovy.lang">Closure</a> closure)</h4>
+
+                                    <p>Iterates from this number up to the given number, inclusive,
+incrementing by one each time.</p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>to</code> -  the end number</dd>
+                                        
+                                        <dd><code>closure</code> -  the code to execute for each number</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>1.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+
+    <!-- ========= END OF class DATA ========= -->
+
+    <!-- ======= START OF BOTTOM NAVBAR ====== -->
+    <a name="navbar_bottom"><!-- --></a>
+    <a href="#skip-navbar_bottom" title="Skip navigation links"></a>
+
+    <div class="topNav">
+        <ul class="navList" title="Navigation">
+            <li><a href="../overview-summary.html">Overview</a></li>
+            <li><a href="package-summary.html">Package</a></li>
+            <li class="navBarCell1Rev">Class</li>
+            <li><a href="../index-all.html">Index</a></li>
+        </ul>
+    </div>
+    <!-- =========== END OF NAVBAR =========== -->
+
+</body>
+</html>

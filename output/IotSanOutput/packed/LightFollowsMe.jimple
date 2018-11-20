@@ -239,7 +239,7 @@ public class LightFollowsMe extends java.lang.Object
     public void scheduleCheck()
     {
         STState motionState;
-        int _static_LightFollowsMe_minutes1, index1, JJJCTEMP$9, threshold, elapsed, JJJCTEMP$7;
+        int index7, _static_LightFollowsMe_minutes1, JJJCTEMP$9, threshold, elapsed, JJJCTEMP$7;
         STMotionSensor _static_LightFollowsMe_motion1;
         LightFollowsMe JJJCTEMP$0;
         STSwitch[] _static_LightFollowsMe_switches;
@@ -258,17 +258,17 @@ public class LightFollowsMe extends java.lang.Object
         threshold = JJJCTEMP$9 - 1000;
         if elapsed < threshold goto label2;
 
-        index1 = 0;
+        index7 = 0;
         goto label1;
 
      label0:
-        it = _static_LightFollowsMe_switches[index1];
+        it = _static_LightFollowsMe_switches[index7];
         virtualinvoke it.[STSwitch.off():void]();
-        index1 = index1 + 1;
+        index7 = index7 + 1;
 
      label1:
-        JJJCTEMP$7 = lengthof _static_LightFollowsMe_switches;
-        if index1 < JJJCTEMP$7 goto label0;
+        JJJCTEMP$9 = lengthof _static_LightFollowsMe_switches;
+        if index7 < JJJCTEMP$9 goto label0;
 
      label2:
         return;
@@ -276,90 +276,90 @@ public class LightFollowsMe extends java.lang.Object
 
     public void motionEvtHandler()
     {
-        STState m10_4_motionState, m10_4_m5_4_$ret;
-        int _static_LightFollowsMe_minutes1, index0, JJJCTEMP$6, m9_JJJCTEMP$0, m10_4_m2_$ret, m9_amount, _static_STCurrentSystemTime, m10_4_elapsed, m9_h, m10_4_m5_4_attributeName, m10_4_index1, _static_evt.value, m10_4_threshold;
-        STMotionSensor _static_LightFollowsMe_motion1, m10_4_m5_4_JJJCTEMP$0;
-        LightFollowsMe m10_4_JJJCTEMP$0, JJJCTEMP$0;
+        STState m3_2_m4_2_$ret, m3_2_motionState;
+        int _static_LightFollowsMe_minutes1, JJJCTEMP$6, m3_2_JJJCTEMP$9, m3_2_threshold, m2_h, _static_STCurrentSystemTime, m3_2_m5_$ret, m2_amount, m3_2_m4_2_attributeName, index6, _static_evt.value, m3_2_index7, m3_2_elapsed, m2_JJJCTEMP$0;
+        STMotionSensor _static_LightFollowsMe_motion1, m3_2_m4_2_JJJCTEMP$0;
+        LightFollowsMe m3_2_JJJCTEMP$0, JJJCTEMP$0;
         STSwitch[] _static_LightFollowsMe_switches;
-        STSwitch m10_4_m12_5_JJJCTEMP$0, it, m11_3_JJJCTEMP$0, m10_4_it;
+        STSwitch it, m3_2_it, m3_2_m6_3_JJJCTEMP$0, m1_1_JJJCTEMP$0;
 
         JJJCTEMP$0 := @this;
         if _static_evt.value != 12 goto label3;
 
-        index0 = 0;
+        index6 = 0;
         goto label2;
 
      label0:
-        it = _static_LightFollowsMe_switches[index0];
-        m11_3_JJJCTEMP$0 = it;
-        m11_3_JJJCTEMP$0.[STSwitch.STCommand_STSwitch_on:boolean] = 1;
+        it = _static_LightFollowsMe_switches[index6];
+        m1_1_JJJCTEMP$0 = it;
+        m1_1_JJJCTEMP$0.[STSwitch.STCommand_STSwitch_on:boolean] = 1;
         goto label1;
 
      label1:
         nop;
-        index0 = index0 + 1;
+        index6 = index6 + 1;
 
      label2:
         JJJCTEMP$6 = lengthof _static_LightFollowsMe_switches;
-        if index0 < JJJCTEMP$6 goto label0;
+        if index6 < JJJCTEMP$6 goto label0;
 
         goto label12;
 
      label3:
         if _static_evt.value != 13 goto label12;
 
-        m9_amount = _static_LightFollowsMe_minutes1 * 60;
-        m9_amount = m9_amount;
-        m9_JJJCTEMP$0 = m9_amount / 3600;
-        m9_h = m9_JJJCTEMP$0 + 1;
-        m10_4_threshold = [LightFollowsMe.STCurrentSystemTime:int];
-        m10_4_threshold = m10_4_threshold + m9_h;
-        [LightFollowsMe.STCurrentSystemTime:int] = m10_4_threshold;
+        m2_h = _static_LightFollowsMe_minutes1 * 60;
+        m2_amount = m2_h;
+        m2_JJJCTEMP$0 = m2_amount / 3600;
+        m2_h = m2_JJJCTEMP$0 + 1;
+        m3_2_JJJCTEMP$9 = [LightFollowsMe.STCurrentSystemTime:int];
+        m2_h = m3_2_JJJCTEMP$9 + m2_h;
+        [LightFollowsMe.STCurrentSystemTime:int] = m2_h;
         goto label4;
 
      label4:
         nop;
-        m10_4_JJJCTEMP$0 = JJJCTEMP$0;
-        m10_4_m5_4_JJJCTEMP$0 = _static_LightFollowsMe_motion1;
-        m10_4_m5_4_attributeName = 11;
-        m10_4_m5_4_$ret = m10_4_m5_4_JJJCTEMP$0.[STMotionSensor.motionState:STState];
-        m10_4_motionState = m10_4_m5_4_$ret;
+        m3_2_JJJCTEMP$0 = JJJCTEMP$0;
+        m3_2_m4_2_JJJCTEMP$0 = _static_LightFollowsMe_motion1;
+        m3_2_m4_2_attributeName = 11;
+        m3_2_m4_2_$ret = m3_2_m4_2_JJJCTEMP$0.[STMotionSensor.motionState:STState];
+        m3_2_motionState = m3_2_m4_2_$ret;
         goto label5;
 
      label5:
         nop;
-        m10_4_threshold = m10_4_motionState.[STState.value:int];
-        if m10_4_threshold != 13 goto label10;
+        m3_2_JJJCTEMP$9 = m3_2_motionState.[STState.value:int];
+        if m3_2_JJJCTEMP$9 != 13 goto label10;
 
-        m10_4_m2_$ret = _static_STCurrentSystemTime * 3600000;
-        m9_amount = m10_4_m2_$ret;
+        m3_2_m5_$ret = _static_STCurrentSystemTime * 3600000;
+        m2_h = m3_2_m5_$ret;
         goto label6;
 
      label6:
         nop;
-        m10_4_threshold = m10_4_motionState.[STState.date:int];
-        m10_4_elapsed = m9_amount - m10_4_threshold;
-        m10_4_threshold = 1000 * 60;
-        JJJCTEMP$6 = m10_4_threshold * _static_LightFollowsMe_minutes1;
-        m10_4_threshold = JJJCTEMP$6 - 1000;
-        if m10_4_elapsed < m10_4_threshold goto label10;
+        m3_2_JJJCTEMP$9 = m3_2_motionState.[STState.date:int];
+        m3_2_elapsed = m2_h - m3_2_JJJCTEMP$9;
+        m3_2_JJJCTEMP$9 = 1000 * 60;
+        m3_2_JJJCTEMP$9 = m3_2_JJJCTEMP$9 * _static_LightFollowsMe_minutes1;
+        m3_2_threshold = m3_2_JJJCTEMP$9 - 1000;
+        if m3_2_elapsed < m3_2_threshold goto label10;
 
-        m10_4_index1 = 0;
+        m3_2_index7 = 0;
         goto label9;
 
      label7:
-        m10_4_it = _static_LightFollowsMe_switches[m10_4_index1];
-        m10_4_m12_5_JJJCTEMP$0 = m10_4_it;
-        m10_4_m12_5_JJJCTEMP$0.[STSwitch.STCommand_STSwitch_off:boolean] = 1;
+        m3_2_it = _static_LightFollowsMe_switches[m3_2_index7];
+        m3_2_m6_3_JJJCTEMP$0 = m3_2_it;
+        m3_2_m6_3_JJJCTEMP$0.[STSwitch.STCommand_STSwitch_off:boolean] = 1;
         goto label8;
 
      label8:
         nop;
-        m10_4_index1 = m10_4_index1 + 1;
+        m3_2_index7 = m3_2_index7 + 1;
 
      label9:
         JJJCTEMP$6 = lengthof _static_LightFollowsMe_switches;
-        if m10_4_index1 < JJJCTEMP$6 goto label7;
+        if m3_2_index7 < JJJCTEMP$6 goto label7;
 
      label10:
         goto label11;

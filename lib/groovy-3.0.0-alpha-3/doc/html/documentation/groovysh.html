@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.6.1">
+<title>Groovysh, the Groovy shell</title>
+<link rel="stylesheet" href="./assets/css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+<h1>Groovysh, the Groovy shell</h1>
+<div class="details">
+<span id="revnumber">version 3.0.0-alpha-3</span>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_groovy_groovy_shell">1. Groovy : Groovy Shell</a>
+<ul class="sectlevel2">
+<li><a href="#GroovyShell-Features">1.1. Features</a></li>
+<li><a href="#GroovyShell-Command-lineOptionsandArguments">1.2. Command-line Options and Arguments</a></li>
+<li><a href="#GroovyShell-EvaluatingExpressions">1.3. Evaluating Expressions</a>
+<ul class="sectlevel3">
+<li><a href="#GroovyShell-SimpleExpressions">1.3.1. Simple Expressions</a></li>
+<li><a href="#GroovyShell-EvaluationResult">1.3.2. Evaluation Result</a></li>
+<li><a href="#GroovyShell-Multi-lineExpressions">1.3.3. Multi-line Expressions</a>
+<ul class="sectlevel4">
+<li><a href="#GroovyShell-DefineaClass">Define a Class</a></li>
+<li><a href="#GroovyShell-UsetheClass">Use the Class</a></li>
+</ul>
+</li>
+<li><a href="#GroovyShell-Variables">1.3.4. Variables</a></li>
+<li><a href="#GroovyShell-Functions">1.3.5. Functions</a></li>
+</ul>
+</li>
+<li><a href="#GroovyShell-Commands">1.4. Commands</a>
+<ul class="sectlevel3">
+<li><a href="#GroovyShell-RecognizedCommands">1.4.1. Recognized Commands</a>
+<ul class="sectlevel4">
+<li><a href="#GroovyShell-help"><code>help</code></a></li>
+<li><a href="#GroovyShell-exit"><code>exit</code></a></li>
+<li><a href="#GroovyShell-import"><code>import</code></a></li>
+<li><a href="#GroovyShell-grab"><code>grab</code></a></li>
+<li><a href="#GroovyShell-display"><code>display</code></a></li>
+<li><a href="#GroovyShell-clear"><code>clear</code></a></li>
+<li><a href="#GroovyShell-show"><code>show</code></a></li>
+<li><a href="#GroovyShell-inspect"><code>inspect</code></a></li>
+<li><a href="#GroovyShell-purge"><code>purge</code></a></li>
+<li><a href="#GroovyShell-edit"><code>edit</code></a></li>
+<li><a href="#GroovyShell-load"><code>load</code></a></li>
+<li><a href="#GroovyShell-save"><code>save</code></a></li>
+<li><a href="#GroovyShell-record"><code>record</code></a></li>
+<li><a href="#GroovyShell-history"><code>history</code></a></li>
+<li><a href="#GroovyShell-alias"><code>alias</code></a></li>
+<li><a href="#GroovyShell-doc"><code>doc</code></a></li>
+<li><a href="#GroovyShell-set"><code>set</code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#GroovyShell-Preferences">1.5. Preferences</a>
+<ul class="sectlevel3">
+<li><a href="#GroovyShell-RecognizedPreferences">1.5.1. Recognized Preferences</a>
+<ul class="sectlevel4">
+<li><a href="#GroovyShell-InterpreterMode"><code>interpreterMode</code></a></li>
+<li><a href="#GroovyShell-verbosity"><code>verbosity</code></a></li>
+<li><a href="#_code_colors_code"><code>colors</code></a></li>
+<li><a href="#GroovyShell-show-last-result"><code>show-last-result</code></a></li>
+<li><a href="#GroovyShell-sanitize-stack-trace"><code>sanitize-stack-trace</code></a></li>
+<li><a href="#GroovyShell-editor"><code>editor</code></a></li>
+</ul>
+</li>
+<li><a href="#GroovyShell-SettingaPreference">1.5.2. Setting a Preference</a></li>
+<li><a href="#GroovyShell-ListingPreferences">1.5.3. Listing Preferences</a></li>
+<li><a href="#GroovyShell-ClearingPreferencesieResettingtoDefaults">1.5.4. Clearing Preferences (i.e. Resetting to Defaults)</a></li>
+</ul>
+</li>
+<li><a href="#GroovyShell-UserProfileScriptsandState">1.6. User Profile Scripts and State</a>
+<ul class="sectlevel3">
+<li><a href="#GroovyShell-ProfileScripts">1.6.1. Profile Scripts</a>
+<ul class="sectlevel4">
+<li><a href="#GroovyShell-HOMEgroovygroovyshprofile"><code>$HOME/.groovy/groovysh.profile</code></a></li>
+<li><a href="#GroovyShell-HOMEgroovygroovyshrc"><code>$HOME/.groovy/groovysh.rc</code></a></li>
+</ul>
+</li>
+<li><a href="#GroovyShell-State">1.6.2. State</a>
+<ul class="sectlevel4">
+<li><a href="#GroovyShell-HOMEgroovygroovyshhistory"><code>$HOME/.groovy/groovysh.history</code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#GroovyShell-register">1.7. Custom commands</a></li>
+<li><a href="#GroovyShell-Troubleshooting">1.8. Troubleshooting</a>
+<ul class="sectlevel3">
+<li><a href="#GroovyShell-PlatformProblems">1.8.1. Platform Problems</a>
+<ul class="sectlevel4">
+<li><a href="#GroovyShell-ProblemsloadingtheJLineDLL">Problems loading the JLine DLL</a></li>
+<li><a href="#GroovyShell-ProblemswithCygwinonWindows">Problems with Cygwin on Windows</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#GroovyShell-GMavenPlus">2. GMavenPlus Maven Plugin</a></li>
+<li><a href="#GroovyShell-GradleGroovyshPlugin">3. Gradle Groovysh Plugin</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_groovy_groovy_shell"><a class="anchor" href="#_groovy_groovy_shell"></a>1. Groovy : Groovy Shell</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The Groovy Shell, aka. <code>groovysh</code> is a command-line application which
+allows easy access to evaluate Groovy expressions, define classes and
+run simple experiments.</p>
+</div>
+<div class="sect2">
+<h3 id="GroovyShell-Features"><a class="anchor" href="#GroovyShell-Features"></a>1.1. Features</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>No need for <code>go</code> command to execute buffer.</p>
+</li>
+<li>
+<p>Rich cross-platform edit-line editing, history and completion thanks
+to <a href="https://github.com/jline/jline2">JLine2</a>.</p>
+</li>
+<li>
+<p>ANSI colors (prompt, exception traces, etc).</p>
+</li>
+<li>
+<p>Simple, yet robust, command system with online help, user alias
+support and more.</p>
+</li>
+<li>
+<p>User profile support</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="GroovyShell-Command-lineOptionsandArguments"><a class="anchor" href="#GroovyShell-Command-lineOptionsandArguments"></a>1.2. Command-line Options and Arguments</h3>
+<div class="paragraph">
+<p>The shell supports several options to control verbosity, ANSI coloring
+and other features.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">./bin/groovysh --help
+
+Usage: groovysh [options] [...]
+The Groovy Shell, aka groovysh, is a command-line application which allows easy
+access to evaluate Groovy expressions, define classes and run simple
+experiments.
+  -C, --color[=&lt;FLAG&gt;]    Enable or disable use of ANSI colors
+      -cp, -classpath, --classpath
+                          Specify where to find the class files - must be first
+                            argument
+  -d, --debug             Enable debug output
+  -D, --define=&lt;name=value&gt;
+                          Define a system property
+  -e, --evaluate=&lt;CODE&gt;   Evaluate the code first when starting interactive session
+  -h, --help              Display this help message
+      -pa, --parameters   Generate metadata for reflection on method parameter names
+                            (jdk8+ only)
+  -q, --quiet             Suppress superfluous output
+  -T, --terminal=&lt;TYPE&gt;   Specify the terminal TYPE to use
+  -v, --verbose           Enable verbose output
+  -V, --version           Display the version</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="GroovyShell-EvaluatingExpressions"><a class="anchor" href="#GroovyShell-EvaluatingExpressions"></a>1.3. Evaluating Expressions</h3>
+<div class="sect3">
+<h4 id="GroovyShell-SimpleExpressions"><a class="anchor" href="#GroovyShell-SimpleExpressions"></a>1.3.1. Simple Expressions</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">println "Hello"</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="GroovyShell-EvaluationResult"><a class="anchor" href="#GroovyShell-EvaluationResult"></a>1.3.2. Evaluation Result</h4>
+<div class="paragraph">
+<p>When a complete expression is found, it is compiled and evaluated. The
+result of the evaluation is stored into the _ variable.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="GroovyShell-Multi-lineExpressions"><a class="anchor" href="#GroovyShell-Multi-lineExpressions"></a>1.3.3. Multi-line Expressions</h4>
+<div class="paragraph">
+<p>Multi-line/complex expressions (like closure or class definitions) may
+be defined over several lines. When the shell detects that it has a
+complete expression it will compile and evaluate it.</p>
+</div>
+<div class="sect4">
+<h5 id="GroovyShell-DefineaClass"><a class="anchor" href="#GroovyShell-DefineaClass"></a>Define a Class</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Foo {
+    def bar() {
+        println "baz"
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="GroovyShell-UsetheClass"><a class="anchor" href="#GroovyShell-UsetheClass"></a>Use the Class</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">foo = new Foo()
+foo.bar()</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="GroovyShell-Variables"><a class="anchor" href="#GroovyShell-Variables"></a>1.3.4. Variables</h4>
+<div class="paragraph">
+<p>Shell variables are <strong>all</strong> untyped (i.e. no <code>def</code> or other type information).</p>
+</div>
+<div class="paragraph">
+<p>This <strong>will</strong> set a shell variable:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">foo = "bar"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>But, this will evaluate a local variable and will <strong>not</strong> be saved to the shell’s environment:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def foo = "bar"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This behavior can be changed by activating <a href="#GroovyShell-InterpreterMode">interpreter mode</a>.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="GroovyShell-Functions"><a class="anchor" href="#GroovyShell-Functions"></a>1.3.5. Functions</h4>
+<div class="paragraph">
+<p>Functions can be defined in the shell, and will be saved for later use.</p>
+</div>
+<div class="paragraph">
+<p>Defining a function is easy:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">groovy:000&gt; def hello(name) {
+groovy:001&gt; println("Hello $name")
+groovy:002&gt; }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And then using it is as one might expect:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">hello("Jason")</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Internally the shell creates a closure to encapsulate the function and
+then binds the closure to a variable. So variables and functions share
+the same namespace.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="GroovyShell-Commands"><a class="anchor" href="#GroovyShell-Commands"></a>1.4. Commands</h3>
+<div class="paragraph">
+<p>The shell has a number of different commands, which provide rich access
+to the shell’s environment.</p>
+</div>
+<div class="paragraph">
+<p>Commands all have a <em>name</em> and a <em>shortcut</em> (which is something like
+<code>\h</code>). Commands may also have some predefined system <em>aliases</em>. Users
+may also create their own aliases.</p>
+</div>
+<div class="sect3">
+<h4 id="GroovyShell-RecognizedCommands"><a class="anchor" href="#GroovyShell-RecognizedCommands"></a>1.4.1. Recognized Commands</h4>
+<div class="sect4">
+<h5 id="GroovyShell-help"><a class="anchor" href="#GroovyShell-help"></a><code>help</code></h5>
+<div class="paragraph">
+<p>Display the list of commands (and aliases) or the help text for specific command.</p>
+</div>
+<div id="GroovyShell-TheCommandList" class="paragraph">
+<p>The Command List</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>groovy:000&gt; :help
+
+For information about Groovy, visit:
+    http://groovy-lang.org
+
+Available commands:
+  :help      (:h ) Display this help message
+  ?          (:? ) Alias to: :help
+  :exit      (:x ) Exit the shell
+  :quit      (:q ) Alias to: :exit
+  import     (:i ) Import a class into the namespace
+  :display   (:d ) Display the current buffer
+  :clear     (:c ) Clear the buffer and reset the prompt counter
+  :show      (:S ) Show variables, classes or imports
+  :inspect   (:n ) Inspect a variable or the last result with the GUI object browser
+  :purge     (:p ) Purge variables, classes, imports or preferences
+  :edit      (:e ) Edit the current buffer
+  :load      (:l ) Load a file or URL into the buffer
+  .          (:. ) Alias to: :load
+  :save      (:s ) Save the current buffer to a file
+  :record    (:r ) Record the current session to a file
+  :history   (:H ) Display, manage and recall edit-line history
+  :alias     (:a ) Create an alias
+  :set       (:= ) Set (or list) preferences
+  :grab      (:g ) Add a dependency to the shell environment
+  :register  (:rc) Register a new command with the shell
+  :doc       (:D ) Open a browser window displaying the doc for the argument
+
+For help on a specific command type:
+    :help &lt;command&gt;</pre>
+</div>
+</div>
+<div id="GroovyShell-HelpforaCommand" class="paragraph">
+<p>Help for a Command</p>
+</div>
+<div class="paragraph">
+<p>While in the interactive shell, you can ask for help for any command to
+get more details about its syntax or function. Here is an example of
+what happens when you ask for help for the <code>help</code> command:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>groovy:000&gt; :help :help
+
+usage: :help [&lt;command&gt;]
+
+Display the list of commands or the help text for &lt;command&gt;.</pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="GroovyShell-exit"><a class="anchor" href="#GroovyShell-exit"></a><code>exit</code></h5>
+<div class="paragraph">
+<p>Exit the shell.</p>
+</div>
+<div class="paragraph">
+<p>This is the <strong>only</strong> way to exit the shell. Well, you can still <code>CTRL-C</code>,
+but the shell will complain about an abnormal shutdown of the JVM.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="GroovyShell-import"><a class="anchor" href="#GroovyShell-import"></a><code>import</code></h5>
+<div class="paragraph">
+<p>Add a custom import which will be included for all shell evaluations.</p>
+</div>
+<div class="paragraph">
+<p>This command can be given at any time to add new imports.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="GroovyShell-grab"><a class="anchor" href="#GroovyShell-grab"></a><code>grab</code></h5>
+<div class="paragraph">
+<p>Grab a dependency (Maven, Ivy, etc.) from Internet sources or cache,
+and add it to the Groovy Shell environment.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>groovy:000&gt; :grab 'com.google.guava:guava:19.0'
+groovy:000&gt; import com.google.common.collect.BiMap
+===&gt; com.google.common.collect.BiMap</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This command can be given at any time to add new dependencies.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="GroovyShell-display"><a class="anchor" href="#GroovyShell-display"></a><code>display</code></h5>
+<div class="paragraph">
+<p>Display the contents of the current buffer.</p>
+</div>
+<div class="paragraph">
+<p>This only displays the buffer of an incomplete expression. Once the
+expression is complete, the buffer is rest. The prompt will update to
+show the size of the current buffer as well.</p>
+</div>
+<div id="GroovyShell-Example" class="paragraph">
+<p>Example</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>groovy:000&gt; class Foo {
+groovy:001&gt; def bar
+groovy:002&gt; def baz() {
+groovy:003&gt; :display
+ 001&gt; class Foo {
+ 002&gt; def bar
+ 003&gt; def baz() {</pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="GroovyShell-clear"><a class="anchor" href="#GroovyShell-clear"></a><code>clear</code></h5>
+<div class="paragraph">
+<p>Clears the current buffer, resetting the prompt counter to 000. Can be used to recover from compilation errors.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="GroovyShell-show"><a class="anchor" href="#GroovyShell-show"></a><code>show</code></h5>
+<div class="paragraph">
+<p>Show variables, classes or preferences or imports.</p>
+</div>
+<div id="GroovyShell-showvariables" class="paragraph">
+<p><code>show variables</code></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>groovy:000&gt; :show variables
+Variables:
+  _ = true</pre>
+</div>
+</div>
+<div id="GroovyShell-showclasses" class="paragraph">
+<p><code>show classes</code></p>
+</div>
+<div id="GroovyShell-showimports" class="paragraph">
+<p><code>show imports</code></p>
+</div>
+<div id="GroovyShell-showpreferences" class="paragraph">
+<p><code>show preferences</code></p>
+</div>
+<div id="GroovyShell-showall" class="paragraph">
+<p><code>show all</code></p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="GroovyShell-inspect"><a class="anchor" href="#GroovyShell-inspect"></a><code>inspect</code></h5>
+<div class="paragraph">
+<p>Opens the GUI object browser to inspect a variable or the result of the
+last evaluation.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="GroovyShell-purge"><a class="anchor" href="#GroovyShell-purge"></a><code>purge</code></h5>
+<div class="paragraph">
+<p>Purges objects from the shell.</p>
+</div>
+<div id="GroovyShell-purgevariables" class="paragraph">
+<p><code>purge variables</code></p>
+</div>
+<div id="GroovyShell-purgeclasses" class="paragraph">
+<p><code>purge classes</code></p>
+</div>
+<div id="GroovyShell-purgeimports" class="paragraph">
+<p><code>purge imports</code></p>
+</div>
+<div id="GroovyShell-purgepreferences" class="paragraph">
+<p><code>purge preferences</code></p>
+</div>
+<div id="GroovyShell-purgeall" class="paragraph">
+<p><code>purge all</code></p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="GroovyShell-edit"><a class="anchor" href="#GroovyShell-edit"></a><code>edit</code></h5>
+<div class="paragraph">
+<p>Edit the current buffer in an external editor.</p>
+</div>
+<div class="paragraph">
+<p>Currently only works on UNIX systems which have the <code>EDITOR</code> environment
+variable set, or have configured the <code>editor</code> preference.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="GroovyShell-load"><a class="anchor" href="#GroovyShell-load"></a><code>load</code></h5>
+<div class="paragraph">
+<p>Load one or more files (or urls) into the buffer.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="GroovyShell-save"><a class="anchor" href="#GroovyShell-save"></a><code>save</code></h5>
+<div class="paragraph">
+<p>Saves the buffer’s contents to a file.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="GroovyShell-record"><a class="anchor" href="#GroovyShell-record"></a><code>record</code></h5>
+<div class="paragraph">
+<p>Record the current session to a file.</p>
+</div>
+<div id="GroovyShell-recordstart" class="paragraph">
+<p><code>record start</code></p>
+</div>
+<div id="GroovyShell-recordstop" class="paragraph">
+<p><code>record stop</code></p>
+</div>
+<div id="GroovyShell-recordstatus" class="paragraph">
+<p><code>record status</code></p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="GroovyShell-history"><a class="anchor" href="#GroovyShell-history"></a><code>history</code></h5>
+<div class="paragraph">
+<p>Display, manage and recall edit-line history.</p>
+</div>
+<div id="GroovyShell-historyshow" class="paragraph">
+<p><code>history show</code></p>
+</div>
+<div id="GroovyShell-historyrecall" class="paragraph">
+<p><code>history recall</code></p>
+</div>
+<div id="GroovyShell-historyflush" class="paragraph">
+<p><code>history flush</code></p>
+</div>
+<div id="GroovyShell-historyclear" class="paragraph">
+<p><code>history clear</code></p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="GroovyShell-alias"><a class="anchor" href="#GroovyShell-alias"></a><code>alias</code></h5>
+<div class="paragraph">
+<p>Create an alias.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="GroovyShell-doc"><a class="anchor" href="#GroovyShell-doc"></a><code>doc</code></h5>
+<div class="paragraph">
+<p>Opens a browser with documentation for the provided class. For example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>groovy:000&gt; :doc java.util.List
+http://docs.oracle.com/javase/7/docs/api/java/util/List.html
+http://docs.groovy-lang.org/2.4.2-SNAPSHOT/html/groovy-jdk/java/util/List.html</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>will open two windows (or tabs, depending on your browser):</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>one for the JDK documentation</p>
+</li>
+<li>
+<p>one for the GDK documentation</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect4">
+<h5 id="GroovyShell-set"><a class="anchor" href="#GroovyShell-set"></a><code>set</code></h5>
+<div class="paragraph">
+<p>Set or list preferences.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="GroovyShell-Preferences"><a class="anchor" href="#GroovyShell-Preferences"></a>1.5. Preferences</h3>
+<div class="paragraph">
+<p>Some of aspects of <code>groovysh</code> behaviors can be customized by setting
+preferences. Preferences are set using the <code>set</code> command or the <code>:=</code>
+shortcut.</p>
+</div>
+<div class="sect3">
+<h4 id="GroovyShell-RecognizedPreferences"><a class="anchor" href="#GroovyShell-RecognizedPreferences"></a>1.5.1. Recognized Preferences</h4>
+<div class="sect4">
+<h5 id="GroovyShell-InterpreterMode"><a class="anchor" href="#GroovyShell-InterpreterMode"></a><code>interpreterMode</code></h5>
+<div class="paragraph">
+<p>Allows the use of typed variables (i.e. <code>def</code> or other type information):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>groovy:000&gt; def x = 3
+===&gt; 3
+groovy:000&gt; x
+===&gt; 3</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>It&#8217;s especially useful for copy&amp;pasting code from tutorials etc. into the running session.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="GroovyShell-verbosity"><a class="anchor" href="#GroovyShell-verbosity"></a><code>verbosity</code></h5>
+<div class="paragraph">
+<p>Set the shell’s verbosity level. Expected to be one of:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>DEBUG</code></p>
+</li>
+<li>
+<p><code>VERBOSE</code></p>
+</li>
+<li>
+<p><code>INFO</code></p>
+</li>
+<li>
+<p><code>QUIET</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Default is <code>INFO</code>.</p>
+</div>
+<div class="paragraph">
+<p>If this preference is set to an invalid value, then the previous setting
+will be used, or if there is none, then the preference is removed and
+the default is used.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_code_colors_code"><a class="anchor" href="#_code_colors_code"></a><code>colors</code></h5>
+<div class="paragraph">
+<p>Set the shell’s use of colors.</p>
+</div>
+<div class="paragraph">
+<p>Default is <code>true</code>.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="GroovyShell-show-last-result"><a class="anchor" href="#GroovyShell-show-last-result"></a><code>show-last-result</code></h5>
+<div class="paragraph">
+<p>Show the last result after an execution.</p>
+</div>
+<div class="paragraph">
+<p>Default is <code>true</code>.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="GroovyShell-sanitize-stack-trace"><a class="anchor" href="#GroovyShell-sanitize-stack-trace"></a><code>sanitize-stack-trace</code></h5>
+<div class="paragraph">
+<p>Sanitize (trim-down/filter) stack traces.</p>
+</div>
+<div class="paragraph">
+<p>Default is <code>true</code>.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="GroovyShell-editor"><a class="anchor" href="#GroovyShell-editor"></a><code>editor</code></h5>
+<div class="paragraph">
+<p>Configures the editor used by the <code>edit</code> command.</p>
+</div>
+<div class="paragraph">
+<p>Default is the value of the system environment variable <code>EDITOR</code>.</p>
+</div>
+<div class="paragraph">
+<p>Mac OS XTo use TextEdit, the default text editor on Mac OS X, configure:
+set editor /Applications/TextEdit.app/Contents/MacOS/TextEdit</p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="GroovyShell-SettingaPreference"><a class="anchor" href="#GroovyShell-SettingaPreference"></a>1.5.2. Setting a Preference</h4>
+<div class="listingblock">
+<div class="content">
+<pre>groovy:000&gt; :set verbosity DEBUG</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="GroovyShell-ListingPreferences"><a class="anchor" href="#GroovyShell-ListingPreferences"></a>1.5.3. Listing Preferences</h4>
+<div class="paragraph">
+<p>To list the current <em>set</em> preferences (and their values):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>groovy:000&gt; :show preferences</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Limitation: At the moment, there is no way to list all of the
+known/available preferences to be set.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="GroovyShell-ClearingPreferencesieResettingtoDefaults"><a class="anchor" href="#GroovyShell-ClearingPreferencesieResettingtoDefaults"></a>1.5.4. Clearing Preferences (i.e. Resetting to Defaults)</h4>
+<div class="listingblock">
+<div class="content">
+<pre>groovy:000&gt; :purge preferences</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="GroovyShell-UserProfileScriptsandState"><a class="anchor" href="#GroovyShell-UserProfileScriptsandState"></a>1.6. User Profile Scripts and State</h3>
+<div class="sect3">
+<h4 id="GroovyShell-ProfileScripts"><a class="anchor" href="#GroovyShell-ProfileScripts"></a>1.6.1. Profile Scripts</h4>
+<div class="sect4">
+<h5 id="GroovyShell-HOMEgroovygroovyshprofile"><a class="anchor" href="#GroovyShell-HOMEgroovygroovyshprofile"></a><code>$HOME/.groovy/groovysh.profile</code></h5>
+<div class="paragraph">
+<p>This script, if it exists, is loaded when the shell starts up.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="GroovyShell-HOMEgroovygroovyshrc"><a class="anchor" href="#GroovyShell-HOMEgroovygroovyshrc"></a><code>$HOME/.groovy/groovysh.rc</code></h5>
+<div class="paragraph">
+<p>This script, if it exists, is loaded when the shell enters interactive
+mode.</p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="GroovyShell-State"><a class="anchor" href="#GroovyShell-State"></a>1.6.2. State</h4>
+<div class="sect4">
+<h5 id="GroovyShell-HOMEgroovygroovyshhistory"><a class="anchor" href="#GroovyShell-HOMEgroovygroovyshhistory"></a><code>$HOME/.groovy/groovysh.history</code></h5>
+<div class="paragraph">
+<p>Edit-line history is stored in this file.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="GroovyShell-register"><a class="anchor" href="#GroovyShell-register"></a>1.7. Custom commands</h3>
+<div class="paragraph">
+<p>The <code>register</code> command allows you to register custom commands in the shell. For example, writing the following
+will register the <code>Stats</code> command:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>groovy:000&gt; :register Stats</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>where the <code>Stats</code> class is a class extending the <code>org.codehaus.groovy.tools.shell.CommandSupport</code> class. For example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import org.codehaus.groovy.tools.shell.CommandSupport
+import org.codehaus.groovy.tools.shell.Groovysh
+
+class Stats extends CommandSupport {
+    protected Stats(final Groovysh shell) {
+        super(shell, 'stats', 'T')
+    }
+
+    public Object execute(List args) {
+        println "Free memory: ${Runtime.runtime.freeMemory()}"
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then the command can be called using:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>groovy:000&gt; :stats
+stats
+Free memory: 139474880
+groovy:000&gt;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note that the command class must be found on classpath: you cannot define a new command from within the shell.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="GroovyShell-Troubleshooting"><a class="anchor" href="#GroovyShell-Troubleshooting"></a>1.8. Troubleshooting</h3>
+<div class="paragraph">
+<p>Please <a href="https://issues.apache.org/jira/browse/GROOVY">report</a> any problems you
+run into. Please be sure to mark the JIRA issue with the <code>Groovysh</code>
+component.</p>
+</div>
+<div class="sect3">
+<h4 id="GroovyShell-PlatformProblems"><a class="anchor" href="#GroovyShell-PlatformProblems"></a>1.8.1. Platform Problems</h4>
+<div class="sect4">
+<h5 id="GroovyShell-ProblemsloadingtheJLineDLL"><a class="anchor" href="#GroovyShell-ProblemsloadingtheJLineDLL"></a>Problems loading the JLine DLL</h5>
+<div class="paragraph">
+<p>On Windows, <a href="https://github.com/jline/jline2">JLine2</a> (which is used for the fancy
+shell input/history/completion fluff), uses a <strong>tiny</strong> DLL file to trick
+the <strong>evil</strong> Windows faux-shell (<code>CMD.EXE</code> or <code>COMMAND.COM</code>) into
+providing Java with unbuffered input. In some rare cases, this might
+fail to load or initialize.</p>
+</div>
+<div class="paragraph">
+<p>One solution is to disable the frills and use the unsupported terminal
+instance. You can do that on the command-line using the <code>--terminal</code>
+flag and set it to one of:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>none</code></p>
+</li>
+<li>
+<p><code>false</code></p>
+</li>
+<li>
+<p><code>off</code></p>
+</li>
+<li>
+<p><code>jline.UnsupportedTerminal</code></p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>groovysh --terminal=none</pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="GroovyShell-ProblemswithCygwinonWindows"><a class="anchor" href="#GroovyShell-ProblemswithCygwinonWindows"></a>Problems with Cygwin on Windows</h5>
+<div class="paragraph">
+<p>Some people have issues when running groovysh with cygwin. If you have
+troubles, the following may help:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>stty -icanon min 1 -echo
+groovysh --terminal=unix
+stty icanon echo</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="GroovyShell-GMavenPlus"><a class="anchor" href="#GroovyShell-GMavenPlus"></a>2. GMavenPlus Maven Plugin</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><a href="https://github.com/groovy/GMavenPlus">GMavenPlus</a> is a Maven plugin with goals
+that support launching a Groovy Shell or Groovy Console bound to a Maven
+project.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="GroovyShell-GradleGroovyshPlugin"><a class="anchor" href="#GroovyShell-GradleGroovyshPlugin"></a>3. Gradle Groovysh Plugin</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><a href="https://github.com/tkruse/gradle-groovysh-plugin">Gradle Groovysh Plugin</a> is a Gradle plugin that provides gradle tasks to start a Groovy Shell bound to a Gradle project.</p>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 3.0.0-alpha-3<br>
+Last updated 2018-06-23 13:44:39 AEST
+</div>
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+<script>prettyPrint()</script>
+</body>
+</html>

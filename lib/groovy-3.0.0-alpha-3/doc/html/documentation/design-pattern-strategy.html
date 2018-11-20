@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.6.1">
+<title>Strategy Pattern</title>
+<link rel="stylesheet" href="./assets/css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+<h1>Strategy Pattern</h1>
+<div class="details">
+<span id="revnumber">version 3.0.0-alpha-3</span>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_example">1. Example</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <a href="http://en.wikipedia.org/wiki/Strategy_pattern">Strategy Pattern</a> allows you to abstract away particular algorithms from their usage. This allows you to easily swap the algorithm being used without having to change the calling code. The general form of the pattern is:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="assets/img/StrategyClasses.gif" alt="StrategyClasses">
+</div>
+</div>
+<div class="paragraph">
+<p>In Groovy, because of its ability to treat code as a first class object using anonymous methods (which we loosely call <em>Closures</em>), the need for the strategy pattern is greatly reduced. You can simply place algorithms inside Closures.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_example"><a class="anchor" href="#_example"></a>1. Example</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>First let&#8217;s look at the traditional way of encapsulating the Strategy Pattern.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">interface Calc {
+    def execute(n, m)
+}
+
+class CalcByMult implements Calc {
+    def execute(n, m) { n * m }
+}
+
+class CalcByManyAdds implements Calc {
+    def execute(n, m) {
+        def result = 0
+        n.times{
+            result += m
+        }
+
+        result
+    }
+}
+
+def sampleData = [
+    [3, 4, 12],
+    [5, -5, -25]
+]
+
+Calc[] multiplicationStrategies = [
+    new CalcByMult(),
+    new CalcByManyAdds()
+]
+
+sampleData.each{ data -&gt;
+    multiplicationStrategies.each { calc -&gt;
+        assert data[2] == calc.execute(data[0], data[1])
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here we have defined an interface <code>Calc</code> which our concrete strategy classes will implement (we could also have used an abstract class). We then defined two algorithms for doing simple multiplication: <code>CalcByMult</code> the normal way, and CalcByManyAdds using only addition (don&#8217;t try this one using negative numbers - yes we could fix this but it would just make the example longer). We then use normal <a href="http://en.wikipedia.org/wiki/Polymorphism_in_object-oriented_programming">polymorphism</a> to invoke the algorithms.</p>
+</div>
+<div class="paragraph">
+<p>Here is the Groovier way to achieve the same thing using Closures:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def multiplicationStrategies = [
+    { n, m -&gt; n * m },
+    { n, m -&gt; def result = 0; n.times{ result += m }; result }
+]
+
+def sampleData = [
+    [3, 4, 12],
+    [5, -5, -25]
+]
+
+sampleData.each{ data -&gt;
+    multiplicationStrategies.each { calc -&gt;
+        assert data[2] == calc(data[0], data[1])
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 3.0.0-alpha-3<br>
+Last updated 2018-06-23 13:44:45 AEST
+</div>
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+<script>prettyPrint()</script>
+</body>
+</html>

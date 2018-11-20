@@ -142,7 +142,7 @@ public class LightFollowsMe
      {
           if (_static_evt.value == 12)
           {
-               int index0 = 0;
+               int index6 = 0;
           } else
           {
                if (_static_evt.value == 13)

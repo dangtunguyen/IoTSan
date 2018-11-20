@@ -1,0 +1,1947 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.6.1">
+<title>Type checking extensions</title>
+<link rel="stylesheet" href="./assets/css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+<h1>Type checking extensions</h1>
+<div class="details">
+<span id="revnumber">version 3.0.0-alpha-3</span>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_writing_a_type_checking_extension">1. Writing a type checking extension</a>
+<ul class="sectlevel2">
+<li><a href="#_towards_a_smarter_type_checker">1.1. Towards a smarter type checker</a></li>
+<li><a href="#Typecheckingextensions-Howdoesitwork">1.2. The extensions attribute</a></li>
+<li><a href="#_a_dsl_for_type_checking">1.3. A DSL for type checking</a></li>
+<li><a href="#Typecheckingextensions-TheAPI">1.4. Type checking extensions API</a>
+<ul class="sectlevel3">
+<li><a href="#Typecheckingextensions-AST">1.4.1. AST</a></li>
+<li><a href="#Typecheckingextensions-Events">1.4.2. Events</a></li>
+</ul>
+</li>
+<li><a href="#Typecheckingextensions-Workingwithextensions">1.5. Working with extensions</a>
+<ul class="sectlevel3">
+<li><a href="#Typecheckingextensions-Supportclasses">1.5.1. Support classes</a></li>
+<li><a href="#Typecheckingextensions-Classnodes">1.5.2. Class nodes</a></li>
+<li><a href="#Typecheckingextensions-Helpingthetypechecker">1.5.3. Helping the type checker</a></li>
+<li><a href="#Typecheckingextensions-Throwinganerror">1.5.4. Throwing an error</a></li>
+<li><a href="#Typecheckingextensions-isXXXExpression">1.5.5. isXXXExpression</a></li>
+<li><a href="#Typecheckingextensions-Virtualmethods">1.5.6. Virtual methods</a></li>
+<li><a href="#Typecheckingextensions-Scoping">1.5.7. Scoping</a></li>
+<li><a href="#Typecheckingextensions-Otherusefulmethods">1.5.8. Other useful methods</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_advanced_type_checking_extensions">2. Advanced type checking extensions</a>
+<ul class="sectlevel2">
+<li><a href="#_precompiled_type_checking_extensions">2.1. Precompiled type checking extensions</a></li>
+<li><a href="#_using_grab_in_a_type_checking_extension">2.2. Using @Grab in a type checking extension</a></li>
+<li><a href="#_sharing_or_packaging_type_checking_extensions">2.3. Sharing or packaging type checking extensions</a></li>
+<li><a href="#_global_type_checking_extensions">2.4. Global type checking extensions</a></li>
+<li><a href="#_type_checking_extensions_and_compilestatic">2.5. Type checking extensions and @CompileStatic</a></li>
+<li><a href="#mixed-mode">2.6. Mixed mode compilation</a></li>
+<li><a href="#ast-xform-as-extension">2.7. Transforming the AST in an extension</a></li>
+<li><a href="#_examples">2.8. Examples</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_writing_a_type_checking_extension"><a class="anchor" href="#_writing_a_type_checking_extension"></a>1. Writing a type checking extension</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_towards_a_smarter_type_checker"><a class="anchor" href="#_towards_a_smarter_type_checker"></a>1.1. Towards a smarter type checker</h3>
+<div class="paragraph">
+<p>Despite being a dynamic language, Groovy can be used with a static type
+checker at compile time, enabled using the <a href="#static-type-checking">@TypeChecked</a>
+annotation. In this mode, the compiler becomes
+more verbose and throws errors for, example, typos, non-existent
+methods,… This comes with a few limitations though, most of them coming
+from the fact that Groovy remains inherently a dynamic language. For
+example, you wouldn’t be able to use type checking on code that uses the markup builder:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def builder = new MarkupBuilder(out)
+builder.html {
+    head {
+        // ...
+    }
+    body {
+        p 'Hello, world!'
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In the previous example, none of the <code>html</code>, <code>head</code>, <code>body</code> or <code>p</code> methods
+exist. However if you execute the code, it works because Groovy uses dynamic dispatch
+and converts those method calls at runtime. In this builder, there’s no limitation about
+the number of tags that you can use, nor the attributes, which means there is no chance
+for a type checker to know about all the possible methods (tags) at compile time, unless
+you create a builder dedicated to HTML for example.</p>
+</div>
+<div class="paragraph">
+<p>Groovy is a platform of choice when it comes to implement internal DSLs. The flexible syntax,
+combined with runtime and compile-time metaprogramming capabilities make Groovy an interesting
+choice because it allows the programmer to focus on the DSL rather than
+on tooling or implementation. Since Groovy DSLs are Groovy code, it’s
+easy to have IDE support without having to write a dedicated plugin for
+example.</p>
+</div>
+<div class="paragraph">
+<p>In a lot of cases, DSL engines are written in Groovy (or Java) then user
+code is executed as scripts, meaning that you have some kind of wrapper
+on top of user logic. The wrapper may consist, for example, in a
+<code>GroovyShell</code> or <code>GroovyScriptEngine</code> that performs some tasks transparently
+before running the script (adding imports, applying AST transforms,
+extending a base script,…). Often, user written scripts come to
+production without testing because the DSL logic comes to a point
+where <strong>any</strong> user may write code using the DSL syntax. In the end, a user
+may just ignore that what he writes is actually <strong>code</strong>. This adds some
+challenges for the DSL implementer, such as securing execution of user
+code or, in this case, early reporting of errors.</p>
+</div>
+<div class="paragraph">
+<p>For example, imagine a DSL which goal is to drive a rover on Mars
+remotely. Sending a message to the rover takes around 15 minutes. If the
+rover executes the script and fails with an error (say a typo), you have
+two problems:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>first, feedback comes only after 30 minutes (the time needed for the
+rover to get the script and the time needed to receive the error)</p>
+</li>
+<li>
+<p>second, some portion of the script has been executed and you may have
+to change the fixed script significantly (implying that you need to know
+the current state of the rover…)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Type checking extensions is a mechanism that will
+allow the developer of a DSL engine to make those scripts safer by
+applying the same kind of checks that static type checking allows on
+regular groovy classes.</p>
+</div>
+<div class="paragraph">
+<p>The principle, here, is to fail early, that is
+to say fail compilation of scripts as soon as possible, and if possible
+provide feedback to the user (including nice error messages).</p>
+</div>
+<div class="paragraph">
+<p>In short, the idea behind type checking extensions is to make the compiler
+aware of all the runtime metaprogramming tricks that the DSL uses, so that
+scripts can benefit the same level of compile-time checks as a verbose statically
+compiled code would have. We will see that you can go even further by performing
+checks that a normal type checker wouldn&#8217;t do, delivering powerful compile-time
+checks for your users.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="Typecheckingextensions-Howdoesitwork"><a class="anchor" href="#Typecheckingextensions-Howdoesitwork"></a>1.2. The extensions attribute</h3>
+<div class="paragraph">
+<p>The <code>@TypeChecked</code> annotation supports an attribute
+named <code>extensions</code>. This parameter takes an array of strings
+corresponding to a list of <em>type checking extensions scripts</em>. Those
+scripts are found at <strong>compile time</strong> on classpath. For example, you would
+write:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@TypeChecked(extensions='/path/to/myextension.groovy')
+void foo() { ...}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In that case, the <em>foo</em> methods would be type checked with the rules of
+the normal type checker completed by those found in
+the <em>myextension.groovy</em> script. Note that while internally the type
+checker supports multiple mechanisms to implement type checking
+extensions (including plain old java code), the recommended way is to
+use those type checking extension scripts.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_a_dsl_for_type_checking"><a class="anchor" href="#_a_dsl_for_type_checking"></a>1.3. A DSL for type checking</h3>
+<div class="paragraph">
+<p>The idea behind type checking extensions is to use a DSL to extend the
+type checker capabilities. This DSL allows you to hook into the
+compilation process, more specifically the type checking phase, using an
+"event-driven" API. For example, when the type checker enters a method
+body, it throws a <em>beforeVisitMethod</em> event that the extension can react to:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">beforeVisitMethod { methodNode -&gt;
+ println "Entering ${methodNode.name}"
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Imagine that you have this rover DSL at hand. A user would write:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">robot.move 100</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you have a class defined as such:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Robot {
+    Robot move(int qt) { this }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The script can be type checked before being executed using the following
+script:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def config = new CompilerConfiguration()
+config.addCompilationCustomizers(
+    new ASTTransformationCustomizer(TypeChecked)            <i class="conum" data-value="1"></i><b>(1)</b>
+)
+def shell = new GroovyShell(config)                         <i class="conum" data-value="2"></i><b>(2)</b>
+def robot = new Robot()
+shell.setVariable('robot', robot)
+shell.evaluate(script)                                      <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>a compiler configuration adds the <code>@TypeChecked</code> annotation to all classes</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>use the configuration in a <code>GroovyShell</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>so that scripts compiled using the shell are compiled with <code>@TypeChecked</code> without the user having to add it explicitly</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Using the compiler configuration above, we can apply <em>@TypeChecked</em>
+transparently to the script. In that case, it will fail at compile
+time:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>[Static type checking] - The variable [robot] is undeclared.</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now, we will slightly update the configuration to include the
+``extensions'' parameter:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">config.addCompilationCustomizers(
+    new ASTTransformationCustomizer(
+        TypeChecked,
+        extensions:['robotextension.groovy'])
+)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then add the following to your classpath:</p>
+</div>
+<div class="listingblock">
+<div class="title">robotextension.groovy</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">unresolvedVariable { var -&gt;
+    if ('robot'==var.name) {
+        storeType(var, classNodeFor(Robot))
+        handled = true
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here, we’re telling the compiler that if an <em>unresolved variable</em> is found
+and that the name of the variable is <em>robot</em>, then we can make sure that the type of this
+variable is <code>Robot</code>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="Typecheckingextensions-TheAPI"><a class="anchor" href="#Typecheckingextensions-TheAPI"></a>1.4. Type checking extensions API</h3>
+<div class="sect3">
+<h4 id="Typecheckingextensions-AST"><a class="anchor" href="#Typecheckingextensions-AST"></a>1.4.1. AST</h4>
+<div class="paragraph">
+<p>The type checking API is a low level API, dealing with the Abstract
+Syntax Tree. You will have to know your AST well to develop extensions,
+even if the DSL makes it much easier than just dealing with AST code
+from plain Java or Groovy.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="Typecheckingextensions-Events"><a class="anchor" href="#Typecheckingextensions-Events"></a>1.4.2. Events</h4>
+<div class="paragraph">
+<p>The type checker sends the following events, to which an extension
+script can react:</p>
+</div>
+<table id="event-setup" class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Event name</strong></p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>setup</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Called When</strong></p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>Called after the type checker finished initialization</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Arguments</strong></p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>none</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Usage</strong></p></td>
+<td class="tableblock halign-left valign-top"><div><div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">setup {
+    // this is called before anything else
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Can be used to perform setup of your extension</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<table id="event-finish" class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Event name</strong></p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>finish</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Called When</strong></p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>Called after the type checker completed type checking</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Arguments</strong></p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>none</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Usage</strong></p></td>
+<td class="tableblock halign-left valign-top"><div><div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">finish {
+    // this is after completion
+    // of all type checking
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Can be used to perform additional checks after the type checker has finished its job.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<table id="event-unresolvedVariable" class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Event name</strong></p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>unresolvedVariable</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Called When</strong></p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>Called when the type checker finds an
+  unresolved variable</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Arguments</strong></p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>VariableExpression var</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Usage</strong></p></td>
+<td class="tableblock halign-left valign-top"><div><div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">unresolvedVariable { var -&gt;
+    if ('people' == var.name) {
+        storeType(var, classNodeFor(List))
+        handled = true
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Allows the developer to help the type checker with user-injected variables.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<table id="event-unresolvedProperty" class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Event name</strong></p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>unresolvedProperty</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Called When</strong></p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>Called when the type checker cannot find
+  a property on the receiver</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Arguments</strong></p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>PropertyExpression pexp</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Usage</strong></p></td>
+<td class="tableblock halign-left valign-top"><div><div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">unresolvedProperty { pexp -&gt;
+    if ('longueur'==pexp.propertyAsString &amp;&amp;
+        getType(pexp.objectExpression)==classNodeFor(String)) {
+        storeType(pexp,classNodeFor(int))
+        handled = true
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Allows the developer to handle "dynamic" properties</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<table id="event-unresolvedAttribute" class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Event name</strong></p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>unresolvedAttribute</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Called When</strong></p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>Called when the type checker cannot
+  find an attribute on the receiver</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Arguments</strong></p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>AttributeExpression aex</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Usage</strong></p></td>
+<td class="tableblock halign-left valign-top"><div><div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">unresolvedAttribute { aex -&gt;
+    if (getType(aex.objectExpression)==classNodeFor(String)) {
+        storeType(aex,classNodeFor(String))
+        handled = true
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Allows the developer to handle missing attributes</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<table id="event-beforeMethodCall" class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Event name</strong></p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>beforeMethodCall</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Called When</strong></p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>Called before the type checker starts type
+  checking a method call</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Arguments</strong></p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>MethodCall call</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Usage</strong></p></td>
+<td class="tableblock halign-left valign-top"><div><div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">beforeMethodCall { call -&gt;
+    if (isMethodCallExpression(call)
+            &amp;&amp; call.methodAsString=='toUpperCase') {
+        addStaticTypeError('Not allowed',call)
+        handled = true
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Allows you to intercept method calls before the
+type checker performs its own checks. This is useful if you want to
+replace the default type checking with a custom one for a limited scope.
+In that case, you must set the handled flag to true, so that the type
+checker skips its own checks.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<table id="event-afterMethodCall" class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Event name</strong></p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>afterMethodCall</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Called When</strong></p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>Called once the type checker has finished
+  type checking a method call</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Arguments</strong></p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>MethodCall call</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Usage</strong></p></td>
+<td class="tableblock halign-left valign-top"><div><div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">afterMethodCall { call -&gt;
+    if (getTargetMethod(call).name=='toUpperCase') {
+        addStaticTypeError('Not allowed',call)
+        handled = true
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Allow you to perform additional checks after the type
+checker has done its own checks. This is in particular useful if you
+want to perform the standard type checking tests but also want to ensure
+additional type safety, for example checking the arguments against each
+other.Note that <code>afterMethodCall</code> is called even if you did
+<code>beforeMethodCall</code> and set the handled flag to true.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<table id="event-onMethodSelection" class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Event name</strong></p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>onMethodSelection</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Called When</strong></p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>Called by the type checker when it finds
+  a method appropriate for a method call</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Arguments</strong></p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>Expression expr, MethodNode node</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Usage</strong></p></td>
+<td class="tableblock halign-left valign-top"><div><div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">onMethodSelection { expr, node -&gt;
+    if (node.declaringClass.name == 'java.lang.String') {
+        // calling a method on 'String'
+        // let’s perform additional checks!
+        if (++count&gt;2) {
+            addStaticTypeError("You can use only 2 calls on String in your source code",expr)
+        }
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The type checker works by inferring
+argument types of a method call, then chooses a target method. If it
+finds one that corresponds, then it triggers this event. It is for
+example interesting if you want to react on a specific method call, such
+as entering the scope of a method that takes a closure as argument (as
+in builders).Please note that this event may be thrown for various types
+of expressions, not only method calls (binary expressions for example).</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<table id="event-methodNotFound" class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Event name</strong></p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>methodNotFound</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Called When</strong></p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>Called by the type checker when it fails to
+  find an appropriate method for a method call</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Arguments</strong></p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>ClassNode receiver, String name, ArgumentListExpression argList, ClassNode[] argTypes,MethodCall call</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Usage</strong></p></td>
+<td class="tableblock halign-left valign-top"><div><div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">methodNotFound { receiver, name, argList, argTypes, call -&gt;
+    // receiver is the inferred type of the receiver
+    // name is the name of the called method
+    // argList is the list of arguments the method was called with
+    // argTypes is the array of inferred types for each argument
+    // call is the method call for which we couldn’t find a target method
+    if (receiver==classNodeFor(String)
+            &amp;&amp; name=='longueur'
+            &amp;&amp; argList.size()==0) {
+        handled = true
+        return newMethod('longueur', classNodeFor(String))
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Unlike <code>onMethodSelection</code>, this event is
+sent when the type checker cannot find a target method for a method call
+(instance or static). It gives you the chance to intercept the error
+before it is sent to the user, but also set the target method.For this,
+you need to return a list of <code>MethodNode</code>. In most situations, you would
+either return: an empty list, meaning that you didn’t find a
+corresponding method, a list with exactly one element, saying that there’s
+no doubt about the target methodIf you return more than one MethodNode,
+then the compiler would throw an error to the user stating that the
+method call is ambiguous, listing the possible methods.For convenience,
+if you want to return only one method, you are allowed to return it
+directly instead of wrapping it into a list.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<table id="event-beforeVisitMethod" class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Event name</strong></p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>beforeVisitMethod</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Called When</strong></p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>Called by the type checker before type
+  checking a method body</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Arguments</strong></p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>MethodNode node</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Usage</strong></p></td>
+<td class="tableblock halign-left valign-top"><div><div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">beforeVisitMethod { methodNode -&gt;
+    // tell the type checker we will handle the body by ourselves
+    handled = methodNode.name.startsWith('skip')
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The type checker will call this method before
+starting to type check a method body. If you want, for example, to
+perform type checking by yourself instead of letting the type checker do
+it, you have to set the handled flag to true.This event can also be used
+to help defining the scope of your extension (for example, applying it
+only if you are inside method foo).</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<table id="event-afterVisitMethod" class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Event name</strong></p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>afterVisitMethod</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Called When</strong></p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>Called by the type checker after type
+  checking a method body</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Arguments</strong></p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>MethodNode node</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Usage</strong></p></td>
+<td class="tableblock halign-left valign-top"><div><div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">afterVisitMethod { methodNode -&gt;
+    scopeExit {
+        if (methods&gt;2) {
+            addStaticTypeError("Method ${methodNode.name} contains more than 2 method calls", methodNode)
+        }
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Gives you the opportunity to perform additional
+checks after a method body is visited by the type checker. This is
+useful if you collect information, for example, and want to perform
+additional checks once everything has been collected.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<table id="event-beforeVisitClass" class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Event name</strong></p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>beforeVisitClass</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Called When</strong></p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>Called by the type checker before type checking a class</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Arguments</strong></p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>ClassNode node</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Usage</strong></p></td>
+<td class="tableblock halign-left valign-top"><div><div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">beforeVisitClass { ClassNode classNode -&gt;
+    def name = classNode.nameWithoutPackage
+    if (!(name[0] in 'A'..'Z')) {
+        addStaticTypeError("Class '${name}' doesn't start with an uppercase letter",classNode)
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If a class is type checked, then
+before visiting the class, this event will be sent. It is also the case
+for inner classes defined inside a class annotated with <code>@TypeChecked</code>. It
+can help you define the scope of your extension, or you can even totally
+replace the visit of the type checker with a custom type checking
+implementation. For that, you would have to set the <code>handled</code> flag to
+<code>true</code>. </p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<table id="event-afterVisitClass" class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Event name</strong></p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>afterVisitClass</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Called When</strong></p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>Called by the type checker after having finished the visit of a type checked class</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Arguments</strong></p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>ClassNode node</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Usage</strong></p></td>
+<td class="tableblock halign-left valign-top"><div><div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">afterVisitClass { ClassNode classNode -&gt;
+    def name = classNode.nameWithoutPackage
+    if (!(name[0] in 'A'..'Z')) {
+        addStaticTypeError("Class '${name}' doesn't start with an uppercase letter",classNode)
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Called
+for every class being type checked after the type checker finished its
+work. This includes classes annotated with <code>@TypeChecked</code> and any
+inner/anonymous class defined in the same class with is not skipped.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<table id="event-incompatibleAssignment" class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Event name</strong></p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>incompatibleAssignment</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Called When</strong></p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>Called when the type checker thinks
+    that an assignment is incorrect, meaning that the right hand side of an
+    assignment is incompatible with the left hand side</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Arguments</strong></p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>ClassNode lhsType, ClassNode rhsType,  Expression assignment</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Usage</strong></p></td>
+<td class="tableblock halign-left valign-top"><div><div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">incompatibleAssignment { lhsType, rhsType, expr -&gt;
+    if (isBinaryExpression(expr) &amp;&amp; isAssignment(expr.operation.type)) {
+        if (lhsType==classNodeFor(int) &amp;&amp; rhsType==classNodeFor(Closure)) {
+            handled = true
+        }
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Gives the
+developer the ability to handle incorrect assignments. This is for
+example useful if a class overrides <code>setProperty</code>, because in that case it
+is possible that assigning a variable of one type to a property of
+another type is handled through that runtime mechanism. In that case, you
+can help the type checker just by telling it that the assignment is
+valid (using <code>handled</code> set to <code>true</code>).</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<table id="event-ambiguousMethods" class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Event name</strong></p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>ambiguousMethods</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Called When</strong></p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>Called when the type checker cannot choose between several candidate methods</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Arguments</strong></p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>List&lt;MethodNode&gt; methods,  Expression origin</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Usage</strong></p></td>
+<td class="tableblock halign-left valign-top"><div><div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">ambiguousMethods { methods, origin -&gt;
+    // choose the method which has an Integer as parameter type
+    methods.find { it.parameters.any { it.type == classNodeFor(Integer) } }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Gives the
+developer the ability to handle incorrect assignments. This is for
+example useful if a class overrides <code>setProperty</code>, because in that case it
+is possible that assigning a variable of one type to a property of
+another type is handled through that runtime mechanism. In that case, you
+can help the type checker just by telling it that the assignment is
+valid (using <code>handled</code> set to <code>true</code>).</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Of course, an extension script may consist of several blocks, and you
+can have multiple blocks responding to the same event. This makes the
+DSL look nicer and easier to write. However, reacting to events is far
+from sufficient. If you know you can react to events, you also need to
+deal with the errors, which implies several <em>helper</em> methods that will
+make things easier.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="Typecheckingextensions-Workingwithextensions"><a class="anchor" href="#Typecheckingextensions-Workingwithextensions"></a>1.5. Working with extensions</h3>
+<div class="sect3">
+<h4 id="Typecheckingextensions-Supportclasses"><a class="anchor" href="#Typecheckingextensions-Supportclasses"></a>1.5.1. Support classes</h4>
+<div class="paragraph">
+<p>The DSL relies on a support class
+called <a href="http://docs.groovy-lang.org/3.0.0-alpha-3/html/gapi/index.html?org/codehaus/groovy/transform/stc/GroovyTypeCheckingExtensionSupport.html">org.codehaus.groovy.transform.stc.GroovyTypeCheckingExtensionSupport</a> .
+This class itself
+extends <a href="http://docs.groovy-lang.org/3.0.0-alpha-3/html/gapi/index.html?org/codehaus/groovy/transform/stc/TypeCheckingExtension.html">org.codehaus.groovy.transform.stc.TypeCheckingExtension</a> . Those
+two classes define a number of <em>helper</em> methods that will make working
+with the AST easier, especially regarding type checking. One interesting
+thing to know is that you <strong>have access to the type checker</strong>. This means
+that you can programmatically call methods of the type checker,
+including those that allow you to <strong>throw compilation errors</strong>.</p>
+</div>
+<div class="paragraph">
+<p>The extension script delegates to
+the <a href="http://docs.groovy-lang.org/3.0.0-alpha-3/html/gapi/index.html?org/codehaus/groovy/transform/stc/GroovyTypeCheckingExtensionSupport.html">org.codehaus.groovy.transform.stc.GroovyTypeCheckingExtensionSupport</a> class, meaning that you have
+direct access to the following variables:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><em>context</em>: the type checker context, of type <a href="http://docs.groovy-lang.org/3.0.0-alpha-3/html/gapi/index.html?org/codehaus/groovy/transform/stc/TypeCheckingContext.html">org.codehaus.groovy.transform.stc.TypeCheckingContext</a></p>
+</li>
+<li>
+<p><em>typeCheckingVisitor</em>: the type checker itself, a <a href="http://docs.groovy-lang.org/3.0.0-alpha-3/html/gapi/index.html?org/codehaus/groovy/transform/stc/StaticTypeCheckingVisitor.html">org.codehaus.groovy.transform.stc.StaticTypeCheckingVisitor</a> instance</p>
+</li>
+<li>
+<p><em>generatedMethods</em>: a list of "generated methods", which is in fact the list of "dummy" methods that you can create
+inside a type checking extension using the <code>newMethod</code> calls</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The type checking context contains a lot of information that is useful
+in context for the type checker. For example, the current stack of
+enclosing method calls, binary expressions, closures, … This information
+is in particular important if you have to know <em>where</em> you are when an
+error occurs and that you want to handle it.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="Typecheckingextensions-Classnodes"><a class="anchor" href="#Typecheckingextensions-Classnodes"></a>1.5.2. Class nodes</h4>
+<div class="paragraph">
+<p>Handling class nodes is something that needs particular attention when
+you work with a type checking extension. Compilation works with an
+abstract syntax tree (AST) and the tree may not be complete when you are
+type checking a class. This also means that when you refer to types, you
+must not use class literals such as <code>String</code> or <code>HashSet</code>, but to class
+nodes representing those types. This requires a certain level of
+abstraction and understanding how Groovy deals with class nodes. To make
+things easier, Groovy supplies several helper methods to deal with class
+nodes. For example, if you want to say "the type for String", you can
+write:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">assert classNodeFor(String) instanceof ClassNode</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You would also note that there is a variant of <em>classNodeFor</em> that takes
+a <code>String</code> as an argument, instead of a <code>Class</code>. In general, you
+should <strong>not</strong> use that one, because it would create a class node for
+which the name is <code>String</code>, but without any method, any property, …
+defined on it. The first version returns a class node that is <em>resolved</em>
+but the second one returns one that is <em>not</em>. So the latter should be
+reserved for very special cases.</p>
+</div>
+<div class="paragraph">
+<p>The second problem that you might encounter is referencing a type which
+is not yet compiled. This may happen more often than you think. For
+example, when you compile a set of files together. In that case, if you
+want to say "that variable is of type Foo" but <code>Foo</code> is not yet
+compiled, you can still refer to the <code>Foo</code> class node
+using <code>lookupClassNodeFor</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">assert lookupClassNodeFor('Foo') instanceof ClassNode</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="Typecheckingextensions-Helpingthetypechecker"><a class="anchor" href="#Typecheckingextensions-Helpingthetypechecker"></a>1.5.3. Helping the type checker</h4>
+<div class="paragraph">
+<p>Say that you know that variable <code>foo</code> is of type <code>Foo</code> and you want to
+tell the type checker about it. Then you can use the <code>storeType</code> method,
+which takes two arguments: the first one is the node for which you want
+to store the type and the second one is the type of the node. If you
+look at the implementation of <code>storeType</code>, you would see that it
+delegates to the type checker equivalent method, which itself does a lot
+of work to store node metadata. You would also see that storing the type
+is not limited to variables: you can set the type of any expression.</p>
+</div>
+<div class="paragraph">
+<p>Likewise, getting the type of an AST node is just a matter of
+calling <code>getType</code> on that node. This would in general be what you want,
+but there’s something that you must understand:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>getType</code> returns the <strong>inferred type</strong> of an expression. This means
+that it will not return, for a variable declared of type <code>Object</code> the
+class node for <code>Object</code>, but the inferred type of this variable <strong>at this
+point of the code</strong> (flow typing)</p>
+</li>
+<li>
+<p>if you want to access the origin type of a variable (or
+field/parameter), then you must call the appropriate method on the AST
+node</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="Typecheckingextensions-Throwinganerror"><a class="anchor" href="#Typecheckingextensions-Throwinganerror"></a>1.5.4. Throwing an error</h4>
+<div class="paragraph">
+<p>To throw a type checking error, you only have to call the
+<code>addStaticTypeError</code> method which takes two arguments:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>a <em>message</em> which is a string that will be displayed to the end user</p>
+</li>
+<li>
+<p>an <em>AST node</em> responsible for the error. It’s better to provide the best
+suiting AST node because it will be used to retrieve the line and column
+numbers</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="Typecheckingextensions-isXXXExpression"><a class="anchor" href="#Typecheckingextensions-isXXXExpression"></a>1.5.5. isXXXExpression</h4>
+<div class="paragraph">
+<p>It is often required to know the type of an AST node. For readability,
+the DSL provides a special isXXXExpression method that will delegate to
+<code>x instance of XXXExpression</code>. For example, instead of writing:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">if (node instanceof BinaryExpression) {
+   ...
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>which requires you to import the <code>BinaryExpression</code> class, you can just
+write:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">if (isBinaryExpression(node)) {
+   ...
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="Typecheckingextensions-Virtualmethods"><a class="anchor" href="#Typecheckingextensions-Virtualmethods"></a>1.5.6. Virtual methods</h4>
+<div class="paragraph">
+<p>When you perform type checking of dynamic code, you may often face the
+case when you know that a method call is valid but there is no "real"
+method behind it. As an example, take the Grails dynamic finders. You
+can have a method call consisting of a method named <em>findByName(…)</em>. As
+there’s no <em>findByName</em> method defined in the bean, the type checker
+would complain. Yet, you would know that this method wouldn’t fail at
+runtime, and you can even tell what is the return type of this method.
+For this case, the DSL supports two special constructs that consist of
+<em>phantom methods</em>. This means that you will return a method node that
+doesn’t really exist but is defined in the context of type checking.
+Three methods exist:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>newMethod(String name, Class returnType)</code></p>
+</li>
+<li>
+<p><code>newMethod(String name, ClassNode returnType)</code></p>
+</li>
+<li>
+<p><code>newMethod(String name, Callable&lt;ClassNode&gt; return Type)</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>All three variants do the same: they create a new method node which name
+is the supplied name and define the return type of this method.
+Moreover, the type checker would add those methods in
+the <code>generatedMethods</code> list (see <code>isGenerated</code> below). The reason why we
+only set a name and a return type is that it is only what you need in
+90% of the cases. For example, in the <code>findByName</code> example upper, the
+only thing you need to know is that <code>findByName</code> wouldn’t fail at
+runtime, and that it returns a domain class. The <code>Callable</code> version of
+return type is interesting because it defers the computation of the
+return type when the type checker actually needs it. This is interesting
+because in some circumstances, you may not know the actual return type
+when the type checker demands it, so you can use a closure that will be
+called each time <code>getReturnType</code> is called by the type checker on this
+method node. If you combine this with deferred checks, you can achieve
+pretty complex type checking including handling of forward references.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">newMethod(name) {
+    // each time getReturnType on this method node will be called, this closure will be called!
+    println 'Type checker called me!'
+    lookupClassNodeFor(Foo) // return type
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Should you need more than the name and return type, you can always
+create a new <code>MethodNode</code> by yourself.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="Typecheckingextensions-Scoping"><a class="anchor" href="#Typecheckingextensions-Scoping"></a>1.5.7. Scoping</h4>
+<div class="paragraph">
+<p>Scoping is very important in DSL type checking and is one of the reasons
+why we couldn’t use a <em>pointcut</em> based approach to DSL type checking.
+Basically, you must be able to define very precisely when your extension
+applies and when it does not. Moreover, you must be able to handle
+situations that a regular type checker would not be able to handle, such
+as forward references:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">point a(1,1)
+line a,b // b is referenced afterwards!
+point b(5,2)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Say for example that you want to handle a builder:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">builder.foo {
+   bar
+   baz(bar)
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Your extension, then, should only be active once you’ve entered
+the <code>foo</code> method, and inactive outside of this scope. But you could have
+complex situations like multiple builders in the same file or embedded
+builders (builders in builders). While you should not try to fix all
+this from start (you must accept limitations to type checking), the type
+checker does offer a nice mechanism to handle this: a scoping stack,
+using the <code>newScope</code> and <code>scopeExit</code> methods.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>newScope</code> creates a new scope and puts it on top of the stack</p>
+</li>
+<li>
+<p><code>scopeExits</code> pops a scope from the stack</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>A scope consists of:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>a parent scope</p>
+</li>
+<li>
+<p>a map of custom data</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>If you want to look at the implementation, it’s simply a <code>LinkedHashMap</code>
+(<a href="http://docs.groovy-lang.org/3.0.0-alpha-3/html/gapi/index.html?org/codehaus/groovy/transform/stc/GroovyTypeCheckingExtensionSupport/TypeCheckingScope.html">org.codehaus.groovy.transform.stc.GroovyTypeCheckingExtensionSupport.TypeCheckingScope</a>),
+but it’s quite powerful. For example, you can use such a scope to store
+a list of closures to be executed when you exit the scope. This is how
+you would handle forward references: </p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def scope = newScope()
+scope.secondPassChecks = []
+//...
+scope.secondPassChecks &lt;&lt; { println 'executed later' }
+// ...
+scopeExit {
+    secondPassChecks*.run() // execute deferred checks
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>That is to say, that if at some point you are not able to determine the
+type of an expression, or that you are not able to check at this point
+that an assignment is valid or not, you can still make the check later…
+This is a very powerful feature. Now, <code>newScope</code> and <code>scopeExit</code>
+provide some interesting syntactic sugar:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">newScope {
+    secondPassChecks = []
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>At anytime in the DSL, you can access the current scope
+using <code>getCurrentScope()</code> or more simply <code>currentScope</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">//...
+currentScope.secondPassChecks &lt;&lt; { println 'executed later' }
+// ...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The general schema would then be:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>determine a <em>pointcut</em> where you push a new scope on stack and
+initialize custom variables within this scope</p>
+</li>
+<li>
+<p>using the various events, you can use the information stored in your
+custom scope to perform checks, defer checks,…</p>
+</li>
+<li>
+<p>determine a <em>pointcut</em> where you exit the scope, call <code>scopeExit</code>
+and eventually perform additional checks</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="Typecheckingextensions-Otherusefulmethods"><a class="anchor" href="#Typecheckingextensions-Otherusefulmethods"></a>1.5.8. Other useful methods</h4>
+<div class="paragraph">
+<p>For the complete list of helper methods, please refer to
+the <a href="http://docs.groovy-lang.org/3.0.0-alpha-3/html/gapi/index.html?org/codehaus/groovy/transform/stc/GroovyTypeCheckingExtensionSupport.html">org.codehaus.groovy.transform.stc.GroovyTypeCheckingExtensionSupport</a> and 
+<a href="http://docs.groovy-lang.org/3.0.0-alpha-3/html/gapi/index.html?org/codehaus/groovy/transform/stc/TypeCheckingExtension.html">org.codehaus.groovy.transform.stc.TypeCheckingExtension</a> classes. However,
+take special attention to those methods:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>isDynamic</code>: takes a VariableExpression as argument and returns true
+if the variable is a DynamicExpression, which means, in a script, that
+it wasn’t defined using a type or <code>def</code>.</p>
+</li>
+<li>
+<p><code>isGenerated</code>: takes a MethodNode as an argument and tells if the
+method is one that was generated by the type checker extension using
+the <code>newMethod</code> method</p>
+</li>
+<li>
+<p><code>isAnnotatedBy</code>: takes an AST node and a Class (or ClassNode), and
+tells if the node is annotated with this class. For example:
+<code>isAnnotatedBy(node, NotNull)</code></p>
+</li>
+<li>
+<p><code>getTargetMethod</code>: takes a method call as argument and returns
+the <code>MethodNode</code> that the type checker has determined for it</p>
+</li>
+<li>
+<p><code>delegatesTo</code>: emulates the behaviour of the <code>@DelegatesTo</code>
+annotation. It allows you to tell that the argument will delegate to a
+specific type (you can also specify the delegation strategy)</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_advanced_type_checking_extensions"><a class="anchor" href="#_advanced_type_checking_extensions"></a>2. Advanced type checking extensions</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_precompiled_type_checking_extensions"><a class="anchor" href="#_precompiled_type_checking_extensions"></a>2.1. Precompiled type checking extensions</h3>
+<div class="paragraph">
+<p>All the examples above use type checking scripts. They are found in source form in classpath, meaning that:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>a Groovy source file, corresponding to the type checking extension, is available on compilation classpath</p>
+</li>
+<li>
+<p>this file is compiled by the Groovy compiler for each source unit being compiled (often, a source unit corresponds
+to a single file)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>It is a very convenient way to develop type checking extensions, however it implies a slower compilation phase, because
+of the compilation of the extension itself for each file being compiled. For those reasons, it can be practical to rely
+on a precompiled extension. You have two options to do this:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>write the extension in Groovy, compile it, then use a reference to the extension class instead of the source</p>
+</li>
+<li>
+<p>write the extension in Java, compile it, then use a reference to the extension class</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Writing a type checking extension in Groovy is the easiest path. Basically, the idea is that the type checking extension
+script becomes the body of the main method of a type checking extension class, as illustrated here:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import org.codehaus.groovy.transform.stc.GroovyTypeCheckingExtensionSupport
+
+class PrecompiledExtension extends GroovyTypeCheckingExtensionSupport.TypeCheckingDSL {     <i class="conum" data-value="1"></i><b>(1)</b>
+    @Override
+    Object run() {                                                                          <i class="conum" data-value="2"></i><b>(2)</b>
+        unresolvedVariable { var -&gt;
+            if ('robot'==var.name) {
+                storeType(var, classNodeFor(Robot))                                         <i class="conum" data-value="3"></i><b>(3)</b>
+                handled = true
+            }
+        }
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>extending the <code>TypeCheckingDSL</code> class is the easiest</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>then the extension code needs to go inside the <code>run</code> method</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>and you can use the very same events as an extension written in source form</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Setting up the extension is very similar to using a source form extension:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">config.addCompilationCustomizers(
+    new ASTTransformationCustomizer(
+        TypeChecked,
+        extensions:['typing.PrecompiledExtension'])
+)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The difference is that instead of using a path in classpath, you just specify the fully qualified class name of the
+precompiled extension.</p>
+</div>
+<div class="paragraph">
+<p>In case you really want to write an extension in Java, then you will not benefit from the type checking extension DSL.
+The extension above can be rewritten in Java this way:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">import org.codehaus.groovy.ast.ClassHelper;
+import org.codehaus.groovy.ast.expr.VariableExpression;
+import org.codehaus.groovy.transform.stc.AbstractTypeCheckingExtension;
+
+
+import org.codehaus.groovy.transform.stc.StaticTypeCheckingVisitor;
+
+public class PrecompiledJavaExtension extends AbstractTypeCheckingExtension {                   <i class="conum" data-value="1"></i><b>(1)</b>
+
+    public PrecompiledJavaExtension(final StaticTypeCheckingVisitor typeCheckingVisitor) {
+        super(typeCheckingVisitor);
+    }
+
+    @Override
+    public boolean handleUnresolvedVariableExpression(final VariableExpression vexp) {          <i class="conum" data-value="2"></i><b>(2)</b>
+        if ("robot".equals(vexp.getName())) {
+            storeType(vexp, ClassHelper.make(Robot.class));
+            setHandled(true);
+            return true;
+        }
+        return false;
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>extend the <code>AbstractTypeCheckingExtension</code> class</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>then override the <code>handleXXX</code> methods as required</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_using_grab_in_a_type_checking_extension"><a class="anchor" href="#_using_grab_in_a_type_checking_extension"></a>2.2. Using @Grab in a type checking extension</h3>
+<div class="paragraph">
+<p>It is totally possible to use the <code>@Grab</code> annotation in a type checking extension.
+This means you can include libraries that would only be
+available at compile time. In that case, you must understand that you
+would increase the time of compilation significantly (at least, the
+first time it grabs the dependencies).</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_sharing_or_packaging_type_checking_extensions"><a class="anchor" href="#_sharing_or_packaging_type_checking_extensions"></a>2.3. Sharing or packaging type checking extensions</h3>
+<div class="paragraph">
+<p>A type checking extension is just a script that need to be on classpath. As such,
+you can share it as is, or bundle it in a jar file that would be added to classpath.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_global_type_checking_extensions"><a class="anchor" href="#_global_type_checking_extensions"></a>2.4. Global type checking extensions</h3>
+<div class="paragraph">
+<p>While you can configure the compiler to transparently add type checking extensions to your
+script, there is currently no way to apply an extension transparently just by having it on
+classpath.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_type_checking_extensions_and_compilestatic"><a class="anchor" href="#_type_checking_extensions_and_compilestatic"></a>2.5. Type checking extensions and @CompileStatic</h3>
+<div class="paragraph">
+<p>Type checking extensions are used with <code>@TypeChecked</code> but can also be used with <code>@CompileStatic</code>. However, you must
+be aware that:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>a type checking extension used with <code>@CompileStatic</code> will in general not be sufficient to let the compiler know how
+to generate statically compilable code from "unsafe" code</p>
+</li>
+<li>
+<p>it is possible to use a type checking extension with <code>@CompileStatic</code> just to enhance type checking, that is to say
+introduce <strong>more</strong> compilation errors, without actually dealing with dynamic code</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s explain the first point, which is that even if you use an extension, the compiler will not know how to compile
+your code statically: technically, even if you tell the type checker what is the type of a dynamic
+variable, for example, it would not know how to compile it. Is it <code>getBinding('foo')</code>, <code>getProperty('foo')</code>,
+<code>delegate.getFoo()</code>,…? There&#8217;s absolutely no direct way to tell the static compiler how to compile such
+code even if you use a type checking extension (that would, again, only give hints about the type).</p>
+</div>
+<div class="paragraph">
+<p>One possible solution for this particular example is to instruct the compiler to use <a href="#mixed-mode">mixed mode compilation</a>.
+The more advanced one is to use <a href="#ast-xform-as-extension">AST transformations during type checking</a> but it is far more
+complex.</p>
+</div>
+<div class="paragraph">
+<p>Type checking extensions allow you to help the type checker where it
+fails, but it also allow you to fail where it doesn’t. In that context,
+it makes sense to support extensions for <code>@CompileStatic</code> too. Imagine
+an extension that is capable of type checking SQL queries. In that case,
+the extension would be valid in both dynamic and static context, because
+without the extension, the code would still pass.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="mixed-mode"><a class="anchor" href="#mixed-mode"></a>2.6. Mixed mode compilation</h3>
+<div class="paragraph">
+<p>In the previous section, we highlighted the fact that you can activate type checking extensions with
+<code>@CompileStatic</code>. In that context, the type checker would not complain anymore about some unresolved variables or
+unknown method calls, but it would still wouldn&#8217;t know how to compile them statically.</p>
+</div>
+<div class="paragraph">
+<p>Mixed mode compilation offers a third way, which is to instruct the compiler that whenever an unresolved variable
+or method call is found, then it should fall back to a dynamic mode. This is possible thanks to type checking extensions
+and a special <code>makeDynamic</code> call.</p>
+</div>
+<div class="paragraph">
+<p>To illustrate this, let&#8217;s come back to the <code>Robot</code> example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">robot.move 100</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And let&#8217;s try to activate our type checking extension using <code>@CompileStatic</code> instead of <code>@TypeChecked</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def config = new CompilerConfiguration()
+config.addCompilationCustomizers(
+    new ASTTransformationCustomizer(
+        CompileStatic,                                      <i class="conum" data-value="1"></i><b>(1)</b>
+        extensions:['robotextension.groovy'])               <i class="conum" data-value="2"></i><b>(2)</b>
+)
+def shell = new GroovyShell(config)
+def robot = new Robot()
+shell.setVariable('robot', robot)
+shell.evaluate(script)</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Apply <code>@CompileStatic</code> transparently</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Activate the type checking extension</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The script will run fine because the static compiler is told about the type of the <code>robot</code> variable, so it is capable
+of making a direct call to <code>move</code>. But before that, how did the compiler know how to get the <code>robot</code> variable? In fact
+by default, in a type checking extension, setting <code>handled=true</code> on an unresolved variable will automatically trigger
+a dynamic resolution, so in this case you don&#8217;t have anything special to make the compiler use a mixed mode. However,
+let&#8217;s slightly update our example, starting from the robot script:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">move 100</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here you can notice that there is no reference to <code>robot</code> anymore. Our extension will not help then because we will not
+be able to instruct the compiler that <code>move</code> is done on a <code>Robot</code> instance. This example of code can be executed in a
+totally dynamic way thanks to the help of a <a href="http://docs.groovy-lang.org/3.0.0-alpha-3/html/gapi/index.html?groovy/util/DelegatingScript.html">groovy.util.DelegatingScript</a>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def config = new CompilerConfiguration()
+config.scriptBaseClass = 'groovy.util.DelegatingScript'     <i class="conum" data-value="1"></i><b>(1)</b>
+def shell = new GroovyShell(config)
+def runner = shell.parse(script)                            <i class="conum" data-value="2"></i><b>(2)</b>
+runner.setDelegate(new Robot())                             <i class="conum" data-value="3"></i><b>(3)</b>
+runner.run()                                                <i class="conum" data-value="4"></i><b>(4)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>we configure the compiler to use a <code>DelegatingScript</code> as the base class</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>the script source needs to be parsed and will return an instance of <code>DelegatingScript</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>we can then call <code>setDelegate</code> to use a <code>Robot</code> as the delegate of the script</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>then execute the script. <code>move</code> will be directly executed on the delegate</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>If we want this to pass with <code>@CompileStatic</code>, we have to use a type checking extension, so let&#8217;s update our configuration:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">config.addCompilationCustomizers(
+    new ASTTransformationCustomizer(
+        CompileStatic,                                      <i class="conum" data-value="1"></i><b>(1)</b>
+        extensions:['robotextension2.groovy'])              <i class="conum" data-value="2"></i><b>(2)</b>
+)</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>apply <code>@CompileStatic</code> transparently</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>use an alternate type checking extension meant to recognize the call to <code>move</code></td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Then in the previous section we have learnt how to deal with unrecognized method calls, so we are able to write this
+extension:</p>
+</div>
+<div class="listingblock">
+<div class="title">robotextension2.groovy</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">methodNotFound { receiver, name, argList, argTypes, call -&gt;
+    if (isMethodCallExpression(call)                        <i class="conum" data-value="1"></i><b>(1)</b>
+        &amp;&amp; call.implicitThis                                <i class="conum" data-value="2"></i><b>(2)</b>
+        &amp;&amp; 'move'==name                                     <i class="conum" data-value="3"></i><b>(3)</b>
+        &amp;&amp; argTypes.length==1                               <i class="conum" data-value="4"></i><b>(4)</b>
+        &amp;&amp; argTypes[0] == classNodeFor(int)                 <i class="conum" data-value="5"></i><b>(5)</b>
+    ) {
+        handled = true                                      <i class="conum" data-value="6"></i><b>(6)</b>
+        newMethod('move', classNodeFor(Robot))              <i class="conum" data-value="7"></i><b>(7)</b>
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>if the call is a method call (not a static method call)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>that this call is made on "implicit this" (no explicit <code>this.</code>)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>that the method being called is <code>move</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>and that the call is done with a single argument</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>and that argument is of type <code>int</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>then tell the type checker that the call is valid</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td>and that the return type of the call is <code>Robot</code></td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>If you try to execute this code, then you could be surprised that it actually fails at runtime:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>java.lang.NoSuchMethodError: java.lang.Object.move()Ltyping/Robot;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The reason is very simple: while the type checking extension is sufficient for <code>@TypeChecked</code>, which does not involve
+static compilation, it is not enough for <code>@CompileStatic</code> which requires additional information. In this case, you told
+the compiler that the method existed, but you didn&#8217;t explain to it <strong>what</strong> method it is in reality, and what is the
+receiver of the message (the delegate).</p>
+</div>
+<div class="paragraph">
+<p>Fixing this is very easy and just implies replacing the <code>newMethod</code> call with something else:</p>
+</div>
+<div class="listingblock">
+<div class="title">robotextension3.groovy</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">methodNotFound { receiver, name, argList, argTypes, call -&gt;
+    if (isMethodCallExpression(call)
+        &amp;&amp; call.implicitThis
+        &amp;&amp; 'move'==name
+        &amp;&amp; argTypes.length==1
+        &amp;&amp; argTypes[0] == classNodeFor(int)
+    ) {
+        makeDynamic(call, classNodeFor(Robot))              <i class="conum" data-value="1"></i><b>(1)</b>
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>tell the compiler that the call should be make dynamic</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The <code>makeDynamic</code> call does 3 things:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>it returns a virtual method just like <code>newMethod</code></p>
+</li>
+<li>
+<p>automatically sets the <code>handled</code> flag to <code>true</code> for you</p>
+</li>
+<li>
+<p>but also marks the <code>call</code> to be done dynamically</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>So when the compiler will have to generate bytecode for the call to <code>move</code>, since it is now marked as a dynamic call,
+it will fallback to the dynamic compiler and let it handle the call. And since the extension tells us that the return
+type of the dynamic call is a <code>Robot</code>, subsequent calls will be done statically!</p>
+</div>
+<div class="paragraph">
+<p>Some would wonder why the static compiler doesn&#8217;t do this by default without an extension. It is a design decision:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>if the code is statically compiled, we normally want type safety and best performance</p>
+</li>
+<li>
+<p>so if unrecognized variables/method calls are made dynamic, you loose type safety, but also all support for typos at
+compile time!</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>In short, if you want to have mixed mode compilation, it <strong>has</strong> to be explicit, through a type checking extension, so
+that the compiler, and the designer of the DSL, are totally aware of what they are doing.</p>
+</div>
+<div class="paragraph">
+<p><code>makeDynamic</code> can be used on 3 kind of AST nodes:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>a method node (<code>MethodNode</code>)</p>
+</li>
+<li>
+<p>a variable (<code>VariableExpression</code>)</p>
+</li>
+<li>
+<p>a property expression (<code>PropertyExpression</code>)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>If that is not enough, then it means that static compilation cannot be done directly and that you have to rely on AST
+transformations.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="ast-xform-as-extension"><a class="anchor" href="#ast-xform-as-extension"></a>2.7. Transforming the AST in an extension</h3>
+<div class="paragraph">
+<p>Type checking extensions look very attractive from an AST transformation design point of view: extensions have access
+to context like inferred types, which is often nice to have. And an extension has a direct access to the abstract
+syntax tree. Since you have access to the AST, there is nothing in theory that prevents
+you from modifying the AST. However, we do not recommend you to do so, unless you are an advanced AST transformation
+designer and well aware of the compiler internals:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>First of all, you would explicitly break the contract of type checking, which is to annotate,
+and only annotate the AST. Type checking should <strong>not</strong> modify the AST tree because you wouldn’t be able to
+guarantee anymore that code without the <em>@TypeChecked</em> annotation
+behaves the same without the annotation.</p>
+</li>
+<li>
+<p>If your extension is meant to work with <em>@CompileStatic</em>, then you <strong>can</strong> modify the AST because
+this is indeed what <em>@CompileStatic</em> will eventually do. Static compilation doesn’t guarantee the same semantics at
+dynamic Groovy so there is effectively a difference between code compiled with <em>@CompileStatic</em> and code compiled
+with <em>@TypeChecked</em>. It’s up to you to choose whatever strategy you want to update the AST, but probably
+using an AST transformation that runs before type checking is easier.</p>
+</li>
+<li>
+<p>if you cannot rely on a transformation that kicks in before the type checker, then you must be <strong>very</strong> careful</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+The type checking phase is the last phase running in the compiler before bytecode generation. All other AST
+transformations run before that and the compiler does a very good job at "fixing" incorrect AST generated before the
+type checking phase. As soon as you perform a transformation during type checking, for example directly in a type
+checking extension, then you have to do all this work of generating a 100% compiler compliant abstract syntax tree by
+yourself, which can easily become complex. That&#8217;s why we do not recommend to go that way if you are beginning with
+type checking extensions and AST transformations.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_examples"><a class="anchor" href="#_examples"></a>2.8. Examples</h3>
+<div class="paragraph">
+<p>Examples of real life type checking extensions are easy to find. You can download the source code for Groovy and
+take a look at the
+<a href="https://github.com/apache/groovy/blob/master/src/test/groovy/transform/stc/TypeCheckingExtensionsTest.groovy">TypeCheckingExtensionsTest</a>
+class which is linked to
+<a href="https://github.com/apache/groovy/tree/master/src/test-resources/groovy/transform/stc">various extension scripts</a>.</p>
+</div>
+<div class="paragraph">
+<p>An example of a complex type checking extension can be found in the <a href="markup-template-engine.html">Markup Template Engine</a>
+source code: this template engine relies on a type checking extension and AST transformations to transform templates into
+fully statically compiled code. Sources for this can be found
+<a href="https://github.com/apache/groovy/tree/master/subprojects/groovy-templates/src/main/groovy/groovy/text/markup">here</a>.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 3.0.0-alpha-3<br>
+Last updated 2018-06-23 13:44:45 AEST
+</div>
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+<script>prettyPrint()</script>
+</body>
+</html>

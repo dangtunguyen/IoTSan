@@ -1,0 +1,39 @@
+<!--
+
+     Licensed to the Apache Software Foundation (ASF) under one
+     or more contributor license agreements.  See the NOTICE file
+     distributed with this work for additional information
+     regarding copyright ownership.  The ASF licenses this file
+     to you under the Apache License, Version 2.0 (the
+     "License"); you may not use this file except in compliance
+     with the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing,
+     software distributed under the License is distributed on an
+     "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+     specific language governing permissions and limitations
+     under the License.
+
+-->
+<html>
+    <head>
+        <title>XML encoding with Groovy</title>
+    </head>
+    <body>
+        <h1>XML encoding with Groovy</h1>
+        <p>this format can be used as an alternative markup to XML</p>
+        <!-- an element with attributes and text content -->
+        <a href="http://groovy.codehaus.org">Groovy</a>
+        <!-- mixed content -->
+        <p>This is some
+            <b>mixed</b>
+            text. For more see the
+            <a href="http://groovy.codehaus.org">Groovy</a>
+            project
+        </p>
+        <p>some text</p>
+    </body>
+</html>

@@ -1,0 +1,1935 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.6.1">
+<title>Differences with Java</title>
+<link rel="stylesheet" href="./assets/css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+<h1>Differences with Java</h1>
+<div class="details">
+<span id="revnumber">version 3.0.0-alpha-3</span>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_default_imports">1. Default imports</a></li>
+<li><a href="#_multi_methods">2. Multi-methods</a></li>
+<li><a href="#_array_initializers">3. Array initializers</a></li>
+<li><a href="#_package_scope_visibility">4. Package scope visibility</a></li>
+<li><a href="#_arm_blocks">5. ARM blocks</a></li>
+<li><a href="#_inner_classes">6. Inner classes</a>
+<ul class="sectlevel2">
+<li><a href="#_static_inner_classes">6.1. Static inner classes</a></li>
+<li><a href="#_anonymous_inner_classes">6.2. Anonymous Inner Classes</a></li>
+<li><a href="#_creating_instances_of_non_static_inner_classes">6.3. Creating Instances of Non-Static Inner Classes</a></li>
+</ul>
+</li>
+<li><a href="#_lambdas">7. Lambdas</a></li>
+<li><a href="#_gstrings">8. GStrings</a></li>
+<li><a href="#_string_and_character_literals">9. String and Character literals</a></li>
+<li><a href="#_primitives_and_wrappers">10. Primitives and wrappers</a></li>
+<li><a href="#_behaviour_of_code_code">11. Behaviour of <code>==</code></a></li>
+<li><a href="#_conversions">12. Conversions</a></li>
+<li><a href="#_extra_keywords">13. Extra keywords</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Groovy tries to be as natural as possible for Java developers. We’ve
+tried to follow the principle of least surprise when designing Groovy,
+particularly for developers learning Groovy who’ve come from a Java
+background.</p>
+</div>
+<div class="paragraph">
+<p>Here we list all the major differences between Java and Groovy.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_default_imports"><a class="anchor" href="#_default_imports"></a>1. Default imports</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>All these packages and classes are imported by default, i.e. you do not
+have to use an explicit <code>import</code> statement to use them:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>java.io.*</p>
+</li>
+<li>
+<p>java.lang.*</p>
+</li>
+<li>
+<p>java.math.BigDecimal</p>
+</li>
+<li>
+<p>java.math.BigInteger</p>
+</li>
+<li>
+<p>java.net.*</p>
+</li>
+<li>
+<p>java.util.*</p>
+</li>
+<li>
+<p>groovy.lang.*</p>
+</li>
+<li>
+<p>groovy.util.*</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_multi_methods"><a class="anchor" href="#_multi_methods"></a>2. Multi-methods</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In Groovy, the methods which will be invoked are chosen at runtime. This is called runtime dispatch or multi-methods. It
+means that the method will be chosen based on the types of the arguments at runtime. In Java, this is the opposite: methods
+are chosen at compile time, based on the declared types.</p>
+</div>
+<div class="paragraph">
+<p>The following code, written as Java code, can be compiled in both Java and Groovy, but it will behave differently:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">int method(String arg) {
+    return 1;
+}
+int method(Object arg) {
+    return 2;
+}
+Object o = "Object";
+int result = method(o);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In Java, you would have:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">assertEquals(2, result);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Whereas in Groovy:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">assertEquals(1, result);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>That is because Java will use the static information type, which is that <code>o</code> is declared as an <code>Object</code>, whereas
+Groovy will choose at runtime, when the method is actually called. Since it is called with a <code>String</code>, then the
+<code>String</code> version is called.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_array_initializers"><a class="anchor" href="#_array_initializers"></a>3. Array initializers</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In Groovy, the <code>{ &#8230;&#8203; }</code> block is reserved for closures. That means that you cannot create array literals with this
+syntax:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">int[] array = { 1, 2, 3}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You actually have to use:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">int[] array = [1,2,3]</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_package_scope_visibility"><a class="anchor" href="#_package_scope_visibility"></a>4. Package scope visibility</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In Groovy, omitting a modifier on a field doesn&#8217;t result in a package-private field like in Java:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Person {
+    String name
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Instead, it is used to create a <em>property</em>, that is to say a <em>private field</em>, an associated <em>getter</em> and an associated
+<em>setter</em>.</p>
+</div>
+<div class="paragraph">
+<p>It is possible to create a package-private field by annotating it with <code>@PackageScope</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Person {
+    @PackageScope String name
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_arm_blocks"><a class="anchor" href="#_arm_blocks"></a>5. ARM blocks</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>ARM (Automatic Resource Management) block from Java 7 are not supported in Groovy. Instead, Groovy provides various
+methods relying on closures, which have the same effect while being more idiomatic. For example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Path file = Paths.get("/path/to/file");
+Charset charset = Charset.forName("UTF-8");
+try (BufferedReader reader = Files.newBufferedReader(file, charset)) {
+    String line;
+    while ((line = reader.readLine()) != null) {
+        System.out.println(line);
+    }
+
+} catch (IOException e) {
+    e.printStackTrace();
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>can be written like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">new File('/path/to/file').eachLine('UTF-8') {
+   println it
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>or, if you want a version closer to Java:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">new File('/path/to/file').withReader('UTF-8') { reader -&gt;
+   reader.eachLine {
+       println it
+   }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_inner_classes"><a class="anchor" href="#_inner_classes"></a>6. Inner classes</h2>
+<div class="sectionbody">
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+The implementation of anonymous inner classes and nested classes follows the Java lead, but
+you should not take out the Java Language Spec and keep shaking the head
+about things that are different. The implementation done looks much like
+what we do for <code>groovy.lang.Closure</code>, with some benefits and some
+differences. Accessing private fields and methods for example can become
+a problem, but on the other hand local variables don’t have to be final.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_static_inner_classes"><a class="anchor" href="#_static_inner_classes"></a>6.1. Static inner classes</h3>
+<div class="paragraph">
+<p>Here’s an example of static inner class:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class A {
+    static class B {}
+}
+
+new A.B()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The usage of static inner classes is the best supported one. If you
+absolutely need an inner class, you should make it a static one.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_anonymous_inner_classes"><a class="anchor" href="#_anonymous_inner_classes"></a>6.2. Anonymous Inner Classes</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
+
+CountDownLatch called = new CountDownLatch(1)
+
+Timer timer = new Timer()
+timer.schedule(new TimerTask() {
+    void run() {
+        called.countDown()
+    }
+}, 0)
+
+assert called.await(10, TimeUnit.SECONDS)</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_creating_instances_of_non_static_inner_classes"><a class="anchor" href="#_creating_instances_of_non_static_inner_classes"></a>6.3. Creating Instances of Non-Static Inner Classes</h3>
+<div class="paragraph">
+<p>In Java you can do this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">public class Y {
+    public class X {}
+    public X foo() {
+        return new X();
+    }
+    public static X createX(Y y) {
+        return y.new X();
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Groovy doesn&#8217;t support the <code>y.new X()</code> syntax. Instead, you have to write <code>new X(y)</code>, like in the code below:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">public class Y {
+    public class X {}
+    public X foo() {
+        return new X()
+    }
+    public static X createX(Y y) {
+        return new X(y)
+    }
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+Caution though, Groovy supports calling methods with one
+parameter without giving an argument. The parameter will then have the
+value null. Basically the same rules apply to calling a constructor.
+There is a danger that you will write new X() instead of new X(this) for
+example. Since this might also be the regular way we have not yet found
+a good way to prevent this problem.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_lambdas"><a class="anchor" href="#_lambdas"></a>7. Lambdas</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Java 8 supports lambdas and method references:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Runnable run = () -&gt; System.out.println("Run");
+list.forEach(System.out::println);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Java 8 lambdas can be more or less considered as anonymous inner classes. Groovy doesn&#8217;t support that syntax, but has closures
+instead:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Runnable run = { println 'run' }
+list.each { println it } // or list.each(this.&amp;println)</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_gstrings"><a class="anchor" href="#_gstrings"></a>8. GStrings</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>As double-quoted string literals are interpreted as <code>GString</code> values, Groovy may fail
+with compile error or produce subtly different code if a class with <code>String</code> literal
+containing a dollar character is compiled with Groovy and Java compiler.</p>
+</div>
+<div class="paragraph">
+<p>While typically, Groovy will auto-cast between <code>GString</code> and <code>String</code> if an API declares
+the type of a parameter, beware of Java APIs that accept an <code>Object</code> parameter and then
+check the actual type.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_string_and_character_literals"><a class="anchor" href="#_string_and_character_literals"></a>9. String and Character literals</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Singly-quoted literals in Groovy are used for <code>String</code>, and double-quoted result in
+<code>String</code> or <code>GString</code>, depending whether there is interpolation in the literal.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">assert 'c'.getClass()==String
+assert "c".getClass()==String
+assert "c${1}".getClass() in GString</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Groovy will automatically cast a single-character <code>String</code> to <code>char</code> only when assigning to
+a variable of type <code>char</code>. When calling methods with arguments of type <code>char</code> we need
+to either cast explicitly or make sure the value has been cast in advance.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">char a='a'
+assert Character.digit(a, 16)==10 : 'But Groovy does boxing'
+assert Character.digit((char) 'a', 16)==10
+
+try {
+  assert Character.digit('a', 16)==10
+  assert false: 'Need explicit cast'
+} catch(MissingMethodException e) {
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Groovy supports two styles of casting and in the case of casting to <code>char</code> there
+are subtle differences when casting a multi-char strings. The Groovy style cast is
+more lenient and will take the first character, while the C-style cast will fail
+with exception.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// for single char strings, both are the same
+assert ((char) "c").class==Character
+assert ("c" as char).class==Character
+
+// for multi char strings they are not
+try {
+  ((char) 'cx') == 'c'
+  assert false: 'will fail - not castable'
+} catch(GroovyCastException e) {
+}
+assert ('cx' as char) == 'c'
+assert 'cx'.asType(char) == 'c'</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_primitives_and_wrappers"><a class="anchor" href="#_primitives_and_wrappers"></a>10. Primitives and wrappers</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Because Groovy uses Objects for everything, it <a href="core-object-orientation.html#_primitive_types">autowraps</a> references
+to primitives. Because of this, it does not follow Java&#8217;s behavior of widening taking priority over boxing.
+Here&#8217;s an example using <code>int</code></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">int i
+m(i)
+
+void m(long l) {           <i class="conum" data-value="1"></i><b>(1)</b>
+  println "in m(long)"
+}
+
+void m(Integer i) {        <i class="conum" data-value="2"></i><b>(2)</b>
+  println "in m(Integer)"
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>This is the method that Java would call, since widening has precedence over unboxing.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>This is the method Groovy actually calls, since all primitive references use their wrapper class.</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_behaviour_of_code_code"><a class="anchor" href="#_behaviour_of_code_code"></a>11. Behaviour of <code>==</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In Java <code>==</code> means equality of primitive types or identity for objects.  In
+Groovy <code>==</code> translates to <code>a.compareTo(b)==0</code>, if they are <code>Comparable</code>, and
+<code>a.equals(b)</code> otherwise.  To check for identity, there is <code>is</code>.  E.g.
+<code>a.is(b)</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_conversions"><a class="anchor" href="#_conversions"></a>12. Conversions</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Java does automatic widening and narrowing
+<a href="https://docs.oracle.com/javase/specs/jls/se7/html/jls-5.html">conversions</a>.</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<caption class="title">Table 1. Java Conversions</caption>
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-right valign-top"></td>
+<td class="tableblock halign-center valign-top" colspan="8"><div><div class="paragraph">
+<p><strong>Converts to</strong></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Converts from</strong></p></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p><strong>boolean</strong></p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p><strong>byte</strong></p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p><strong>short</strong></p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p><strong>char</strong></p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p><strong>int</strong></p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p><strong>long</strong></p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p><strong>float</strong></p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p><strong>double</strong></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>boolean</strong></p></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>-</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>N</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>N</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>N</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>N</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>N</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>N</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>N</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>byte</strong></p></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>N</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>-</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>C</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>short</strong></p></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>N</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>C</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>-</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>C</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>char</strong></p></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>N</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>C</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>C</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>-</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>int</strong></p></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>N</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>C</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>C</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>C</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>-</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>T</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>long</strong></p></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>N</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>C</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>C</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>C</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>C</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>-</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>T</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>T</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>float</strong></p></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>N</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>C</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>C</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>C</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>C</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>C</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>-</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>double</strong></p></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>N</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>C</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>C</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>C</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>C</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>C</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>C</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>-</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p><sup>*</sup> 'Y' indicates a conversion Java can make, 'C' indicates a conversion Java can make when there is an explicit cast,
+'T` indicates a conversion Java can make but data is truncated, 'N' indicates a conversion Java can&#8217;t make.</p>
+</div>
+<div class="paragraph">
+<p>Groovy expands greatly on this.</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<caption class="title">Table 2. Groovy Conversions</caption>
+<colgroup>
+<col style="width: 10%;">
+<col style="width: 5%;">
+<col style="width: 5%;">
+<col style="width: 5%;">
+<col style="width: 5%;">
+<col style="width: 5%;">
+<col style="width: 5%;">
+<col style="width: 5%;">
+<col style="width: 5%;">
+<col style="width: 5%;">
+<col style="width: 5%;">
+<col style="width: 5%;">
+<col style="width: 5%;">
+<col style="width: 5%;">
+<col style="width: 5%;">
+<col style="width: 5%;">
+<col style="width: 5%;">
+<col style="width: 5%;">
+<col style="width: 5%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-right valign-top"></td>
+<td class="tableblock halign-center valign-top" colspan="18"><div><div class="paragraph">
+<p><strong>Converts to</strong></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Converts from</strong></p></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p><strong>boolean</strong></p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p><strong>Boolean</strong></p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p><strong>byte</strong></p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p><strong>Byte</strong></p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p><strong>short</strong></p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p><strong>Short</strong></p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p><strong>char</strong></p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p><strong>Character</strong></p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p><strong>int</strong></p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p><strong>Integer</strong></p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p><strong>long</strong></p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p><strong>Long</strong></p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p><strong>BigInteger</strong></p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p><strong>float</strong></p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p><strong>Float</strong></p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p><strong>double</strong></p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p><strong>Double</strong></p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p><strong>BigDecimal</strong></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>boolean</strong></p></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>-</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>B</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>N</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>N</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>N</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>N</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>N</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>N</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>N</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>N</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>N</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>N</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>N</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>N</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>N</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>N</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>N</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>N</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Boolean</strong></p></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>B</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>-</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>N</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>N</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>N</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>N</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>N</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>N</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>N</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>N</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>N</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>N</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>N</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>N</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>N</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>N</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>N</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>N</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>byte</strong></p></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>T</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>T</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>-</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>B</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Byte</strong></p></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>T</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>T</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>B</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>-</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>short</strong></p></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>T</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>T</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>-</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>B</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Short</strong></p></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>T</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>T</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>T</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>B</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>-</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>char</strong></p></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>T</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>T</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>-</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Character</strong></p></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>T</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>T</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>-</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>int</strong></p></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>T</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>T</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>-</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>B</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Integer</strong></p></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>T</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>T</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>B</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>-</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>long</strong></p></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>T</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>T</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>-</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>B</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>T</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>T</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>T</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>T</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Long</strong></p></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>T</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>T</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>T</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>T</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>B</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>-</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>T</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>T</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>T</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>T</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>BigInteger</strong></p></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>T</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>T</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>-</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>T</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>float</strong></p></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>T</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>T</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>T</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>-</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>B</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Float</strong></p></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>T</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>T</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>T</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>T</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>T</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>T</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>T</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>B</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>-</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>double</strong></p></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>T</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>T</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>T</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>-</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>B</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Double</strong></p></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>T</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>T</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>T</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>T</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>T</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>T</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>T</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>T</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>B</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>-</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>Y</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>BigDecimal</strong></p></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>T</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>T</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>T</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>T</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>D</p>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div><div class="paragraph">
+<p>-</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p><sup>*</sup> 'Y' indicates a conversion Groovy can make, 'D' indicates a conversion Groovy can make when compiled dynamically or
+explicitly cast, 'T` indicates a conversion Groovy can make but data is truncated, 'B' indicates a boxing/unboxing
+operation, 'N' indicates a conversion Groovy can&#8217;t make.</p>
+</div>
+<div class="paragraph">
+<p>The truncation uses <a href="core-semantics.html#Groovy-Truth">Groovy Truth</a> when converting to <code>boolean</code>/<code>Boolean</code>. Converting
+from a number to a character casts the <code>Number.intvalue()</code> to <code>char</code>. Groovy constructs <code>BigInteger</code> and <code>BigDecimal</code>
+using <code>Number.doubleValue()</code> when converting from a <code>Float</code> or <code>Double</code>, otherwise it constructs using <code>toString()</code>.
+Other conversions have their behavior defined by <code>java.lang.Number</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_extra_keywords"><a class="anchor" href="#_extra_keywords"></a>13. Extra keywords</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>There are a few more keywords in Groovy than in Java.  Don&#8217;t use them for
+variable names etc.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>as</code></p>
+</li>
+<li>
+<p><code>def</code></p>
+</li>
+<li>
+<p><code>in</code></p>
+</li>
+<li>
+<p><code>trait</code></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 3.0.0-alpha-3<br>
+Last updated 2018-06-23 13:44:50 AEST
+</div>
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+<script>prettyPrint()</script>
+</body>
+</html>

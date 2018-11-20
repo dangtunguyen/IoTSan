@@ -239,7 +239,7 @@ public class LightFollowsMe extends java.lang.Object
     public void scheduleCheck()
     {
         STState motionState;
-        int index1, JJJCTEMP$9, _static_LightFollowsMe_minutes1, JJJCTEMP$7, JJJCTEMP$14, elapsed, JJJCTEMP$5, JJJCTEMP$4, JJJCTEMP$3, threshold;
+        int JJJCTEMP$9, _static_LightFollowsMe_minutes1, JJJCTEMP$7, JJJCTEMP$14, elapsed, JJJCTEMP$5, JJJCTEMP$4, JJJCTEMP$3, index7, threshold;
         STMotionSensor _static_LightFollowsMe_motion1;
         LightFollowsMe JJJCTEMP$0;
         STSwitch[] _static_LightFollowsMe_switches;
@@ -258,17 +258,17 @@ public class LightFollowsMe extends java.lang.Object
         threshold = JJJCTEMP$9 - 1000;
         if elapsed < threshold goto label2;
 
-        index1 = 0;
+        index7 = 0;
         goto label1;
 
      label0:
-        it = _static_LightFollowsMe_switches[index1];
+        it = _static_LightFollowsMe_switches[index7];
         virtualinvoke it.[STSwitch.off():void]();
-        index1 = index1 + 1;
+        index7 = index7 + 1;
 
      label1:
         JJJCTEMP$14 = lengthof _static_LightFollowsMe_switches;
-        if index1 < JJJCTEMP$14 goto label0;
+        if index7 < JJJCTEMP$14 goto label0;
 
      label2:
         return;
@@ -276,7 +276,7 @@ public class LightFollowsMe extends java.lang.Object
 
     public void motionEvtHandler()
     {
-        int JJJCTEMP$6, _static_evt.value, _static_LightFollowsMe_minutes1, JJJCTEMP$10, index0;
+        int JJJCTEMP$6, index6, _static_evt.value, _static_LightFollowsMe_minutes1, JJJCTEMP$10;
         LightFollowsMe JJJCTEMP$0;
         STSwitch[] _static_LightFollowsMe_switches;
         STSwitch it;
@@ -285,17 +285,17 @@ public class LightFollowsMe extends java.lang.Object
         JJJCTEMP$0 := @this;
         if _static_evt.value != 12 goto label2;
 
-        index0 = 0;
+        index6 = 0;
         goto label1;
 
      label0:
-        it = _static_LightFollowsMe_switches[index0];
+        it = _static_LightFollowsMe_switches[index6];
         virtualinvoke it.[STSwitch.on():void]();
-        index0 = index0 + 1;
+        index6 = index6 + 1;
 
      label1:
         JJJCTEMP$6 = lengthof _static_LightFollowsMe_switches;
-        if index0 < JJJCTEMP$6 goto label0;
+        if index6 < JJJCTEMP$6 goto label0;
 
         goto label3;
 

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.6.1">
+<title>Pimp my Library Pattern</title>
+<link rel="stylesheet" href="./assets/css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+<h1>Pimp my Library Pattern</h1>
+<div class="details">
+<span id="revnumber">version 3.0.0-alpha-3</span>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_example">1. Example</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <a href="http://www.artima.com/weblogs/viewpost.jsp?thread=179766">Pimp my Library</a> Pattern suggests an approach for extending a library that nearly does everything that you need but just needs a little more. It assumes that you do not have source code for the library of interest.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_example"><a class="anchor" href="#_example"></a>1. Example</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Suppose we want to make use of the built-in Integer facilities in Groovy (which build upon the features already in Java). Those libraries have nearly all of the features we want but not quite everything. We may not have all of the source code to the Groovy and Java libraries so we can&#8217;t just change the library. Instead we augment the library. Groovy has a number of ways to do this. One way is to use a Category.</p>
+</div>
+<div class="paragraph">
+<p>First, we&#8217;ll define a suitable category.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class EnhancedInteger {
+    static boolean greaterThanAll(Integer self, Object[] others) {
+        greaterThanAll(self, others)
+    }
+    static boolean greaterThanAll(Integer self, others) {
+        others.every { self &gt; it }
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>We have added two methods which augment the Integer methods by providing the <code>greaterThanAll</code> method. Categories follow conventions where they are defined as static methods with a special first parameter representing the class we wish to extend. The greaterThanAll(Integer self, others) static method becomes the <code>greaterThanAll(other)</code> instance method.</p>
+</div>
+<div class="paragraph">
+<p>We defined two versions of <code>greaterThanAll</code>. One which works for collections, ranges etc. The other which works with a variable number of <code>Integer</code> arguments.</p>
+</div>
+<div class="paragraph">
+<p>Here is how you would use the category.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">use(EnhancedInteger) {
+    assert 4.greaterThanAll(1, 2, 3)
+    assert !5.greaterThanAll(2, 4, 6)
+    assert 5.greaterThanAll(-4..4)
+    assert 5.greaterThanAll([])
+    assert !5.greaterThanAll([4, 5])
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As you can see, using this technique you can effectively enrich an original class without having access to its source code. Moreover, you can apply different enrichments in different parts of the system as well as work with un-enriched objects if we need to.</p>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 3.0.0-alpha-3<br>
+Last updated 2018-06-23 13:44:51 AEST
+</div>
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+<script>prettyPrint()</script>
+</body>
+</html>

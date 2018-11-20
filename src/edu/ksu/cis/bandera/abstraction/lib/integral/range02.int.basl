@@ -1,0 +1,322 @@
+abstraction Range02 extends integral 
+  begin
+    TOKENS = {LT0, R0, R1, R2, GT2};
+    DEFAULT = R0;
+    ONE2ONE = {R0, R1, R2};
+    abstract (n)
+      begin
+        n < 0 -> LT0;
+        n == 0 -> R0;
+        n == 1 -> R1;
+        n == 2 -> R2;
+        n > 2 -> GT2;
+      end
+    operator + add 
+      begin
+        (LT0, LT0) -> LT0;
+        (LT0, R0) -> LT0;
+        (LT0, R1) -> {LT0, R0};
+        (LT0, R2) -> {LT0, R0, R1};
+        (LT0, GT2) -> {LT0, R0, R1, R2, GT2};
+        (R0, LT0) -> LT0;
+        (R0, R0) -> R0;
+        (R0, R1) -> R1;
+        (R0, R2) -> R2;
+        (R0, GT2) -> GT2;
+        (R1, LT0) -> {LT0, R0};
+        (R1, R0) -> R1;
+        (R1, R1) -> R2;
+        (R1, R2) -> GT2;
+        (R1, GT2) -> GT2;
+        (R2, LT0) -> {LT0, R0, R1};
+        (R2, R0) -> R2;
+        (R2, R1) -> GT2;
+        (R2, R2) -> GT2;
+        (R2, GT2) -> GT2;
+        (GT2, LT0) -> {LT0, R0, R1, R2, GT2};
+        (GT2, R0) -> GT2;
+        (GT2, R1) -> GT2;
+        (GT2, R2) -> GT2;
+        (GT2, GT2) -> GT2;
+      end
+    operator - sub 
+      begin
+        (LT0, LT0) -> {LT0, R0, R1, R2, GT2};
+        (LT0, R0) -> LT0;
+        (LT0, R1) -> LT0;
+        (LT0, R2) -> LT0;
+        (LT0, GT2) -> LT0;
+        (R0, LT0) -> {R1, R2, GT2};
+        (R0, R0) -> R0;
+        (R0, R1) -> LT0;
+        (R0, R2) -> LT0;
+        (R0, GT2) -> LT0;
+        (R1, LT0) -> {R2, GT2};
+        (R1, R0) -> R1;
+        (R1, R1) -> R0;
+        (R1, R2) -> LT0;
+        (R1, GT2) -> LT0;
+        (R2, LT0) -> GT2;
+        (R2, R0) -> R2;
+        (R2, R1) -> R1;
+        (R2, R2) -> R0;
+        (R2, GT2) -> LT0;
+        (GT2, LT0) -> GT2;
+        (GT2, R0) -> GT2;
+        (GT2, R1) -> {R2, GT2};
+        (GT2, R2) -> {R1, R2, GT2};
+        (GT2, GT2) -> {LT0, R0, R1, R2, GT2};
+      end
+    operator * mul 
+      begin
+        (LT0, LT0) -> {R1, R2, GT2};
+        (LT0, R0) -> R0;
+        (LT0, R1) -> LT0;
+        (LT0, R2) -> LT0;
+        (LT0, GT2) -> {LT0, R1, R2, GT2};
+        (R0, LT0) -> R0;
+        (R0, R0) -> R0;
+        (R0, R1) -> R0;
+        (R0, R2) -> R0;
+        (R0, GT2) -> R0;
+        (R1, LT0) -> LT0;
+        (R1, R0) -> R0;
+        (R1, R1) -> R1;
+        (R1, R2) -> R2;
+        (R1, GT2) -> GT2;
+        (R2, LT0) -> LT0;
+        (R2, R0) -> R0;
+        (R2, R1) -> R2;
+        (R2, R2) -> GT2;
+        (R2, GT2) -> GT2;
+        (GT2, LT0) -> {LT0, R1, R2, GT2};
+        (GT2, R0) -> R0;
+        (GT2, R1) -> GT2;
+        (GT2, R2) -> GT2;
+        (GT2, GT2) -> {R1, R2, GT2};
+      end
+    operator / div 
+      begin
+        (LT0, LT0) -> {LT0, R0, R1, R2, GT2};
+        (LT0, R0) -> T;
+        (LT0, R1) -> LT0;
+        (LT0, R2) -> LT0;
+        (LT0, GT2) -> {LT0, R0, R1, R2, GT2};
+        (R0, LT0) -> R0;
+        (R0, R0) -> T;
+        (R0, R1) -> R0;
+        (R0, R2) -> R0;
+        (R0, GT2) -> R0;
+        (R1, LT0) -> {LT0, R0, R1, R2, GT2};
+        (R1, R0) -> T;
+        (R1, R1) -> R1;
+        (R1, R2) -> R0;
+        (R1, GT2) -> {LT0, R0, R1, R2, GT2};
+        (R2, LT0) -> {LT0, R0, R1, R2, GT2};
+        (R2, R0) -> T;
+        (R2, R1) -> R2;
+        (R2, R2) -> R1;
+        (R2, GT2) -> {LT0, R0, R1, R2, GT2};
+        (GT2, LT0) -> {LT0, R0, R1, R2, GT2};
+        (GT2, R0) -> T;
+        (GT2, R1) -> GT2;
+        (GT2, R2) -> {R1, R2, GT2};
+        (GT2, GT2) -> {LT0, R0, R1, R2, GT2};
+      end
+    operator % rem 
+      begin
+        (LT0, LT0) -> {LT0, R0, R1, R2, GT2};
+        (LT0, R0) -> T;
+        (LT0, R1) -> R0;
+        (LT0, R2) -> {R0, R1};
+        (LT0, GT2) -> {LT0, R0, R1, R2, GT2};
+        (R0, LT0) -> R0;
+        (R0, R0) -> T;
+        (R0, R1) -> R0;
+        (R0, R2) -> R0;
+        (R0, GT2) -> R0;
+        (R1, LT0) -> {LT0, R0, R1, R2, GT2};
+        (R1, R0) -> T;
+        (R1, R1) -> R0;
+        (R1, R2) -> R1;
+        (R1, GT2) -> {LT0, R0, R1, R2, GT2};
+        (R2, LT0) -> {LT0, R0, R1, R2, GT2};
+        (R2, R0) -> T;
+        (R2, R1) -> R0;
+        (R2, R2) -> R0;
+        (R2, GT2) -> {LT0, R0, R1, R2, GT2};
+        (GT2, LT0) -> {LT0, R0, R1, R2, GT2};
+        (GT2, R0) -> T;
+        (GT2, R1) -> R0;
+        (GT2, R2) -> {R0, R1};
+        (GT2, GT2) -> {LT0, R0, R1, R2, GT2};
+      end
+    test == eq 
+      begin
+        (LT0, LT0) -> {TRUE, FALSE};
+        (LT0, R0) -> FALSE;
+        (LT0, R1) -> FALSE;
+        (LT0, R2) -> FALSE;
+        (LT0, GT2) -> FALSE;
+        (R0, LT0) -> FALSE;
+        (R0, R0) -> TRUE;
+        (R0, R1) -> FALSE;
+        (R0, R2) -> FALSE;
+        (R0, GT2) -> FALSE;
+        (R1, LT0) -> FALSE;
+        (R1, R0) -> FALSE;
+        (R1, R1) -> TRUE;
+        (R1, R2) -> FALSE;
+        (R1, GT2) -> FALSE;
+        (R2, LT0) -> FALSE;
+        (R2, R0) -> FALSE;
+        (R2, R1) -> FALSE;
+        (R2, R2) -> TRUE;
+        (R2, GT2) -> FALSE;
+        (GT2, LT0) -> FALSE;
+        (GT2, R0) -> FALSE;
+        (GT2, R1) -> FALSE;
+        (GT2, R2) -> FALSE;
+        (GT2, GT2) -> {TRUE, FALSE};
+      end
+    test != neq 
+      begin
+        (LT0, LT0) -> {TRUE, FALSE};
+        (LT0, R0) -> TRUE;
+        (LT0, R1) -> TRUE;
+        (LT0, R2) -> TRUE;
+        (LT0, GT2) -> TRUE;
+        (R0, LT0) -> TRUE;
+        (R0, R0) -> FALSE;
+        (R0, R1) -> TRUE;
+        (R0, R2) -> TRUE;
+        (R0, GT2) -> TRUE;
+        (R1, LT0) -> TRUE;
+        (R1, R0) -> TRUE;
+        (R1, R1) -> FALSE;
+        (R1, R2) -> TRUE;
+        (R1, GT2) -> TRUE;
+        (R2, LT0) -> TRUE;
+        (R2, R0) -> TRUE;
+        (R2, R1) -> TRUE;
+        (R2, R2) -> FALSE;
+        (R2, GT2) -> TRUE;
+        (GT2, LT0) -> TRUE;
+        (GT2, R0) -> TRUE;
+        (GT2, R1) -> TRUE;
+        (GT2, R2) -> TRUE;
+        (GT2, GT2) -> {TRUE, FALSE};
+      end
+    test < lt 
+      begin
+        (LT0, LT0) -> {TRUE, FALSE};
+        (LT0, R0) -> TRUE;
+        (LT0, R1) -> TRUE;
+        (LT0, R2) -> TRUE;
+        (LT0, GT2) -> TRUE;
+        (R0, LT0) -> FALSE;
+        (R0, R0) -> FALSE;
+        (R0, R1) -> TRUE;
+        (R0, R2) -> TRUE;
+        (R0, GT2) -> TRUE;
+        (R1, LT0) -> FALSE;
+        (R1, R0) -> FALSE;
+        (R1, R1) -> FALSE;
+        (R1, R2) -> TRUE;
+        (R1, GT2) -> TRUE;
+        (R2, LT0) -> FALSE;
+        (R2, R0) -> FALSE;
+        (R2, R1) -> FALSE;
+        (R2, R2) -> FALSE;
+        (R2, GT2) -> TRUE;
+        (GT2, LT0) -> FALSE;
+        (GT2, R0) -> FALSE;
+        (GT2, R1) -> FALSE;
+        (GT2, R2) -> FALSE;
+        (GT2, GT2) -> {TRUE, FALSE};
+      end
+    test <= le 
+      begin
+        (LT0, LT0) -> {TRUE, FALSE};
+        (LT0, R0) -> TRUE;
+        (LT0, R1) -> TRUE;
+        (LT0, R2) -> TRUE;
+        (LT0, GT2) -> TRUE;
+        (R0, LT0) -> FALSE;
+        (R0, R0) -> TRUE;
+        (R0, R1) -> TRUE;
+        (R0, R2) -> TRUE;
+        (R0, GT2) -> TRUE;
+        (R1, LT0) -> FALSE;
+        (R1, R0) -> FALSE;
+        (R1, R1) -> TRUE;
+        (R1, R2) -> TRUE;
+        (R1, GT2) -> TRUE;
+        (R2, LT0) -> FALSE;
+        (R2, R0) -> FALSE;
+        (R2, R1) -> FALSE;
+        (R2, R2) -> TRUE;
+        (R2, GT2) -> TRUE;
+        (GT2, LT0) -> FALSE;
+        (GT2, R0) -> FALSE;
+        (GT2, R1) -> FALSE;
+        (GT2, R2) -> FALSE;
+        (GT2, GT2) -> {TRUE, FALSE};
+      end
+    test > gt 
+      begin
+        (LT0, LT0) -> {TRUE, FALSE};
+        (LT0, R0) -> FALSE;
+        (LT0, R1) -> FALSE;
+        (LT0, R2) -> FALSE;
+        (LT0, GT2) -> FALSE;
+        (R0, LT0) -> TRUE;
+        (R0, R0) -> FALSE;
+        (R0, R1) -> FALSE;
+        (R0, R2) -> FALSE;
+        (R0, GT2) -> FALSE;
+        (R1, LT0) -> TRUE;
+        (R1, R0) -> TRUE;
+        (R1, R1) -> FALSE;
+        (R1, R2) -> FALSE;
+        (R1, GT2) -> FALSE;
+        (R2, LT0) -> TRUE;
+        (R2, R0) -> TRUE;
+        (R2, R1) -> TRUE;
+        (R2, R2) -> FALSE;
+        (R2, GT2) -> FALSE;
+        (GT2, LT0) -> TRUE;
+        (GT2, R0) -> TRUE;
+        (GT2, R1) -> TRUE;
+        (GT2, R2) -> TRUE;
+        (GT2, GT2) -> {TRUE, FALSE};
+      end
+    test >= ge 
+      begin
+        (LT0, LT0) -> {TRUE, FALSE};
+        (LT0, R0) -> FALSE;
+        (LT0, R1) -> FALSE;
+        (LT0, R2) -> FALSE;
+        (LT0, GT2) -> FALSE;
+        (R0, LT0) -> TRUE;
+        (R0, R0) -> TRUE;
+        (R0, R1) -> FALSE;
+        (R0, R2) -> FALSE;
+        (R0, GT2) -> FALSE;
+        (R1, LT0) -> TRUE;
+        (R1, R0) -> TRUE;
+        (R1, R1) -> TRUE;
+        (R1, R2) -> FALSE;
+        (R1, GT2) -> FALSE;
+        (R2, LT0) -> TRUE;
+        (R2, R0) -> TRUE;
+        (R2, R1) -> TRUE;
+        (R2, R2) -> TRUE;
+        (R2, GT2) -> FALSE;
+        (GT2, LT0) -> TRUE;
+        (GT2, R0) -> TRUE;
+        (GT2, R1) -> TRUE;
+        (GT2, R2) -> TRUE;
+        (GT2, GT2) -> {TRUE, FALSE};
+      end
+  end

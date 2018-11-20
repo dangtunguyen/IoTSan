@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.6.1">
+<title>SaxBuilder</title>
+<link rel="stylesheet" href="./assets/css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+</head>
+<body class="book">
+<div id="header">
+<h1>SaxBuilder</h1>
+<div class="details">
+<span id="revnumber">version 3.0.0-alpha-3</span>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>A builder for generating <a href="https://en.wikipedia.org/wiki/Simple_API_for_XML">Simple API for XML (SAX)</a> events.</p>
+</div>
+<div class="paragraph">
+<p>If you have the following SAX handler:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class LogHandler extends org.xml.sax.helpers.DefaultHandler {
+
+    String log = ''
+
+    void startElement(String uri, String localName, String qName, org.xml.sax.Attributes attributes) {
+        log += "Start Element: $localName, "
+    }
+
+    void endElement(String uri, String localName, String qName) {
+        log += "End Element: $localName, "
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can use <code>SaxBuilder</code> to generate SAX events for the handler like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def handler = new LogHandler()
+def builder = new groovy.xml.SAXBuilder(handler)
+
+builder.root() {
+    helloWorld()
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And then check that everything worked as expected:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">assert handler.log == 'Start Element: root, Start Element: helloWorld, End Element: helloWorld, End Element: root, '</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 3.0.0-alpha-3<br>
+Last updated 2018-06-23 13:44:43 AEST
+</div>
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+<script>prettyPrint()</script>
+</body>
+</html>

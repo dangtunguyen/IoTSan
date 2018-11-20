@@ -1,0 +1,222 @@
+abstraction Range01 extends integral 
+  begin
+    TOKENS = {LT0, R0, R1, GT1};
+    DEFAULT = R0;
+    ONE2ONE = {R0, R1};
+    abstract (n)
+      begin
+        n < 0 -> LT0;
+        n == 0 -> R0;
+        n == 1 -> R1;
+        n > 1 -> GT1;
+      end
+    operator + add 
+      begin
+        (LT0, LT0) -> LT0;
+        (LT0, R0) -> LT0;
+        (LT0, R1) -> {LT0, R0};
+        (LT0, GT1) -> {LT0, R0, R1, GT1};
+        (R0, LT0) -> LT0;
+        (R0, R0) -> R0;
+        (R0, R1) -> R1;
+        (R0, GT1) -> GT1;
+        (R1, LT0) -> {LT0, R0};
+        (R1, R0) -> R1;
+        (R1, R1) -> GT1;
+        (R1, GT1) -> GT1;
+        (GT1, LT0) -> {LT0, R0, R1, GT1};
+        (GT1, R0) -> GT1;
+        (GT1, R1) -> GT1;
+        (GT1, GT1) -> GT1;
+      end
+    operator - sub 
+      begin
+        (LT0, LT0) -> {LT0, R0, R1, GT1};
+        (LT0, R0) -> LT0;
+        (LT0, R1) -> LT0;
+        (LT0, GT1) -> LT0;
+        (R0, LT0) -> {R1, GT1};
+        (R0, R0) -> R0;
+        (R0, R1) -> LT0;
+        (R0, GT1) -> LT0;
+        (R1, LT0) -> GT1;
+        (R1, R0) -> R1;
+        (R1, R1) -> R0;
+        (R1, GT1) -> LT0;
+        (GT1, LT0) -> GT1;
+        (GT1, R0) -> GT1;
+        (GT1, R1) -> {R1, GT1};
+        (GT1, GT1) -> {LT0, R0, R1, GT1};
+      end
+    operator * mul 
+      begin
+        (LT0, LT0) -> {R1, GT1};
+        (LT0, R0) -> R0;
+        (LT0, R1) -> LT0;
+        (LT0, GT1) -> {LT0, R1, GT1};
+        (R0, LT0) -> R0;
+        (R0, R0) -> R0;
+        (R0, R1) -> R0;
+        (R0, GT1) -> R0;
+        (R1, LT0) -> LT0;
+        (R1, R0) -> R0;
+        (R1, R1) -> R1;
+        (R1, GT1) -> GT1;
+        (GT1, LT0) -> {LT0, R1, GT1};
+        (GT1, R0) -> R0;
+        (GT1, R1) -> GT1;
+        (GT1, GT1) -> {R1, GT1};
+      end
+    operator / div 
+      begin
+        (LT0, LT0) -> {LT0, R0, R1, GT1};
+        (LT0, R0) -> T;
+        (LT0, R1) -> LT0;
+        (LT0, GT1) -> {LT0, R0, R1, GT1};
+        (R0, LT0) -> R0;
+        (R0, R0) -> T;
+        (R0, R1) -> R0;
+        (R0, GT1) -> R0;
+        (R1, LT0) -> {LT0, R0, R1, GT1};
+        (R1, R0) -> T;
+        (R1, R1) -> R1;
+        (R1, GT1) -> {LT0, R0, R1, GT1};
+        (GT1, LT0) -> {LT0, R0, R1, GT1};
+        (GT1, R0) -> T;
+        (GT1, R1) -> GT1;
+        (GT1, GT1) -> {LT0, R0, R1, GT1};
+      end
+    operator % rem 
+      begin
+        (LT0, LT0) -> {LT0, R0, R1, GT1};
+        (LT0, R0) -> T;
+        (LT0, R1) -> R0;
+        (LT0, GT1) -> {LT0, R0, R1, GT1};
+        (R0, LT0) -> R0;
+        (R0, R0) -> T;
+        (R0, R1) -> R0;
+        (R0, GT1) -> R0;
+        (R1, LT0) -> {LT0, R0, R1, GT1};
+        (R1, R0) -> T;
+        (R1, R1) -> R0;
+        (R1, GT1) -> {LT0, R0, R1, GT1};
+        (GT1, LT0) -> {LT0, R0, R1, GT1};
+        (GT1, R0) -> T;
+        (GT1, R1) -> R0;
+        (GT1, GT1) -> {LT0, R0, R1, GT1};
+      end
+    test == eq 
+      begin
+        (LT0, LT0) -> {TRUE, FALSE};
+        (LT0, R0) -> FALSE;
+        (LT0, R1) -> FALSE;
+        (LT0, GT1) -> FALSE;
+        (R0, LT0) -> FALSE;
+        (R0, R0) -> TRUE;
+        (R0, R1) -> FALSE;
+        (R0, GT1) -> FALSE;
+        (R1, LT0) -> FALSE;
+        (R1, R0) -> FALSE;
+        (R1, R1) -> TRUE;
+        (R1, GT1) -> FALSE;
+        (GT1, LT0) -> FALSE;
+        (GT1, R0) -> FALSE;
+        (GT1, R1) -> FALSE;
+        (GT1, GT1) -> {TRUE, FALSE};
+      end
+    test != neq 
+      begin
+        (LT0, LT0) -> {TRUE, FALSE};
+        (LT0, R0) -> TRUE;
+        (LT0, R1) -> TRUE;
+        (LT0, GT1) -> TRUE;
+        (R0, LT0) -> TRUE;
+        (R0, R0) -> FALSE;
+        (R0, R1) -> TRUE;
+        (R0, GT1) -> TRUE;
+        (R1, LT0) -> TRUE;
+        (R1, R0) -> TRUE;
+        (R1, R1) -> FALSE;
+        (R1, GT1) -> TRUE;
+        (GT1, LT0) -> TRUE;
+        (GT1, R0) -> TRUE;
+        (GT1, R1) -> TRUE;
+        (GT1, GT1) -> {TRUE, FALSE};
+      end
+    test < lt 
+      begin
+        (LT0, LT0) -> {TRUE, FALSE};
+        (LT0, R0) -> TRUE;
+        (LT0, R1) -> TRUE;
+        (LT0, GT1) -> TRUE;
+        (R0, LT0) -> FALSE;
+        (R0, R0) -> FALSE;
+        (R0, R1) -> TRUE;
+        (R0, GT1) -> TRUE;
+        (R1, LT0) -> FALSE;
+        (R1, R0) -> FALSE;
+        (R1, R1) -> FALSE;
+        (R1, GT1) -> TRUE;
+        (GT1, LT0) -> FALSE;
+        (GT1, R0) -> FALSE;
+        (GT1, R1) -> FALSE;
+        (GT1, GT1) -> {TRUE, FALSE};
+      end
+    test <= le 
+      begin
+        (LT0, LT0) -> {TRUE, FALSE};
+        (LT0, R0) -> TRUE;
+        (LT0, R1) -> TRUE;
+        (LT0, GT1) -> TRUE;
+        (R0, LT0) -> FALSE;
+        (R0, R0) -> TRUE;
+        (R0, R1) -> TRUE;
+        (R0, GT1) -> TRUE;
+        (R1, LT0) -> FALSE;
+        (R1, R0) -> FALSE;
+        (R1, R1) -> TRUE;
+        (R1, GT1) -> TRUE;
+        (GT1, LT0) -> FALSE;
+        (GT1, R0) -> FALSE;
+        (GT1, R1) -> FALSE;
+        (GT1, GT1) -> {TRUE, FALSE};
+      end
+    test > gt 
+      begin
+        (LT0, LT0) -> {TRUE, FALSE};
+        (LT0, R0) -> FALSE;
+        (LT0, R1) -> FALSE;
+        (LT0, GT1) -> FALSE;
+        (R0, LT0) -> TRUE;
+        (R0, R0) -> FALSE;
+        (R0, R1) -> FALSE;
+        (R0, GT1) -> FALSE;
+        (R1, LT0) -> TRUE;
+        (R1, R0) -> TRUE;
+        (R1, R1) -> FALSE;
+        (R1, GT1) -> FALSE;
+        (GT1, LT0) -> TRUE;
+        (GT1, R0) -> TRUE;
+        (GT1, R1) -> TRUE;
+        (GT1, GT1) -> {TRUE, FALSE};
+      end
+    test >= ge 
+      begin
+        (LT0, LT0) -> {TRUE, FALSE};
+        (LT0, R0) -> FALSE;
+        (LT0, R1) -> FALSE;
+        (LT0, GT1) -> FALSE;
+        (R0, LT0) -> TRUE;
+        (R0, R0) -> TRUE;
+        (R0, R1) -> FALSE;
+        (R0, GT1) -> FALSE;
+        (R1, LT0) -> TRUE;
+        (R1, R0) -> TRUE;
+        (R1, R1) -> TRUE;
+        (R1, GT1) -> FALSE;
+        (GT1, LT0) -> TRUE;
+        (GT1, R0) -> TRUE;
+        (GT1, R1) -> TRUE;
+        (GT1, GT1) -> {TRUE, FALSE};
+      end
+  end

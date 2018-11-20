@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.6.1">
+<title>Interacting with a SQL database</title>
+<link rel="stylesheet" href="./assets/css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+<h1>Interacting with a SQL database</h1>
+<div class="details">
+<span id="revnumber">version 3.0.0-alpha-3</span>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_connecting_to_the_database">1. Connecting to the database</a>
+<ul class="sectlevel2">
+<li><a href="#_connecting_with_a_datasource">1.1. Connecting with a DataSource</a></li>
+<li><a href="#_connecting_using_grab">1.2. Connecting using @Grab</a></li>
+</ul>
+</li>
+<li><a href="#_executing_sql">2. Executing SQL</a>
+<ul class="sectlevel2">
+<li><a href="#_creating_tables">2.1. Creating tables</a></li>
+</ul>
+</li>
+<li><a href="#_basic_crud_operations">3. Basic CRUD operations</a>
+<ul class="sectlevel2">
+<li><a href="#_creating_inserting_data">3.1. Creating/Inserting data</a></li>
+<li><a href="#_reading_rows">3.2. Reading rows</a></li>
+<li><a href="#_updating_rows">3.3. Updating rows</a></li>
+<li><a href="#_deleting_rows">3.4. Deleting rows</a></li>
+</ul>
+</li>
+<li><a href="#_advanced_sql_operations">4. Advanced SQL operations</a>
+<ul class="sectlevel2">
+<li><a href="#_working_with_transactions">4.1. Working with transactions</a></li>
+<li><a href="#_using_batches">4.2. Using batches</a></li>
+<li><a href="#_performing_pagination">4.3. Performing pagination</a></li>
+<li><a href="#_fetching_metadata">4.4. Fetching metadata</a></li>
+<li><a href="#_named_and_named_ordinal_parameters">4.5. Named and named-ordinal parameters</a></li>
+<li><a href="#_stored_procedures">4.6. Stored procedures</a></li>
+</ul>
+</li>
+<li><a href="#_using_datasets">5. Using DataSets</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Groovy&#8217;s <code>groovy-sql</code> module provides a higher-level abstraction over Java&#8217;s JDBC technology. JDBC itself provides
+a lower-level but fairly comprehensive API which provides uniform access to a whole variety of supported relational database systems.
+We&#8217;ll use HSQLDB in our examples here but you can alternatively use Oracle, SQL Server, MySQL and a host of others.
+The most frequently used class within the <code>groovy-sql</code> module is the <code>groovy.sql.Sql</code> class which raises the JDBC
+abstractions up one level. We&#8217;ll cover that first.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_connecting_to_the_database"><a class="anchor" href="#_connecting_to_the_database"></a>1. Connecting to the database</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Connecting to a database with Groovy&#8217;s <code>Sql</code> class requires four pieces of information:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The database uniform resource locator (URL)</p>
+</li>
+<li>
+<p>Username</p>
+</li>
+<li>
+<p>Password</p>
+</li>
+<li>
+<p>The driver class name (which can be derived automatically in some situations)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>For our HSQLDB database, the values will be something like that shown in the following table:</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Property</th>
+<th class="tableblock halign-left valign-top">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">url</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>jdbc:hsqldb:mem:yourdb</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">user</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">sa (or your <em>username</em>)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">password</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>yourPassword</em></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">driver</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>org.hsqldb.jdbcDriver</code></p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Consult the documentation for the JDBC driver that you plan to use to determine the correct values for your situation.</p>
+</div>
+<div class="paragraph">
+<p>The <code>Sql</code> class has a <code>newInstance</code> factory method which takes these parameters. You would typically use it as follows:</p>
+</div>
+<div class="listingblock">
+<div class="title">Connecting to HSQLDB</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import groovy.sql.Sql
+
+def url = 'jdbc:hsqldb:mem:yourDB'
+def user = 'sa'
+def password = ''
+def driver = 'org.hsqldb.jdbcDriver'
+def sql = Sql.newInstance(url, user, password, driver)
+
+// use 'sql' instance ...
+
+sql.close()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you don&#8217;t want to have to handle resource handling yourself (i.e. call <code>close()</code> manually) then you can use the <code>withInstance</code> variation as shown here:</p>
+</div>
+<div class="listingblock">
+<div class="title">Connecting to HSQLDB (<code>withInstance</code> variation)</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Sql.withInstance(url, user, password, driver) { sql -&gt;
+  // use 'sql' instance ...
+}</code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_connecting_with_a_datasource"><a class="anchor" href="#_connecting_with_a_datasource"></a>1.1. Connecting with a DataSource</h3>
+<div class="paragraph">
+<p>It is often preferred to use a DataSource. You may have one available to you from a connection pool.
+Here we&#8217;ll use the one provided as part of the HSQLDB driver jar as shown here:</p>
+</div>
+<div class="listingblock">
+<div class="title">Connecting to HSQLDB with a DataSource</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import groovy.sql.Sql
+import org.hsqldb.jdbc.JDBCDataSource
+
+def dataSource = new JDBCDataSource(
+    database: 'jdbc:hsqldb:mem:yourDB', user: 'sa', password: '')
+def sql = new Sql(dataSource)
+
+// use then close 'sql' instance ...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you have your own connection pooling, the details will be different, e.g. for Apache Commons DBCP:</p>
+</div>
+<div class="listingblock">
+<div class="title">Connecting to HSQLDB with a DataSource using Apache Commons DBCP</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@Grab('commons-dbcp:commons-dbcp:1.4')
+import groovy.sql.Sql
+import org.apache.commons.dbcp.BasicDataSource
+
+def ds = new BasicDataSource(driverClassName: "org.hsqldb.jdbcDriver",
+    url: 'jdbc:hsqldb:mem:yourDB', username: 'sa', password: '')
+def sql = new Sql(ds)
+// use then close 'sql' instance ...</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_connecting_using_grab"><a class="anchor" href="#_connecting_using_grab"></a>1.2. Connecting using @Grab</h3>
+<div class="paragraph">
+<p>The previous examples assume that the necessary database driver jar is already on your classpath.
+For a self-contained script you can add <code>@Grab</code> statements to the top of the script to automatically download the necessary jar as shown here:</p>
+</div>
+<div class="listingblock">
+<div class="title">Connecting to HSQLDB using @Grab</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@Grab('org.hsqldb:hsqldb:2.3.3')
+@GrabConfig(systemClassLoader=true)
+// create, use, and then close sql instance ...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>@GrabConfig</code> statement is necessary to make sure the system classloader is used. This ensures that the driver classes and
+system classes like <code>java.sql.DriverManager</code> are in the same classloader.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_executing_sql"><a class="anchor" href="#_executing_sql"></a>2. Executing SQL</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You can execute arbitrary SQL commands using the <code>execute()</code> method. Let&#8217;s have a look at using it to create a table.</p>
+</div>
+<div class="sect2">
+<h3 id="_creating_tables"><a class="anchor" href="#_creating_tables"></a>2.1. Creating tables</h3>
+<div class="paragraph">
+<p>The simplest way to execute SQL is to call the <code>execute()</code> method passing the SQL you wish to execute as a String as shown here:</p>
+</div>
+<div class="listingblock">
+<div class="title">Creating a table</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// ... create 'sql' instance
+sql.execute '''
+  CREATE TABLE Author (
+    id          INTEGER GENERATED BY DEFAULT AS IDENTITY,
+    firstname   VARCHAR(64),
+    lastname    VARCHAR(64)
+  );
+'''
+// close 'sql' instance ...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>There is a variant of this method which takes a GString and another with a list of parameters. There are also other variants with similar names: <code>executeInsert</code> and <code>executeUpdate</code>.
+We&#8217;ll see examples of these variants in other examples in this section.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_basic_crud_operations"><a class="anchor" href="#_basic_crud_operations"></a>3. Basic CRUD operations</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The basic operations on a database are Create, Read, Update and Delete (the so-called CRUD operations). We&#8217;ll examine each of these in turn.</p>
+</div>
+<div class="sect2">
+<h3 id="_creating_inserting_data"><a class="anchor" href="#_creating_inserting_data"></a>3.1. Creating/Inserting data</h3>
+<div class="paragraph">
+<p>You can use the same <code>execute()</code> statement we saw earlier but to insert a row by using a SQL insert statement as follows:</p>
+</div>
+<div class="listingblock">
+<div class="title">Inserting a row</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">sql.execute "INSERT INTO Author (firstname, lastname) VALUES ('Dierk', 'Koenig')"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can use a special <code>executeInsert</code> method instead of <code>execute</code>. This will return a list of all keys generated.
+Both the <code>execute</code> and <code>executeInsert</code> methods allow you to place '?' placeholders into your SQL string and supply a list of parameters.
+In this case a PreparedStatement is used which avoids any risk of SQL injection. The following example illustrates <code>executeInsert</code> using placeholders and parameters:</p>
+</div>
+<div class="listingblock">
+<div class="title">Inserting a row using executeInsert with placeholders and parameters</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def insertSql = 'INSERT INTO Author (firstname, lastname) VALUES (?,?)'
+def params = ['Jon', 'Skeet']
+def keys = sql.executeInsert insertSql, params
+assert keys[0] == [1]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In addition, both the <code>execute</code> and <code>executeInsert</code> methods allow you to use GStrings. Any '$' placeholders within the SQL are assumed
+to be placeholders. An escaping mechanism exists if you want to supply part of the GString with a variable in a
+position which isn&#8217;t where normal placeholders go within SQL. See the GroovyDoc for more details.
+Also, <code>executeInsert</code> allows you to supply a list of key column names, when multiple keys are returned and you are only interested in some of them.
+ Here is a fragment illustrating key name specification and GStrings:</p>
+</div>
+<div class="listingblock">
+<div class="title">Inserting a row using executeInsert with a GString and specifying key names</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def first = 'Guillaume'
+def last = 'Laforge'
+def myKeyNames = ['ID']
+def myKeys = sql.executeInsert """
+  INSERT INTO Author (firstname, lastname)
+  VALUES (${first}, ${last})
+""", myKeyNames
+assert myKeys[0] == [ID: 2]</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_reading_rows"><a class="anchor" href="#_reading_rows"></a>3.2. Reading rows</h3>
+<div class="paragraph">
+<p>Reading rows of data from the database is accomplished using one of several available methods: <code>query</code>, <code>eachRow</code>, <code>firstRow</code> and <code>rows</code>.</p>
+</div>
+<div class="paragraph">
+<p>Use the <code>query</code> method if you want to iterate through the <code>ResultSet</code> returned by the underlying JDBC API as shown here:</p>
+</div>
+<div class="listingblock">
+<div class="title">Reading data using <code>query</code></div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def expected = ['Dierk Koenig', 'Jon Skeet', 'Guillaume Laforge']
+
+def rowNum = 0
+sql.query('SELECT firstname, lastname FROM Author') { resultSet -&gt;
+  while (resultSet.next()) {
+    def first = resultSet.getString(1)
+    def last = resultSet.getString('lastname')
+    assert expected[rowNum++] == "$first $last"
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Use the <code>eachRow</code> method if you want a slightly higher-level abstraction which provides a Groovy friendly map-like abstraction for the <code>ResultSet</code> as shown here:</p>
+</div>
+<div class="listingblock">
+<div class="title">Reading data using <code>eachRow</code></div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">rowNum = 0
+sql.eachRow('SELECT firstname, lastname FROM Author') { row -&gt;
+  def first = row[0]
+  def last = row.lastname
+  assert expected[rowNum++] == "$first $last"
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note that you can use Groovy list-style and map-style notations when accessing the row of data.</p>
+</div>
+<div class="paragraph">
+<p>Use the <code>firstRow</code> method if you for similar functionality as <code>eachRow</code> but returning only one row of data as shown here:</p>
+</div>
+<div class="listingblock">
+<div class="title">Reading data using <code>firstRow</code></div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def first = sql.firstRow('SELECT lastname, firstname FROM Author')
+assert first.values().sort().join(',') == 'Dierk,Koenig'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Use the <code>rows</code> method if you want to process a list of map-like data structures as shown here:</p>
+</div>
+<div class="listingblock">
+<div class="title">Reading data using <code>rows</code></div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">List authors = sql.rows('SELECT firstname, lastname FROM Author')
+assert authors.size() == 3
+assert authors.collect { "$it.FIRSTNAME ${it[-1]}" } == expected</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note that the map-like abstraction has case-insensitive keys (hence we can use 'FIRSTNAME' or 'firstname' as the key) and
+also that -ve indices (a standard Groovy feature) works when using an index value (to count column numbers from the right).</p>
+</div>
+<div class="paragraph">
+<p>You can also use any of the above methods to return scalar values, though typically <code>firstRow</code> is all that is required in such cases. An example returning the count of rows is shown here:</p>
+</div>
+<div class="listingblock">
+<div class="title">Reading scalar values</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">assert sql.firstRow('SELECT COUNT(*) AS num FROM Author').num == 3</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_updating_rows"><a class="anchor" href="#_updating_rows"></a>3.3. Updating rows</h3>
+<div class="paragraph">
+<p>Updating rows can again be done using the <code>execute()</code> method. Just use a SQL update statement as the argument to the method.
+You can insert an author with just a lastname and then update the row to also have a firstname as follows:</p>
+</div>
+<div class="listingblock">
+<div class="title">Updating a row</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">sql.execute "INSERT INTO Author (lastname) VALUES ('Thorvaldsson')"
+sql.execute "UPDATE Author SET firstname='Erik' where lastname='Thorvaldsson'"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>There is also a special <code>executeUpdate</code> variant which returns the number of rows updated as a result of executing the SQL.
+For example, you can change the lastname of an author as follows:</p>
+</div>
+<div class="listingblock">
+<div class="title">Using executeUpdate</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def updateSql = "UPDATE Author SET lastname='Pragt' where lastname='Thorvaldsson'"
+def updateCount = sql.executeUpdate updateSql
+assert updateCount == 1
+
+def row = sql.firstRow "SELECT * FROM Author where firstname = 'Erik'"
+assert "${row.firstname} ${row.lastname}" == 'Erik Pragt'</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_deleting_rows"><a class="anchor" href="#_deleting_rows"></a>3.4. Deleting rows</h3>
+<div class="paragraph">
+<p>The <code>execute</code> method is also used for deleting rows as this example shows:</p>
+</div>
+<div class="listingblock">
+<div class="title">Deleting rows</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">assert sql.firstRow('SELECT COUNT(*) as num FROM Author').num == 3
+sql.execute "DELETE FROM Author WHERE lastname = 'Skeet'"
+assert sql.firstRow('SELECT COUNT(*) as num FROM Author').num == 2</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_advanced_sql_operations"><a class="anchor" href="#_advanced_sql_operations"></a>4. Advanced SQL operations</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_working_with_transactions"><a class="anchor" href="#_working_with_transactions"></a>4.1. Working with transactions</h3>
+<div class="paragraph">
+<p>The easiest way to perform database operations within a transaction is to include the database operation within a <code>withTransaction</code> closure as shown in the following example:</p>
+</div>
+<div class="listingblock">
+<div class="title">A successful transaction</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">assert sql.firstRow('SELECT COUNT(*) as num FROM Author').num == 0
+sql.withTransaction {
+  sql.execute "INSERT INTO Author (firstname, lastname) VALUES ('Dierk', 'Koenig')"
+  sql.execute "INSERT INTO Author (firstname, lastname) VALUES ('Jon', 'Skeet')"
+}
+assert sql.firstRow('SELECT COUNT(*) as num FROM Author').num == 2</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here the database starts empty and has two rows after successful completion of the operation. Outside the scope of the
+transaction, the database is never seen as having just one row.</p>
+</div>
+<div class="paragraph">
+<p>If something goes wrong, any earlier operations within the <code>withTransaction</code> block are rolled back.
+We can see that in operation in the following example where we use database metadata (more details coming up shortly) to find the
+maximum allowable size of the <code>firstname</code> column and then attempt to enter a firstname one larger than that maximum value as shown here:</p>
+</div>
+<div class="listingblock">
+<div class="title">A failed transaction will cause a rollback</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def maxFirstnameLength
+def metaClosure = { meta -&gt; maxFirstnameLength = meta.getPrecision(1) }
+def rowClosure = {}
+def rowCountBefore = sql.firstRow('SELECT COUNT(*) as num FROM Author').num
+try {
+  sql.withTransaction {
+    sql.execute "INSERT INTO Author (firstname) VALUES ('Dierk')"
+    sql.eachRow "SELECT firstname FROM Author WHERE firstname = 'Dierk'", metaClosure, rowClosure
+    sql.execute "INSERT INTO Author (firstname) VALUES (?)", 'X' * (maxFirstnameLength + 1)
+  }
+} catch(ignore) { println ignore.message }
+def rowCountAfter = sql.firstRow('SELECT COUNT(*) as num FROM Author').num
+assert rowCountBefore == rowCountAfter</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Even though the first sql execute succeeds initially, it will be rolled back and the number of rows will remain the same.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_using_batches"><a class="anchor" href="#_using_batches"></a>4.2. Using batches</h3>
+<div class="paragraph">
+<p>When dealing with large volumes of data, particularly when inserting such data, it can be more efficient to chunk the data into batches. This is done
+using the <code>withBatch</code> statement as shown in the following example:</p>
+</div>
+<div class="listingblock">
+<div class="title">Batching SQL statements</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">sql.withBatch(3) { stmt -&gt;
+  stmt.addBatch "INSERT INTO Author (firstname, lastname) VALUES ('Dierk', 'Koenig')"
+  stmt.addBatch "INSERT INTO Author (firstname, lastname) VALUES ('Paul', 'King')"
+  stmt.addBatch "INSERT INTO Author (firstname, lastname) VALUES ('Guillaume', 'Laforge')"
+  stmt.addBatch "INSERT INTO Author (firstname, lastname) VALUES ('Hamlet', 'D''Arcy')"
+  stmt.addBatch "INSERT INTO Author (firstname, lastname) VALUES ('Cedric', 'Champeau')"
+  stmt.addBatch "INSERT INTO Author (firstname, lastname) VALUES ('Erik', 'Pragt')"
+  stmt.addBatch "INSERT INTO Author (firstname, lastname) VALUES ('Jon', 'Skeet')"
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After executing these statements, there will be 7 new rows in the database. In fact, they will have been added in batches
+even though you can&#8217;t easily tell that after that fact. If you want to confirm what is going on under the covers, you can
+add a little bit of extra logging into your program. Add the following lines before the <code>withBatch</code> statement:</p>
+</div>
+<div class="listingblock">
+<div class="title">Logging additional SQL information</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import java.util.logging.*
+
+// next line will add fine logging
+Logger.getLogger('groovy.sql').level = Level.FINE
+// also adjust logging.properties file in JRE_HOME/lib to have:
+// java.util.logging.ConsoleHandler.level = FINE</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>With this extra logging turned on, and the changes made as per the above comment for the logging.properties file, you should see
+output such as:</p>
+</div>
+<div class="listingblock">
+<div class="title">SQL logging output with batching enable</div>
+<div class="content">
+<pre class="prettyprint highlight"><code>FINE: Successfully executed batch with 3 command(s)
+Apr 19, 2015 8:38:42 PM groovy.sql.BatchingStatementWrapper processResult
+
+FINE: Successfully executed batch with 3 command(s)
+Apr 19, 2015 8:38:42 PM groovy.sql.BatchingStatementWrapper processResult
+
+FINE: Successfully executed batch with 1 command(s)
+Apr 19, 2015 8:38:42 PM groovy.sql.Sql getStatement</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>We should also note, that any combination of SQL statements can be added to the batch. They don&#8217;t all have to be
+inserting a new row to the same table.</p>
+</div>
+<div class="paragraph">
+<p>We noted earlier that to avoid SQL injection, we encourage you to use prepared statements, this is achieved using the
+variants of methods which take GStrings or a list of extra parameters. Prepared statements can be used in combination
+with batches as shown in the following example:</p>
+</div>
+<div class="listingblock">
+<div class="title">Batching prepared statements</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def qry = 'INSERT INTO Author (firstname, lastname) VALUES (?,?)'
+sql.withBatch(3, qry) { ps -&gt;
+  ps.addBatch('Dierk', 'Koenig')
+  ps.addBatch('Paul', 'King')
+  ps.addBatch('Guillaume', 'Laforge')
+  ps.addBatch('Hamlet', "D'Arcy")
+  ps.addBatch('Cedric', 'Champeau')
+  ps.addBatch('Erik', 'Pragt')
+  ps.addBatch('Jon', 'Skeet')
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This provides a much safer option if the data could come from a user such as via a script or a web form. Of course, given
+that a prepared statement is being used, you are limited to a batch of the same SQL operation (insert in our example)
+to the one table.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_performing_pagination"><a class="anchor" href="#_performing_pagination"></a>4.3. Performing pagination</h3>
+<div class="paragraph">
+<p>When presenting large tables of data to a user, it is often convenient to present information a page at
+a time. Many of Groovy&#8217;s SQL retrieval methods have extra parameters which can be used to select a particular
+page of interest. The starting position and page size are specified as integers as shown in the following example
+using <code>rows</code>:</p>
+</div>
+<div class="listingblock">
+<div class="title">Retrieving pages of data</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def qry = 'SELECT * FROM Author'
+assert sql.rows(qry, 1, 3)*.firstname == ['Dierk', 'Paul', 'Guillaume']
+assert sql.rows(qry, 4, 3)*.firstname == ['Hamlet', 'Cedric', 'Erik']
+assert sql.rows(qry, 7, 3)*.firstname == ['Jon']</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_fetching_metadata"><a class="anchor" href="#_fetching_metadata"></a>4.4. Fetching metadata</h3>
+<div class="paragraph">
+<p>JDBC metadata can be retrieved in numerous ways. Perhaps the most basic approach is to extract the
+metadata from any row as shown in the following example which examines the tablename, column names and column type names:</p>
+</div>
+<div class="listingblock">
+<div class="title">Using row metadata</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">sql.eachRow("SELECT * FROM Author WHERE firstname = 'Dierk'") { row -&gt;
+  def md = row.getMetaData()
+  assert md.getTableName(1) == 'AUTHOR'
+  assert (1..md.columnCount).collect{ md.getColumnName(it) } == ['ID', 'FIRSTNAME', 'LASTNAME']
+  assert (1..md.columnCount).collect{ md.getColumnTypeName(it) } == ['INTEGER', 'VARCHAR', 'VARCHAR']
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And another slight variant to the previous example, this time also looking at the column label:</p>
+</div>
+<div class="listingblock">
+<div class="title">Also using row metadata</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">sql.eachRow("SELECT firstname AS first FROM Author WHERE firstname = 'Dierk'") { row -&gt;
+  def md = row.getMetaData()
+  assert md.getColumnName(1) == 'FIRSTNAME'
+  assert md.getColumnLabel(1) == 'FIRST'
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Accessing metadata is quite common, so Groovy also provides variants to many of its methods that let you
+supply a closure that will be called once with the row metadata in addition to the normal row closure
+which is called for each row. The following example illustrates the two closure variant for <code>eachRow</code>:</p>
+</div>
+<div class="listingblock">
+<div class="title">Using row and metadata closures</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def metaClosure = { meta -&gt; assert meta.getColumnName(1) == 'FIRSTNAME' }
+def rowClosure = { row -&gt; assert row.FIRSTNAME == 'Dierk' }
+sql.eachRow("SELECT firstname FROM Author WHERE firstname = 'Dierk'", metaClosure, rowClosure)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note that our SQL query will only return one row, so we could have equally used <code>firstRow</code> for the previous example.</p>
+</div>
+<div class="paragraph">
+<p>Finally, JDBC also provides metadata per connection (not just for rows). You can also access such metadata from Groovy as shown in this example:</p>
+</div>
+<div class="listingblock">
+<div class="title">Using connection metadata</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def md = sql.connection.metaData
+assert md.driverName == 'HSQL Database Engine Driver'
+assert md.databaseProductVersion == '2.3.3'
+assert ['JDBCMajorVersion', 'JDBCMinorVersion'].collect{ md[it] } == [4, 0]
+assert md.stringFunctions.tokenize(',').contains('CONCAT')
+def rs = md.getTables(null, null, 'AUTH%', null)
+assert rs.next()
+assert rs.getString('TABLE_NAME') == 'AUTHOR'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Consult the JavaDoc for your driver to find out what metadata information is available for you to access.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_named_and_named_ordinal_parameters"><a class="anchor" href="#_named_and_named_ordinal_parameters"></a>4.5. Named and named-ordinal parameters</h3>
+<div class="paragraph">
+<p>Groovy supports some additional alternative placeholder syntax variants. The GString variants
+are typically preferred over these alternatives but the alternatives are useful for Java integration
+purposes and sometimes in templating scenarios where GStrings might already be in heavy use as part
+of a template. The named parameter variants are much like the String plus list of parameter variants but
+instead of having a list of <code>?</code> placeholders followed by a list of parameters, you have one or more
+placeholders having the form <code>:propName</code> or <code>?.propName</code> and a single map, named arguments or a
+domain object as the parameter. The map or domain object should have a property named <code>propName</code>
+corresponding to each supplied placeholder.</p>
+</div>
+<div class="paragraph">
+<p>Here is an example using the colon form:</p>
+</div>
+<div class="listingblock">
+<div class="title">Named parameters (colon form)</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">sql.execute "INSERT INTO Author (firstname, lastname) VALUES (:first, :last)", first: 'Dierk', last: 'Koenig'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And another example using the question mark form:</p>
+</div>
+<div class="listingblock">
+<div class="title">Named parameters (question mark form)</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">sql.execute "INSERT INTO Author (firstname, lastname) VALUES (?.first, ?.last)", first: 'Jon', last: 'Skeet'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If the information you need to supply is spread across multiple maps or domain objects you can
+use the question mark form with an additional ordinal index as shown here:</p>
+</div>
+<div class="listingblock">
+<div class="title">Named-ordinal parameters</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Rockstar { String first, last }
+def pogo = new Rockstar(first: 'Paul', last: 'McCartney')
+def map = [lion: 'King']
+sql.execute "INSERT INTO Author (firstname, lastname) VALUES (?1.first, ?2.lion)", pogo, map</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_stored_procedures"><a class="anchor" href="#_stored_procedures"></a>4.6. Stored procedures</h3>
+<div class="paragraph">
+<p>The exact syntax for creating a stored procedure or function varies slightly between different databases.
+For the HSQLDB database we are using, we can create a stored function which returns the initials of all authors in a table
+as follows:</p>
+</div>
+<div class="listingblock">
+<div class="title">Creating a stored function</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">sql.execute """
+  CREATE FUNCTION SELECT_AUTHOR_INITIALS()
+  RETURNS TABLE (firstInitial VARCHAR(1), lastInitial VARCHAR(1))
+  READS SQL DATA
+  RETURN TABLE (
+    SELECT LEFT(Author.firstname, 1) as firstInitial, LEFT(Author.lastname, 1) as lastInitial
+    FROM Author
+  )
+"""</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>We can use a SQL <code>CALL</code> statement to invoke the function using Groovy&#8217;s normal SQL retrieval methods.
+Here is an example using <code>eachRow</code>.</p>
+</div>
+<div class="listingblock">
+<div class="title">Creating a stored procedure or function</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def result = []
+sql.eachRow('CALL SELECT_AUTHOR_INITIALS()') {
+  result &lt;&lt; "$it.firstInitial$it.lastInitial"
+}
+assert result == ['DK', 'JS', 'GL']</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here is the code for creating another stored function, this one taking the lastname as a parameter:</p>
+</div>
+<div class="listingblock">
+<div class="title">Creating a stored function with a parameter</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">sql.execute """
+  CREATE FUNCTION FULL_NAME (p_lastname VARCHAR(64))
+  RETURNS VARCHAR(100)
+  READS SQL DATA
+  BEGIN ATOMIC
+    DECLARE ans VARCHAR(100);
+    SELECT CONCAT(firstname, ' ', lastname) INTO ans
+    FROM Author WHERE lastname = p_lastname;
+    RETURN ans;
+  END
+"""</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>We can use the placeholder syntax to specify where the parameter belongs and note the special placeholder position to indicate the result:</p>
+</div>
+<div class="listingblock">
+<div class="title">Using a stored function with a parameter</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def result = sql.firstRow("{? = call FULL_NAME(?)}", ['Koenig'])
+assert result[0] == 'Dierk Koenig'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Finally, here is a stored procedure with input and output parameters:</p>
+</div>
+<div class="listingblock">
+<div class="title">Creating a stored procedure with input and output parameters</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">sql.execute """
+  CREATE PROCEDURE CONCAT_NAME (OUT fullname VARCHAR(100),
+    IN first VARCHAR(50), IN last VARCHAR(50))
+  BEGIN ATOMIC
+    SET fullname = CONCAT(first, ' ', last);
+  END
+"""</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To use the <code>CONCAT_NAME</code> stored procedure parameter, we make use of a special <code>call</code> method. Any input parameters are simply provided
+as parameters to the method call. For output parameters, the resulting type must be specified as shown here:</p>
+</div>
+<div class="listingblock">
+<div class="title">Using a stored procedure with input and output parameters</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">sql.call("{call CONCAT_NAME(?, ?, ?)}", [Sql.VARCHAR, 'Dierk', 'Koenig']) {
+  fullname -&gt; assert fullname == 'Dierk Koenig'
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_using_datasets"><a class="anchor" href="#_using_datasets"></a>5. Using DataSets</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>(TBD)</p>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 3.0.0-alpha-3<br>
+Last updated 2018-06-23 13:44:34 AEST
+</div>
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+<script>prettyPrint()</script>
+</body>
+</html>

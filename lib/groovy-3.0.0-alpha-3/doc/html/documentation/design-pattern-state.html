@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.6.1">
+<title>State Pattern</title>
+<link rel="stylesheet" href="./assets/css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+<h1>State Pattern</h1>
+<div class="details">
+<span id="revnumber">version 3.0.0-alpha-3</span>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_example">1. Example</a></li>
+<li><a href="#_variation_1_leveraging_interface_oriented_design">2. Variation 1: Leveraging Interface-Oriented Design</a></li>
+<li><a href="#_variation_2_extract_state_pattern_logic">3. Variation 2: Extract State Pattern Logic</a></li>
+<li><a href="#_variation_3_bring_on_the_dsl">4. Variation 3: Bring on the DSL</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <a href="http://en.wikipedia.org/wiki/State_pattern">State Pattern</a> provides a structured approach to partitioning the behaviour within complex systems. The overall behaviour of a system is partitioned into well-defined states. Typically, each state is implemented by a class. The overall system behaviour can be determined firstly by knowing the <em>current state</em> of the system; secondly, by understanding the behaviour possible while in that state (as embodied in the methods of the class corresponding to that state).</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_example"><a class="anchor" href="#_example"></a>1. Example</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Here is an example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Client {
+    def context = new Context()
+    def connect() {
+        context.state.connect()
+    }
+    def disconnect() {
+        context.state.disconnect()
+    }
+    def send_message(message) {
+        context.state.send_message(message)
+    }
+    def receive_message() {
+        context.state.receive_message()
+    }
+}
+
+class Context {
+    def state = new Offline(this)
+}
+
+class ClientState {
+    def context
+    ClientState(context) {
+        this.context = context
+        inform()
+    }
+}
+
+class Offline extends ClientState {
+    Offline(context) {
+        super(context)
+    }
+    def inform() {
+        println "offline"
+    }
+    def connect() {
+        context.state = new Online(context)
+    }
+    def disconnect() {
+        println "error: not connected"
+    }
+    def send_message(message) {
+        println "error: not connected"
+    }
+    def receive_message() {
+        println "error: not connected"
+    }
+}
+
+class Online extends ClientState {
+    Online(context) {
+        super(context)
+    }
+    def inform() {
+        println "connected"
+    }
+    def connect() {
+        println "error: already connected"
+    }
+    def disconnect() {
+        context.state = new Offline(context)
+    }
+    def send_message(message) {
+        println "\"$message\" sent"
+    }
+    def receive_message() {
+        println "message received"
+    }
+}
+
+client = new Client()
+client.send_message("Hello")
+client.connect()
+client.send_message("Hello")
+client.connect()
+client.receive_message()
+client.disconnect()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here is the output:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>offline
+error: not connected
+connected
+"Hello" sent
+error: already connected
+message received
+offline</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>One of the great things about a dynamic language like Groovy though is that we can take this example and express it in many different ways depending on our particular needs. Some potential variations for this example are shown below.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_variation_1_leveraging_interface_oriented_design"><a class="anchor" href="#_variation_1_leveraging_interface_oriented_design"></a>2. Variation 1: Leveraging Interface-Oriented Design</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>One approach we could take is to leverage <a href="http://www.pragmaticprogrammer.com/titles/kpiod/index.html">Interface-Oriented Design</a>. To do this, we could introduce the following interface:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">interface State {
+    def connect()
+    def disconnect()
+    def send_message(message)
+    def receive_message()
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then our <code>Client</code>, <code>Online</code> and 'Offline` classes could be modified to implement that interface, e.g.:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Client implements State {
+  // ... as before ...
+}
+
+class Online implements State {
+  // ... as before ...
+}
+
+class Offline implements State {
+  // ... as before ...
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You might ask: Haven&#8217;t we just introduced additional boilerplate code? Can&#8217;t we rely on duck-typing for this? The answer is 'yes' and 'no'. We can get away with duck-typing but one of the key intentions of the state pattern is to partition complexity. If we know that the <em>client</em> class and each <em>state</em> class all satisfy one interface, then we have placed some key boundaries around the complexity. We can look at any state class in isolation and know the bounds of behaviour possible for that state.</p>
+</div>
+<div class="paragraph">
+<p>We don&#8217;t have to use interfaces for this, but it helps express the intent of this particular style of partitioning and it helps reduce the size of our unit tests (we would have to have additional tests in place to express this intent in languages which have less support for interface-oriented design).</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_variation_2_extract_state_pattern_logic"><a class="anchor" href="#_variation_2_extract_state_pattern_logic"></a>3. Variation 2: Extract State Pattern Logic</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Alternatively, or in combination with other variations, we might decide to extract some of our State Pattern logic into helper classes. For example, we could define the following classes in a state pattern package/jar/script:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">abstract class InstanceProvider {
+    static def registry = GroovySystem.metaClassRegistry
+    static def create(objectClass, param) {
+        registry.getMetaClass(objectClass).invokeConstructor([param] as Object[])
+    }
+}
+
+abstract class Context {
+    private context
+    protected setContext(context) {
+        this.context = context
+    }
+    def invokeMethod(String name, Object arg) {
+        context.invokeMethod(name, arg)
+    }
+    def startFrom(initialState) {
+        setContext(InstanceProvider.create(initialState, this))
+    }
+}
+
+abstract class State {
+    private client
+
+    State(client) { this.client = client }
+
+    def transitionTo(nextState) {
+        client.setContext(InstanceProvider.create(nextState, client))
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This is all quite generic and can be used wherever we want to introduce the state pattern. Here is what our code would look like now:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Client extends Context {
+    Client() {
+        startFrom(Offline)
+    }
+}
+
+class Offline extends State {
+    Offline(client) {
+        super(client)
+        println "offline"
+    }
+    def connect() {
+        transitionTo(Online)
+    }
+    def disconnect() {
+        println "error: not connected"
+    }
+    def send_message(message) {
+        println "error: not connected"
+    }
+    def receive_message() {
+        println "error: not connected"
+    }
+}
+
+class Online extends State {
+    Online(client) {
+        super(client)
+        println "connected"
+    }
+    def connect() {
+        println "error: already connected"
+    }
+    def disconnect() {
+        transitionTo(Offline)
+    }
+    def send_message(message) {
+        println "\"$message\" sent"
+    }
+    def receive_message() {
+        println "message received"
+    }
+}
+
+client = new Client()
+client.send_message("Hello")
+client.connect()
+client.send_message("Hello")
+client.connect()
+client.receive_message()
+client.disconnect()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can see here the <code>startFrom</code> and <code>transitionTo</code> methods begin to give our example code a DSL feel.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_variation_3_bring_on_the_dsl"><a class="anchor" href="#_variation_3_bring_on_the_dsl"></a>4. Variation 3: Bring on the DSL</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Alternatively, or in combination with other variations, we might decide to fully embrace a Domain Specific Language (DSL) approach to this example.</p>
+</div>
+<div class="paragraph">
+<p>We can define the following generic helper functions (first discussed <a href="http://www.bytemycode.com/snippets/snippet/640/">here</a>):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Grammar {
+    def fsm
+
+    def event
+    def fromState
+    def toState
+
+    Grammar(a_fsm) {
+        fsm = a_fsm
+    }
+
+    def on(a_event) {
+        event = a_event
+        this
+    }
+
+    def on(a_event, a_transitioner) {
+        on(a_event)
+        a_transitioner.delegate = this
+        a_transitioner.call()
+        this
+    }
+
+    def from(a_fromState) {
+        fromState = a_fromState
+        this
+    }
+
+    def to(a_toState) {
+        assert a_toState, "Invalid toState: $a_toState"
+        toState = a_toState
+        fsm.registerTransition(this)
+        this
+    }
+
+    def isValid() {
+        event &amp;&amp; fromState &amp;&amp; toState
+    }
+
+    public String toString() {
+        "$event: $fromState=&gt;$toState"
+    }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class FiniteStateMachine {
+    def transitions = [:]
+
+    def initialState
+    def currentState
+
+    FiniteStateMachine(a_initialState) {
+        assert a_initialState, "You need to provide an initial state"
+        initialState = a_initialState
+        currentState = a_initialState
+    }
+
+    def record() {
+        Grammar.newInstance(this)
+    }
+
+    def reset() {
+        currentState = initialState
+    }
+
+    def isState(a_state) {
+        currentState == a_state
+    }
+
+    def registerTransition(a_grammar) {
+        assert a_grammar.isValid(), "Invalid transition ($a_grammar)"
+        def transition
+        def event = a_grammar.event
+        def fromState = a_grammar.fromState
+        def toState = a_grammar.toState
+
+        if (!transitions[event]) {
+            transitions[event] = [:]
+        }
+
+        transition = transitions[event]
+        assert !transition[fromState], "Duplicate fromState $fromState for transition $a_grammar"
+        transition[fromState] = toState
+    }
+
+    def fire(a_event) {
+        assert currentState, "Invalid current state '$currentState': passed into constructor"
+        assert transitions.containsKey(a_event), "Invalid event '$a_event', should be one of ${transitions.keySet()}"
+        def transition = transitions[a_event]
+        def nextState = transition[currentState]
+        assert nextState, "There is no transition from '$currentState' to any other state"
+        currentState = nextState
+        currentState
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now we can define and test our state machine like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class StatePatternDslTest extends GroovyTestCase {
+    private fsm
+
+    protected void setUp() {
+        fsm = FiniteStateMachine.newInstance('offline')
+        def recorder = fsm.record()
+        recorder.on('connect').from('offline').to('online')
+        recorder.on('disconnect').from('online').to('offline')
+        recorder.on('send_message').from('online').to('online')
+        recorder.on('receive_message').from('online').to('online')
+    }
+
+    void testInitialState() {
+        assert fsm.isState('offline')
+    }
+
+    void testOfflineState() {
+        shouldFail{
+            fsm.fire('send_message')
+        }
+        shouldFail{
+            fsm.fire('receive_message')
+        }
+        shouldFail{
+            fsm.fire('disconnect')
+        }
+        assert 'online' == fsm.fire('connect')
+    }
+
+    void testOnlineState() {
+        fsm.fire('connect')
+        fsm.fire('send_message')
+        fsm.fire('receive_message')
+        shouldFail{
+            fsm.fire('connect')
+        }
+        assert 'offline' == fsm.fire('disconnect')
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This example isn&#8217;t an exact equivalent of the others. It doesn&#8217;t use predefined <code>Online</code> and <code>Offline</code> classes. Instead it defines the entire state machine on the fly as needed. See the <a href="http://www.bytemycode.com/snippets/snippet/640/">previous reference</a> for more elaborate examples of this style.</p>
+</div>
+<div class="paragraph">
+<p>See also: <a href="#_model_based_testing_using_modeljunit">Model-based testing using ModelJUnit</a></p>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 3.0.0-alpha-3<br>
+Last updated 2018-06-23 13:44:42 AEST
+</div>
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+<script>prettyPrint()</script>
+</body>
+</html>

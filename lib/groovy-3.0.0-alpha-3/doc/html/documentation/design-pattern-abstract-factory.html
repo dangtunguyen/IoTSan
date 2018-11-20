@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.6.1">
+<title>Abstract Factory Pattern</title>
+<link rel="stylesheet" href="./assets/css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+<h1>Abstract Factory Pattern</h1>
+<div class="details">
+<span id="revnumber">version 3.0.0-alpha-3</span>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_example">1. Example</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <a href="http://en.wikipedia.org/wiki/Abstract_factory_pattern">Abstract Factory Pattern</a> provides a way to encapsulate a group of individual factories that have a common theme. It embodies the intent of a normal factory, i.e. remove the need for code using an interface to know the concrete implementation behind the interface, but applies to a set of interfaces and selects an entire family of concrete classes which implement those interfaces.</p>
+</div>
+<div class="paragraph">
+<p>As an example, I might have interfaces Button, TextField and Scrollbar. I might have WindowsButton, MacButton, FlashButton as concrete classes for Button. I might have WindowsScrollBar, MacScrollBar and FlashScrollBar as concrete implementations for ScrollBar. Using the Abstract Factory Pattern should allow me to select which windowing system (i.e. Windows, Mac, Flash) I want to use once and from then on should be able to write code that references the interfaces but is always using the appropriate concrete classes (all from the one windowing system) under the covers.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_example"><a class="anchor" href="#_example"></a>1. Example</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Suppose we want to write a game system. We might note that many games have very similar features and control.</p>
+</div>
+<div class="paragraph">
+<p>We decide to try to split the common and game-specific code into separate classes.</p>
+</div>
+<div class="paragraph">
+<p>First let&#8217;s look at the game-specific code for a <a href="http://en.wikipedia.org/wiki/Two-Up">Two-up</a> game:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class TwoupMessages {
+    def welcome = 'Welcome to the twoup game, you start with $1000'
+    def done = 'Sorry, you have no money left, goodbye'
+}
+
+class TwoupInputConverter {
+    def convert(input) { input.toInteger() }
+}
+
+class TwoupControl {
+    private money = 1000
+    private random = new Random()
+    private tossWasHead() {
+        def next = random.nextInt()
+        return next % 2 == 0
+    }
+    def moreTurns() {
+        if (money &gt; 0) {
+            println "You have $money, how much would you like to bet?"
+            return true
+        }
+
+        false
+    }
+    def play(amount) {
+        def coin1 = tossWasHead()
+        def coin2 = tossWasHead()
+        if (coin1 &amp;&amp; coin2) {
+            money += amount
+            println 'You win'
+        } else if (!coin1 &amp;&amp; !coin2) {
+            money -= amount
+            println 'You lose'
+        } else {
+            println 'Draw'
+        }
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now, let&#8217;s look at the game-specific code for a number guessing game:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class GuessGameMessages {
+    def welcome = 'Welcome to the guessing game, my secret number is between 1 and 100'
+    def done = 'Correct'
+}
+
+class GuessGameInputConverter {
+    def convert(input) { input.toInteger() }
+}
+
+class GuessGameControl {
+    private lower = 1
+    private upper = 100
+    private guess = new Random().nextInt(upper - lower) + lower
+    def moreTurns() {
+        def done = (lower == guess || upper == guess)
+        if (!done) {
+            println "Enter a number between $lower and $upper"
+        }
+
+        !done
+    }
+    def play(nextGuess) {
+        if (nextGuess &lt;= guess) {
+            lower = [lower, nextGuess].max()
+        }
+        if (nextGuess &gt;= guess) {
+            upper = [upper, nextGuess].min()
+        }
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now, let&#8217;s write our factory code:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def guessFactory = [messages: GuessGameMessages, control: GuessGameControl, converter: GuessGameInputConverter]
+def twoupFactory = [messages: TwoupMessages, control: TwoupControl, converter: TwoupInputConverter]
+
+class GameFactory {
+    def static factory
+    def static getMessages() { return factory.messages.newInstance() }
+    def static getControl() { return factory.control.newInstance() }
+    def static getConverter() { return factory.converter.newInstance() }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The important aspect of this factory is that it allows selection of an entire family of concrete classes.</p>
+</div>
+<div class="paragraph">
+<p>Here is how we would use the factory:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">GameFactory.factory = twoupFactory
+def messages = GameFactory.messages
+def control = GameFactory.control
+def converter = GameFactory.converter
+println messages.welcome
+def reader = new BufferedReader(new InputStreamReader(System.in))
+while (control.moreTurns()) {
+    def input = reader.readLine().trim()
+    control.play(converter.convert(input))
+}
+println messages.done</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note that the first line configures which family of concrete game classes we will use. It&#8217;s not important that we selected which family to use by using the factory property as shown in the first line. Other ways would be equally valid examples of this pattern. For example, we may have asked the user which game they wanted to play or determined which game from an environment setting.</p>
+</div>
+<div class="paragraph">
+<p>With the code as shown, the game might look like this when run:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Welcome to the twoup game, you start with $1000
+You have 1000, how much would you like to bet?
+300
+Draw
+You have 1000, how much would you like to bet?
+700
+You win
+You have 1700, how much would you like to bet?
+1700
+You lose
+Sorry, you have no money left, goodbye</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If we change the first line of the script to GameFactory.factory = guessFactory, then the sample run might look like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Welcome to the guessing game, my secret number is between 1 and 100
+Enter a number between 1 and 100
+75
+Enter a number between 1 and 75
+35
+Enter a number between 1 and 35
+15
+Enter a number between 1 and 15
+5
+Enter a number between 5 and 15
+10
+Correct</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 3.0.0-alpha-3<br>
+Last updated 2018-06-23 13:44:37 AEST
+</div>
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+<script>prettyPrint()</script>
+</body>
+</html>

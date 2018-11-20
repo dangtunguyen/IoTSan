@@ -1,0 +1,86 @@
+public class STTherCoSetpoint extends STDevice
+{
+    public STState coolingSetpointState;
+    public int currentCoolingSetpoint;
+    public boolean STCommand_STTherCoSetpoint_setCoolingSetpoint;
+
+    public STState currentState(int)
+    {
+        STState $ret;
+        int attributeName;
+        STTherCoSetpoint JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        attributeName := @parameter0;
+        $ret = JJJCTEMP$0.[STTherCoSetpoint.coolingSetpointState:STState];
+        return $ret;
+    }
+
+    public int currentValue(int)
+    {
+        int attributeName, $ret;
+        STTherCoSetpoint JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        attributeName := @parameter0;
+        $ret = JJJCTEMP$0.[STTherCoSetpoint.currentCoolingSetpoint:int];
+        return $ret;
+    }
+
+    public STState latestState(int)
+    {
+        STState $ret;
+        int attributeName;
+        STTherCoSetpoint JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        attributeName := @parameter0;
+        $ret = JJJCTEMP$0.[STTherCoSetpoint.coolingSetpointState:STState];
+        return $ret;
+    }
+
+    public int latestValue(int)
+    {
+        int attributeName, $ret;
+        STTherCoSetpoint JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        attributeName := @parameter0;
+        $ret = JJJCTEMP$0.[STTherCoSetpoint.currentCoolingSetpoint:int];
+        return $ret;
+    }
+
+    public void setCoolingSetpoint(int)
+    {
+        int setpoint;
+        STTherCoSetpoint JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        setpoint := @parameter0;
+        JJJCTEMP$0.[STTherCoSetpoint.currentCoolingSetpoint:int] = setpoint;
+        JJJCTEMP$0.[STTherCoSetpoint.STCommand_STTherCoSetpoint_setCoolingSetpoint:boolean] = 1;
+        return;
+    }
+
+    public void setCoolingSetpoint(int, int)
+    {
+        int delay, setpoint;
+        STTherCoSetpoint JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        setpoint := @parameter0;
+        delay := @parameter1;
+        JJJCTEMP$0.[STTherCoSetpoint.currentCoolingSetpoint:int] = setpoint;
+        JJJCTEMP$0.[STTherCoSetpoint.STCommand_STTherCoSetpoint_setCoolingSetpoint:boolean] = 1;
+        return;
+    }
+
+    public void <init>()
+    {
+        STTherCoSetpoint JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        specialinvoke JJJCTEMP$0.[STDevice.<init>():void]();
+        return;
+    }
+}

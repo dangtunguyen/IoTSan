@@ -1,0 +1,187 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ */
+import groovy.text.markup.MarkupTemplateEngine
+import groovy.text.markup.TemplateConfiguration
+
+allprojects {
+    apply plugin: "org.nosphere.apache.rat"
+    //apply plugin: "com.github.hierynomus.license"
+    apply plugin: 'checkstyle'
+    apply plugin: 'codenarc'
+    apply plugin: 'findbugs'
+    configurations.codenarc {
+        // because we will rely on the version we build
+        // because version ranges are evil
+        // and because it causes bnd to be brought transitively
+        // I am unsure why; says it is required by groovy-ant but its pom.xml does not declare so
+        resolutionStrategy.dependencySubstitution {
+            substitute module("org.codehaus.groovy:groovy") with project(":")
+            substitute module("org.codehaus.groovy:groovy-ant") with project(":groovy-ant")
+            substitute module("org.codehaus.groovy:groovy-xml") with project(":groovy-xml")
+            substitute module("org.codehaus.groovy:groovy-groovydoc") with project(":groovy-groovydoc")
+        }
+    }
+
+//    license {
+//        header rootProject.file('config/licensing/HEADER.txt')
+//        include "**/*.groovy"
+//        include "**/*.java"
+//        include "**/*.properties"
+//        include "**/*.js"
+//        include "**/*.css"
+//        include "**/*.html"
+//        include "**/*.gradle"
+//        include "**/*.xml"
+//        exclude "org/codehaus/groovy/antlr/**"
+//        exclude 'reloading/**' // test resources for documentation of reloading
+//        exclude 'includes/**' // documentation resources included as snippets of code
+//        //dryRun = true
+//        ignoreFailures = true
+//        //skipExistingHeaders = true
+//        //ext.year = Calendar.instance.get(Calendar.YEAR)
+//    }
+
+    // don't fail build on CodeNarc tasks
+    tasks.withType(CodeNarc) {
+        dependsOn jar
+        ignoreFailures = true
+        configFile = file("$rootProject.projectDir/config/codenarc/codenarc.groovy")
+    }
+
+    tasks.withType(Checkstyle) {
+        showViolations = false
+        ignoreFailures = true
+        configFile = file("$rootProject.projectDir/config/checkstyle/checkstyle.xml")
+        configProperties = ['rootProject.projectDir': rootProject.projectDir]
+        def reportFile = file("${buildDir}/reports/checkstyle/${name}.xml")
+        source = sourceSets.main.allJava.matching {
+            // TODO why doesn't this exclusion work?
+            exclude '**/generated-sources/**/*'
+        }
+        reports {
+            include ( '**/*.java')
+            xml {
+                destination reportFile
+            }
+        }
+        if (!source.empty) {
+            task("${name}Report") {
+                def configDir = file("$rootProject.projectDir/config/checkstyle")
+                def templateFile = 'checkstyle-report.groovy'
+                def htmlReportFile = file("${buildDir}/reports/checkstyle/${name}.html")
+                inputs.file file("$configDir/$templateFile")
+                inputs.file reportFile
+                outputs.file htmlReportFile
+
+                doLast {
+                    def templateConfiguration = new TemplateConfiguration()
+                    templateConfiguration.with {
+                        autoIndent = true
+                        autoNewLine = true
+                    }
+                    def engine = new MarkupTemplateEngine(this.class.classLoader, configDir, templateConfiguration)
+                    def xml = new XmlSlurper().parse(reportFile.newReader('utf-8'))
+                    def files = []
+                    xml.file.each { f ->
+                        // TODO remove generated-sources check once exclude above works
+                        if (f.error.size() && !f.@name.toString().contains('generated-sources')) {
+                            files << [
+                                    name: f.@name.toString(),
+                                    errors: f.error.collect { e ->
+                                        def rule = e.@source.toString()
+                                        rule = rule.substring(rule.lastIndexOf('.')+1)
+                                        [line: e.@line.toString(),
+                                         column: e.@column.toString(),
+                                         message: e.@message.toString(),
+                                         source: rule,
+                                         severity: e.@severity.toString()]
+                                    }]
+                        }
+                    }
+                    def model = [
+                            project: project,
+                            files: files
+                    ]
+                    htmlReportFile.withWriter('utf-8') { wrt ->
+                        engine.createTemplateByPath('checkstyle-report.groovy').make(model).writeTo(wrt)
+                    }
+                }
+            }
+            finalizedBy "${name}Report"
+        }
+    }
+
+    findbugs {
+        // continue build despite findbug warnings
+        ignoreFailures = true
+        sourceSets = [sourceSets.main]
+    }
+    tasks.withType(FindBugs) {
+        effort = 'max'
+        reports {
+            xml.enabled = false
+            html.enabled = true
+        }
+        maxHeapSize = '2g'
+    }
+}
+
+subprojects { sp ->
+    def extras = []
+    switch(sp.name) {
+        case 'groovy-templates':
+            extras = [
+                    // test files
+                    'src/spec/test-resources/*.txt',
+                    'src/test/resources/includes/hello-escaped.txt',
+                    'src/test/resources/includes/hello.html'
+            ]
+            break;
+        case ['groovy-groovydoc', 'groovy-docgenerator']:
+            extras = [
+                    '**/stylesheet.css'  // MIT license as per NOTICE/LICENSE files
+            ]
+            break;
+    }
+    rat {
+        inputDir = sp.projectDir.absolutePath
+        excludes = [ 'target/**', 'build/**', '.gradle/**', '*.iml', '.classpath', '.project', '.settings/**', 'bin/**' , *extras]
+    }
+}
+
+rat {
+    excludes = [ 'subprojects/**', // covered above
+                 'benchmark/**', // benchmarking files excluded from src zip
+                 'config/**',
+                 'src/install/**', // CI file excluded from src zip
+                 'src/test/org/codehaus/groovy/ast/LineColumnCheck.txt', // test file
+                 'security/groovykeys', // excluded from src zip
+                 '**/.gradle/**', '**/wrapper/**', 'gradlew*',  // gradle wrapper files excluded from src zip
+                 'gradle.properties',  // artifactory release plugin removes header when bumping version
+                 '**/target/**', '**/build/**', 'licenses/**', 'notices/**',
+                 'out/**', '*.ipr',  '**/*.iml', '*.iws', // Intellij files
+                 '**/style.css', // MIT license as per NOTICE/LICENSE files
+                 '**/jquery-2.1.1.min.js', // MIT license as per NOTICE/LICENSE files
+                 '.classpath', '.project', '.settings/**', 'bin/**', // Eclipse files
+    ]
+}
+
+apply from: 'gradle/jacoco/jacoco.gradle'
+// Temporarily disabled because of conflict
+apply from: 'gradle/binarycompatibility.gradle'

@@ -1,0 +1,34 @@
+public class STMode extends java.lang.Object
+{
+    public int name;
+    public int id;
+
+    public int getId()
+    {
+        STMode JJJCTEMP$0;
+        int $ret;
+
+        JJJCTEMP$0 := @this;
+        $ret = JJJCTEMP$0.[STMode.id:int];
+        return $ret;
+    }
+
+    public int getName()
+    {
+        STMode JJJCTEMP$0;
+        int $ret;
+
+        JJJCTEMP$0 := @this;
+        $ret = JJJCTEMP$0.[STMode.name:int];
+        return $ret;
+    }
+
+    public void <init>()
+    {
+        STMode JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        specialinvoke JJJCTEMP$0.[java.lang.Object.<init>():void]();
+        return;
+    }
+}

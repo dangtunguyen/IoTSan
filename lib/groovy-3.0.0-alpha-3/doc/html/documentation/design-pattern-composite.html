@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.6.1">
+<title>Composite Pattern</title>
+<link rel="stylesheet" href="./assets/css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+<h1>Composite Pattern</h1>
+<div class="details">
+<span id="revnumber">version 3.0.0-alpha-3</span>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_example">1. Example</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <a href="http://en.wikipedia.org/wiki/Composite_pattern">Composite Pattern</a> allows you to treat single instances of an object the same way as a group of objects. The pattern is often used with hierarchies of objects. Typically, one or more methods should be callable in the same way for either <em>leaf</em> or <em>composite</em> nodes within the hierarchy. In such a case, composite nodes typically invoke the same named method for each of their children nodes.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_example"><a class="anchor" href="#_example"></a>1. Example</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Consider this usage of the composite pattern where we want to call <code>toString()</code> on either <code>Leaf</code> or <code>Composite</code> objects.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="assets/img/CompositeClasses.gif" alt="CompositeClasses">
+</div>
+</div>
+<div class="paragraph">
+<p>In Java, the <code>Component</code> class is essential as it provides the type used for both leaf and composite nodes. In Groovy, because of duck-typing, we don&#8217;t need it for that purpose, however, it can still server as a useful place to place common behaviour between the leaf and composite nodes.</p>
+</div>
+<div class="paragraph">
+<p>For our purposes, we will assemble the following hierarchy of components.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="assets/img/CompositeComponents.gif" alt="CompositeComponents">
+</div>
+</div>
+<div class="paragraph">
+<p>Here is the code:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">abstract class Component {
+    def name
+    def toString(indent) {
+        ("-" * indent) + name
+    }
+}
+
+class Composite extends Component {
+    private children = []
+    def toString(indent) {
+        def s = super.toString(indent)
+        children.each { child -&gt;
+            s += "\\n" + child.toString(indent + 1)
+        }
+        s
+    }
+    def leftShift(component) {
+        children &lt;&lt; component
+    }
+}
+
+class Leaf extends Component { }
+
+def root = new Composite(name: "root")
+root &lt;&lt; new Leaf(name: "leaf A")
+def comp = new Composite(name: "comp B")
+root &lt;&lt; comp
+root &lt;&lt; new Leaf(name: "leaf C")
+comp &lt;&lt; new Leaf(name: "leaf B1")
+comp &lt;&lt; new Leaf(name: "leaf B2")
+println root.toString(0)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here is the resulting output:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>root
+-leaf A
+-comp B
+--leaf B1
+--leaf B2
+-leaf C</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 3.0.0-alpha-3<br>
+Last updated 2018-06-23 13:44:40 AEST
+</div>
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+<script>prettyPrint()</script>
+</body>
+</html>

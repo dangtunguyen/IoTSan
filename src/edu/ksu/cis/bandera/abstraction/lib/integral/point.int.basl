@@ -1,0 +1,54 @@
+abstraction Point extends integral 
+  begin
+    TOKENS = {POINT};
+    DEFAULT = POINT;
+    ONE2ONE = {};
+    abstract (n)
+      begin
+        _ -> POINT;
+      end
+    operator + add 
+      begin
+        _ -> POINT;
+      end
+    operator - sub 
+      begin
+        _ -> POINT;
+      end
+    operator * mul 
+      begin
+        _ -> POINT;
+      end
+    operator / div 
+      begin
+        _ -> POINT;
+      end
+    operator % rem 
+      begin
+        _ -> POINT;
+      end
+    test == eq 
+      begin
+        _ -> T;
+      end
+    test != neq 
+      begin
+        _ -> T;
+      end
+    test < lt 
+      begin
+        _ -> T;
+      end
+    test <= le 
+      begin
+        _ -> T;
+      end
+    test > gt 
+      begin
+        _ -> T;
+      end
+    test >= ge 
+      begin
+        _ -> T;
+      end
+  end

@@ -1,0 +1,2748 @@
+<!--
+
+     Licensed to the Apache Software Foundation (ASF) under one
+     or more contributor license agreements.  See the NOTICE file
+     distributed with this work for additional information
+     regarding copyright ownership.  The ASF licenses this file
+     to you under the Apache License, Version 2.0 (the
+     "License"); you may not use this file except in compliance
+     with the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing,
+     software distributed under the License is distributed on an
+     "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+     specific language governing permissions and limitations
+     under the License.
+
+-->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>Collection (Groovy JDK enhancements)</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../stylesheet.css" title="Style">
+    <script type="text/javascript">
+        function windowTitle() {
+            parent.document.title = document.title;
+        }
+    </script>
+</head>
+
+<body class="center" onload="windowTitle();">
+
+    <!-- ========== START OF NAVBAR ========== -->
+    <a name="navbar_top"><!-- --></a>
+
+    <div class="topNav">
+        <ul class="navList" title="Navigation">
+            <li><a href="../../overview-summary.html">Overview</a></li>
+            <li><a href="package-summary.html">Package</a></li>
+            <li class="navBarCell1Rev">Class</li>
+            <li><a href="../../index-all.html">Index</a></li>
+        </ul>
+    </div>
+
+    <!-- =========== END OF NAVBAR =========== -->
+
+    <!-- ======== START OF class DATA ======== -->
+
+    <div class="header">
+        <div class="subTitle">Package: <strong>java.util</strong></div>
+        <h2>Interface Collection</h2>
+    </div>
+
+    <div class="contentContainer">
+
+    <!-- ========== METHOD SUMMARY =========== -->
+
+        <a name="method_summary"><!-- --></a>
+
+        <div class="summary">
+            <ul class="blockList">
+                <li class="blockList">
+                    <ul class="blockList">
+                        <li class="blockList">
+                            <h3>Methods Summary</h3>
+                            <table border="0" cellpadding="3" cellspacing="0" class="overviewSummary">
+                               <caption><span>Methods</span><span class="tabEnd">&nbsp;</span></caption>
+                                <tbody>
+                                    <tr>
+                                        <th>Return type</th>
+                                        <th>Name and parameters</th>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code>boolean</code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#addAll(java.lang.Iterable)">addAll</a></strong>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html" title="Class in java.lang">Iterable</a> items)</code>
+                                            <br>
+                                            Adds all items from the iterable to the Collection.
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="rawColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code>boolean</code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#addAll(java.lang.Object[])">addAll</a></strong>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object[].html" title="Class in java.lang">Object[]</a> items)</code>
+                                            <br>
+                                            Modifies the collection by adding all of the elements in the specified array to the collection.
+
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code>boolean</code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#addAll(java.util.Iterator)">addAll</a></strong>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html" title="Class in java.util">Iterator</a> items)</code>
+                                            <br>
+                                            Adds all items from the iterator to the Collection.
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="rawColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code>boolean</code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#asBoolean()">asBoolean</a></strong>()</code>
+                                            <br>
+                                            Coerce a collection instance to a boolean value.
+
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="Class in java.util">Collection</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#asImmutable()">asImmutable</a></strong>()</code>
+                                            <br>
+                                            A convenience method for creating an immutable Collection.
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="rawColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="Class in java.util">Collection</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#asSynchronized()">asSynchronized</a></strong>()</code>
+                                            <br>
+                                            A convenience method for creating a synchronized Collection.
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="Class in java.lang">Object</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#asType(java.lang.Class)">asType</a></strong>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Class.html" title="Class in java.lang">Class</a> clazz)</code>
+                                            <br>
+                                            Converts the given collection to another type. 
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="rawColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="Class in java.util">Collection</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#asUnmodifiable()">asUnmodifiable</a></strong>()</code>
+                                            <br>
+                                            Creates an unmodifiable view of a Collection.
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="Class in java.util">List</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#collectNested(groovy.lang.Closure)">collectNested</a></strong>(<a href="http://docs.groovy-lang.org/latest/html/gapi/groovy/lang/Closure.html" title="Class in groovy.lang">Closure</a> transform)</code>
+                                            <br>
+                                            Recursively iterates through this collection transforming each non-Collection value
+into a new value using the closure as a transformer. 
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="rawColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="Class in java.util">Collection</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#each(groovy.lang.Closure)">each</a></strong>(<a href="http://docs.groovy-lang.org/latest/html/gapi/groovy/lang/Closure.html" title="Class in groovy.lang">Closure</a> closure)</code>
+                                            <br>
+                                            Iterates through a Collection, passing each item to the given closure.
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="Class in java.util">Collection</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#eachWithIndex(groovy.lang.Closure)">eachWithIndex</a></strong>(<a href="http://docs.groovy-lang.org/latest/html/gapi/groovy/lang/Closure.html" title="Class in groovy.lang">Closure</a> closure)</code>
+                                            <br>
+                                            Iterates through a Collection,
+passing each item and the item's index (a counter starting at
+zero) to the given closure.
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="rawColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="Class in java.lang">Object</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#find()">find</a></strong>()</code>
+                                            <br>
+                                            Finds the first item matching the IDENTITY Closure (i.e.&#160;matching Groovy truth).
+
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="Class in java.lang">Object</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#find(groovy.lang.Closure)">find</a></strong>(<a href="http://docs.groovy-lang.org/latest/html/gapi/groovy/lang/Closure.html" title="Class in groovy.lang">Closure</a> closure)</code>
+                                            <br>
+                                            Finds the first value matching the closure condition.  
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="rawColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="Class in java.util">Collection</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#findAll()">findAll</a></strong>()</code>
+                                            <br>
+                                            Finds the items matching the IDENTITY Closure (i.e.&#160;matching Groovy truth).
+
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="Class in java.util">Collection</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#findAll(groovy.lang.Closure)">findAll</a></strong>(<a href="http://docs.groovy-lang.org/latest/html/gapi/groovy/lang/Closure.html" title="Class in groovy.lang">Closure</a> closure)</code>
+                                            <br>
+                                            Finds all values matching the closure condition.
+
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="rawColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="Class in java.util">Collection</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#flatten()">flatten</a></strong>()</code>
+                                            <br>
+                                            Flatten a Collection.  
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="Class in java.util">List</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#getAt(java.lang.String)">getAt</a></strong>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="Class in java.lang">String</a> property)</code>
+                                            <br>
+                                            Support the subscript operator for Collection.
+
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="rawColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.groovy-lang.org/latest/html/gapi/groovy/lang/IntRange.html" title="Class in groovy.lang">IntRange</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#getIndices()">getIndices</a></strong>()</code>
+                                            <br>
+                                            Returns indices of the collection.
+
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="Class in java.util">Collection</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#grep()">grep</a></strong>()</code>
+                                            <br>
+                                            Iterates over the collection returning each element that matches
+using the IDENTITY Closure as a filter - effectively returning all elements which satisfy Groovy truth.
+
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="rawColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="Class in java.util">Collection</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#grep(java.lang.Object)">grep</a></strong>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="Class in java.lang">Object</a> filter)</code>
+                                            <br>
+                                            Iterates over the collection of items and returns each item that matches
+the given filter - calling the <code><a href="../../java/lang/Object.html#isCase(java.lang.Object)" title="GDK enhancement for java.lang.Object">Object#isCase(java.lang.Object)</a></code>
+method used by switch statements.  
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="Class in java.lang">Object</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#inject(groovy.lang.Closure)">inject</a></strong>(<a href="http://docs.groovy-lang.org/latest/html/gapi/groovy/lang/Closure.html" title="Class in groovy.lang">Closure</a> closure)</code>
+                                            <br>
+                                            Performs the same function as the version of inject that takes an initial value, but
+uses the head of the Collection as the initial value, and iterates over the tail.
+
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="rawColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="Class in java.lang">Object</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#inject(java.lang.Object, groovy.lang.Closure)">inject</a></strong>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="Class in java.lang">Object</a> initialValue, <a href="http://docs.groovy-lang.org/latest/html/gapi/groovy/lang/Closure.html" title="Class in groovy.lang">Closure</a> closure)</code>
+                                            <br>
+                                            Iterates through the given Collection, passing in the initial value to
+the 2-arg closure along with the first item. 
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="Class in java.util">Collection</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#intersect(java.util.Collection)">intersect</a></strong>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="Class in java.util">Collection</a> right)</code>
+                                            <br>
+                                            Create a Collection composed of the intersection of both collections.  
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="rawColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="Class in java.util">Collection</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#intersect(java.util.Collection, java.util.Comparator)">intersect</a></strong>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="Class in java.util">Collection</a> right, <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Comparator.html" title="Class in java.util">Comparator</a> comparator)</code>
+                                            <br>
+                                            Create a Collection composed of the intersection of both collections.  
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code>boolean</code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#isCase(java.lang.Object)">isCase</a></strong>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="Class in java.lang">Object</a> switchValue)</code>
+                                            <br>
+                                            'Case' implementation for collections which tests if the 'switch'
+operand is contained in any of the 'case' values.
+
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="rawColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="Class in java.util">Collection</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#leftShift(java.lang.Object)">leftShift</a></strong>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="Class in java.lang">Object</a> value)</code>
+                                            <br>
+                                            Overloads the left shift operator to provide an easy way to append
+objects to a Collection.
+
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="Class in java.util">Collection</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#minus(java.util.Collection)">minus</a></strong>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="Class in java.util">Collection</a> removeMe)</code>
+                                            <br>
+                                            Create a new Collection composed of the elements of the first Collection minus
+every occurrence of elements of the given Collection.
+
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="rawColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="Class in java.util">Collection</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#plus(java.lang.Iterable)">plus</a></strong>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html" title="Class in java.lang">Iterable</a> right)</code>
+                                            <br>
+                                            Create a Collection as a union of a Collection and an Iterable. 
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="Class in java.util">Collection</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#plus(java.lang.Object)">plus</a></strong>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="Class in java.lang">Object</a> right)</code>
+                                            <br>
+                                            Create a collection as a union of a Collection and an Object. 
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="rawColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="Class in java.util">Collection</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#plus(java.util.Collection)">plus</a></strong>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="Class in java.util">Collection</a> right)</code>
+                                            <br>
+                                            Create a Collection as a union of two collections. 
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code>boolean</code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#removeAll(groovy.lang.Closure)">removeAll</a></strong>(<a href="http://docs.groovy-lang.org/latest/html/gapi/groovy/lang/Closure.html" title="Class in groovy.lang">Closure</a> condition)</code>
+                                            <br>
+                                            Modifies this collection by removing the elements that are matched according
+to the specified closure condition.
+
+
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="rawColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code>boolean</code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#removeAll(java.lang.Object[])">removeAll</a></strong>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object[].html" title="Class in java.lang">Object[]</a> items)</code>
+                                            <br>
+                                            Modifies this collection by removing its elements that are contained
+within the specified object array.
+
+
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code>boolean</code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#removeElement(java.lang.Object)">removeElement</a></strong>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="Class in java.lang">Object</a> o)</code>
+                                            <br>
+                                            Modifies this collection by removing a single instance of the specified
+element from this collection, if it is present. 
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="rawColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code>boolean</code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#retainAll(groovy.lang.Closure)">retainAll</a></strong>(<a href="http://docs.groovy-lang.org/latest/html/gapi/groovy/lang/Closure.html" title="Class in groovy.lang">Closure</a> condition)</code>
+                                            <br>
+                                            Modifies this collection so that it retains only its elements
+that are matched according to the specified closure condition.  
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code>boolean</code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#retainAll(java.lang.Object[])">retainAll</a></strong>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object[].html" title="Class in java.lang">Object[]</a> items)</code>
+                                            <br>
+                                            Modifies this collection so that it retains only its elements that are contained
+in the specified array.  
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="rawColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="Class in java.util">Collection</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#split(groovy.lang.Closure)">split</a></strong>(<a href="http://docs.groovy-lang.org/latest/html/gapi/groovy/lang/Closure.html" title="Class in groovy.lang">Closure</a> closure)</code>
+                                            <br>
+                                            Splits all items into two collections based on the closure condition.
+
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="Class in java.lang">String</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#toListString()">toListString</a></strong>()</code>
+                                            <br>
+                                            Returns the string representation of the given list.  
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="rawColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="Class in java.lang">String</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#toListString(int)">toListString</a></strong>(int maxSize)</code>
+                                            <br>
+                                            Returns the string representation of the given list.  
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="Class in java.util">Set</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#toSet()">toSet</a></strong>()</code>
+                                            <br>
+                                            Convert a Collection to a Set. 
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="rawColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="Class in java.util">Collection</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#unique()">unique</a></strong>()</code>
+                                            <br>
+                                            Modifies this collection to remove all duplicated items, using Groovy's
+default number-aware comparator.
+
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="Class in java.util">Collection</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#unique(boolean)">unique</a></strong>(boolean mutate)</code>
+                                            <br>
+                                            Remove all duplicates from a given Collection using Groovy's default number-aware comparator.
+
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="rawColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="Class in java.util">Collection</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#unique(boolean, groovy.lang.Closure)">unique</a></strong>(boolean mutate, <a href="http://docs.groovy-lang.org/latest/html/gapi/groovy/lang/Closure.html" title="Class in groovy.lang">Closure</a> closure)</code>
+                                            <br>
+                                            A convenience method for making a collection unique using a Closure to determine duplicate (equal) items.
+
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="Class in java.util">Collection</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#unique(boolean, java.util.Comparator)">unique</a></strong>(boolean mutate, <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Comparator.html" title="Class in java.util">Comparator</a> comparator)</code>
+                                            <br>
+                                            Remove all duplicates from a given Collection.
+
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="rawColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="Class in java.util">Collection</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#unique(groovy.lang.Closure)">unique</a></strong>(<a href="http://docs.groovy-lang.org/latest/html/gapi/groovy/lang/Closure.html" title="Class in groovy.lang">Closure</a> closure)</code>
+                                            <br>
+                                            A convenience method for making a collection unique using a Closure
+to determine duplicate (equal) items.
+
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="Class in java.util">Collection</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#unique(java.util.Comparator)">unique</a></strong>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Comparator.html" title="Class in java.util">Comparator</a> comparator)</code>
+                                            <br>
+                                            Remove all duplicates from a given Collection.
+
+                                        </td>
+                                    </tr>
+                                    
+                                </tbody>
+                            </table>
+                        </li>
+                        
+                        <ul class="blockList">
+                            <li class="blockList">
+                            <h4>Methods inherited from interface java.lang.<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html" title="Class in java.lang">Iterable</a></h4>
+                                <p>
+                                    <code><strong><a href="../../java/lang/Iterable.html#any(groovy.lang.Closure)">any</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#asCollection()">asCollection</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#asList()">asList</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#asType(java.lang.Class)">asType</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#bufferedIterator()">bufferedIterator</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#collate(int)">collate</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#collate(int, boolean)">collate</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#collate(int, int)">collate</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#collate(int, int, boolean)">collate</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#collect()">collect</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#collect(groovy.lang.Closure)">collect</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#collect(java.util.Collection, groovy.lang.Closure)">collect</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#collectEntries()">collectEntries</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#collectEntries(groovy.lang.Closure)">collectEntries</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#collectEntries(java.util.Map)">collectEntries</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#collectEntries(java.util.Map, groovy.lang.Closure)">collectEntries</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#collectMany(groovy.lang.Closure)">collectMany</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#collectMany(java.util.Collection, groovy.lang.Closure)">collectMany</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#collectNested(groovy.lang.Closure)">collectNested</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#collectNested(java.util.Collection, groovy.lang.Closure)">collectNested</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#combinations()">combinations</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#combinations(groovy.lang.Closure)">combinations</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#contains(java.lang.Object)">contains</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#containsAll(java.lang.Object[])">containsAll</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#count(groovy.lang.Closure)">count</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#count(java.lang.Object)">count</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#countBy(groovy.lang.Closure)">countBy</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#disjoint(java.lang.Iterable)">disjoint</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#drop(int)">drop</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#dropRight(int)">dropRight</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#dropWhile(groovy.lang.Closure)">dropWhile</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#each(groovy.lang.Closure)">each</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#eachCombination(groovy.lang.Closure)">eachCombination</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#eachPermutation(groovy.lang.Closure)">eachPermutation</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#eachWithIndex(groovy.lang.Closure)">eachWithIndex</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#every(groovy.lang.Closure)">every</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#findIndexOf(groovy.lang.Closure)">findIndexOf</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#findIndexOf(int, groovy.lang.Closure)">findIndexOf</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#findIndexValues(groovy.lang.Closure)">findIndexValues</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#findIndexValues(java.lang.Number, groovy.lang.Closure)">findIndexValues</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#findLastIndexOf(groovy.lang.Closure)">findLastIndexOf</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#findLastIndexOf(int, groovy.lang.Closure)">findLastIndexOf</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#findResult(groovy.lang.Closure)">findResult</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#findResult(java.lang.Object, groovy.lang.Closure)">findResult</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#findResults(groovy.lang.Closure)">findResults</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#first()">first</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#flatten()">flatten</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#flatten(groovy.lang.Closure)">flatten</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#getAt(int)">getAt</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#groupBy(groovy.lang.Closure)">groupBy</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#groupBy(java.lang.Object)">groupBy</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#groupBy(java.util.List)">groupBy</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#head()">head</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#indexed()">indexed</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#indexed(int)">indexed</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#init()">init</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#inits()">inits</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#intersect(java.lang.Iterable)">intersect</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#intersect(java.lang.Iterable, java.util.Comparator)">intersect</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#isEmpty()">isEmpty</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#join(java.lang.String)">join</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#last()">last</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#max()">max</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#max(groovy.lang.Closure)">max</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#max(java.util.Comparator)">max</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#min()">min</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#min(groovy.lang.Closure)">min</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#min(java.util.Comparator)">min</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#minus(java.lang.Iterable)">minus</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#minus(java.lang.Object)">minus</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#multiply(java.lang.Number)">multiply</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#permutations()">permutations</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#permutations(groovy.lang.Closure)">permutations</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#plus(java.lang.Iterable)">plus</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#plus(java.lang.Object)">plus</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#size()">size</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#sort()">sort</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#sort(boolean)">sort</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#sort(boolean, groovy.lang.Closure)">sort</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#sort(boolean, java.util.Comparator)">sort</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#sort(groovy.lang.Closure)">sort</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#sum()">sum</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#sum(groovy.lang.Closure)">sum</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#sum(java.lang.Object)">sum</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#sum(java.lang.Object, groovy.lang.Closure)">sum</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#tail()">tail</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#tails()">tails</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#take(int)">take</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#takeRight(int)">takeRight</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#takeWhile(groovy.lang.Closure)">takeWhile</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#toList()">toList</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#toSet()">toSet</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#toSorted()">toSorted</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#toSorted(groovy.lang.Closure)">toSorted</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#toSorted(java.util.Comparator)">toSorted</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#toSpreadMap()">toSpreadMap</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#toUnique()">toUnique</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#toUnique(groovy.lang.Closure)">toUnique</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#toUnique(java.util.Comparator)">toUnique</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#withIndex()">withIndex</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#withIndex(int)">withIndex</a></strong></code>
+                                </p>
+                            </li>
+                        </ul>
+                        
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+    <!-- ============ METHOD DETAIL ========== -->
+
+    <a name="method_detail"><!-- --></a>
+
+
+        <div class="details">
+            <ul class="blockList">
+                <li class="blockList">
+                    <ul class="blockList">
+                        <li class="blockList">
+                            <h3>Methods Detail</h3>
+
+                            
+                            <a name="addAll(java.lang.Iterable)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public boolean <b>addAll</b>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html" title="Class in java.lang">Iterable</a> items)</h4>
+
+                                    <p>Adds all items from the iterable to the Collection.</p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>items</code> -  the items to add</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>true if the collection changed</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="addAll(java.lang.Object[])"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public boolean <b>addAll</b>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object[].html" title="Class in java.lang">Object[]</a> items)</h4>
+
+                                    <p>Modifies the collection by adding all of the elements in the specified array to the collection.
+The behavior of this operation is undefined if
+the specified array is modified while the operation is in progress.
+
+See also <code>plus</code> or the '+' operator if wanting to produce a new collection
+containing additional items but while leaving the original collection unchanged.</p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>items</code> -  array containing elements to be added to this collection</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd><tt>true</tt> if this collection changed as a result of the call</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>1.7.2</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>See Also:</b></dt>
+                                        
+                                        <dd>Collection#addAll(Collection)</dd>
+                                        
+                                    </dl>
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="addAll(java.util.Iterator)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public boolean <b>addAll</b>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html" title="Class in java.util">Iterator</a> items)</h4>
+
+                                    <p>Adds all items from the iterator to the Collection.</p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>items</code> -  the items to add</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>true if the collection changed</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="asBoolean()"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public boolean <b>asBoolean</b>()</h4>
+
+                                    <p>Coerce a collection instance to a boolean value.
+A collection is coerced to false if it's empty, and to true otherwise.
+<pre class="groovyTestCase">assert [1,2].asBoolean() == true</pre>
+<pre class="groovyTestCase">assert [].asBoolean() == false</pre></p>
+
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>the boolean value</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>1.7.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="asImmutable()"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="Class in java.util">Collection</a> <b>asImmutable</b>()</h4>
+
+                                    <p>A convenience method for creating an immutable Collection.</p>
+
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>an unmodifiable view of a copy of the original, i.e. an effectively immutable copy</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>1.5.0</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>See Also:</b></dt>
+                                        
+                                        <dd><a href="../../java/util/List.html#asImmutable()" title="GDK enhancement for java.util.List">List#asImmutable()</a></dd>
+                                        
+                                        <dd><a href="../../java/util/Collection.html#asUnmodifiable()" title="GDK enhancement for java.util.Collection">Collection#asUnmodifiable()</a></dd>
+                                        
+                                    </dl>
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="asSynchronized()"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="Class in java.util">Collection</a> <b>asSynchronized</b>()</h4>
+
+                                    <p>A convenience method for creating a synchronized Collection.</p>
+
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>a synchronized Collection</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>1.0</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>See Also:</b></dt>
+                                        
+                                        <dd><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collections.html#synchronizedCollection(java.util.Collection)" title="Class in java.util">Collections#synchronizedCollection(java.util.Collection)</a></dd>
+                                        
+                                    </dl>
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="asType(java.lang.Class)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="Class in java.lang">Object</a> <b>asType</b>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Class.html" title="Class in java.lang">Class</a> clazz)</h4>
+
+                                    <p>Converts the given collection to another type. A default concrete
+type is used for List, Set, or SortedSet. If the given type has
+a constructor taking a collection, that is used. Otherwise, the
+call is deferred to Object#asType(Class).  If this
+collection is already of the given type, the same instance is
+returned.</p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>clazz</code> -  the desired class</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>the object resulting from this type conversion</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>1.0</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>See Also:</b></dt>
+                                        
+                                        <dd><a href="../../java/lang/Object.html#asType(java.lang.Class)" title="GDK enhancement for java.lang.Object">Object#asType(java.lang.Class)</a></dd>
+                                        
+                                    </dl>
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="asUnmodifiable()"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="Class in java.util">Collection</a> <b>asUnmodifiable</b>()</h4>
+
+                                    <p>Creates an unmodifiable view of a Collection.</p>
+
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>an unmodifiable view of the Collection</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>2.5.0</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>See Also:</b></dt>
+                                        
+                                        <dd><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collections.html#unmodifiableCollection(java.util.Collection)" title="Class in java.util">Collections#unmodifiableCollection(java.util.Collection)</a></dd>
+                                        
+                                        <dd><a href="../../java/util/List.html#asUnmodifiable()" title="GDK enhancement for java.util.List">List#asUnmodifiable()</a></dd>
+                                        
+                                    </dl>
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="collectNested(groovy.lang.Closure)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="Class in java.util">List</a> <b>collectNested</b>(<a href="http://docs.groovy-lang.org/latest/html/gapi/groovy/lang/Closure.html" title="Class in groovy.lang">Closure</a> transform)</h4>
+
+                                    <p>Recursively iterates through this collection transforming each non-Collection value
+into a new value using the closure as a transformer. Returns a potentially nested
+list of transformed values.
+<pre class="groovyTestCase">
+assert [2,[4,6],[8],[]] == [1,[2,3],[4],[]].collectNested { it * 2 }
+</pre></p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>transform</code> -  the closure used to transform each item of the collection</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>the resultant collection</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>1.8.1</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="each(groovy.lang.Closure)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="Class in java.util">Collection</a> <b>each</b>(<a href="http://docs.groovy-lang.org/latest/html/gapi/groovy/lang/Closure.html" title="Class in groovy.lang">Closure</a> closure)</h4>
+
+                                    <p>Iterates through a Collection, passing each item to the given closure.</p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>closure</code> -  the closure applied on each element found</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>the self Collection</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>2.4.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="eachWithIndex(groovy.lang.Closure)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="Class in java.util">Collection</a> <b>eachWithIndex</b>(<a href="http://docs.groovy-lang.org/latest/html/gapi/groovy/lang/Closure.html" title="Class in groovy.lang">Closure</a> closure)</h4>
+
+                                    <p>Iterates through a Collection,
+passing each item and the item's index (a counter starting at
+zero) to the given closure.</p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>closure</code> -  a Closure to operate on each item</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>the self Collection</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>2.4.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="find()"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="Class in java.lang">Object</a> <b>find</b>()</h4>
+
+                                    <p>Finds the first item matching the IDENTITY Closure (i.e.&#160;matching Groovy truth).
+<p>
+Example:
+<pre class="groovyTestCase">
+def items = [null, 0, 0.0, false, '', [], 42, 43]
+assert items.find() == 42
+</pre></p>
+
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>the first Object found or null if none was found</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>1.8.1</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>See Also:</b></dt>
+                                        
+                                        <dd>Closure#IDENTITY</dd>
+                                        
+                                    </dl>
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="find(groovy.lang.Closure)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="Class in java.lang">Object</a> <b>find</b>(<a href="http://docs.groovy-lang.org/latest/html/gapi/groovy/lang/Closure.html" title="Class in groovy.lang">Closure</a> closure)</h4>
+
+                                    <p>Finds the first value matching the closure condition.  Example:
+<pre class="groovyTestCase">def list = [1,2,3]
+assert 2 == list.find { it > 1 }
+</pre></p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>closure</code> -  a closure condition</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>the first Object found, in the order of the collections iterator, or null if no element matches</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>1.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="findAll()"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="Class in java.util">Collection</a> <b>findAll</b>()</h4>
+
+                                    <p>Finds the items matching the IDENTITY Closure (i.e.&#160;matching Groovy truth).
+<p>
+Example:
+<pre class="groovyTestCase">
+def items = [1, 2, 0, false, true, '', 'foo', [], [4, 5], null]
+assert items.findAll() == [1, 2, true, 'foo', [4, 5]]
+</pre></p>
+
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>a Collection of the values found</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>1.8.1</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>See Also:</b></dt>
+                                        
+                                        <dd>Closure#IDENTITY</dd>
+                                        
+                                    </dl>
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="findAll(groovy.lang.Closure)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="Class in java.util">Collection</a> <b>findAll</b>(<a href="http://docs.groovy-lang.org/latest/html/gapi/groovy/lang/Closure.html" title="Class in groovy.lang">Closure</a> closure)</h4>
+
+                                    <p>Finds all values matching the closure condition.
+<pre class="groovyTestCase">assert [2,4] == [1,2,3,4].findAll { it % 2 == 0 }</pre></p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>closure</code> -  a closure condition</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>a Collection of matching values</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>1.5.6</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="flatten()"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="Class in java.util">Collection</a> <b>flatten</b>()</h4>
+
+                                    <p>Flatten a Collection.  This Collection and any nested arrays or
+collections have their contents (recursively) added to the new collection.
+<pre class="groovyTestCase">assert [1,2,3,4,5] == [1,[2,3],[[4]],[],5].flatten()</pre></p>
+
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>a flattened Collection</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>1.6.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="getAt(java.lang.String)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="Class in java.util">List</a> <b>getAt</b>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="Class in java.lang">String</a> property)</h4>
+
+                                    <p>Support the subscript operator for Collection.
+<pre class="groovyTestCase">
+assert [String, Long, Integer] == ["a",5L,2]["class"]
+</pre></p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>property</code> -  a String</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>a List</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>1.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="getIndices()"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.groovy-lang.org/latest/html/gapi/groovy/lang/IntRange.html" title="Class in groovy.lang">IntRange</a> <b>getIndices</b>()</h4>
+
+                                    <p>Returns indices of the collection.
+<p>
+Example:
+<pre class="groovyTestCase">
+assert 0..2 == [5, 6, 7].indices
+</pre></p>
+
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>an index range</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>2.4.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="grep()"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="Class in java.util">Collection</a> <b>grep</b>()</h4>
+
+                                    <p>Iterates over the collection returning each element that matches
+using the IDENTITY Closure as a filter - effectively returning all elements which satisfy Groovy truth.
+<p>
+Example:
+<pre class="groovyTestCase">
+def items = [1, 2, 0, false, true, '', 'foo', [], [4, 5], null]
+assert items.grep() == [1, 2, true, 'foo', [4, 5]]
+</pre></p>
+
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>a collection of elements satisfy Groovy truth</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>2.0</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>See Also:</b></dt>
+                                        
+                                        <dd>Closure#IDENTITY</dd>
+                                        
+                                    </dl>
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="grep(java.lang.Object)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="Class in java.util">Collection</a> <b>grep</b>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="Class in java.lang">Object</a> filter)</h4>
+
+                                    <p>Iterates over the collection of items and returns each item that matches
+the given filter - calling the <code><a href="../../java/lang/Object.html#isCase(java.lang.Object)" title="GDK enhancement for java.lang.Object">Object#isCase(java.lang.Object)</a></code>
+method used by switch statements.  This method can be used with different
+kinds of filters like regular expressions, classes, ranges etc.
+Example:
+<pre class="groovyTestCase">
+def list = ['a', 'b', 'aa', 'bc', 3, 4.5]
+assert list.grep( ~/a+/ )  == ['a', 'aa']
+assert list.grep( ~/../ )  == ['aa', 'bc']
+assert list.grep( Number ) == [ 3, 4.5 ]
+assert list.grep{ it.toString().size() == 1 } == [ 'a', 'b', 3 ]
+</pre></p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>filter</code> -  the filter to perform on each element of the collection (using the <a href="../../java/lang/Object.html#isCase(java.lang.Object)" title="GDK enhancement for java.lang.Object">Object#isCase(java.lang.Object)</a> method)</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>a collection of objects which match the filter</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>2.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="inject(groovy.lang.Closure)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="Class in java.lang">Object</a> <b>inject</b>(<a href="http://docs.groovy-lang.org/latest/html/gapi/groovy/lang/Closure.html" title="Class in groovy.lang">Closure</a> closure)</h4>
+
+                                    <p>Performs the same function as the version of inject that takes an initial value, but
+uses the head of the Collection as the initial value, and iterates over the tail.
+<pre class="groovyTestCase">
+assert 1 * 2 * 3 * 4 == [ 1, 2, 3, 4 ].inject { acc, val -> acc * val }
+assert ['b'] == [['a','b'], ['b','c'], ['d','b']].inject { acc, val -> acc.intersect( val ) }
+LinkedHashSet set = [ 't', 'i', 'm' ]
+assert 'tim' == set.inject { a, b -> a + b }
+</pre></p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>closure</code> -       a closure</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>the result of the last closure call</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>1.8.7</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>See Also:</b></dt>
+                                        
+                                        <dd>Collection#inject(Object, Closure)</dd>
+                                        
+                                    </dl>
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="inject(java.lang.Object, groovy.lang.Closure)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="Class in java.lang">Object</a> <b>inject</b>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="Class in java.lang">Object</a> initialValue, <a href="http://docs.groovy-lang.org/latest/html/gapi/groovy/lang/Closure.html" title="Class in groovy.lang">Closure</a> closure)</h4>
+
+                                    <p>Iterates through the given Collection, passing in the initial value to
+the 2-arg closure along with the first item. The result is passed back (injected) into
+the closure along with the second item. The new result is injected back into
+the closure along with the third item and so on until the entire collection
+has been used. Also known as <tt>foldLeft</tt> or <tt>reduce</tt> in functional parlance.
+
+Examples:
+<pre class="groovyTestCase">
+assert 1*1*2*3*4 == [1,2,3,4].inject(1) { acc, val -> acc * val }
+
+assert 0+1+2+3+4 == [1,2,3,4].inject(0) { acc, val -> acc + val }
+
+assert 'The quick brown fox' ==
+    ['quick', 'brown', 'fox'].inject('The') { acc, val -> acc + ' ' + val }
+
+assert 'bat' ==
+    ['rat', 'bat', 'cat'].inject('zzz') { min, next -> next < min ? next : min }
+
+def max = { a, b -> [a, b].max() }
+def animals = ['bat', 'rat', 'cat']
+assert 'rat' == animals.inject('aaa', max)
+</pre>
+Visual representation of the last example above:
+<pre>
+   initVal  animals[0]
+      v        v
+max('aaa',   'bat')  =>  'bat'  animals[1]
+                           v       v
+                     max('bat',  'rat')  =>  'rat'  animals[2]
+                                               v       v
+                                         max('rat',  'cat')  =>  'rat'
+</pre></p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>initialValue</code> -  some initial value</dd>
+                                        
+                                        <dd><code>closure</code> -       a closure</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>the result of the last closure call</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>1.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="intersect(java.util.Collection)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="Class in java.util">Collection</a> <b>intersect</b>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="Class in java.util">Collection</a> right)</h4>
+
+                                    <p>Create a Collection composed of the intersection of both collections.  Any
+elements that exist in both collections are added to the resultant collection.
+For collections of custom objects; the objects should implement java.lang.Comparable
+<pre class="groovyTestCase">assert [4,5] == [1,2,3,4,5].intersect([4,5,6,7,8])</pre>
+By default, Groovy uses a NumberAwareComparator when determining if an
+element exists in both collections.</p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>right</code> -  a Collection</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>a Collection as an intersection of both collections</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>1.5.6</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>See Also:</b></dt>
+                                        
+                                        <dd>Collection#intersect(Collection, Comparator)</dd>
+                                        
+                                    </dl>
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="intersect(java.util.Collection, java.util.Comparator)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="Class in java.util">Collection</a> <b>intersect</b>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="Class in java.util">Collection</a> right, <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Comparator.html" title="Class in java.util">Comparator</a> comparator)</h4>
+
+                                    <p>Create a Collection composed of the intersection of both collections.  Any
+elements that exist in both collections are added to the resultant collection.
+For collections of custom objects; the objects should implement java.lang.Comparable
+<pre class="groovyTestCase">
+assert [3,4] == [1,2,3,4].intersect([3,4,5,6], Comparator.naturalOrder())
+</pre>
+<pre class="groovyTestCase">
+def one = ['a', 'B', 'c', 'd']
+def two = ['b', 'C', 'd', 'e']
+def compareIgnoreCase = { a, b -> a.toLowerCase() <=> b.toLowerCase() }
+assert one.intersect(two) == ['d']
+assert two.intersect(one) == ['d']
+assert one.intersect(two, compareIgnoreCase) == ['b', 'C', 'd']
+assert two.intersect(one, compareIgnoreCase) == ['B', 'c', 'd']
+</pre></p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>right</code> -  a Collection</dd>
+                                        
+                                        <dd><code>comparator</code> -  a Comparator</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>a Collection as an intersection of both collections</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>2.5.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="isCase(java.lang.Object)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public boolean <b>isCase</b>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="Class in java.lang">Object</a> switchValue)</h4>
+
+                                    <p>'Case' implementation for collections which tests if the 'switch'
+operand is contained in any of the 'case' values.
+For example:
+<pre class="groovyTestCase">switch( 3 ) {
+  case [1,3,5]:
+    assert true
+    break
+  default:
+    assert false
+}</pre></p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>switchValue</code> -  the switch value</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>true if the caseValue is deemed to contain the switchValue</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>1.0</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>See Also:</b></dt>
+                                        
+                                        <dd><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html#contains(java.lang.Object)" title="Class in java.util">Collection#contains(java.lang.Object)</a></dd>
+                                        
+                                    </dl>
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="leftShift(java.lang.Object)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="Class in java.util">Collection</a> <b>leftShift</b>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="Class in java.lang">Object</a> value)</h4>
+
+                                    <p>Overloads the left shift operator to provide an easy way to append
+objects to a Collection.
+<pre class="groovyTestCase">def list = [1,2]
+list &lt;&lt; 3
+assert list == [1,2,3]</pre></p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>value</code> -  an Object to be added to the collection.</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>same collection, after the value was added to it.</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>1.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="minus(java.util.Collection)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="Class in java.util">Collection</a> <b>minus</b>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="Class in java.util">Collection</a> removeMe)</h4>
+
+                                    <p>Create a new Collection composed of the elements of the first Collection minus
+every occurrence of elements of the given Collection.
+<pre class="groovyTestCase">assert [1, "a", true, true, false, 5.3] - [true, 5.3] == [1, "a", false]</pre></p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>removeMe</code> -  a Collection of elements to remove</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>a Collection with the given elements removed</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>2.4.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="plus(java.lang.Iterable)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="Class in java.util">Collection</a> <b>plus</b>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html" title="Class in java.lang">Iterable</a> right)</h4>
+
+                                    <p>Create a Collection as a union of a Collection and an Iterable. If the left collection
+is a Set, then the returned collection will be a Set otherwise a List.
+This operation will always create a new object for the result,
+while the operands remain unchanged.</p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>right</code> -  the right Iterable</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>the merged Collection</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>1.8.7</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>See Also:</b></dt>
+                                        
+                                        <dd>Collection#plus(Collection)</dd>
+                                        
+                                    </dl>
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="plus(java.lang.Object)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="Class in java.util">Collection</a> <b>plus</b>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="Class in java.lang">Object</a> right)</h4>
+
+                                    <p>Create a collection as a union of a Collection and an Object. If the collection
+is a Set, then the returned collection will be a Set otherwise a List.
+This operation will always create a new object for the result,
+while the operands remain unchanged.
+<pre class="groovyTestCase">assert [1,2,3] == [1,2] + 3</pre></p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>right</code> -  an object to add/append</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>the resulting Collection</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>1.5.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="plus(java.util.Collection)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="Class in java.util">Collection</a> <b>plus</b>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="Class in java.util">Collection</a> right)</h4>
+
+                                    <p>Create a Collection as a union of two collections. If the left collection
+is a Set, then the returned collection will be a Set otherwise a List.
+This operation will always create a new object for the result,
+while the operands remain unchanged.
+<pre class="groovyTestCase">assert [1,2,3,4] == [1,2] + [3,4]</pre></p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>right</code> -  the right Collection</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>the merged Collection</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>1.5.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="removeAll(groovy.lang.Closure)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public boolean <b>removeAll</b>(<a href="http://docs.groovy-lang.org/latest/html/gapi/groovy/lang/Closure.html" title="Class in groovy.lang">Closure</a> condition)</h4>
+
+                                    <p>Modifies this collection by removing the elements that are matched according
+to the specified closure condition.
+
+<pre class="groovyTestCase">def list = ['a', 'b']
+list.removeAll { it == 'b' }
+assert list == ['a']</pre>
+
+See also <code>findAll</code> and <code>grep</code> when wanting to produce a new list
+containing items which match some criteria but leaving the original collection unchanged.</p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>condition</code> -  a closure condition</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd><tt>true</tt> if this collection changed as a result of the call</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>1.7.2</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>See Also:</b></dt>
+                                        
+                                        <dd>Iterator#remove()</dd>
+                                        
+                                    </dl>
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="removeAll(java.lang.Object[])"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public boolean <b>removeAll</b>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object[].html" title="Class in java.lang">Object[]</a> items)</h4>
+
+                                    <p>Modifies this collection by removing its elements that are contained
+within the specified object array.
+
+See also <code>findAll</code> and <code>grep</code> when wanting to produce a new list
+containing items which don't match some criteria while leaving the original collection unchanged.</p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>items</code> -  array containing elements to be removed from this collection</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd><tt>true</tt> if this collection changed as a result of the call</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>1.7.2</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>See Also:</b></dt>
+                                        
+                                        <dd>Collection#removeAll(Collection)</dd>
+                                        
+                                    </dl>
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="removeElement(java.lang.Object)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public boolean <b>removeElement</b>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="Class in java.lang">Object</a> o)</h4>
+
+                                    <p>Modifies this collection by removing a single instance of the specified
+element from this collection, if it is present. Essentially an alias for
+Collection#remove(Object) but with no ambiguity for Collection&lt;Integer&gt;.
+<p/>
+Example:
+<pre class="groovyTestCase">
+def list = [1, 2, 3, 2]
+list.removeElement(2)
+assert [1, 3, 2] == list
+</pre></p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>o</code> -  element to be removed from this collection, if present</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>true if an element was removed as a result of this call</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>2.4.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="retainAll(groovy.lang.Closure)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public boolean <b>retainAll</b>(<a href="http://docs.groovy-lang.org/latest/html/gapi/groovy/lang/Closure.html" title="Class in groovy.lang">Closure</a> condition)</h4>
+
+                                    <p>Modifies this collection so that it retains only its elements
+that are matched according to the specified closure condition.  In other words,
+removes from this collection all of its elements that don't match.
+
+<pre class="groovyTestCase">def list = ['a', 'b']
+list.retainAll { it == 'b' }
+assert list == ['b']</pre>
+
+See also <code>findAll</code> and <code>grep</code> when wanting to produce a new list
+containing items which match some criteria but leaving the original collection unchanged.</p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>condition</code> -  a closure condition</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd><tt>true</tt> if this collection changed as a result of the call</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>1.7.2</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>See Also:</b></dt>
+                                        
+                                        <dd>Iterator#remove()</dd>
+                                        
+                                    </dl>
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="retainAll(java.lang.Object[])"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public boolean <b>retainAll</b>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object[].html" title="Class in java.lang">Object[]</a> items)</h4>
+
+                                    <p>Modifies this collection so that it retains only its elements that are contained
+in the specified array.  In other words, removes from this collection all of
+its elements that are not contained in the specified array.
+
+See also <code>grep</code> and <code>findAll</code> when wanting to produce a new list
+containing items which match some specified items but leaving the original collection unchanged.</p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>items</code> -  array containing elements to be retained from this collection</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd><tt>true</tt> if this collection changed as a result of the call</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>1.7.2</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>See Also:</b></dt>
+                                        
+                                        <dd>Collection#retainAll(Collection)</dd>
+                                        
+                                    </dl>
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="split(groovy.lang.Closure)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="Class in java.util">Collection</a> <b>split</b>(<a href="http://docs.groovy-lang.org/latest/html/gapi/groovy/lang/Closure.html" title="Class in groovy.lang">Closure</a> closure)</h4>
+
+                                    <p>Splits all items into two collections based on the closure condition.
+The first list contains all items which match the closure expression.
+The second list all those that don't.
+<p>
+Example usage:
+<pre class="groovyTestCase">assert [[2,4],[1,3]] == [1,2,3,4].split { it % 2 == 0 }</pre></p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>closure</code> -  a closure condition</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>a List whose first item is the accepted values and whose second item is the rejected values</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>1.6.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="toListString()"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="Class in java.lang">String</a> <b>toListString</b>()</h4>
+
+                                    <p>Returns the string representation of the given list.  The string
+displays the contents of the list, similar to a list literal, i.e.
+<code>[1, 2, a]</code>.</p>
+
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>the string representation</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>1.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="toListString(int)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="Class in java.lang">String</a> <b>toListString</b>(int maxSize)</h4>
+
+                                    <p>Returns the string representation of the given list.  The string
+displays the contents of the list, similar to a list literal, i.e.
+<code>[1, 2, a]</code>.</p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>maxSize</code> -  stop after approximately this many characters and append '...'</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>the string representation</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>1.7.3</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="toSet()"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="Class in java.util">Set</a> <b>toSet</b>()</h4>
+
+                                    <p>Convert a Collection to a Set. Always returns a new Set
+even if the Collection is already a Set.
+<p>
+Example usage:
+<pre class="groovyTestCase">
+def result = [1, 2, 2, 2, 3].toSet()
+assert result instanceof Set
+assert result == [1, 2, 3] as Set
+</pre></p>
+
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>a Set</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>1.8.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="unique()"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="Class in java.util">Collection</a> <b>unique</b>()</h4>
+
+                                    <p>Modifies this collection to remove all duplicated items, using Groovy's
+default number-aware comparator.
+<pre class="groovyTestCase">assert [1,3] == [1,3,3].unique()</pre></p>
+
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>the now modified collection</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>1.0</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>See Also:</b></dt>
+                                        
+                                        <dd>Collection#unique(boolean)</dd>
+                                        
+                                    </dl>
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="unique(boolean)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="Class in java.util">Collection</a> <b>unique</b>(boolean mutate)</h4>
+
+                                    <p>Remove all duplicates from a given Collection using Groovy's default number-aware comparator.
+If mutate is true, it works by modifying the original object (and also returning it).
+If mutate is false, a new collection is returned leaving the original unchanged.
+<pre class="groovyTestCase">
+assert [1,3] == [1,3,3].unique()
+</pre>
+<pre class="groovyTestCase">
+def orig = [1, 3, 2, 3]
+def uniq = orig.unique(false)
+assert orig == [1, 3, 2, 3]
+assert uniq == [1, 3, 2]
+</pre></p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>mutate</code> -  false will cause a new list containing unique items from the collection to be created, true will mutate collections in place</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>the now modified collection</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>1.8.1</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="unique(boolean, groovy.lang.Closure)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="Class in java.util">Collection</a> <b>unique</b>(boolean mutate, <a href="http://docs.groovy-lang.org/latest/html/gapi/groovy/lang/Closure.html" title="Class in groovy.lang">Closure</a> closure)</h4>
+
+                                    <p>A convenience method for making a collection unique using a Closure to determine duplicate (equal) items.
+If mutate is true, it works on the receiver object and returns it. If mutate is false, a new collection is returned.
+<p>
+If the closure takes a single parameter, each element from the Collection will be passed to the closure. The closure
+should return a value used for comparison (either using <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Comparable.html#compareTo(java.lang.Object)" title="Class in java.lang">Comparable#compareTo(java.lang.Object)</a> or
+<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#equals(java.lang.Object)" title="Class in java.lang">Object#equals(java.lang.Object)</a>). If the closure takes two parameters, two items from the collection
+will be passed as arguments, and the closure should return an int value (with 0 indicating the items are not unique).
+<pre class="groovyTestCase">
+def orig = [1, 3, 4, 5]
+def uniq = orig.unique(false) { it % 2 }
+assert orig == [1, 3, 4, 5]
+assert uniq == [1, 4]
+</pre>
+<pre class="groovyTestCase">
+def orig = [2, 3, 3, 4]
+def uniq = orig.unique(false) { a, b -> a <=> b }
+assert orig == [2, 3, 3, 4]
+assert uniq == [2, 3, 4]
+</pre></p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>mutate</code> -   false will always cause a new list to be created, true will mutate lists in place</dd>
+                                        
+                                        <dd><code>closure</code> -  a 1 or 2 arg Closure used to determine unique items</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>self   without any duplicates</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>1.8.1</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="unique(boolean, java.util.Comparator)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="Class in java.util">Collection</a> <b>unique</b>(boolean mutate, <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Comparator.html" title="Class in java.util">Comparator</a> comparator)</h4>
+
+                                    <p>Remove all duplicates from a given Collection.
+If mutate is true, it works on the original object (and also returns it). If mutate is false, a new collection is returned.
+The order of members in the Collection are compared by the given Comparator.
+For each duplicate, the first member which is returned
+by the given Collection's iterator is retained, but all other ones are removed.
+The given Collection's original order is preserved.
+<p>
+<pre class="groovyTestCase">
+class Person {
+    def fname, lname
+    String toString() {
+        return fname + " " + lname
+    }
+}
+
+class PersonComparator implements Comparator {
+    int compare(Object o1, Object o2) {
+        Person p1 = (Person) o1
+        Person p2 = (Person) o2
+        if (p1.lname != p2.lname)
+            return p1.lname.compareTo(p2.lname)
+        else
+            return p1.fname.compareTo(p2.fname)
+    }
+
+    boolean equals(Object obj) {
+        return this.equals(obj)
+    }
+}
+
+Person a = new Person(fname:"John", lname:"Taylor")
+Person b = new Person(fname:"Clark", lname:"Taylor")
+Person c = new Person(fname:"Tom", lname:"Cruz")
+Person d = new Person(fname:"Clark", lname:"Taylor")
+
+def list = [a, b, c, d]
+List list2 = list.unique(false, new PersonComparator())
+assert( list2 != list && list2 == [a, b, c] )
+</pre></p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>mutate</code> -      false will always cause a new collection to be created, true will mutate collections in place</dd>
+                                        
+                                        <dd><code>comparator</code> -  a Comparator</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>self      the collection without duplicates</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>1.8.1</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="unique(groovy.lang.Closure)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="Class in java.util">Collection</a> <b>unique</b>(<a href="http://docs.groovy-lang.org/latest/html/gapi/groovy/lang/Closure.html" title="Class in groovy.lang">Closure</a> closure)</h4>
+
+                                    <p>A convenience method for making a collection unique using a Closure
+to determine duplicate (equal) items.
+<p>
+If the closure takes a single parameter, the
+argument passed will be each element, and the closure
+should return a value used for comparison (either using
+<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Comparable.html#compareTo(java.lang.Object)" title="Class in java.lang">Comparable#compareTo(java.lang.Object)</a> or <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#equals(java.lang.Object)" title="Class in java.lang">Object#equals(java.lang.Object)</a>).
+If the closure takes two parameters, two items from the collection
+will be passed as arguments, and the closure should return an
+int value (with 0 indicating the items are not unique).
+<pre class="groovyTestCase">assert [1,4] == [1,3,4,5].unique { it % 2 }</pre>
+<pre class="groovyTestCase">assert [2,3,4] == [2,3,3,4].unique { a, b -> a <=> b }</pre></p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>closure</code> -  a 1 or 2 arg Closure used to determine unique items</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>self   without any duplicates</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>1.0</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>See Also:</b></dt>
+                                        
+                                        <dd>Collection#unique(boolean, Closure)</dd>
+                                        
+                                    </dl>
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="unique(java.util.Comparator)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="Class in java.util">Collection</a> <b>unique</b>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Comparator.html" title="Class in java.util">Comparator</a> comparator)</h4>
+
+                                    <p>Remove all duplicates from a given Collection.
+Works on the original object (and also returns it).
+The order of members in the Collection are compared by the given Comparator.
+For each duplicate, the first member which is returned
+by the given Collection's iterator is retained, but all other ones are removed.
+The given Collection's original order is preserved.
+<p>
+<pre class="groovyTestCase">
+class Person {
+    def fname, lname
+    String toString() {
+        return fname + " " + lname
+    }
+}
+
+class PersonComparator implements Comparator {
+    int compare(Object o1, Object o2) {
+        Person p1 = (Person) o1
+        Person p2 = (Person) o2
+        if (p1.lname != p2.lname)
+            return p1.lname.compareTo(p2.lname)
+        else
+            return p1.fname.compareTo(p2.fname)
+    }
+
+    boolean equals(Object obj) {
+        return this.equals(obj)
+    }
+}
+
+Person a = new Person(fname:"John", lname:"Taylor")
+Person b = new Person(fname:"Clark", lname:"Taylor")
+Person c = new Person(fname:"Tom", lname:"Cruz")
+Person d = new Person(fname:"Clark", lname:"Taylor")
+
+def list = [a, b, c, d]
+List list2 = list.unique(new PersonComparator())
+assert( list2 == list && list == [a, b, c] )
+</pre></p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>comparator</code> -  a Comparator</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>self      the now modified collection without duplicates</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>1.0</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>See Also:</b></dt>
+                                        
+                                        <dd><a href="../../java/util/Collection.html#unique(boolean, java.util.Comparator)" title="GDK enhancement for java.util.Collection">Collection#unique(boolean, java.util.Comparator)</a></dd>
+                                        
+                                    </dl>
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+
+    <!-- ========= END OF class DATA ========= -->
+
+    <!-- ======= START OF BOTTOM NAVBAR ====== -->
+    <a name="navbar_bottom"><!-- --></a>
+    <a href="#skip-navbar_bottom" title="Skip navigation links"></a>
+
+    <div class="topNav">
+        <ul class="navList" title="Navigation">
+            <li><a href="../../overview-summary.html">Overview</a></li>
+            <li><a href="package-summary.html">Package</a></li>
+            <li class="navBarCell1Rev">Class</li>
+            <li><a href="../../index-all.html">Index</a></li>
+        </ul>
+    </div>
+    <!-- =========== END OF NAVBAR =========== -->
+
+</body>
+</html>

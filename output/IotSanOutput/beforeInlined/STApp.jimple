@@ -1,0 +1,137 @@
+public class STApp extends java.lang.Object
+{
+    public int name;
+    public int value;
+    public int date;
+    public int id;
+    public int label;
+
+    public int getData()
+    {
+        int $ret;
+        STApp JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        $ret = JJJCTEMP$0.[STApp.value:int];
+        return $ret;
+    }
+
+    public int getDate()
+    {
+        int $ret;
+        STApp JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        $ret = JJJCTEMP$0.[STApp.date:int];
+        return $ret;
+    }
+
+    public int getDateValue()
+    {
+        int $ret;
+        STApp JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        $ret = JJJCTEMP$0.[STApp.date:int];
+        return $ret;
+    }
+
+    public int getId()
+    {
+        int $ret;
+        STApp JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        $ret = JJJCTEMP$0.[STApp.id:int];
+        return $ret;
+    }
+
+    public int getDoubleValue()
+    {
+        int $ret;
+        STApp JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        $ret = JJJCTEMP$0.[STApp.value:int];
+        return $ret;
+    }
+
+    public int getFloatValue()
+    {
+        int $ret;
+        STApp JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        $ret = JJJCTEMP$0.[STApp.value:int];
+        return $ret;
+    }
+
+    public int getIntegerValue()
+    {
+        int $ret;
+        STApp JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        $ret = JJJCTEMP$0.[STApp.value:int];
+        return $ret;
+    }
+
+    public int getName()
+    {
+        int $ret;
+        STApp JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        $ret = JJJCTEMP$0.[STApp.name:int];
+        return $ret;
+    }
+
+    public int getNumberValue()
+    {
+        int $ret;
+        STApp JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        $ret = JJJCTEMP$0.[STApp.value:int];
+        return $ret;
+    }
+
+    public int getNumericValue()
+    {
+        int $ret;
+        STApp JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        $ret = JJJCTEMP$0.[STApp.value:int];
+        return $ret;
+    }
+
+    public int getStringValue()
+    {
+        int $ret;
+        STApp JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        $ret = JJJCTEMP$0.[STApp.value:int];
+        return $ret;
+    }
+
+    public int getValue()
+    {
+        int $ret;
+        STApp JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        $ret = JJJCTEMP$0.[STApp.value:int];
+        return $ret;
+    }
+
+    public void <init>()
+    {
+        STApp JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        specialinvoke JJJCTEMP$0.[java.lang.Object.<init>():void]();
+        return;
+    }
+}

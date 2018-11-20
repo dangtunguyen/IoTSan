@@ -1,0 +1,85 @@
+public class CInt2IntMap extends java.lang.Object
+{
+    private int size;
+    private int[] keyArr;
+    private int[] valueArr;
+    private int gArrIndex;
+    public int keyToPut;
+    public int valueToPut;
+    public boolean STCommand_CInt2IntMap_put;
+
+    public int get(int)
+    {
+        int[] JJJCTEMP$5, JJJCTEMP$2;
+        int index, key, i, $ret, JJJCTEMP$3, JJJCTEMP$1;
+        CInt2IntMap JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        key := @parameter0;
+        index = 10;
+        i = 0;
+
+     label0:
+        JJJCTEMP$1 = JJJCTEMP$0.[CInt2IntMap.size:int];
+        if i >= JJJCTEMP$1 goto label2;
+
+        JJJCTEMP$2 = JJJCTEMP$0.[CInt2IntMap.keyArr:int[]];
+        JJJCTEMP$3 = JJJCTEMP$2[i];
+        if JJJCTEMP$3 != key goto label1;
+
+        index = i;
+        goto label2;
+
+     label1:
+        i = i + 1;
+        goto label0;
+
+     label2:
+        if index != 10 goto label3;
+
+        $ret = 0;
+        return $ret;
+
+     label3:
+        JJJCTEMP$5 = JJJCTEMP$0.[CInt2IntMap.valueArr:int[]];
+        $ret = JJJCTEMP$5[index];
+        return $ret;
+    }
+
+    public void put(int, int)
+    {
+        int key, value;
+        CInt2IntMap JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        key := @parameter0;
+        value := @parameter1;
+        JJJCTEMP$0.[CInt2IntMap.keyToPut:int] = key;
+        JJJCTEMP$0.[CInt2IntMap.valueToPut:int] = value;
+        JJJCTEMP$0.[CInt2IntMap.STCommand_CInt2IntMap_put:boolean] = 1;
+        return;
+    }
+
+    public void put(int, boolean)
+    {
+        int key, value;
+        CInt2IntMap JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        key := @parameter0;
+        value := @parameter1;
+        JJJCTEMP$0.[CInt2IntMap.keyToPut:int] = key;
+        JJJCTEMP$0.[CInt2IntMap.valueToPut:int] = value;
+        JJJCTEMP$0.[CInt2IntMap.STCommand_CInt2IntMap_put:boolean] = 1;
+        return;
+    }
+
+    public void <init>()
+    {
+        CInt2IntMap JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        specialinvoke JJJCTEMP$0.[java.lang.Object.<init>():void]();
+        return;
+    }
+}

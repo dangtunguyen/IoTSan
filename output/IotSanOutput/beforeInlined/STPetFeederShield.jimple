@@ -1,0 +1,78 @@
+public class STPetFeederShield extends STDevice
+{
+    public STState petFeederShieldState;
+    public int currentPetFeederShield;
+
+    public STState currentState(int)
+    {
+        STState $ret;
+        int attributeName;
+        STPetFeederShield JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        attributeName := @parameter0;
+        $ret = JJJCTEMP$0.[STPetFeederShield.petFeederShieldState:STState];
+        return $ret;
+    }
+
+    public int currentValue(int)
+    {
+        int attributeName, $ret;
+        STPetFeederShield JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        attributeName := @parameter0;
+        $ret = JJJCTEMP$0.[STPetFeederShield.currentPetFeederShield:int];
+        return $ret;
+    }
+
+    public STState latestState(int)
+    {
+        STState $ret;
+        int attributeName;
+        STPetFeederShield JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        attributeName := @parameter0;
+        $ret = JJJCTEMP$0.[STPetFeederShield.petFeederShieldState:STState];
+        return $ret;
+    }
+
+    public int latestValue(int)
+    {
+        int attributeName, $ret;
+        STPetFeederShield JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        attributeName := @parameter0;
+        $ret = JJJCTEMP$0.[STPetFeederShield.currentPetFeederShield:int];
+        return $ret;
+    }
+
+    public void feed()
+    {
+        STPetFeederShield JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        return;
+    }
+
+    public void feed(java.util.Map)
+    {
+        java.util.Map map;
+        STPetFeederShield JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        map := @parameter0;
+        return;
+    }
+
+    public void <init>()
+    {
+        STPetFeederShield JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        specialinvoke JJJCTEMP$0.[STDevice.<init>():void]();
+        return;
+    }
+}

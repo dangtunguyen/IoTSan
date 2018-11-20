@@ -1,0 +1,184 @@
+<!doctype html>
+<!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]-->
+<!--[if IE 7 ]>    <html lang="en" class="no-js ie7"> <![endif]-->
+<!--[if IE 8 ]>    <html lang="en" class="no-js ie8"> <![endif]-->
+<!--[if IE 9 ]>    <html lang="en" class="no-js ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!-->
+<html lang="en" class="no-js">
+ <!--<![endif]-->
+ <head> 
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+  <title>Location List</title> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  <link rel="shortcut icon" type="image/x-icon" href="/assets/components/common/favicon-e139278c1f23d5ca93e5b74b58622e9d.ico"> 
+  <link rel="apple-touch-icon" href="/assets/components/common/apple-touch-icon-b7275dbac7a4078e4f44859751581016.png"> 
+  <link rel="apple-touch-icon" sizes="114x114" href="/assets/components/common/apple-touch-icon-retina-35ea8b3c6aa433fa74ebc97d0b5a2a53.png"> 
+  <link rel="stylesheet" href="/assets/base/bootstrap-framework-449e81f998287c2a7231536d26e3b2b6.css"> 
+  <link rel="stylesheet" href="/assets/base/common-f1637902ac11f16a5c6e994298845cb0.css"> 
+  <script src="/assets/libs/underscore/underscore-6e1f1c149dc88c708f9bfce4a061187f.js" type="text/javascript"></script> 
+  <script src="/assets/apps/main/main-app-5811442e0bc96e2d7374677668e7edc4.js" type="text/javascript"></script> 
+  <script src="/assets/libs/bootstrap/bootstrap-e3bccdc29cf6e1d0f3e7bc54ccf086ef.js" type="text/javascript"></script> 
+  <!--[if lt IE 9]>
+	<script src="/assets/libs/html5shiv/html5shiv-4163e58056c3c7ff50f91c9d141fefaa.js" type="text/javascript" ></script>
+	<![endif]--> 
+  <script type="text/javascript">
+			window.heap=window.heap||[],heap.load=function(t,e){window.heap.appid=t,window.heap.config=e;var a=document.createElement("script");a.type="text/javascript",a.async=!0,a.src=("https:"===document.location.protocol?"https:":"http:")+"//cdn.heapanalytics.com/js/heap-"+t+".js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(a,n);for(var o=function(t){return function(){heap.push([t].concat(Array.prototype.slice.call(arguments,0)))}},p=["clearEventProperties","identify","setEventProperties","track","unsetEventProperty"],c=0;c<p.length;c++)heap[p[c]]=o(p[c])};
+			heap.load("2894297474");
+		</script> 
+  <meta name="layout" content="bootstrap-fixed"> 
+  <link rel="stylesheet" href="/assets/apps/location/location-list-27416428f6dbfd2e0f4336a67c41aac3.css"> 
+  <script src="/assets/libs/bootbox/bootbox-f121c132065a395da46166eb555a8bcc.js" type="text/javascript"></script> 
+ </head> 
+ <body class="production-env"> 
+  <!-- Google Tag Manager --> 
+  <noscript>
+   <iframe src="//www.googletagmanager.com/ns.html?id=GTM-M4C995" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+  </noscript> 
+  <script type="application/javascript">
+(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-M4C995');
+</script> 
+  <!-- End Google Tag Manager --> 
+  <header class="header-main minimized"> 
+   <div class="login-tab"> 
+    <div class="login-tab-welcome"> 
+     <div class="st-arrow-container"> 
+      <div class="st-arrow-dropdown"></div> 
+     </div> Welcome back, 
+     <strong class="username"><a href="/user/show">tnguy208@ucr.edu</a></strong> 
+    </div> 
+    <ul> 
+     <li><a href="/logout/index">Logout</a></li> 
+    </ul> 
+   </div> 
+   <div> 
+    <div class="gradient-top-bar"></div> 
+    <div class="clearfix"> 
+     <div id="topNavigation" style="display:none;"> 
+      <div class="mobile-menu-brand">
+       <img src="/assets/components/common/smartthings-logo.png" alt="logo">
+      </div> 
+      <div class="mobile-menu-icon">
+       <div>
+        <div></div>
+       </div>
+      </div> 
+     </div> 
+    </div> 
+   </div> 
+  </header> 
+  <div class="mobile-menu"> 
+   <ul class="ul-reset"> 
+    <li><a href="/user/show">Logged in as: tnguy208@ucr.edu</a></li> 
+    <li><a href="/logout/index">Logout</a></li> 
+    <li><a href="https://shop.smartthings.com">Shop</a></li> 
+    <li><a href="http://smartthings.com">Learn More</a></li> 
+    <li><a href="http://smartthings.com/build">Build</a></li> 
+    <li><a href="http://support.smartthings.com">Support</a></li> 
+    <ul class="logged-in-menu ul-reset"> 
+     <li class="menu-title">Developer Tools:</li> 
+     <li class="active"><a href="/location/list"><span class="hidden-sm hidden-xs">My </span>Locations</a></li> 
+     <li class=""><a href="/hub/list"><span class="hidden-sm hidden-xs">My </span>Hubs</a></li> 
+     <li class=""><a href="/device/list"><span class="hidden-sm hidden-xs">My </span>Devices</a></li> 
+     <li class=""><a href="/ide/apps"><span class="hidden-sm hidden-xs">My </span>SmartApps</a></li> 
+     <li class=""><a href="/ide/devices"><span class="hidden-sm hidden-xs">My </span>Device Handlers</a></li> 
+     <li class=""><a href="/ide/submissions"><span class="hidden-sm hidden-xs">My </span>Publication Requests</a></li> 
+     <li class=""><a href="/ide/logs">Logs</a></li> 
+     <li class=""><a href="http://docs.smartthings.com/" target="_newWindow">Documentation</a></li> 
+    </ul> 
+   </ul> 
+  </div> 
+  <div class="dev-nav-wrap"> 
+   <div class="navbar navbar-default main"> 
+    <div class="container-fluid"> 
+     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1"> 
+      <ul class="nav navbar-nav main"> 
+       <li class="active"><a href="/location/list"><span class="hidden-sm hidden-xs">My </span>Locations</a></li> 
+       <li class=""><a href="/hub/list"><span class="hidden-sm hidden-xs">My </span>Hubs</a></li> 
+       <li class=""><a href="/device/list"><span class="hidden-sm hidden-xs">My </span>Devices</a></li> 
+       <li class=""><a href="/ide/apps"><span class="hidden-sm hidden-xs">My </span>SmartApps</a></li> 
+       <li class=""><a href="/ide/devices"><span class="hidden-sm hidden-xs">My </span>Device Handlers</a></li> 
+       <li class=""><a href="/ide/submissions"><span class="hidden-sm hidden-xs">My </span>Publication Requests</a></li> 
+       <li class=""><a href="/ide/logs">Live Logging</a></li> 
+       <li class=""><a href="http://docs.smartthings.com/" target="_newWindow">Documentation</a></li> 
+      </ul> 
+     </div> 
+    </div> 
+   </div> 
+  </div> 
+  <script id="success-template" type="text/x-handlebars-template">
+	<div class="inner-wrap">
+		<div class="alert alert-success alert-dismissible flash">
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+			{{message}}
+		</div>
+	</div>
+</script> 
+  <script type="application/javascript">
+	function _resize_window_delayed() {
+		setTimeout(function() {
+			window.dispatchEvent(new Event('resize'));
+		}, 50)
+	}
+</script> 
+  <div id="flash-message-container" class="row"> 
+  </div> 
+  <main class="location-list-page content"> 
+   <div id="list-location"> 
+    <a href="/location/create" class="create btn btn-small btn-success pull-right"><i class="icon-plus icon-white"></i> New Location</a> 
+    <h1>Locations</h1> 
+    <div class="table-wrap"> 
+     <table class="table table-bordered table-condensed table-striped"> 
+      <thead> 
+       <tr> 
+        <th>Name</th> 
+        <th>Events</th> 
+        <th>Notifications</th> 
+        <th>Devices</th> 
+        <th>Installed SmartApps</th> 
+       </tr> 
+      </thead> 
+      <tbody> 
+       <tr class="even"> 
+        <td> <a href="https://graph-na02-useast1.api.smartthings.com:443/location/show/6be87d7c-688c-4b7e-93ce-617fa05ef8ea"> Networking Lab </a> </td> 
+        <td> <a href="https://graph-na02-useast1.api.smartthings.com:443/location/6be87d7c-688c-4b7e-93ce-617fa05ef8ea/events"> events </a> </td> 
+        <td> <a href="https://graph-na02-useast1.api.smartthings.com:443/location/notifications/6be87d7c-688c-4b7e-93ce-617fa05ef8ea?type=location"> notifications </a> </td> 
+        <td> <a href="https://graph-na02-useast1.api.smartthings.com:443/location/devices/6be87d7c-688c-4b7e-93ce-617fa05ef8ea"> devices </a> </td> 
+        <td> <a href="https://graph-na02-useast1.api.smartthings.com:443/location/installedSmartApps/6be87d7c-688c-4b7e-93ce-617fa05ef8ea"> smartapps </a> </td> 
+       </tr> 
+      </tbody> 
+     </table> 
+    </div> 
+    <div class="pagination"> 
+    </div> 
+   </div> 
+  </main> 
+  <div class="inner-wrap clearfix"></div> 
+  <div class="footer main" role="contentinfo"> 
+   <div class="inner-wrap clearfix"> 
+    <div class="pull-left">
+      © 2018 SmartThings, Inc. All rights reserved. 
+    </div> 
+    <ul class="pull-right footer-links"> 
+     <li><a href="http://www.smartthings.com/benefits/" target="_blank">Benefits</a></li> 
+     <li>&nbsp;&nbsp;|&nbsp;&nbsp;</li> 
+     <li><a href="https://shop.smartthings.com" target="_blank">Shop</a></li> 
+     <li>&nbsp;&nbsp;|&nbsp;&nbsp;</li> 
+     <li><a href="http://blog.smartthings.com/" target="_blank">Blog</a></li> 
+     <li>&nbsp;&nbsp;|&nbsp;&nbsp;</li> 
+     <li><a href="https://developers.smartthings.com/" target="_blank">Developers</a></li> 
+     <li>&nbsp;&nbsp;|&nbsp;&nbsp;</li> 
+     <li><a href="http://support.smartthings.com" target="_blank">Support</a></li> 
+     <li>&nbsp;&nbsp;|&nbsp;&nbsp;</li> 
+     <li><a href="http://www.smartthings.com/terms/" target="_blank">Terms of Use</a></li> 
+     <li>&nbsp;&nbsp;|&nbsp;&nbsp;</li> 
+     <li><a href="http://www.smartthings.com/privacy/" target="_blank">Privacy Policy</a></li> 
+    </ul> 
+   </div> 
+  </div>   
+ </body>
+</html>

@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.6.1">
+<title>Visitor Pattern</title>
+<link rel="stylesheet" href="./assets/css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+<h1>Visitor Pattern</h1>
+<div class="details">
+<span id="revnumber">version 3.0.0-alpha-3</span>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_simple_example">1. Simple Example</a></li>
+<li><a href="#_advanced_example">2. Advanced Example</a>
+<ul class="sectlevel2">
+<li><a href="#_why_to_use_this">2.1. Why to use this</a></li>
+<li><a href="#_what_happens_if_we_add_a_new_type">2.2. What happens if we add a new type?</a></li>
+<li><a href="#_what_if_we_want_to_have_different_iteration_patterns">2.3. What if we want to have different iteration patterns?</a></li>
+<li><a href="#_make_it_groovy">2.4. Make it Groovy</a></li>
+<li><a href="#_summary">2.5. Summary</a></li>
+</ul>
+</li>
+<li><a href="#_further_information">3. Further Information</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <a href="http://en.wikipedia.org/wiki/Visitor_pattern">Visitor Pattern</a> is one of those well-known but not often used patterns. I think this is strange, as it is really a nice thing.</p>
+</div>
+<div class="paragraph">
+<p>The goal of the pattern is to separate an algorithm from an object structure. A practical result of this separation is the ability to add new operations to existing object structures without modifying those structures.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_simple_example"><a class="anchor" href="#_simple_example"></a>1. Simple Example</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This example considers how to calculate the bounds of shapes (or collections of shapes). Our first attempt uses the traditional visitor pattern. We will see a more Groovy way to do this shortly.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">abstract class Shape { }
+
+class Rectangle extends Shape {
+    def x, y, width, height
+
+    Rectangle(x, y, width, height) {
+        this.x = x; this.y = y; this.width = width; this.height = height
+    }
+
+    def union(rect) {
+        if (!rect) return this
+        def minx = [rect.x, x].min()
+        def maxx = [rect.x + width, x + width].max()
+        def miny = [rect.y, y].min()
+        def maxy = [rect.y + height, y + height].max()
+        new Rectangle(minx, miny, maxx - minx, maxy - miny)
+    }
+
+    def accept(visitor) {
+        visitor.visit_rectangle(this)
+    }
+}
+
+class Line extends Shape {
+    def x1, y1, x2, y2
+
+    Line(x1, y1, x2, y2) {
+        this.x1 = x1; this.y1 = y1; this.x2 = x2; this.y2 = y2
+    }
+
+    def accept(visitor){
+        visitor.visit_line(this)
+    }
+}
+
+class Group extends Shape {
+    def shapes = []
+    def add(shape) { shapes += shape }
+    def remove(shape) { shapes -= shape }
+    def accept(visitor) {
+        visitor.visit_group(this)
+    }
+}
+
+class BoundingRectangleVisitor {
+    def bounds
+
+    def visit_rectangle(rectangle) {
+        if (bounds)
+            bounds = bounds.union(rectangle)
+        else
+            bounds = rectangle
+    }
+
+    def visit_line(line) {
+        def line_bounds = new Rectangle(line.x1, line.y1, line.x2-line.y1, line.x2-line.y2)
+        if (bounds)
+            bounds = bounds.union(line_bounds)
+        else
+            bounds = line_bounds
+    }
+
+    def visit_group(group) {
+        group.shapes.each { shape -&gt; shape.accept(this) }
+    }
+}
+
+def group = new Group()
+group.add(new Rectangle(100, 40, 10, 5))
+group.add(new Rectangle(100, 70, 10, 5))
+group.add(new Line(90, 30, 60, 5))
+def visitor = new BoundingRectangleVisitor()
+group.accept(visitor)
+bounding_box = visitor.bounds
+println bounding_box.dump()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>That took quite a bit of code.</p>
+</div>
+<div class="paragraph">
+<p>We can improve the clarity of our code (and make it about half the size) by making use of Groovy Closures as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">abstract class Shape {
+    def accept(Closure yield) { yield(this) }
+}
+
+class Rectangle extends Shape {
+    def x, y, w, h
+    def bounds() { this }
+    def union(rect) {
+        if (!rect) return this
+        def minx = [ rect.x, x ].min()
+        def maxx = [ rect.x + w, x + w ].max()
+        def miny = [ rect.y, y ].min()
+        def maxy = [ rect.y + h, y + h ].max()
+        new Rectangle(x:minx, y:miny, w:maxx - minx, h:maxy - miny)
+    }
+}
+
+class Line extends Shape {
+    def x1, y1, x2, y2
+    def bounds() {
+        new Rectangle(x:[x1, x2].min(), y:[y1, y2].min(), w:(x2 - x1).abs(), h:(y2 - y1).abs())
+    }
+}
+
+class Group {
+    def shapes = []
+    def leftShift(shape) { shapes += shape }
+    def accept(Closure yield) { shapes.each{it.accept(yield)} }
+}
+
+def group = new Group()
+group &lt;&lt; new Rectangle(x:100, y:40, w:10, h:5)
+group &lt;&lt; new Rectangle(x:100, y:70, w:10, h:5)
+group &lt;&lt; new Line(x1:90, y1:30, x2:60, y2:5)
+def bounds
+group.accept{ bounds = it.bounds().union(bounds) }
+println bounds.dump()</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_advanced_example"><a class="anchor" href="#_advanced_example"></a>2. Advanced Example</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">interface Visitor {
+    void visit(NodeType1 n1)
+    void visit(NodeType2 n2)
+}
+
+interface Visitable {
+    void accept(Visitor visitor)
+}
+
+class NodeType1 implements Visitable {
+    Visitable[] children = new Visitable[0]
+    void accept(Visitor visitor) {
+        visitor.visit(this)
+        for(int i = 0; i &lt; children.length; ++i) {
+            children[i].accept(visitor)
+        }
+    }
+}
+
+class NodeType2 implements Visitable {
+    Visitable[] children = new Visitable[0]
+    void accept(Visitor visitor) {
+        visitor.visit(this)
+        for(int i = 0; i &lt; children.length; ++i) {
+            children[i].accept(visitor)
+        }
+    }
+}
+
+class NodeType1Counter implements Visitor {
+    int count = 0
+    void visit(NodeType1 n1) {
+        count++
+    }
+    void visit(NodeType2 n2){}
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If we now use <code>NodeType1Counter</code> on a tree like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">NodeType1 root = new NodeType1()
+root.children = new Visitable[2]
+root.children[0] = new NodeType1()
+root.children[1] = new NodeType2()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then we have one <code>NodeType1</code> object as root and one of the children is also a <code>NodeType1</code> instance. The other child is a <code>NodeType2</code> instance. That means using <code>NodeType1Counter</code> here should count 2 <code>NodeType1</code> objects.</p>
+</div>
+<div class="sect2">
+<h3 id="_why_to_use_this"><a class="anchor" href="#_why_to_use_this"></a>2.1. Why to use this</h3>
+<div class="paragraph">
+<p>As you can see here very good we have a visitor that has a state while the tree of objects is not changed. That&#8217;s pretty useful in different areas, for example you could have a visitor counting all node types, or how many different types are used, or you could use methods special to the node to gather information about the tree and much more.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_what_happens_if_we_add_a_new_type"><a class="anchor" href="#_what_happens_if_we_add_a_new_type"></a>2.2. What happens if we add a new type?</h3>
+<div class="paragraph">
+<p>In this case we have to do much work.. we have to change Visitor to accept the new type, we have to write the new type itself of course and we have to change every Visitor we have already implemented. After very few changes you will modify all your Visitors to extend a default implementation of the visitor, so you don&#8217;t need to change every Visitor each time you add a new type.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_what_if_we_want_to_have_different_iteration_patterns"><a class="anchor" href="#_what_if_we_want_to_have_different_iteration_patterns"></a>2.3. What if we want to have different iteration patterns?</h3>
+<div class="paragraph">
+<p>Then you have a problem. since the node describes how to iterate, you have no influence and stop iteration at a point or change the order. So maybe we should change this a little to this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">interface Visitor {
+    void visit(NodeType1 n1)
+    void visit(NodeType2 n2)
+}
+
+class DefaultVisitor implements Visitor{
+    void visit(NodeType1 n1) {
+        for(int i = 0; i &lt; n1.children.length; ++i) {
+            n1.children[i].accept(this)
+        }
+    }
+    void visit(NodeType2 n2) {
+        for(int i = 0; i &lt; n2.children.length; ++i) {
+            n2.children[i].accept(this)
+        }
+    }
+}
+
+interface Visitable {
+    void accept(Visitor visitor)
+}
+
+class NodeType1 implements Visitable {
+    Visitable[] children = new Visitable[0]
+    void accept(Visitor visitor) {
+        visitor.visit(this)
+    }
+}
+
+class NodeType2 implements Visitable {
+    Visitable[] children = new Visitable[0];
+    void accept(Visitor visitor) {
+        visitor.visit(this)
+    }
+}
+
+class NodeType1Counter extends DefaultVisitor {
+    int count = 0
+    void visit(NodeType1 n1) {
+        count++
+        super.visit(n1)
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Some small changes but with big effect&#8230;&#8203; the visitor is now recursive and tells me how to iterate. The implementation in the Nodes is minimized to <code>visitor.visit(this)</code>, <code>DefaultVisitor</code> is now able to catch the new types, we can stop iteration by not delegating to super. Of course the big disadvantage now is that it is no longer iterative, but you can&#8217;t get all the benefits.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_make_it_groovy"><a class="anchor" href="#_make_it_groovy"></a>2.4. Make it Groovy</h3>
+<div class="paragraph">
+<p>The question now is how to make that a bit more Groovy. Didn&#8217;t you find this <code>visitor.visit(this)</code> strange? Why is it there? The answer is to simulate double dispatch. In Java the compile time type is used, so when I <code>visitor.visit(children[i])</code> then the compiler won&#8217;t be able to find the correct method, because <code>Visitor</code> does not contain a method <code>visit(Visitable)</code>. And even if it would, we would like to visit the more special methods with <code>NodeType1</code> or <code>NodeType2</code>.</p>
+</div>
+<div class="paragraph">
+<p>Now Groovy is not using the static type, Groovy uses the runtime type. This means I could do <code>visitor.visit(children[i])</code> directly. Hmm.. since we minimized the accept method to just do the double dispatch part and since the runtime type system of Groovy will already cover that.. do we need the accept method? I think you can guess that I would answer no. But we can do more. We had the disadvantage of not knowing how to handle unknown tree elements. We had to extends the interface <code>Visitor</code> for that, resulting in changes to <code>DefaultVisitor</code> and then we have the task to provide a useful default like iterating the node or not doing anything at all. Now with Groovy we can catch that case by adding a <code>visit(Visitable)</code> method that does nothing. That would be the same in Java btw.</p>
+</div>
+<div class="paragraph">
+<p>But don&#8217;t let us stop here&#8230;&#8203; do we need the <code>Visitor</code> interface? If we don&#8217;t have the accept method, then we don&#8217;t need the <code>Visitor</code> interface at all. So the new code would be:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class DefaultVisitor {
+    void visit(NodeType1 n1) {
+        n1.children.each { visit(it) }
+    }
+    void visit(NodeType2 n2) {
+        n2.children.each { visit(it) }
+    }
+    void visit(Visitable v) { }
+}
+
+interface Visitable { }
+
+class NodeType1 implements Visitable {
+    Visitable[] children = []
+}
+
+class NodeType2 implements Visitable {
+    Visitable[] children = []
+}
+
+class NodeType1Counter extends DefaultVisitor {
+    int count = 0
+    void visit(NodeType1 n1) {
+        count++
+        super.visit(n1)
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Looks like we saved a few lines of code here. But we made more. The <code>Visitable</code> nodes now do not refer to any <code>Visitor</code> class or interface. For me this is the best level of separation you could get here. But do we really need to stop here? No. Let us change the <code>Visitable</code> interface a little and let it return the children we want to visit next. This allows us a general iteration method.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class DefaultVisitor {
+    void visit(Visitable v) {
+        doIteraton(v)
+    }
+    void doIteraton(Visitable v) {
+        v.children.each {
+            visit(it)
+        }
+    }
+}
+
+interface Visitable {
+    Visitable[] getChildren()
+}
+
+class NodeType1 implements Visitable {
+    Visitable[] children = []
+}
+
+class NodeType2 implements Visitable {
+    Visitable[] children = []
+}
+
+class NodeType1Counter extends DefaultVisitor {
+    int count = 0
+    void visit(NodeType1 n1) {
+        count++
+        super.visit(n1)
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>DefaultVisitor</code> now looks a bit different. I added a <code>doIteration</code> method that will get the children it should iterate over and then call visit on each element. Per default this will call <code>visit(Visitable)</code> which then iterates over the children of this child. I changed <code>Visitable</code> to ensure that any node will be able to return children (even if empty). I didn&#8217;t have to change the <code>NodeType1</code> and <code>NodeType2</code> class, because the way the children filed was defined already made them a property, which means Groovy is so nice to generate a get method for us. No the really interesting part is <code>NodeType1Counter</code>, it is interesting because we have not changed it. <code>super.visit(n1)</code> will now call <code>visit(Visitable)</code> which will call <code>doIteration</code> which will start the next level of iteration. So no change. But <code>visit(it)</code> will call <code>visit(NodeType1)</code> if it is of type <code>NodeType1</code>. In fact we don&#8217;t need the <code>doIteration</code> method, we could do that in <code>visit(Visitable)</code> too, but I thought this variant is better, because it allows us to write a new <code>Visitor</code> that overwrites visit(<code>Visitable</code>) for error cases which of course means we must not do <code>super.visit(n1)</code> but <code>doIteration(n1)</code>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_summary"><a class="anchor" href="#_summary"></a>2.5. Summary</h3>
+<div class="paragraph">
+<p>In the end we got ~40% less code, a robust and stable architecture and we completely removed the Visitor from the Visitable. I heard about visitor implementations based on Reflection to get a more generic version. Well, with this you see there is really no need to do such thing. If we add new types we don&#8217;t need to change anything. It is said that the visitor pattern doesn&#8217;t fit extreme programming techniques very well because you need to make changes to so many classes all the time. I think I proved that this is because of Java not because the pattern is bad or something.</p>
+</div>
+<div class="paragraph">
+<p>There are variants of the Visitor pattern, like the acyclic visitor pattern, that tries to solve the problem of adding new node types with special visitors. I don&#8217;t like that very much, it works with casts, catches the <code>ClassCastException</code> and other nasty things. In the end it tries to solve something we don&#8217;t even get with the Groovy version.</p>
+</div>
+<div class="paragraph">
+<p>One more thing. <code>NodeType1Counter</code> could be implemented in Java as well. Groovy will recognize the visit methods and call them as needed because <code>DefaultVisitor</code> is still Groovy and does all the magic.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_further_information"><a class="anchor" href="#_further_information"></a>3. Further Information</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="http://se.ethz.ch/~meyer/publications/computer/visitor.pdf">Componentization: the Visitor example</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 3.0.0-alpha-3<br>
+Last updated 2018-06-23 13:44:42 AEST
+</div>
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+<script>prettyPrint()</script>
+</body>
+</html>

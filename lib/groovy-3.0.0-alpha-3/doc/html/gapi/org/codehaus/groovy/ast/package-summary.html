@@ -1,0 +1,414 @@
+<!--
+
+     Licensed to the Apache Software Foundation (ASF) under one
+     or more contributor license agreements.  See the NOTICE file
+     distributed with this work for additional information
+     regarding copyright ownership.  The ASF licenses this file
+     to you under the Apache License, Version 2.0 (the
+     "License"); you may not use this file except in compliance
+     with the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing,
+     software distributed under the License is distributed on an
+     "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+     specific language governing permissions and limitations
+     under the License.
+
+-->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+
+<title>org.codehaus.groovy.ast (groovy 3.0.0-alpha-3 API)</title>
+<meta name="keywords" content="org.codehaus.groovy.ast package">
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<link rel ="stylesheet" TYPE="text/css" HREF="../../../../stylesheet.css" title="Style">
+<link href="../../../../groovy.ico" type="image/x-icon" rel="shortcut icon">
+<link href="../../../../groovy.ico" type="image/x-icon" rel="icon">
+<script type="text/javascript">
+function windowTitle()
+{
+    parent.document.title="org.codehaus.groovy.ast (groovy 3.0.0-alpha-3 API)";
+}
+</script>
+<noscript>
+</noscript>
+
+</head>
+
+<body class="center" onload="windowTitle();">
+
+<!-- ========= START OF TOP NAVBAR ======= -->
+<div class="topNav"><a name="navbar_top">
+    <!--   -->
+</a><a href="#skip-navbar_top" title="Skip navigation links"></a><a name="navbar_top_firstrow">
+    <!--   -->
+</a>
+<a name="navbar_top_firstrow"><!-- --></a>
+<ul class="navList" title="Navigation">
+    <li><a href="../../../../overview-summary.html">Overview</a></li>
+    <li class="navBarCell1Rev">Package</li>
+    <li>Class</li>
+    <li><a href="../../../../deprecated-list.html">Deprecated</a></li>
+    <li><a href="../../../../index-all.html">Index</a></li>
+    <li><a href="../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+
+<div class="subNav">
+    <ul class="navList">
+        <li><a href="../../../../index.html?org/codehaus/groovy/ast/package-summary.html" target="_top">Frames</a></li>
+        <li><a href="package-summary.html" target="_top">No Frames</a></li>
+    </ul>
+</div>
+
+<!-- ========= END OF TOP NAVBAR ========= -->
+
+<div class="header">
+    <h1 class="title">Package org.codehaus.groovy.ast</h1>
+</div>
+
+
+<h2 title="Package org.codehaus.groovy.ast Description" class="title">Package org.codehaus.groovy.ast Description</h2>
+<div class="header">Groovy AST nodes for the syntax of the language</div>
+
+
+<div class="contentContainer">
+
+
+    <div class="summary">
+        <ul class="blockList">
+            <li class="blockList">
+                <table border="0" cellpadding="3" cellspacing="0" summary="Interface Summary">
+                    <caption><span>Interface Summary</span><span class="tabEnd">&nbsp;</span></caption>
+                    <tbody>
+                    <tr>
+                        <th class="colFirst" scope="col">Interface</th>
+                        <th class="colLast" scope="col">Description</th>
+                    </tr>
+<tr class="altColor">
+                            <td class="colOne">
+                                <strong><a href="GroovyClassVisitor.html" title="class in org/codehaus/groovy/ast">
+                                    GroovyClassVisitor
+                                </a></strong>
+                            </td>
+                            <td>A special visitor for working with the structure of a class. </td>
+                        </tr>
+<tr class="altColor">
+                            <td class="colOne">
+                                <strong><a href="Variable.html" title="class in org/codehaus/groovy/ast">
+                                    Variable
+                                </a></strong>
+                            </td>
+                            <td>interface to mark a AstNode as Variable. </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </li>
+            </ul>
+        </div>
+    
+
+
+
+    <div class="summary">
+        <ul class="blockList">
+            <li class="blockList">
+                <table border="0" cellpadding="3" cellspacing="0" summary="Class Summary">
+                    <caption><span>Class Summary</span><span class="tabEnd">&nbsp;</span></caption>
+                    <tbody>
+                    <tr>
+                        <th class="colFirst" scope="col">Class</th>
+                        <th class="colLast" scope="col">Description</th>
+                    </tr>
+<tr class="altColor">
+                            <td class="colOne">
+                                <strong><a href="ASTNode.html" title="class in org/codehaus/groovy/ast">
+                                    ASTNode
+                                </a></strong>
+                            </td>
+                            <td>Base class for any AST node. </td>
+                        </tr>
+<tr class="altColor">
+                            <td class="colOne">
+                                <strong><a href="AnnotatedNode.html" title="class in org/codehaus/groovy/ast">
+                                    AnnotatedNode
+                                </a></strong>
+                            </td>
+                            <td>Base class for any AST node which is capable of being annotated</td>
+                        </tr>
+<tr class="altColor">
+                            <td class="colOne">
+                                <strong><a href="AnnotationNode.html" title="class in org/codehaus/groovy/ast">
+                                    AnnotationNode
+                                </a></strong>
+                            </td>
+                            <td>Represents an annotation which can be attached to interfaces, classes, methods and fields.</td>
+                        </tr>
+<tr class="altColor">
+                            <td class="colOne">
+                                <strong><a href="AstToTextHelper.html" title="class in org/codehaus/groovy/ast">
+                                    AstToTextHelper
+                                </a></strong>
+                            </td>
+                            <td>Helper class for converting AST into text.</td>
+                        </tr>
+<tr class="altColor">
+                            <td class="colOne">
+                                <strong><a href="ClassCodeExpressionTransformer.html" title="class in org/codehaus/groovy/ast">
+                                    ClassCodeExpressionTransformer
+                                </a></strong>
+                            </td>
+                            <td>Visitor to transform expressions in a whole class.
+ </td>
+                        </tr>
+<tr class="altColor">
+                            <td class="colOne">
+                                <strong><a href="ClassCodeVisitorSupport.html" title="class in org/codehaus/groovy/ast">
+                                    ClassCodeVisitorSupport
+                                </a></strong>
+                            </td>
+                            <td></td>
+                        </tr>
+<tr class="altColor">
+                            <td class="colOne">
+                                <strong><a href="ClassHelper.html" title="class in org/codehaus/groovy/ast">
+                                    ClassHelper
+                                </a></strong>
+                            </td>
+                            <td>This class is a Helper for ClassNode and classes handling ClassNodes.
+ </td>
+                        </tr>
+<tr class="altColor">
+                            <td class="colOne">
+                                <strong><a href="ClassNode.html" title="class in org/codehaus/groovy/ast">
+                                    ClassNode
+                                </a></strong>
+                            </td>
+                            <td>Represents a class in the AST.</td>
+                        </tr>
+<tr class="altColor">
+                            <td class="colOne">
+                                <strong><a href="CodeVisitorSupport.html" title="class in org/codehaus/groovy/ast">
+                                    CodeVisitorSupport
+                                </a></strong>
+                            </td>
+                            <td>Abstract base class for any GroovyCodeVisitor which by default
+ just walks the code and expression tree</td>
+                        </tr>
+<tr class="altColor">
+                            <td class="colOne">
+                                <strong><a href="CompileUnit.html" title="class in org/codehaus/groovy/ast">
+                                    CompileUnit
+                                </a></strong>
+                            </td>
+                            <td>Represents the entire contents of a compilation step which consists of one or more
+ <a href='../../../../org/codehaus/groovy/ast/ModuleNode.html' title='ModuleNode'>ModuleNode</a> instances. </td>
+                        </tr>
+<tr class="altColor">
+                            <td class="colOne">
+                                <strong><a href="ConstructorNode.html" title="class in org/codehaus/groovy/ast">
+                                    ConstructorNode
+                                </a></strong>
+                            </td>
+                            <td>Represents a constructor declaration</td>
+                        </tr>
+<tr class="altColor">
+                            <td class="colOne">
+                                <strong><a href="DynamicVariable.html" title="class in org/codehaus/groovy/ast">
+                                    DynamicVariable
+                                </a></strong>
+                            </td>
+                            <td></td>
+                        </tr>
+<tr class="altColor">
+                            <td class="colOne">
+                                <strong><a href="EnumConstantClassNode.html" title="class in org/codehaus/groovy/ast">
+                                    EnumConstantClassNode
+                                </a></strong>
+                            </td>
+                            <td>Represents the anonymous inner class for an enum constant
+ This subtype is needed so that EnumVisitor can differentiate between the scenarios when a InnerClassNode
+ represents anonymous inner class for an enu constant and when it represents an enum class defined inside
+ another class</td>
+                        </tr>
+<tr class="altColor">
+                            <td class="colOne">
+                                <strong><a href="FieldNode.html" title="class in org/codehaus/groovy/ast">
+                                    FieldNode
+                                </a></strong>
+                            </td>
+                            <td>Represents a field (member variable)</td>
+                        </tr>
+<tr class="altColor">
+                            <td class="colOne">
+                                <strong><a href="GenericsType.html" title="class in org/codehaus/groovy/ast">
+                                    GenericsType
+                                </a></strong>
+                            </td>
+                            <td>This class is used to describe generic type signatures for ClassNodes.</td>
+                        </tr>
+<tr class="altColor">
+                            <td class="colOne">
+                                <strong><a href="ImportNode.html" title="class in org/codehaus/groovy/ast">
+                                    ImportNode
+                                </a></strong>
+                            </td>
+                            <td>Represents an import statement of a single class</td>
+                        </tr>
+<tr class="altColor">
+                            <td class="colOne">
+                                <strong><a href="InnerClassNode.html" title="class in org/codehaus/groovy/ast">
+                                    InnerClassNode
+                                </a></strong>
+                            </td>
+                            <td>Represents an inner class declaration</td>
+                        </tr>
+<tr class="altColor">
+                            <td class="colOne">
+                                <strong><a href="InterfaceHelperClassNode.html" title="class in org/codehaus/groovy/ast">
+                                    InterfaceHelperClassNode
+                                </a></strong>
+                            </td>
+                            <td>Represents an inner class defined as helper for an interface</td>
+                        </tr>
+<tr class="altColor">
+                            <td class="colOne">
+                                <strong><a href="MethodCallTransformation.html" title="class in org/codehaus/groovy/ast">
+                                    MethodCallTransformation
+                                </a></strong>
+                            </td>
+                            <td>@author Hamlet D'Arcy</td>
+                        </tr>
+<tr class="altColor">
+                            <td class="colOne">
+                                <strong><a href="MethodInvocationTrap.html" title="class in org/codehaus/groovy/ast">
+                                    MethodInvocationTrap
+                                </a></strong>
+                            </td>
+                            <td>@author Hamlet D'Arcy</td>
+                        </tr>
+<tr class="altColor">
+                            <td class="colOne">
+                                <strong><a href="MethodNode.html" title="class in org/codehaus/groovy/ast">
+                                    MethodNode
+                                </a></strong>
+                            </td>
+                            <td>Represents a method declaration</td>
+                        </tr>
+<tr class="altColor">
+                            <td class="colOne">
+                                <strong><a href="MixinASTTransformation.html" title="class in org/codehaus/groovy/ast">
+                                    MixinASTTransformation
+                                </a></strong>
+                            </td>
+                            <td>@deprecated static mixins have been deprecated in favour of traits (trait keyword).</td>
+                        </tr>
+<tr class="altColor">
+                            <td class="colOne">
+                                <strong><a href="MixinNode.html" title="class in org/codehaus/groovy/ast">
+                                    MixinNode
+                                </a></strong>
+                            </td>
+                            <td>Represents a mixin which can be applied to any ClassNode to implement mixins</td>
+                        </tr>
+<tr class="altColor">
+                            <td class="colOne">
+                                <strong><a href="ModuleNode.html" title="class in org/codehaus/groovy/ast">
+                                    ModuleNode
+                                </a></strong>
+                            </td>
+                            <td>Represents a module, which consists typically of a class declaration
+ but could include some imports, some statements and multiple classes
+ intermixed with statements like scripts in Python or Ruby</td>
+                        </tr>
+<tr class="altColor">
+                            <td class="colOne">
+                                <strong><a href="PackageNode.html" title="class in org/codehaus/groovy/ast">
+                                    PackageNode
+                                </a></strong>
+                            </td>
+                            <td>Represents a package in the AST.</td>
+                        </tr>
+<tr class="altColor">
+                            <td class="colOne">
+                                <strong><a href="Parameter.html" title="class in org/codehaus/groovy/ast">
+                                    Parameter
+                                </a></strong>
+                            </td>
+                            <td>Represents a parameter on a constructor or method call. </td>
+                        </tr>
+<tr class="altColor">
+                            <td class="colOne">
+                                <strong><a href="PropertyNode.html" title="class in org/codehaus/groovy/ast">
+                                    PropertyNode
+                                </a></strong>
+                            </td>
+                            <td>Represents a property (member variable, a getter and setter)</td>
+                        </tr>
+<tr class="altColor">
+                            <td class="colOne">
+                                <strong><a href="TransformingCodeVisitor.html" title="class in org/codehaus/groovy/ast">
+                                    TransformingCodeVisitor
+                                </a></strong>
+                            </td>
+                            <td></td>
+                        </tr>
+<tr class="altColor">
+                            <td class="colOne">
+                                <strong><a href="VariableScope.html" title="class in org/codehaus/groovy/ast">
+                                    VariableScope
+                                </a></strong>
+                            </td>
+                            <td>Represents a variable scope. </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </li>
+            </ul>
+        </div>
+    
+
+
+
+
+
+
+</div>
+
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<div class="bottomNav"><a name="navbar_bottom">
+    <!--   -->
+</a><a href="#skip-navbar_bottom" title="Skip navigation links"></a><a name="navbar_bottom_firstrow">
+    <!--   -->
+</a>
+    <ul class="navList" title="Navigation">
+        <li><a href="overview-summary.html">Overview</a></li>
+        <li class="navBarCell1Rev">Package</li>
+        <li>Class</li>
+        <li><a href="deprecated-list.html">Deprecated</a></li>
+        <li><a href="index-all.html">Index</a></li>
+        <li><a href="help-doc.html">Help</a></li>
+    </ul>
+</div>
+<div class="subNav">
+    <div>
+        <ul class="navList">
+            <li><a href="index.html?deprecated-list.html" target="_top">Frames</a></li>
+            <li><a href="deprecated-list.html" target="_top">No Frames</a></li>
+        </ul>
+    </div>
+
+    <div class="aboutLanguage"><em>Copyright &copy; 2003-2018 The Apache Software Foundation. All rights reserved.</em></div>
+    <a name="skip-navbar_bottom">
+        <!--   -->
+    </a></div>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+
+</body>
+</html>

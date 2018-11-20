@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.6.1">
+<title>Groovy style and language feature guidelines for Java developers</title>
+<link rel="stylesheet" href="./assets/css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+<h1>Groovy style and language feature guidelines for Java developers</h1>
+<div class="details">
+<span id="revnumber">version 3.0.0-alpha-3</span>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_no_semicolons">1. No semicolons</a></li>
+<li><a href="#_return_keyword_optional">2. Return keyword optional</a></li>
+<li><a href="#_def_and_type">3. Def and type</a></li>
+<li><a href="#_public_by_default">4. Public by default</a></li>
+<li><a href="#_omitting_parentheses">5. Omitting parentheses</a></li>
+<li><a href="#_classes_as_first_class_citizens">6. Classes as first-class citizens</a></li>
+<li><a href="#_getters_and_setters">7. Getters and Setters</a></li>
+<li><a href="#_initializing_beans_with_named_parameters_and_the_default_constructor">8. Initializing beans with named parameters and the default constructor</a></li>
+<li><a href="#_using_code_with_code_and_code_tap_code_for_repeated_operations_on_the_same_bean">9. Using <code>with()</code> and <code>tap()</code> for repeated operations on the same bean</a></li>
+<li><a href="#_equals_and_code_code">10. Equals and <code>==</code></a></li>
+<li><a href="#_gstrings_interpolation_multiline">11. GStrings (interpolation, multiline)</a></li>
+<li><a href="#_native_syntax_for_data_structures">12. Native syntax for data structures</a></li>
+<li><a href="#_the_groovy_development_kit">13. The Groovy Development Kit</a></li>
+<li><a href="#_the_power_of_switch">14. The power of switch</a></li>
+<li><a href="#_import_aliasing">15. Import aliasing</a></li>
+<li><a href="#_groovy_truth">16. Groovy Truth</a></li>
+<li><a href="#_safe_graph_navigation">17. Safe graph navigation</a></li>
+<li><a href="#_assert">18. Assert</a></li>
+<li><a href="#_elvis_operator_for_default_values">19. Elvis operator for default values</a></li>
+<li><a href="#_catch_any_exception">20. Catch any exception</a></li>
+<li><a href="#_optional_typing_advice">21. Optional typing advice</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>A Java developer embarking on a Groovy adventure will always have Java in mind, and will progressively learn Groovy,
+one feature at a time, becoming more productive and writing more idiomatic Groovy code.
+This document&#8217;s purpose is to guide such a developer along the way, teaching some common Groovy syntax style,
+new operators, and new features like closures, etc.
+This guide is not complete and only serves as a quick intro and a base for further guideline sections
+should you feel like contributing to the document and enhancing it.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_no_semicolons"><a class="anchor" href="#_no_semicolons"></a>1. No semicolons</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>When coming from a C / C++ / C# / Java background, we&#8217;re so used to semicolons, that we put them everywhere.
+Even worse, Groovy supports 99% of Java&#8217;s syntax, and sometimes,
+it&#8217;s so easy to paste some Java code into your Groovy programs, that you end up with tons of semicolons everywhere.
+But&#8230;&#8203; semicolons are optional in Groovy, you can omit them, and it&#8217;s more idiomatic to remove them.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_return_keyword_optional"><a class="anchor" href="#_return_keyword_optional"></a>2. Return keyword optional</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In Groovy, the last expression evaluated in the body of a method can be returned without necessitating the <code>return</code> keyword.
+Especially for short methods and for closures, it&#8217;s nicer to omit it for brevity:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">String toString() { return "a server" }
+String toString() { "a server" }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>But sometimes, this doesn&#8217;t look too good when you&#8217;re using a variable, and see it visually twice on two rows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def props() {
+    def m1 = [a: 1, b: 2]
+    m2 = m1.findAll { k, v -&gt; v % 2 == 0 }
+    m2.c = 3
+    m2
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In such case, either putting a newline before the last expression, or explicitly using <code>return</code> may yield better readability.</p>
+</div>
+<div class="paragraph">
+<p>I, for myself, sometimes use the <code>return</code> keyword, sometimes not, it&#8217;s often a matter of taste.
+But often, inside of closure, we omit it more often than not, for example. So even if the keyword is optional,
+this is by no means mandatory to not use it if you think it halters the readability of your code.</p>
+</div>
+<div class="paragraph">
+<p>A word of caution, however. When using methods which are defined with the <code>def</code> keyword instead of a specific concrete type,
+you may be surprised to see the last expression being returned sometimes. So usually prefer using a specific return type like void or a type.
+In our example above, imagine we forgot to put m2 as last statement to be returned,
+the last expression would be <code>m2.c = 3</code>, which would return&#8230;&#8203; <code>3</code>, and not the map you expect.</p>
+</div>
+<div class="paragraph">
+<p>Statements like <code>if</code>/<code>else</code>, <code>try</code>/<code>catch</code> can thus return a value as well, as there&#8217;s a "last expression" evaluated in those statements:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def foo(n) {
+    if(n == 1) {
+        "Roshan"
+    } else {
+        "Dawrani"
+    }
+}
+
+assert foo(1) == "Roshan"
+assert foo(2) == "Dawrani"</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_def_and_type"><a class="anchor" href="#_def_and_type"></a>3. Def and type</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>As we&#8217;re talking about <code>def</code> and types, I often see developers using both <code>def</code> and a type. But <code>def</code> is redundant here.
+So make a choice, either use <code>def</code> or a type.</p>
+</div>
+<div class="paragraph">
+<p>So don&#8217;t write:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def String name = "Guillaume"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>But:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">String name = "Guillaume"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When using <code>def</code> in Groovy, the actual type holder is <code>Object</code> (so you can assign any object to variables defined with <code>def</code>,
+and return any kind of object if a method is declared returning <code>def</code>).</p>
+</div>
+<div class="paragraph">
+<p>When defining a method with untyped parameters, you can use <code>def</code> but it&#8217;s not needed, so we tend to omit them.
+So instead of:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">void doSomething(def param1, def param2) { }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Prefer:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">void doSomething(param1, param2) { }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>But as we mention in the last section of the document, it&#8217;s usually better to type your method parameters,
+so as to help with documenting your code, and also help IDEs for code-completion,
+or for leveraging the static type checking or static compilation capabilities of Groovy.</p>
+</div>
+<div class="paragraph">
+<p>Another place where <code>def</code> is redundant and should be avoided is when defining constructors:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class MyClass {
+    def MyClass() {}
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Instead, just remove the <code>def</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class MyClass {
+    MyClass() {}
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_public_by_default"><a class="anchor" href="#_public_by_default"></a>4. Public by default</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>By default, Groovy considers classes and methods <code>public</code>.
+So you don&#8217;t have to use the <code>public</code> modifier everywhere something is public.
+Only if it&#8217;s not public, you should put a visibility modifier.</p>
+</div>
+<div class="paragraph">
+<p>So instead of:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">public class Server {
+    public String toString() { return "a server" }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Prefer the more concise:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Server {
+    String toString() { "a server" }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You may wonder about the 'package-scope' visibility,
+and the fact Groovy allows one to omit 'public' means that this scope is not supported by default,
+but there&#8217;s actually a special Groovy annotation which allows you to use that visibility:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Server {
+    @PackageScope Cluster cluster
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_omitting_parentheses"><a class="anchor" href="#_omitting_parentheses"></a>5. Omitting parentheses</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Groovy allows you to omit the parentheses for top-level expressions, like with the <code>println</code> command:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">println "Hello"
+method a, b</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>vs:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">println("Hello")
+method(a, b)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When a closure is the last parameter of a method call, like when using Groovy&#8217;s <code>each{}</code> iteration mechanism,
+you can put the closure outside the closing parentheses, and even omit the parentheses:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">list.each( { println it } )
+list.each(){ println it }
+list.each  { println it }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Always prefer the third form, which is more natural, as an empty pair of parentheses is just useless syntactical noise!</p>
+</div>
+<div class="paragraph">
+<p>In some cases parentheses are required, such as when making nested method calls or when calling a method without parameters.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def foo(n) { n }
+def bar() { 1 }
+
+println foo 1 // won't work
+def m = bar   // won't work</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_classes_as_first_class_citizens"><a class="anchor" href="#_classes_as_first_class_citizens"></a>6. Classes as first-class citizens</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>.class</code> suffix is not needed in Groovy, a bit like in Java&#8217;s <code>instanceof</code>.</p>
+</div>
+<div class="paragraph">
+<p>For example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">connection.doPost(BASE_URI + "/modify.hqu", params, ResourcesResponse.class)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Using GStrings we&#8217;re going to cover below, and using first class citizens:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">connection.doPost("${BASE_URI}/modify.hqu", params, ResourcesResponse)</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_getters_and_setters"><a class="anchor" href="#_getters_and_setters"></a>7. Getters and Setters</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In Groovy, a getters and setters form what we call a "property",
+and offers a shortcut notation for accessing and setting such properties.
+So instead of the Java-way of calling getters / setters, you can use a field-like access notation:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">resourceGroup.getResourcePrototype().getName() == SERVER_TYPE_NAME
+resourceGroup.resourcePrototype.name == SERVER_TYPE_NAME
+
+resourcePrototype.setName("something")
+resourcePrototype.name = "something"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When writing your beans in Groovy, often called POGOs (Plain Old Groovy Objects),
+you don&#8217;t have to create the field and getter / setter yourself, but let the Groovy compiler do it for you.</p>
+</div>
+<div class="paragraph">
+<p>So instead of:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Person {
+    private String name
+    String getName() { return name }
+    void setName(String name) { this.name = name }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can simply write:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Person {
+    String name
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As you can see, a free standing 'field' without modifier visibility actually
+makes the Groovy compiler to generate a private field and a getter and setter for you.</p>
+</div>
+<div class="paragraph">
+<p>When using such POGOs from Java, the getter and setter are indeed there, and can be used as usual, of course.</p>
+</div>
+<div class="paragraph">
+<p>Although the compiler creates the usual getter/setter logic,
+if you wish to do anything additional or different in those getters/setters,
+you&#8217;re free to still provide them, and the compiler will use your logic, instead of the default generated one.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_initializing_beans_with_named_parameters_and_the_default_constructor"><a class="anchor" href="#_initializing_beans_with_named_parameters_and_the_default_constructor"></a>8. Initializing beans with named parameters and the default constructor</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>With a bean like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Server {
+    String name
+    Cluster cluster
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Instead of setting each setter in subsequent statements as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def server = new Server()
+server.name = "Obelix"
+server.cluster = aCluster</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can use named parameters with the default constructor (first the constructor is called, then the setters are called in the sequence in which they are specified in the map):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def server = new Server(name: "Obelix", cluster: aCluster)</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_using_code_with_code_and_code_tap_code_for_repeated_operations_on_the_same_bean"><a class="anchor" href="#_using_code_with_code_and_code_tap_code_for_repeated_operations_on_the_same_bean"></a>9. Using <code>with()</code> and <code>tap()</code> for repeated operations on the same bean</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Named-parameters with the default constructor is interesting when creating new instances,
+but what if you are updating an instance that was given to you, do you have to repeat the 'server' prefix again and again?
+No, thanks to the <code>with()</code> and <code>tap()</code> methods that Groovy adds on all objects of any kind:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">server.name = application.name
+server.status = status
+server.sessionCount = 3
+server.start()
+server.stop()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>vs:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">server.with {
+    name = application.name
+    status = status
+    sessionCount = 3
+    start()
+    stop()
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As with any closure in Groovy, the last statement is considered the return value.  In the example above this is the result of <code>stop()</code>.  To use this as a builder, that just returns the incoming object, there is also <code>tap()</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def person = new Person().with {
+    name = "Ada Lovelace"
+    it // Note the explicit mention of it as the return value
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>vs:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def person = new Person().tap {
+    name = "Ada Lovelace"
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note: you can also use <code>with(true)</code> instead of <code>tap()</code> and <code>with(false)</code> instead of <code>with()</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_equals_and_code_code"><a class="anchor" href="#_equals_and_code_code"></a>10. Equals and <code>==</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Java&#8217;s <code>==</code> is actually Groovy&#8217;s <code>is()</code> method, and Groovy&#8217;s <code>==</code> is a clever <code>equals()</code>!</p>
+</div>
+<div class="paragraph">
+<p>To compare the references of objects, instead of <code>==</code>, you should use <code>a.is(b)</code>.</p>
+</div>
+<div class="paragraph">
+<p>But to do the usual <code>equals()</code> comparison, you should prefer Groovy&#8217;s <code>==</code>,
+as it also takes care of avoiding <code>NullPointerException</code>, independently of whether the left or right is <code>null</code> or not.</p>
+</div>
+<div class="paragraph">
+<p>Instead of:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">status != null &amp;&amp; status.equals(ControlConstants.STATUS_COMPLETED)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Do:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">status == ControlConstants.STATUS_COMPLETED</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_gstrings_interpolation_multiline"><a class="anchor" href="#_gstrings_interpolation_multiline"></a>11. GStrings (interpolation, multiline)</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>We often use string and variable concatenation in Java, with many opening <code>/</code> closing of double quotes, plus signs,
+and <code>\n</code> characters for newlines.
+ With interpolated strings (called GStrings), such strings look better and are less painful to type:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">throw new Exception("Unable to convert resource: " + resource)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>vs:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">throw new Exception("Unable to convert resource: ${resource}")</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Inside the curly braces, you can put any kind of expression, not just variables.
+For simple variables, or <code>variable.property</code>, you can even drop the curly braces:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">throw new Exception("Unable to convert resource: $resource")</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can even lazily evaluate those expressions using a closure notation with <code>${-&gt; resource }</code>.
+When the GString will be coerced to a String, it&#8217;ll evaluate the closure and get the <code>toString()</code> representation of the return value.</p>
+</div>
+<div class="paragraph">
+<p>Example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">int i = 3
+
+def s1 = "i's value is: ${i}"
+def s2 = "i's value is: ${-&gt; i}"
+
+i++
+
+assert s1 == "i's value is: 3" // eagerly evaluated, takes the value on creation
+assert s2 == "i's value is: 4" // lazily evaluated, takes the new value into account</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When strings and their concatenated expression are long in Java:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">throw new PluginException("Failed to execute command list-applications:" +
+    " The group with name " +
+    parameterMap.groupname[0] +
+    " is not compatible group of type " +
+    SERVER_TYPE_NAME)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can use the <code>\</code> continuation character (this is not a multiline string):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">throw new PluginException("Failed to execute command list-applications: \
+The group with name ${parameterMap.groupname[0]} \
+is not compatible group of type ${SERVER_TYPE_NAME}")</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Or using multiline strings with triple quotes:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">throw new PluginException("""Failed to execute command list-applications:
+    The group with name ${parameterMap.groupname[0]}
+    is not compatible group of type ${SERVER_TYPE_NAME)}""")</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can also strip the indentation appearing on the left side of the multiline strings by calling <code>.stripIndent()</code> on that string.</p>
+</div>
+<div class="paragraph">
+<p>Also note the difference between single quotes and double quotes in Groovy: single quotes always create Java Strings,
+without interpolation of variables, whereas double quotes either create Java Strings or GStrings when interpolated variables are present.</p>
+</div>
+<div class="paragraph">
+<p>For multiline strings, you can triple the quotes: i.e. triple double quotes for GStrings and triple single quotes for mere Strings.</p>
+</div>
+<div class="paragraph">
+<p>If you need to write regular expression patterns, you should use the "slashy" string notation:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">assert "foooo/baaaaar" ==~ /fo+\/ba+r/</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The advantage of the "slashy" notation is that you don&#8217;t need to double escape backslashes, making working with regex a bit simpler.</p>
+</div>
+<div class="paragraph">
+<p>Last but not least, prefer using single quoted strings when you need string constants,
+and use double quoted strings when you are explicitly relying on string interpolation.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_native_syntax_for_data_structures"><a class="anchor" href="#_native_syntax_for_data_structures"></a>12. Native syntax for data structures</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Groovy provides native syntax constructs for data structures like lists, maps, regex, or ranges of values.
+Make sure to leverage them in your Groovy programs.</p>
+</div>
+<div class="paragraph">
+<p>Here are some examples of those native constructs:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def list = [1, 4, 6, 9]
+
+// by default, keys are Strings, no need to quote them
+// you can wrap keys with () like [(variableStateAcronym): stateName] to insert a variable or object as a key.
+def map = [CA: 'California', MI: 'Michigan']
+
+// ranges can be inclusive and exclusive
+def range = 10..20 // inclusive
+assert range.size() == 11
+// use brackets if you need to call a method on a range definition
+assert (10..&lt;20).size() == 10 // exclusive
+
+def pattern = ~/fo*/
+
+// equivalent to add()
+list &lt;&lt; 5
+
+// call contains()
+assert 4 in list
+assert 5 in list
+assert 15 in range
+
+// subscript notation
+assert list[1] == 4
+
+// add a new key value pair
+map &lt;&lt; [WA: 'Washington']
+// subscript notation
+assert map['CA'] == 'California'
+// property notation
+assert map.WA == 'Washington'
+
+// matches() strings against patterns
+assert 'foo' ==~ pattern</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_the_groovy_development_kit"><a class="anchor" href="#_the_groovy_development_kit"></a>13. The Groovy Development Kit</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Continuing on the data structures, when you need to iterate over collections,
+Groovy provides various additional methods, decorating Java&#8217;s core data structures,
+like <code>each{}</code>, <code>find{}</code>, <code>findAll{}</code>, <code>every{}</code>, <code>collect{}</code>, <code>inject{}</code>.
+These methods add a functional flavor to the programming language and help working with complex algorithms more easily.
+Lots of new methods are applied to various types, through decoration, thanks to the dynamic nature of the language.
+You can find lots of very useful methods on String, Files, Streams, Collections, and much more:</p>
+</div>
+<div class="paragraph">
+<p><a href="http://beta.groovy-lang.org/gdk.html" class="bare">http://beta.groovy-lang.org/gdk.html</a></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_the_power_of_switch"><a class="anchor" href="#_the_power_of_switch"></a>14. The power of switch</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Groovy&#8217;s <code>switch</code> is much more powerful than in C-ish languages which usually only accept primitives and assimilated.
+Groovy&#8217;s <code>switch</code> accepts pretty much any kind of type.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def x = 1.23
+def result = ""
+switch (x) {
+    case "foo": result = "found foo"
+    // lets fall through
+    case "bar": result += "bar"
+    case [4, 5, 6, 'inList']:
+        result = "list"
+        break
+    case 12..30:
+        result = "range"
+        break
+    case Integer:
+        result = "integer"
+        break
+    case Number:
+        result = "number"
+        break
+    case { it &gt; 3 }:
+        result = "number &gt; 3"
+        break
+    default: result = "default"
+}
+assert result == "number"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And more generally, types with an <code>isCase()</code> method can also decide whether a value corresponds with a case</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_import_aliasing"><a class="anchor" href="#_import_aliasing"></a>15. Import aliasing</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In Java, when using two classes of the same name but from different packages, like <code>java.util.List</code>
+and <code>java.awt.List</code>, you can import one class, but have to use a fully-qualified name for the other.</p>
+</div>
+<div class="paragraph">
+<p>Also sometimes, in your code, multiple usages of a long class name, can increase verbosity and
+reduce clarity of the code.</p>
+</div>
+<div class="paragraph">
+<p>To improve such situations, Groovy features import aliasing:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import java.util.List as UtilList
+import java.awt.List as AwtList
+import javax.swing.WindowConstants as WC
+
+UtilList list1 = [WC.EXIT_ON_CLOSE]
+assert list1.size() instanceof Integer
+def list2 = new AwtList()
+assert list2.size() instanceof java.awt.Dimension</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can also use aliasing when importing methods statically:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import static java.lang.Math.abs as mabs
+assert mabs(-4) == 4</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_groovy_truth"><a class="anchor" href="#_groovy_truth"></a>16. Groovy Truth</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>All objects can be 'coerced' to a boolean value: everything that&#8217;s <code>null</code>, <code>void</code>, equal to zero,
+or empty evaluates to <code>false</code>, and if not, evaluates to <code>true</code>.</p>
+</div>
+<div class="paragraph">
+<p>So instead of writing:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">if (name != null &amp;&amp; name.length &gt; 0) {}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can just do:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">if (name) {}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Same thing for collections, etc.</p>
+</div>
+<div class="paragraph">
+<p>Thus, you can use some shortcuts in things like <code>while()</code>, <code>if()</code>, the ternary operator, the Elvis operator (see below), etc.</p>
+</div>
+<div class="paragraph">
+<p>It&#8217;s even possible to customize the Groovy Truth, by adding an boolean <code>asBoolean()</code> method to your classes!</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_safe_graph_navigation"><a class="anchor" href="#_safe_graph_navigation"></a>17. Safe graph navigation</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Groovy supports a variant of the <code>.</code> operator to safely navigate an object graph.</p>
+</div>
+<div class="paragraph">
+<p>In Java, when you&#8217;re interested in a node deep in the graph and need to check for <code>null</code>,
+you often end up writing complex <code>if</code>, or nested <code>if</code> statements like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">if (order != null) {
+    if (order.getCustomer() != null) {
+        if (order.getCustomer().getAddress() != null) {
+            System.out.println(order.getCustomer().getAddress());
+        }
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>With <code>?.</code> safe dereference operator, you can simplify such code with:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">println order?.customer?.address</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Nulls are checked throughout the call chain and no <code>NullPointerException</code> will be thrown if any element is <code>null</code>,
+and the resulting value will be null if something&#8217;s <code>null</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_assert"><a class="anchor" href="#_assert"></a>18. Assert</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To check your parameters, your return values, and more, you can use the <code>assert</code> statement.</p>
+</div>
+<div class="paragraph">
+<p>Contrary to Java&#8217;s <code>assert</code>, `assert`s don&#8217;t need to be activated to be working, so `assert`s are always checked.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def check(String name) {
+    // name non-null and non-empty according to Groovy Truth
+    assert name
+    // safe navigation + Groovy Truth to check
+    assert name?.size() &gt; 3
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You&#8217;ll also notice the nice output that Groovy&#8217;s "Power Assert" statement provides,
+with a graph view of the various values of each sub-expressions being asserted.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_elvis_operator_for_default_values"><a class="anchor" href="#_elvis_operator_for_default_values"></a>19. Elvis operator for default values</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The Elvis operator is a special ternary operator shortcut which is handy to use for default values.</p>
+</div>
+<div class="paragraph">
+<p>We often have to write code like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def result = name != null ? name : "Unknown"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Thanks to Groovy Truth, the <code>null</code> check can be simplified to just 'name'.</p>
+</div>
+<div class="paragraph">
+<p>And to go even further, since you return 'name' anyway, instead of repeating name twice in this ternary expression,
+we can somehow remove what&#8217;s in between the question mark and colon, by using the Elvis operator, so that the above becomes:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def result = name ?: "Unknown"</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_catch_any_exception"><a class="anchor" href="#_catch_any_exception"></a>20. Catch any exception</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>If you don&#8217;t really care about the type of the exception which is thrown inside your <code>try</code> block,
+you can simply catch any of them and simply omit the type of the caught exception.
+So instead of catching the exceptions like in:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">try {
+    // ...
+} catch (Exception t) {
+    // something bad happens
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then catch anything ('any' or 'all', or whatever makes you think it&#8217;s anything):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">try {
+    // ...
+} catch (any) {
+    // something bad happens
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Note that it&#8217;s catching all Exceptions, not `Throwable`s. If you need to really catch "everything",
+you&#8217;ll have to be explicit and say you want to catch `Throwable`s.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_optional_typing_advice"><a class="anchor" href="#_optional_typing_advice"></a>21. Optional typing advice</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>I&#8217;ll finish on some words on when and how to use optional typing.
+Groovy lets you decide whether you use explicit strong typing, or when you use <code>def</code>.</p>
+</div>
+<div class="paragraph">
+<p>I&#8217;ve got a rather simple rule of thumb: whenever the code you&#8217;re writing is going to be used by others as a public API,
+you should always favor the use of strong typing, it helps making the contract stronger,
+avoids possible passed arguments type mistakes, gives better documentation, and also helps the IDE with code completion.
+Whenever the code is for your use only, like private methods,
+or when the IDE can easily infer the type, then you&#8217;re more free to decide when to type or not.</p>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 3.0.0-alpha-3<br>
+Last updated 2018-06-23 13:44:34 AEST
+</div>
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+<script>prettyPrint()</script>
+</body>
+</html>

@@ -1,0 +1,3958 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.6.1">
+<title>Domain-Specific Languages</title>
+<link rel="stylesheet" href="./assets/css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+<h1>Domain-Specific Languages</h1>
+<div class="details">
+<span id="revnumber">version 3.0.0-alpha-3</span>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_command_chains">1. Command chains</a></li>
+<li><a href="#_operator_overloading">2. Operator overloading</a></li>
+<li><a href="#_script_base_classes">3. Script base classes</a>
+<ul class="sectlevel2">
+<li><a href="#_the_script_class">3.1. The Script class</a></li>
+<li><a href="#dsl-basescript">3.2. The @BaseScript annotation</a></li>
+<li><a href="#_alternate_abstract_method">3.3. Alternate abstract method</a></li>
+</ul>
+</li>
+<li><a href="#_adding_properties_to_numbers">4. Adding properties to numbers</a></li>
+<li><a href="#section-delegatesto">5. @DelegatesTo</a>
+<ul class="sectlevel2">
+<li><a href="#TheDelegatesToannotation-DSLsmadeeasy">5.1. Explaining delegation strategy at compile time</a></li>
+<li><a href="#TheDelegatesToannotation-DelegatesTo">5.2. @DelegatesTo</a></li>
+<li><a href="#TheDelegatesToannotation-DelegatesTomodes">5.3. DelegatesTo modes</a>
+<ul class="sectlevel3">
+<li><a href="#TheDelegatesToannotation-Simpledelegation">5.3.1. Simple delegation</a></li>
+<li><a href="#TheDelegatesToannotation-Delegationstrategy">5.3.2. Delegation strategy</a></li>
+<li><a href="#TheDelegatesToannotation-Delegatetoparameter">5.3.3. Delegate to parameter</a></li>
+<li><a href="#TheDelegatesToannotation-Multipleclosures">5.3.4. Multiple closures</a></li>
+<li><a href="#_delegating_to_a_generic_type">5.3.5. Delegating to a generic type</a></li>
+<li><a href="#_delegating_to_an_arbitrary_type">5.3.6. Delegating to an arbitrary type</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#compilation-customizers">6. Compilation customizers</a>
+<ul class="sectlevel2">
+<li><a href="#_introduction">6.1. Introduction</a></li>
+<li><a href="#_import_customizer">6.2. Import customizer</a></li>
+<li><a href="#_ast_transformation_customizer">6.3. AST transformation customizer</a></li>
+<li><a href="#_secure_ast_customizer">6.4. Secure AST customizer</a></li>
+<li><a href="#_source_aware_customizer">6.5. Source aware customizer</a></li>
+<li><a href="#_customizer_builder">6.6. Customizer builder</a>
+<ul class="sectlevel3">
+<li><a href="#_import_customizer_2">6.6.1. Import customizer</a></li>
+<li><a href="#_ast_transformation_customizer_2">6.6.2. AST transformation customizer</a></li>
+<li><a href="#_secure_ast_customizer_2">6.6.3. Secure AST customizer</a></li>
+<li><a href="#_source_aware_customizer_2">6.6.4. Source aware customizer</a></li>
+<li><a href="#_inlining_a_customizer">6.6.5. Inlining a customizer</a></li>
+<li><a href="#_multiple_customizers">6.6.6. Multiple customizers</a></li>
+</ul>
+</li>
+<li><a href="#_config_script_flag">6.7. Config script flag</a>
+<ul class="sectlevel3">
+<li><a href="#_static_compilation_by_default">6.7.1. Static compilation by default</a></li>
+</ul>
+</li>
+<li><a href="#_ast_transformations">6.8. AST transformations</a></li>
+</ul>
+</li>
+<li><a href="#_custom_type_checking_extensions">7. Custom type checking extensions</a></li>
+<li><a href="#_builders">8. Builders</a>
+<ul class="sectlevel2">
+<li><a href="#_creating_a_builder">8.1. Creating a builder</a>
+<ul class="sectlevel3">
+<li><a href="#_buildersupport">8.1.1. BuilderSupport</a></li>
+<li><a href="#_factorybuildersupport">8.1.2. FactoryBuilderSupport</a></li>
+</ul>
+</li>
+<li><a href="#_existing_builders">8.2. Existing builders</a>
+<ul class="sectlevel3">
+<li><a href="#_markupbuilder">8.2.1. MarkupBuilder</a></li>
+<li><a href="#_streamingmarkupbuilder">8.2.2. StreamingMarkupBuilder</a></li>
+<li><a href="#_saxbuilder">8.2.3. SaxBuilder</a></li>
+<li><a href="#_staxbuilder">8.2.4. StaxBuilder</a></li>
+<li><a href="#_dombuilder">8.2.5. DOMBuilder</a></li>
+<li><a href="#_nodebuilder">8.2.6. NodeBuilder</a></li>
+<li><a href="#_jsonbuilder">8.2.7. JsonBuilder</a></li>
+<li><a href="#_streamingjsonbuilder">8.2.8. StreamingJsonBuilder</a></li>
+<li><a href="#swingbuilder">8.2.9. SwingBuilder</a></li>
+<li><a href="#_antbuilder">8.2.10. AntBuilder</a></li>
+<li><a href="#_clibuilder">8.2.11. CliBuilder</a>
+<ul class="sectlevel4">
+<li><a href="#_using_annotations_and_an_interface">Using Annotations and an interface</a></li>
+<li><a href="#_using_annotations_and_an_instance">Using Annotations and an instance</a></li>
+<li><a href="#_using_annotations_and_a_script">Using Annotations and a script</a></li>
+<li><a href="#_options_with_arguments">Options with arguments</a></li>
+<li><a href="#_specifying_a_type">Specifying a type</a></li>
+<li><a href="#_custom_parsing_of_the_argument_string">Custom parsing of the argument String</a></li>
+<li><a href="#_options_with_multiple_arguments">Options with multiple arguments</a></li>
+<li><a href="#_types_and_multiple_arguments">Types and multiple arguments</a></li>
+<li><a href="#_setting_a_default_value">Setting a default value</a></li>
+<li><a href="#_use_with_code_typechecked_code">Use with <code>TypeChecked</code></a></li>
+<li><a href="#_advanced_cli_usage">Advanced CLI Usage</a>
+<ul class="sectlevel5">
+<li><a href="#_apache_commons_cli">Apache Commons CLI</a></li>
+<li><a href="#_picocli">Picocli</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_objectgraphbuilder">8.2.12. ObjectGraphBuilder</a></li>
+<li><a href="#_jmxbuilder">8.2.13. JmxBuilder</a></li>
+<li><a href="#_filetreebuilder">8.2.14. FileTreeBuilder</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_command_chains"><a class="anchor" href="#_command_chains"></a>1. Command chains</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Groovy lets you omit parentheses around the arguments of a
+method call for top-level statements. "command chain" feature extends this by allowing us to chain such
+parentheses-free method calls, requiring neither parentheses around arguments, nor dots between the chained calls.
+The general idea is that a call like <code>a b c d</code> will actually be equivalent to <code>a(b).c(d)</code>. This
+also works with multiple arguments, closure arguments, and even named arguments. Furthermore, such command chains can
+also appear on the right-hand side of assignments. Let’s have a look at some examples
+supported by this new syntax:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// equivalent to: turn(left).then(right)
+turn left then right
+
+// equivalent to: take(2.pills).of(chloroquinine).after(6.hours)
+take 2.pills of chloroquinine after 6.hours
+
+// equivalent to: paint(wall).with(red, green).and(yellow)
+paint wall with red, green and yellow
+
+// with named parameters too
+// equivalent to: check(that: margarita).tastes(good)
+check that: margarita tastes good
+
+// with closures as parameters
+// equivalent to: given({}).when({}).then({})
+given { } when { } then { }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>It is also possible to use methods in the chain which take no arguments,
+but in that case, the parentheses are needed:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// equivalent to: select(all).unique().from(names)
+select all unique() from names</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If your command chain contains an odd number of elements, the chain will
+be composed of method / arguments, and will finish by a final property
+access:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// equivalent to: take(3).cookies
+// and also this: take(3).getCookies()
+take 3 cookies</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This command chain approach opens up interesting possibilities in terms of the much wider range of DSLs which
+can now be written in Groovy.</p>
+</div>
+<div class="paragraph">
+<p>The above examples illustrate using a command chain based DSL but not how to create one. There are various strategies
+that you can use, but to illustrate creating such a DSL, we will show a couple of examples - first using maps and Closures:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">show = { println it }
+square_root = { Math.sqrt(it) }
+
+def please(action) {
+  [the: { what -&gt;
+    [of: { n -&gt; action(what(n)) }]
+  }]
+}
+
+// equivalent to: please(show).the(square_root).of(100)
+please show the square_root of 100
+// ==&gt; 10.0</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As a second example, consider how you might write a DSL for simplifying
+one of your existing APIs. Maybe you need to put this code in front of
+customers, business analysts or testers who might be not hard-core Java
+developers. We’ll use the <code>Splitter</code> from the Google
+<a href="https://github.com/google/guava">Guava libraries</a> project as it
+already has a nice Fluent API. Here is how we might use it out of the
+box:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@Grab('com.google.guava:guava:r09')
+import com.google.common.base.*
+def result = Splitter.on(',').trimResults(CharMatcher.is('_' as char)).split("_a ,_b_ ,c__").iterator().toList()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>It reads fairly well for a Java developer but if that is not your target
+audience or you have many such statements to write, it could be
+considered a little verbose. Again, there are many options for writing a
+DSL. We’ll keep it simple with Maps and Closures. We’ll first write a
+helper method:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@Grab('com.google.guava:guava:r09')
+import com.google.common.base.*
+def split(string) {
+  [on: { sep -&gt;
+    [trimming: { trimChar -&gt;
+      Splitter.on(sep).trimResults(CharMatcher.is(trimChar as char)).split(string).iterator().toList()
+    }]
+  }]
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>now instead of this line from our original example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def result = Splitter.on(',').trimResults(CharMatcher.is('_' as char)).split("_a ,_b_ ,c__").iterator().toList()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>we can write this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def result = split "_a ,_b_ ,c__" on ',' trimming '_\'</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_operator_overloading"><a class="anchor" href="#_operator_overloading"></a>2. Operator overloading</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Various operators in Groovy are mapped onto regular method calls on objects.</p>
+</div>
+<div class="paragraph">
+<p>This allows you to provide your own Java or Groovy objects which can take advantage of operator overloading. The following table describes the operators supported in Groovy and the methods they map to.</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Operator</th>
+<th class="tableblock halign-left valign-top">Method</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>a + b</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a.plus(b)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>a - b</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a.minus(b)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>a * b</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a.multiply(b)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>a ** b</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a.power(b)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>a / b</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a.div(b)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>a % b</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a.mod(b)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>a | b</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a.or(b)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>a &amp; b</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a.and(b)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>a ^ b</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a.xor(b)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>a++</code> or <code>++a</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a.next()</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>a--</code> or <code>--a</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a.previous()</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>a[b]</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a.getAt(b)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>a[b] = c</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a.putAt(b, c)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>a &lt;&lt; b</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a.leftShift(b)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>a &gt;&gt; b</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a.rightShift(b)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>a &gt;&gt;&gt; b</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a.rightShiftUnsigned(b)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>switch(a) { case(b) : }</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">b.isCase(a)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>if(a)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a.asBoolean()</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>~a</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a.bitwiseNegate()</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-a</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a.negative()</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>+a</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a.positive()</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>a as b</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a.asType(b)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>a == b</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a.equals(b)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>a != b</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">! a.equals(b)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>a <=> b</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a.compareTo(b)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>a &gt; b</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a.compareTo(b) &gt; 0</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>a &gt;= b</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a.compareTo(b) &gt;= 0</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>a &lt; b</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a.compareTo(b) &lt; 0</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>a &lt;= b</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a.compareTo(b) &lt;= 0</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_script_base_classes"><a class="anchor" href="#_script_base_classes"></a>3. Script base classes</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_the_script_class"><a class="anchor" href="#_the_script_class"></a>3.1. The Script class</h3>
+<div class="paragraph">
+<p>Groovy scripts are always compiled to classes. For example, a script as simple as:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">println 'Hello from Groovy'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>is compiled to a class extending the abstract <a href="http://docs.groovy-lang.org/3.0.0-alpha-3/html/gapi/index.html?groovy/lang/Script.html">groovy.lang.Script</a> class. This class contains a single abstract
+method called <em>run</em>. When a script is compiled, then its body will become the <em>run</em> method, while the other methods
+found in the script are found in the implementing class. The <code>Script</code> class provides base support for integration
+with your application through the <code>Binding</code> object, as illustrated in this example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def binding = new Binding()             <i class="conum" data-value="1"></i><b>(1)</b>
+def shell = new GroovyShell(binding)    <i class="conum" data-value="2"></i><b>(2)</b>
+binding.setVariable('x',1)              <i class="conum" data-value="3"></i><b>(3)</b>
+binding.setVariable('y',3)
+shell.evaluate 'z=2*x+y'                <i class="conum" data-value="4"></i><b>(4)</b>
+assert binding.getVariable('z') == 5    <i class="conum" data-value="5"></i><b>(5)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>a binding is used to share data between the script and the calling class</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>a <code>GroovyShell</code> can be used with this binding</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>input variables are set from the calling class inside the binding</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>then the script is evaluated</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>and the <code>z</code> variable has been "exported" into the binding</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>This is a very practical way to share data between the caller and the script, however it may be insufficient or not
+practical in some cases. For that purpose, Groovy allows you to set your own base script class. A base script class
+has to extend <a href="http://docs.groovy-lang.org/3.0.0-alpha-3/html/gapi/index.html?groovy/lang/Script.html">groovy.lang.Script</a> and be a single abstract method type:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">abstract class MyBaseClass extends Script {
+    String name
+    public void greet() { println "Hello, $name!" }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then the custom script base class can be declared in the compiler configuration, for example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def config = new CompilerConfiguration()                                <i class="conum" data-value="1"></i><b>(1)</b>
+config.scriptBaseClass = 'MyBaseClass'                                  <i class="conum" data-value="2"></i><b>(2)</b>
+def shell = new GroovyShell(this.class.classLoader, config)             <i class="conum" data-value="3"></i><b>(3)</b>
+shell.evaluate """
+    setName 'Judith'                                                    <i class="conum" data-value="4"></i><b>(4)</b>
+    greet()
+"""</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>create a custom compiler configuration</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>set the base script class to our custom base script class</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>then create a <code>GroovyShell</code> using that configuration</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>the script will then extend the base script class, giving direct access to the <code>name</code> property and <code>greet</code> method</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="dsl-basescript"><a class="anchor" href="#dsl-basescript"></a>3.2. The @BaseScript annotation</h3>
+<div class="paragraph">
+<p>As an alternative, it is also possible to use the <code>@BaseScript</code> annotation directly into a script:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import groovy.transform.BaseScript
+
+@BaseScript MyBaseClass baseScript
+setName 'Judith'
+greet()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>where <code>@BaseScript</code> should annotate a variable which type is the class of the base script. Alternatively, you can set
+the base script class as a member of the <code>@BaseScript</code> annotation itself:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@BaseScript(MyBaseClass)
+import groovy.transform.BaseScript
+
+setName 'Judith'
+greet()</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_alternate_abstract_method"><a class="anchor" href="#_alternate_abstract_method"></a>3.3. Alternate abstract method</h3>
+<div class="paragraph">
+<p>We have seen that the base script class is a single abstract method type that needs to implement the <code>run</code> method. The
+<code>run</code> method is executed by the script engine automatically. In some circumstances it may be interesting to have a base
+class which implements the <code>run</code> method, but provides an alternative abstract method to be used for the script body.
+For example, the base script <code>run</code> method might perform some initialization before the <code>run</code> method is executed. This
+is possible by doing this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">abstract class MyBaseClass extends Script {
+    int count
+    abstract void scriptBody()                              <i class="conum" data-value="1"></i><b>(1)</b>
+    def run() {
+        count++                                             <i class="conum" data-value="2"></i><b>(2)</b>
+        scriptBody()                                        <i class="conum" data-value="3"></i><b>(3)</b>
+        count                                               <i class="conum" data-value="4"></i><b>(4)</b>
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>the base script class should define one (and only one) abstract method</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>the <code>run</code> method can be overridden and perform a task before executing the script body</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td><code>run</code> calls the abstract <code>scriptBody</code> method which will delegate to the user script</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>then it can return something else than the value from the script</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>If you execute this code:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def result = shell.evaluate """
+    println 'Ok'
+"""
+assert result == 1</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then you will see that the script is executed, but the result of the evaluation is <code>1</code> as returned by the <code>run</code>
+method of the base class. It is even clearer if you use <code>parse</code> instead of <code>evaluate</code>, because it would allow you to
+execute the <code>run</code> method several times on the same script instance:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def script = shell.parse("println 'Ok'")
+assert script.run() == 1
+assert script.run() == 2</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_adding_properties_to_numbers"><a class="anchor" href="#_adding_properties_to_numbers"></a>4. Adding properties to numbers</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In Groovy number types are considered equal to any other types. As such, it is possible to enhance numbers by adding
+properties or methods to them. This can be very handy when dealing with measurable quantities for example. Details about
+how existing classes can be enhanced in Groovy are found in the <a href="core-metaprogramming.html#_extension_modules">extension
+modules</a> section or the <a href="core-metaprogramming.html#categories">categories</a> section.</p>
+</div>
+<div class="paragraph">
+<p>An illustration of this can be found in Groovy using the <code>TimeCategory</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">use(TimeCategory)  {
+    println 1.minute.from.now       <i class="conum" data-value="1"></i><b>(1)</b>
+    println 10.hours.ago
+
+    def someDate = new Date()       <i class="conum" data-value="2"></i><b>(2)</b>
+    println someDate - 3.months
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>using the <code>TimeCategory</code>, a property <code>minute</code> is added to the <code>Integer</code> class</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>similarily, the <code>months</code> method returns a <code>groovy.time.DatumDependentDuration</code> which can be used in calculus</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Categories are lexically bound, making them a great fit for internal DSLs.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="section-delegatesto"><a class="anchor" href="#section-delegatesto"></a>5. @DelegatesTo</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="TheDelegatesToannotation-DSLsmadeeasy"><a class="anchor" href="#TheDelegatesToannotation-DSLsmadeeasy"></a>5.1. Explaining delegation strategy at compile time</h3>
+<div class="paragraph">
+<p><code>@groovy.lang.DelegatesTo</code> is a documentation and compile-time annotation aimed at:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>documenting APIs that use closures as arguments</p>
+</li>
+<li>
+<p>providing type information for the static type checker and compiler</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The Groovy language is a platform of choice for building DSLs. Using
+closures, it’s quite easy to create custom control structures, as well
+as it is simple to create builders. Imagine that you have the following
+code:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">email {
+    from 'dsl-guru@mycompany.com'
+    to 'john.doe@waitaminute.com'
+    subject 'The pope has resigned!'
+    body {
+        p 'Really, the pope has resigned!'
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>One way of implementing this is using the builder strategy, which
+implies a method, named <code>email</code> which accepts a closure as an argument.
+The method may delegate subsequent calls to an object that implements
+the <code>from</code>, <code>to</code>, <code>subject</code> and <code>body</code> methods. Again, <code>body</code> is a
+method which accepts a closure as an argument and that uses the builder
+strategy.</p>
+</div>
+<div class="paragraph">
+<p>Implementing such a builder is usually done the following way:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def email(Closure cl) {
+    def email = new EmailSpec()
+    def code = cl.rehydrate(email, this, this)
+    code.resolveStrategy = Closure.DELEGATE_ONLY
+    code()
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>the <code>EmailSpec</code> class implements the <code>from</code>, <code>to</code>, … methods. By
+calling <code>rehydrate</code>, we’re creating a copy of the closure for which we
+set the <code>delegate</code>, <code>owner</code> and <code>thisObject</code> values. Setting the owner
+and the <code>this</code> object is not very important here since we will use the
+<code>DELEGATE_ONLY</code> strategy which says that the method calls will be
+resolved only against the delegate of the closure.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class EmailSpec {
+    void from(String from) { println "From: $from"}
+    void to(String... to) { println "To: $to"}
+    void subject(String subject) { println "Subject: $subject"}
+    void body(Closure body) {
+        def bodySpec = new BodySpec()
+        def code = body.rehydrate(bodySpec, this, this)
+        code.resolveStrategy = Closure.DELEGATE_ONLY
+        code()
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>EmailSpec</code> class has itself a <code>body</code> method accepting a closure that is cloned and executed. This is what
+we call the builder pattern in Groovy.</p>
+</div>
+<div class="paragraph">
+<p>One of the problems with the code that we’ve shown is that the user of
+the <code>email</code> method doesn’t have any information about the methods that
+he’s allowed to call inside the closure. The only possible information
+is from the method documentation. There are two issues with this: first
+of all, documentation is not always written, and if it is, it’s not
+always available (javadoc not downloaded, for example). Second, it
+doesn’t help IDEs. What would be really interesting, here, is for IDEs
+to help the developer by suggesting, once they are in the closure body,
+methods that exist on the <code>email</code> class.</p>
+</div>
+<div class="paragraph">
+<p>Moreover, if the user calls a method in the closure which is not defined
+by the <code>EmailSpec</code> class, the IDE should at least issue a warning (because
+it’s very likely that it will break at runtime).</p>
+</div>
+<div class="paragraph">
+<p>One more problem with the code above is that it is not compatible with static type checking. Type checking would let
+the user know if a method call is authorized at compile time instead of runtime, but if you try to perform type
+checking on this code:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">email {
+    from 'dsl-guru@mycompany.com'
+    to 'john.doe@waitaminute.com'
+    subject 'The pope has resigned!'
+    body {
+        p 'Really, the pope has resigned!'
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then the type checker will know that there’s an <code>email</code> method accepting
+a <code>Closure</code>, but it will complain for every method call <strong>inside</strong> the
+closure, because <code>from</code>, for example, is not a method which is defined
+in the class. Indeed, it’s defined in the <code>EmailSpec</code> class and it has
+absolutely no hint to help it knowing that the closure delegate will, at
+runtime, be of type <code>EmailSpec</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@groovy.transform.TypeChecked
+void sendEmail() {
+    email {
+        from 'dsl-guru@mycompany.com'
+        to 'john.doe@waitaminute.com'
+        subject 'The pope has resigned!'
+        body {
+            p 'Really, the pope has resigned!'
+        }
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>will fail compilation with errors like this one:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>[Static type checking] - Cannot find matching method MyScript#from(java.lang.String). Please check if the declared type is correct and if the method exists.
+ @ line 31, column 21.
+                       from 'dsl-guru@mycompany.com'</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="TheDelegatesToannotation-DelegatesTo"><a class="anchor" href="#TheDelegatesToannotation-DelegatesTo"></a>5.2. @DelegatesTo</h3>
+<div class="paragraph">
+<p>For those reasons, Groovy 2.1 introduced a new annotation
+named <code>@DelegatesTo</code>. The goal of this annotation is to solve both the
+documentation issue, that will let your IDE know about the expected
+methods in the closure body, and it will also solve the type checking
+issue, by giving hints to the compiler about what are the potential
+receivers of method calls in the closure body.</p>
+</div>
+<div class="paragraph">
+<p>The idea is to annotate the <code>Closure</code> parameter of the <code>email</code> method:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def email(@DelegatesTo(EmailSpec) Closure cl) {
+    def email = new EmailSpec()
+    def code = cl.rehydrate(email, this, this)
+    code.resolveStrategy = Closure.DELEGATE_ONLY
+    code()
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>What we’ve done here is telling the compiler (or the IDE) that when the
+method will be called with a closure, the delegate of this closure will
+be set to an object of type <code>email</code>. But there is still a problem: the
+default delegation strategy is not the one which is used in our method.
+So we will give more information and tell the compiler (or the IDE) that
+the delegation strategy is also changed:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def email(@DelegatesTo(strategy=Closure.DELEGATE_ONLY, value=EmailSpec) Closure cl) {
+    def email = new EmailSpec()
+    def code = cl.rehydrate(email, this, this)
+    code.resolveStrategy = Closure.DELEGATE_ONLY
+    code()
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now, both the IDE and the type checker (if you are using <code>@TypeChecked</code>)
+will be aware of the delegate and the delegation strategy. This is very
+nice because it will both allow the IDE to provide smart completion, but
+it will also remove errors at compile time that exist only because the
+behaviour of the program is normally only known at runtime!</p>
+</div>
+<div class="paragraph">
+<p>The following code will now pass compilation:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@TypeChecked
+void doEmail() {
+    email {
+        from 'dsl-guru@mycompany.com'
+        to 'john.doe@waitaminute.com'
+        subject 'The pope has resigned!'
+        body {
+            p 'Really, the pope has resigned!'
+        }
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="TheDelegatesToannotation-DelegatesTomodes"><a class="anchor" href="#TheDelegatesToannotation-DelegatesTomodes"></a>5.3. DelegatesTo modes</h3>
+<div class="paragraph">
+<p><code>@DelegatesTo</code> supports multiple modes that we will describe with examples
+in this section.</p>
+</div>
+<div class="sect3">
+<h4 id="TheDelegatesToannotation-Simpledelegation"><a class="anchor" href="#TheDelegatesToannotation-Simpledelegation"></a>5.3.1. Simple delegation</h4>
+<div class="paragraph">
+<p>In this mode, the only mandatory parameter is the <em>value</em> which says to
+which class we delegate calls. Nothing more. We’re telling the compiler
+that the type of the delegate will <strong>always</strong> be of the type documented
+by <code>@DelegatesTo</code> (note that it can be a subclass, but if it is, the
+methods defined by the subclass will not be visible to the type
+checker).</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">void body(@DelegatesTo(BodySpec) Closure cl) {
+    // ...
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="TheDelegatesToannotation-Delegationstrategy"><a class="anchor" href="#TheDelegatesToannotation-Delegationstrategy"></a>5.3.2. Delegation strategy</h4>
+<div class="paragraph">
+<p>In this mode, you must specify both the delegate class <strong>and</strong> a
+delegation strategy. This must be used if the closure will not be called
+with the default delegation strategy, which is <code>Closure.OWNER_FIRST</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">void body(@DelegatesTo(strategy=Closure.DELEGATE_ONLY, value=BodySpec) Closure cl) {
+    // ...
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="TheDelegatesToannotation-Delegatetoparameter"><a class="anchor" href="#TheDelegatesToannotation-Delegatetoparameter"></a>5.3.3. Delegate to parameter</h4>
+<div class="paragraph">
+<p>In this variant, we will tell the compiler that we are delegating to
+another parameter of the method. Take the following code:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def exec(Object target, Closure code) {
+   def clone = code.rehydrate(target, this, this)
+   clone()
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here, the delegate which will be used is <strong>not</strong> created inside the <code>exec</code>
+method. In fact, we take an argument of the method and delegate to it.
+Usage may look like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def email = new Email()
+exec(email) {
+   from '...'
+   to '...'
+   send()
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Each of the method calls are delegated to the <code>email</code> parameter. This is
+a widely used pattern which is also supported by <code>@DelegatesTo</code> using a
+companion annotation:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def exec(@DelegatesTo.Target Object target, @DelegatesTo Closure code) {
+   def clone = code.rehydrate(target, this, this)
+   clone()
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A closure is annotated with <code>@DelegatesTo</code>, but this time, without
+specifying any class. Instead, we’re annotating another parameter
+with <code>@DelegatesTo.Target</code>. The type of the delegate is then determined
+at compile time. One could think that we are using the parameter type,
+which in this case is <code>Object</code> but this is not true. Take this code:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Greeter {
+   void sayHello() { println 'Hello' }
+}
+def greeter = new Greeter()
+exec(greeter) {
+   sayHello()
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Remember that this works out of the box <strong>without</strong> having to annotate
+with <code>@DelegatesTo</code>. However, to make the IDE aware of the delegate
+type, or the <strong>type checker</strong> aware of it, we need to add <code>@DelegatesTo</code>.
+And in this case, it will know that the <code>Greeter</code> variable is of
+type <code>Greeter</code>, so it will not report errors on the <em>sayHello</em>
+method <strong>even if the exec method doesn’t explicitly define the target as
+of type Greeter</strong>. This is a very powerful feature, because it prevents
+you from writing multiple versions of the same <code>exec</code> method for
+different receiver types!</p>
+</div>
+<div class="paragraph">
+<p>In this mode, the <code>@DelegatesTo</code> annotation also supports the <code>strategy</code>
+parameter that we’ve described upper.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="TheDelegatesToannotation-Multipleclosures"><a class="anchor" href="#TheDelegatesToannotation-Multipleclosures"></a>5.3.4. Multiple closures</h4>
+<div class="paragraph">
+<p>In the previous example, the <code>exec</code> method accepted only one closure,
+but you may have methods that take multiple closures:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">void fooBarBaz(Closure foo, Closure bar, Closure baz) {
+    ...
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then nothing prevents you from annotating each closure
+with <code>@DelegatesTo</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Foo { void foo(String msg) { println "Foo ${msg}!" } }
+class Bar { void bar(int x) { println "Bar ${x}!" } }
+class Baz { void baz(Date d) { println "Baz ${d}!" } }
+
+void fooBarBaz(@DelegatesTo(Foo) Closure foo, @DelegatesTo(Bar) Closure bar, @DelegatesTo(Baz) Closure baz) {
+   ...
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>But more importantly, if you have multiple closures <strong>and</strong> multiple
+arguments, you can use several targets:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">void fooBarBaz(
+    @DelegatesTo.Target('foo') foo,
+    @DelegatesTo.Target('bar') bar,
+    @DelegatesTo.Target('baz') baz,
+
+    @DelegatesTo(target='foo') Closure cl1,
+    @DelegatesTo(target='bar') Closure cl2,
+    @DelegatesTo(target='baz') Closure cl3) {
+    cl1.rehydrate(foo, this, this).call()
+    cl2.rehydrate(bar, this, this).call()
+    cl3.rehydrate(baz, this, this).call()
+}
+
+def a = new Foo()
+def b = new Bar()
+def c = new Baz()
+fooBarBaz(
+    a, b, c,
+    { foo('Hello') },
+    { bar(123) },
+    { baz(new Date()) }
+)</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+At this point, you may wonder why we don’t use the parameter names as
+references. The reason is that the information (the parameter name) is
+not always available (it’s a debug-only information), so it’s a
+limitation of the JVM.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_delegating_to_a_generic_type"><a class="anchor" href="#_delegating_to_a_generic_type"></a>5.3.5. Delegating to a generic type</h4>
+<div class="paragraph">
+<p>In some situations, it is interesting to instruct the IDE or the compiler that the delegate type will not be a parameter
+but a generic type. Imagine a configurator that runs on a list of elements:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">public &lt;T&gt; void configure(List&lt;T&gt; elements, Closure configuration) {
+   elements.each { e-&gt;
+      def clone = configuration.rehydrate(e, this, this)
+      clone.resolveStrategy = Closure.DELEGATE_FIRST
+      clone.call()
+   }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then this method can be called with any list like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@groovy.transform.ToString
+class Realm {
+   String name
+}
+List&lt;Realm&gt; list = []
+3.times { list &lt;&lt; new Realm() }
+configure(list) {
+   name = 'My Realm'
+}
+assert list.every { it.name == 'My Realm' }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To let the type checker and the IDE know that the <code>configure</code> method calls the closure on each element of the list, you
+ need to use <code>@DelegatesTo</code> differently:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">public &lt;T&gt; void configure(
+    @DelegatesTo.Target List&lt;T&gt; elements,
+    @DelegatesTo(strategy=Closure.DELEGATE_FIRST, genericTypeIndex=0) Closure configuration) {
+   def clone = configuration.rehydrate(e, this, this)
+   clone.resolveStrategy = Closure.DELEGATE_FIRST
+   clone.call()
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>@DelegatesTo</code> takes an optional <code>genericTypeIndex</code> argument that tells what is the index of the generic type that will
+be used as the delegate type. This <strong>must</strong> be used in conjunction with <code>@DelegatesTo.Target</code> and the index starts at 0. In
+the example above, that means that the delegate type is resolved against <code>List&lt;T&gt;</code>, and since the generic type at index
+0 is <code>T</code> and inferred as a <code>Realm</code>, the type checker infers that the delegate type will be of type <code>Realm</code>.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+We&#8217;re using a <code>genericTypeIndex</code> instead of a placeholder (<code>T</code>) because of JVM limitations.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_delegating_to_an_arbitrary_type"><a class="anchor" href="#_delegating_to_an_arbitrary_type"></a>5.3.6. Delegating to an arbitrary type</h4>
+<div class="paragraph">
+<p>It is possible that none of the options above can represent the type you want to delegate to. For example, let&#8217;s define
+a mapper class which is parametrized with an object and defines a map method which returns an object of another type:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Mapper&lt;T,U&gt; {                             <i class="conum" data-value="1"></i><b>(1)</b>
+    final T value                               <i class="conum" data-value="2"></i><b>(2)</b>
+    Mapper(T value) { this.value = value }
+    U map(Closure&lt;U&gt; producer) {                <i class="conum" data-value="3"></i><b>(3)</b>
+        producer.delegate = value
+        producer()
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The mapper class takes two generic type arguments: the source type and the target type</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The source object is stored in a final field</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>The <code>map</code> method asks to convert the source object to a target object</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>As you can see, the method signature from <code>map</code> does not give any information about what object will
+be manipulated by the closure. Reading the method body, we know that it will be the <code>value</code> which is
+of type <code>T</code>, but <code>T</code> is not found in the method signature, so we are facing a case where none of the
+available options for <code>@DelegatesTo</code> is suitable. For example, if we try to statically compile this code:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def mapper = new Mapper&lt;String,Integer&gt;('Hello')
+assert mapper.map { length() } == 5</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then the compiler will fail with:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Static type checking] - Cannot find matching method TestScript0#length()</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In that case, you can use the <code>type</code> member of the <code>@DelegatesTo</code> annotation to reference <code>T</code> as a type token:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Mapper&lt;T,U&gt; {
+    final T value
+    Mapper(T value) { this.value = value }
+    U map(@DelegatesTo(type="T") Closure&lt;U&gt; producer) {  <i class="conum" data-value="1"></i><b>(1)</b>
+        producer.delegate = value
+        producer()
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The <code>@DelegatesTo</code> annotation references a generic type which is not found in the method signature</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Note that you are not limited to generic type tokens. The <code>type</code> member can be used to represent complex types, such
+as <code>List&lt;T&gt;</code> or <code>Map&lt;T,List&lt;U&gt;&gt;</code>. The reason why you should use that in last resort is that the type is only checked
+when the type checker finds usage of <code>@DelegatesTo</code>, not when the annotated method itself is compiled. This means that
+type safety is only ensured at the call site. Additionally, compilation will be slower (though probably unnoticeable for
+most cases).</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="compilation-customizers"><a class="anchor" href="#compilation-customizers"></a>6. Compilation customizers</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_introduction"><a class="anchor" href="#_introduction"></a>6.1. Introduction</h3>
+<div class="paragraph">
+<p>Whether you are using <code>groovyc</code> to compile classes or a <code>GroovyShell</code>,
+for example, to execute scripts, under the hood, a <em>compiler configuration</em> is used. This configuration holds information
+like the source encoding or the classpath but it can also be used to perform more operations like adding imports by
+default, applying AST transformations transparently or disabling global AST transformations.</p>
+</div>
+<div class="paragraph">
+<p>The goal of compilation customizers is to make those common tasks easy to implement. For that, the <code>CompilerConfiguration</code>
+class is the entry point. The general schema will always be based on the following code:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import org.codehaus.groovy.control.CompilerConfiguration
+// create a configuration
+def config = new CompilerConfiguration()
+// tweak the configuration
+config.addCompilationCustomizers(...)
+// run your script
+def shell = new GroovyShell(config)
+shell.evaluate(script)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Compilation customizers must extend the <em>org.codehaus.groovy.control.customizers.CompilationCustomizer</em> class. A customizer works:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>on a specific compilation phase</p>
+</li>
+<li>
+<p>on <em>every</em> class node being compiled</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>You can implement your own compilation customizer but Groovy includes some of the most common operations.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_import_customizer"><a class="anchor" href="#_import_customizer"></a>6.2. Import customizer</h3>
+<div class="paragraph">
+<p>Using this compilation customizer, your code will have imports added
+transparently. This is in particular useful for scripts implementing a
+DSL where you want to avoid users from having to write imports. The
+import customizer will let you add all the variants of imports the
+Groovy language allows, that is:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>class imports, optionally aliased</p>
+</li>
+<li>
+<p>star imports</p>
+</li>
+<li>
+<p>static imports, optionally aliased</p>
+</li>
+<li>
+<p>static star imports</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import org.codehaus.groovy.control.customizers.ImportCustomizer
+
+def icz = new ImportCustomizer()
+// "normal" import
+icz.addImports('java.util.concurrent.atomic.AtomicInteger', 'java.util.concurrent.ConcurrentHashMap')
+// "aliases" import
+icz.addImport('CHM', 'java.util.concurrent.ConcurrentHashMap')
+// "static" import
+icz.addStaticImport('java.lang.Math', 'PI') // import static java.lang.Math.PI
+// "aliased static" import
+icz.addStaticImport('pi', 'java.lang.Math', 'PI') // import static java.lang.Math.PI as pi
+// "star" import
+icz.addStarImports 'java.util.concurrent' // import java.util.concurrent.*
+// "static star" import
+icz.addStaticStars 'java.lang.Math' // import static java.lang.Math.*</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A detailed description of all shortcuts can be found in <a href="http://docs.groovy-lang.org/3.0.0-alpha-3/html/gapi/index.html?org/codehaus/groovy/control/customizers/ImportCustomizer.html">org.codehaus.groovy.control.customizers.ImportCustomizer</a></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_ast_transformation_customizer"><a class="anchor" href="#_ast_transformation_customizer"></a>6.3. AST transformation customizer</h3>
+<div class="paragraph">
+<p>The AST transformation customizer is meant to apply AST transformations
+transparently. Unlike global AST transformations that apply on every
+class beeing compiled as long as the transform is found on classpath
+(which has drawbacks like increasing the compilation time or side
+effects due to transformations applied where they should not), the
+customizer will allow you to selectively apply a transform only for
+specific scripts or classes.</p>
+</div>
+<div class="paragraph">
+<p>As an example, let’s say you want to be able to use <code>@Log</code> in a script.
+The problem is that <code>@Log</code> is normally applied on a class node and a
+script, by definition, doesn’t require one. But implementation wise,
+scripts are classes, it’s just that you cannot annotate this implicit
+class node with <code>@Log</code>. Using the AST customizer, you have a workaround
+to do it:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import org.codehaus.groovy.control.customizers.ASTTransformationCustomizer
+import groovy.util.logging.Log
+
+def acz = new ASTTransformationCustomizer(Log)
+config.addCompilationCustomizers(acz)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>That’s all! Internally, the <code>@Log</code> AST transformation is applied to
+every class node in the compilation unit. This means that it will be
+applied to the script, but also to classes defined within the script.</p>
+</div>
+<div class="paragraph">
+<p>If the AST transformation that you are using accepts parameters, you can
+use parameters in the constructor too:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def acz = new ASTTransformationCustomizer(Log, value: 'LOGGER')
+// use name 'LOGGER' instead of the default 'log'
+config.addCompilationCustomizers(acz)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As the AST transformation customizers works with objects instead of AST
+nodes, not all values can be converted to AST transformation parameters.
+For example, primitive types are converted to <code>ConstantExpression</code> (that
+is <code>LOGGER</code> is converted to <code>new ConstantExpression('LOGGER')</code>, but if
+your AST transformation takes a closure as an argument, then you have to
+give it a <code>ClosureExpression</code>, like in the following example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def configuration = new CompilerConfiguration()
+def expression = new AstBuilder().buildFromCode(CompilePhase.CONVERSION) { -&gt; true }.expression[0]
+def customizer = new ASTTransformationCustomizer(ConditionalInterrupt, value: expression, thrown: SecurityException)
+configuration.addCompilationCustomizers(customizer)
+def shell = new GroovyShell(configuration)
+shouldFail(SecurityException) {
+    shell.evaluate("""
+        // equivalent to adding @ConditionalInterrupt(value={true}, thrown: SecurityException)
+        class MyClass {
+            void doIt() { }
+        }
+        new MyClass().doIt()
+    """)
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For a complete list of options, please refer to <a href="http://docs.groovy-lang.org/3.0.0-alpha-3/html/gapi/index.html?org/codehaus/groovy/control/customizers/ASTTransformationCustomizer.html">org.codehaus.groovy.control.customizers.ASTTransformationCustomizer</a></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_secure_ast_customizer"><a class="anchor" href="#_secure_ast_customizer"></a>6.4. Secure AST customizer</h3>
+<div class="paragraph">
+<p>This customizer will allow the developer of a DSL to restrict the
+<strong>grammar</strong> of the language, to prevent users from using some constructs,
+for example. It is only ``secure'' in that sense only and it is very
+important to understand that it does <strong>not</strong> replace a security manager.
+The only reason for it to exist is to limit the expressiveness of the
+language. This customizer only works at the AST (abstract syntax tree)
+level, not at runtime! It can be strange at first glance, but it makes
+much more sense if you think of Groovy as a platform to build DSLs. You
+may not want a user to have a complete language at hand. In the example
+below, we will demonstrate it using an example of language that only
+allows arithmetic operations, but this customizer allows you to:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>allow/disallow creation of closures</p>
+</li>
+<li>
+<p>allow/disallow imports</p>
+</li>
+<li>
+<p>allow/disallow package definition</p>
+</li>
+<li>
+<p>allow/disallow definition of methods</p>
+</li>
+<li>
+<p>restrict the receivers of method calls</p>
+</li>
+<li>
+<p>restrict the kind of AST expressions a user can use</p>
+</li>
+<li>
+<p>restrict the tokens (grammar-wise) a user can use</p>
+</li>
+<li>
+<p>restrict the types of the constants that can be used in code</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>For all those features, the secure AST customizer works using either a
+whitelist (list of elements that are allowed) <strong>or</strong> a blacklist (list of
+elements that are disallowed). For each type of feature (imports,
+tokens, …) you have the choice to use either a whitelist or a blacklist,
+but you can mix whitelists and blacklists for distinct features. In
+general, you will choose whitelists (disallow all, allow selected).</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import org.codehaus.groovy.control.customizers.SecureASTCustomizer
+import static org.codehaus.groovy.syntax.Types.* <i class="conum" data-value="1"></i><b>(1)</b>
+
+def scz = new SecureASTCustomizer()
+scz.with {
+    closuresAllowed = false // user will not be able to write closures
+    methodDefinitionAllowed = false // user will not be able to define methods
+    importsWhitelist = [] // empty whitelist means imports are disallowed
+    staticImportsWhitelist = [] // same for static imports
+    staticStarImportsWhitelist = ['java.lang.Math'] // only java.lang.Math is allowed
+    // the list of tokens the user can find
+    // constants are defined in org.codehaus.groovy.syntax.Types
+    tokensWhitelist = [ <i class="conum" data-value="1"></i><b>(1)</b>
+            PLUS,
+            MINUS,
+            MULTIPLY,
+            DIVIDE,
+            MOD,
+            POWER,
+            PLUS_PLUS,
+            MINUS_MINUS,
+            COMPARE_EQUAL,
+            COMPARE_NOT_EQUAL,
+            COMPARE_LESS_THAN,
+            COMPARE_LESS_THAN_EQUAL,
+            COMPARE_GREATER_THAN,
+            COMPARE_GREATER_THAN_EQUAL,
+    ].asImmutable()
+    // limit the types of constants that a user can define to number types only
+    constantTypesClassesWhiteList = [ <i class="conum" data-value="2"></i><b>(2)</b>
+            Integer,
+            Float,
+            Long,
+            Double,
+            BigDecimal,
+            Integer.TYPE,
+            Long.TYPE,
+            Float.TYPE,
+            Double.TYPE
+    ].asImmutable()
+    // method calls are only allowed if the receiver is of one of those types
+    // be careful, it's not a runtime type!
+    receiversClassesWhiteList = [ <i class="conum" data-value="2"></i><b>(2)</b>
+            Math,
+            Integer,
+            Float,
+            Double,
+            Long,
+            BigDecimal
+    ].asImmutable()
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>use for token types from <a href="http://docs.groovy-lang.org/3.0.0-alpha-3/html/gapi/index.html?org/codehaus/groovy/syntax/Types.html">org.codehaus.groovy.syntax.Types</a></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>you can use class literals here</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>If what the secure AST customizer provides out of the box isn’t enough
+for your needs, before creating your own compilation customizer, you
+might be interested in the expression and statement checkers that the
+AST customizer supports. Basically, it allows you to add custom checks
+on the AST tree, on expressions (expression checkers) or statements
+(statement checkers). For this, you must
+implement <code>org.codehaus.groovy.control.customizers.SecureASTCustomizer.StatementChecker</code>
+or <code>org.codehaus.groovy.control.customizers.SecureASTCustomizer.ExpressionChecker</code>.</p>
+</div>
+<div class="paragraph">
+<p>Those interfaces define a single method called <code>isAuthorized</code>, returning
+a boolean, and taking a <code>Statement</code> (or <code>Expression</code>) as a parameter. It
+allows you to perform complex logic over expressions or statements to
+tell if a user is allowed to do it or not.</p>
+</div>
+<div class="paragraph">
+<p>For example, there&#8217;s no predefined configuration flag in the customizer which
+will let you prevent people from using an attribute expression. Using a custom
+checker, it is trivial:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def scz = new SecureASTCustomizer()
+def checker = { expr -&gt;
+    !(expr instanceof AttributeExpression)
+} as SecureASTCustomizer.ExpressionChecker
+scz.addExpressionCheckers(checker)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then we can make sure that this works by evaluating a simple script:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">new GroovyShell(config).evaluate '''
+    class A {
+        int val
+    }
+
+    def a = new A(val: 123)
+    a.@val <i class="conum" data-value="1"></i><b>(1)</b>
+'''</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>will fail compilation</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Statements can be checked using <a href="http://docs.groovy-lang.org/3.0.0-alpha-3/html/gapi/index.html?org/codehaus/groovy/control/customizers/SecureASTCustomizer/StatementChecker.html">org.codehaus.groovy.control.customizers.SecureASTCustomizer.StatementChecker</a>
+Expressions can be checked using <a href="http://docs.groovy-lang.org/3.0.0-alpha-3/html/gapi/index.html?org/codehaus/groovy/control/customizers/SecureASTCustomizer/ExpressionChecker.html">org.codehaus.groovy.control.customizers.SecureASTCustomizer.ExpressionChecker</a></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_source_aware_customizer"><a class="anchor" href="#_source_aware_customizer"></a>6.5. Source aware customizer</h3>
+<div class="paragraph">
+<p>This customizer may be used as a filter on other customizers. The
+filter, in that case, is the <code>org.codehaus.groovy.control.SourceUnit</code>.
+For this, the source aware customizer takes another customizer as a
+delegate, and it will apply customization of that delegate only and only
+if predicates on the source unit match.</p>
+</div>
+<div class="paragraph">
+<p><code>SourceUnit</code> gives you access to multiple things but in particular the
+file being compiled (if compiling from a file, of course). It gives
+you the potential to perform operation based on the file name, for
+example. Here is how you would create a source aware customizer:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import org.codehaus.groovy.control.customizers.SourceAwareCustomizer
+import org.codehaus.groovy.control.customizers.ImportCustomizer
+
+def delegate = new ImportCustomizer()
+def sac = new SourceAwareCustomizer(delegate)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then you can use predicates on the source aware customizer:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// the customizer will only be applied to classes contained in a file name ending with 'Bean'
+sac.baseNameValidator = { baseName -&gt;
+    baseName.endsWith 'Bean'
+}
+
+// the customizer will only be applied to files which extension is '.spec'
+sac.extensionValidator = { ext -&gt; ext == 'spec' }
+
+// source unit validation
+// allow compilation only if the file contains at most 1 class
+sac.sourceUnitValidator = { SourceUnit sourceUnit -&gt; sourceUnit.AST.classes.size() == 1 }
+
+// class validation
+// the customizer will only be applied to classes ending with 'Bean'
+sac.classValidator = { ClassNode cn -&gt; cn.endsWith('Bean') }</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_customizer_builder"><a class="anchor" href="#_customizer_builder"></a>6.6. Customizer builder</h3>
+<div class="paragraph">
+<p>If you are using compilation customizers in Groovy code (like the
+examples above) then you can use an alternative syntax to customize compilation.
+A builder (<code>org.codehaus.groovy.control.customizers.builder.CompilerCustomizationBuilder</code>)
+simplifies the creation of customizers using a hierarchical DSL.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import org.codehaus.groovy.control.CompilerConfiguration
+import static org.codehaus.groovy.control.customizers.builder.CompilerCustomizationBuilder.withConfig <i class="conum" data-value="1"></i><b>(1)</b>
+
+def conf = new CompilerConfiguration()
+withConfig(conf) {
+    // ... <i class="conum" data-value="2"></i><b>(2)</b>
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>static import of the builder method</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>configuration goes here</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The code sample above shows how to use the builder. A static
+method, <em>withConfig</em>, takes a closure corresponding to the builder code,
+and automatically registers compilation customizers to the
+configuration. Every compilation customizer available in the distribution
+can be configured this way:</p>
+</div>
+<div class="sect3">
+<h4 id="_import_customizer_2"><a class="anchor" href="#_import_customizer_2"></a>6.6.1. Import customizer</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">withConfig(configuration) {
+   imports { // imports customizer
+      normal 'my.package.MyClass' // a normal import
+      alias 'AI', 'java.util.concurrent.atomic.AtomicInteger' // an aliased import
+      star 'java.util.concurrent' // star imports
+      staticMember 'java.lang.Math', 'PI' // static import
+      staticMember 'pi', 'java.lang.Math', 'PI' // aliased static import
+   }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_ast_transformation_customizer_2"><a class="anchor" href="#_ast_transformation_customizer_2"></a>6.6.2. AST transformation customizer</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">withConfig(conf) {
+   ast(Log) <i class="conum" data-value="1"></i><b>(1)</b>
+}
+
+withConfig(conf) {
+   ast(Log, value: 'LOGGER') <i class="conum" data-value="2"></i><b>(2)</b>
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>apply @Log transparently</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>apply @Log with a different name for the logger</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_secure_ast_customizer_2"><a class="anchor" href="#_secure_ast_customizer_2"></a>6.6.3. Secure AST customizer</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">withConfig(conf) {
+   secureAst {
+       closuresAllowed = false
+       methodDefinitionAllowed = false
+   }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_source_aware_customizer_2"><a class="anchor" href="#_source_aware_customizer_2"></a>6.6.4. Source aware customizer</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">withConfig(configuration){
+    source(extension: 'sgroovy') {
+        ast(CompileStatic) <i class="conum" data-value="1"></i><b>(1)</b>
+    }
+}
+
+withConfig(configuration){
+    source(extensions: ['sgroovy','sg']) {
+        ast(CompileStatic) <i class="conum" data-value="2"></i><b>(2)</b>
+    }
+}
+
+withConfig(configuration) {
+    source(extensionValidator: { it.name in ['sgroovy','sg']}) {
+        ast(CompileStatic) <i class="conum" data-value="2"></i><b>(2)</b>
+    }
+}
+
+withConfig(configuration) {
+    source(basename: 'foo') {
+        ast(CompileStatic) <i class="conum" data-value="3"></i><b>(3)</b>
+    }
+}
+
+withConfig(configuration) {
+    source(basenames: ['foo', 'bar']) {
+        ast(CompileStatic) <i class="conum" data-value="4"></i><b>(4)</b>
+    }
+}
+
+withConfig(configuration) {
+    source(basenameValidator: { it in ['foo', 'bar'] }) {
+        ast(CompileStatic) <i class="conum" data-value="4"></i><b>(4)</b>
+    }
+}
+
+withConfig(configuration) {
+    source(unitValidator: { unit -&gt; !unit.AST.classes.any { it.name == 'Baz' } }) {
+        ast(CompileStatic) <i class="conum" data-value="5"></i><b>(5)</b>
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>apply CompileStatic AST annotation on .sgroovy files</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>apply CompileStatic AST annotation on .sgroovy or .sg files</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>apply CompileStatic AST annotation on files whose name is 'foo'</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>apply CompileStatic AST annotation on files whose name is 'foo' or 'bar'</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>apply CompileStatic AST annotation on files that do not contain a class named 'Baz'</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_inlining_a_customizer"><a class="anchor" href="#_inlining_a_customizer"></a>6.6.5. Inlining a customizer</h4>
+<div class="paragraph">
+<p>Inlined customizer allows you to write a compilation customizer
+directly, without having to create a class for it.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">withConfig(configuration) {
+    inline(phase:'CONVERSION') { source, context, classNode -&gt;  <i class="conum" data-value="1"></i><b>(1)</b>
+        println "visiting $classNode"                           <i class="conum" data-value="2"></i><b>(2)</b>
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>define an inlined customizer which will execute at the CONVERSION phase</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>prints the name of the class node being compiled</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_multiple_customizers"><a class="anchor" href="#_multiple_customizers"></a>6.6.6. Multiple customizers</h4>
+<div class="paragraph">
+<p>Of course, the builder allows you to define multiple customizers at
+once:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">withConfig(configuration) {
+   ast(ToString)
+   ast(EqualsAndHashCode)
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_config_script_flag"><a class="anchor" href="#_config_script_flag"></a>6.7. Config script flag</h3>
+<div class="paragraph">
+<p>So far, we have described how you can customize compilation using
+a <code>CompilationConfiguration</code> class, but this is only possible if you
+embed Groovy and that you create your own instances
+of <code>CompilerConfiguration</code> (then use it to create a
+<code>GroovyShell</code>, <code>GroovyScriptEngine</code>, …).</p>
+</div>
+<div class="paragraph">
+<p>If you want it to be applied on the classes you compile with the normal
+Groovy compiler (that is to say with  <code>groovyc</code>, <code>ant</code> or <code>gradle</code>,
+for example), it is possible to use a compilation flag named <code>configscript</code>
+that takes a Groovy configuration script as argument.</p>
+</div>
+<div class="paragraph">
+<p>This script gives you access to the <code>CompilerConfiguration</code> instance <strong>before</strong>
+the files are compiled (exposed into the configuration script as a variable named <code>configuration</code>),
+so that you can tweak it.</p>
+</div>
+<div class="paragraph">
+<p>It also transparently integrates the compiler configuration builder above. As an example, let&#8217;s see
+how you would activate static compilation by default on all classes.</p>
+</div>
+<div class="sect3">
+<h4 id="_static_compilation_by_default"><a class="anchor" href="#_static_compilation_by_default"></a>6.7.1. Static compilation by default</h4>
+<div class="paragraph">
+<p>Normally, classes in Groovy are compiled with a dynamic runtime. You can activate static compilation
+by placing an annotation named <code>@CompileStatic</code> on any class. Some people would like to have this
+mode activated by default, that is to say not having to annotated classes. Using <code>configscript</code>,
+this is possible. First of all, you need to create a file named <code>config.groovy</code> into <code>src/conf</code> with
+the following contents:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">withConfig(configuration) { <i class="conum" data-value="1"></i><b>(1)</b>
+   ast(groovy.transform.CompileStatic)
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><em>configuration</em> references a <code>CompilerConfiguration</code> instance</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>That is actually all you need. You don’t have to import the builder, it’s automatically
+exposed in the script. Then, compile your files using the following command line:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>groovyc -configscript src/conf/config.groovy src/main/groovy/MyClass.groovy</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>We strongly recommend you to separate configuration files from classes,
+hence why we suggest using the <code>src/main</code> and <code>src/conf</code> directories above.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_ast_transformations"><a class="anchor" href="#_ast_transformations"></a>6.8. AST transformations</h3>
+<div class="paragraph">
+<p>If:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>runtime metaprogramming doesn&#8217;t allow you do do what you want</p>
+</li>
+<li>
+<p>you need to improve the performance of the execution of your DSLs</p>
+</li>
+<li>
+<p>you want to leverage the same syntax as Groovy but with different semantics</p>
+</li>
+<li>
+<p>you want to improve support for type checking in your DSLs</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Then AST transformations are the way to go. Unlike the techniques used so far, AST transformations are meant to
+change or generate code before it is compiled to bytecode. AST transformations are capable of adding new methods at
+compile time for example, or totally changing the body of a method based on your needs. They are a very powerful tool
+but also come at the price of not being easy to write. For more information about AST transformations, please take
+a look at the <a href="http://docs.groovy-lang.org/latest/html/documentation/index.html#_compile_time_metaprogramming">compile-time
+metaprogramming</a> section of this manual.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_custom_type_checking_extensions"><a class="anchor" href="#_custom_type_checking_extensions"></a>7. Custom type checking extensions</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>It may be interesting, in some circumstances, to provide feedback about wrong code to the user as soon as possible,
+that is to say when the DSL script is compiled, rather than having to wait for the execution of the script. However,
+this is not often possible with dynamic code. Groovy actually provides a practical answer to this known as
+<a href="type-checking-extensions.html">type checking extensions</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_builders"><a class="anchor" href="#_builders"></a>8. Builders</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>(TBD)</p>
+</div>
+<div class="sect2">
+<h3 id="_creating_a_builder"><a class="anchor" href="#_creating_a_builder"></a>8.1. Creating a builder</h3>
+<div class="paragraph">
+<p>(TBD)</p>
+</div>
+<div class="sect3">
+<h4 id="_buildersupport"><a class="anchor" href="#_buildersupport"></a>8.1.1. BuilderSupport</h4>
+<div class="paragraph">
+<p>(TBD)</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_factorybuildersupport"><a class="anchor" href="#_factorybuildersupport"></a>8.1.2. FactoryBuilderSupport</h4>
+<div class="paragraph">
+<p>(TBD)</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_existing_builders"><a class="anchor" href="#_existing_builders"></a>8.2. Existing builders</h3>
+<div class="paragraph">
+<p>(TBD)</p>
+</div>
+<div class="sect3">
+<h4 id="_markupbuilder"><a class="anchor" href="#_markupbuilder"></a>8.2.1. MarkupBuilder</h4>
+<div class="paragraph">
+<p>See <a href="#_markupbuilder">Creating Xml - MarkupBuilder</a>.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_streamingmarkupbuilder"><a class="anchor" href="#_streamingmarkupbuilder"></a>8.2.2. StreamingMarkupBuilder</h4>
+<div class="paragraph">
+<p>See <a href="#_streamingmarkupbuilder">Creating Xml - StreamingMarkupBuilder</a>.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_saxbuilder"><a class="anchor" href="#_saxbuilder"></a>8.2.3. SaxBuilder</h4>
+<div class="paragraph">
+<p>A builder for generating <a href="https://en.wikipedia.org/wiki/Simple_API_for_XML">Simple API for XML (SAX)</a> events.</p>
+</div>
+<div class="paragraph">
+<p>If you have the following SAX handler:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class LogHandler extends org.xml.sax.helpers.DefaultHandler {
+
+    String log = ''
+
+    void startElement(String uri, String localName, String qName, org.xml.sax.Attributes attributes) {
+        log += "Start Element: $localName, "
+    }
+
+    void endElement(String uri, String localName, String qName) {
+        log += "End Element: $localName, "
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can use <code>SaxBuilder</code> to generate SAX events for the handler like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def handler = new LogHandler()
+def builder = new groovy.xml.SAXBuilder(handler)
+
+builder.root() {
+    helloWorld()
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And then check that everything worked as expected:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">assert handler.log == 'Start Element: root, Start Element: helloWorld, End Element: helloWorld, End Element: root, '</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_staxbuilder"><a class="anchor" href="#_staxbuilder"></a>8.2.4. StaxBuilder</h4>
+<div class="paragraph">
+<p>A Groovy builder that works with <a href="http://en.wikipedia.org/wiki/StAX">Streaming API for XML (StAX)</a> processors.</p>
+</div>
+<div class="paragraph">
+<p>Here is a simple example using the StAX implementation of Java to generate XML:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def factory = javax.xml.stream.XMLOutputFactory.newInstance()
+def writer = new StringWriter()
+def builder = new groovy.xml.StaxBuilder(factory.createXMLStreamWriter(writer))
+
+builder.root(attribute:1) {
+    elem1('hello')
+    elem2('world')
+}
+
+assert writer.toString() == '&lt;?xml version="1.0" ?&gt;&lt;root attribute="1"&gt;&lt;elem1&gt;hello&lt;/elem1&gt;&lt;elem2&gt;world&lt;/elem2&gt;&lt;/root&gt;'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>An external library such as <a href="http://jettison.codehaus.org/">Jettison</a> can be used as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@Grab('org.codehaus.jettison:jettison:1.3.3')
+@GrabExclude('stax:stax-api') // part of Java 6 and later
+import org.codehaus.jettison.mapped.*
+
+def writer = new StringWriter()
+def mappedWriter = new MappedXMLStreamWriter(new MappedNamespaceConvention(), writer)
+def builder = new groovy.xml.StaxBuilder(mappedWriter)
+
+builder.root(attribute:1) {
+     elem1('hello')
+     elem2('world')
+}
+
+assert writer.toString() == '{"root":{"@attribute":"1","elem1":"hello","elem2":"world"}}'</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_dombuilder"><a class="anchor" href="#_dombuilder"></a>8.2.5. DOMBuilder</h4>
+<div class="paragraph">
+<p>A builder for parsing HTML, XHTML and XML into a <a href="https://en.wikipedia.org/wiki/Document_Object_Model">W3C DOM</a> tree.</p>
+</div>
+<div class="paragraph">
+<p>For example this XML <code>String</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">String recordsXML = '''
+    &lt;records&gt;
+      &lt;car name='HSV Maloo' make='Holden' year='2006'&gt;
+        &lt;country&gt;Australia&lt;/country&gt;
+        &lt;record type='speed'&gt;Production Pickup Truck with speed of 271kph&lt;/record&gt;
+      &lt;/car&gt;
+      &lt;car name='P50' make='Peel' year='1962'&gt;
+        &lt;country&gt;Isle of Man&lt;/country&gt;
+        &lt;record type='size'&gt;Smallest Street-Legal Car at 99cm wide and 59 kg in weight&lt;/record&gt;
+      &lt;/car&gt;
+      &lt;car name='Royale' make='Bugatti' year='1931'&gt;
+        &lt;country&gt;France&lt;/country&gt;
+        &lt;record type='price'&gt;Most Valuable Car at $15 million&lt;/record&gt;
+      &lt;/car&gt;
+    &lt;/records&gt;'''</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Can be parsed into a DOM tree with a <code>DOMBuilder</code> like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def reader = new StringReader(recordsXML)
+def doc = groovy.xml.DOMBuilder.parse(reader)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And then processed further e.g. by using <a href="#_domcategory">DOMCategory</a>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def records = doc.documentElement
+use(groovy.xml.dom.DOMCategory) {
+    assert records.car.size() == 3
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_nodebuilder"><a class="anchor" href="#_nodebuilder"></a>8.2.6. NodeBuilder</h4>
+<div class="paragraph">
+<p><code>NodeBuilder</code> is used for creating nested trees of <a href="http://docs.groovy-lang.org/3.0.0-alpha-3/html/gapi/index.html?groovy/util/Node.html">Node</a> objects for handling arbitrary data.
+To create a simple user list you use a <code>NodeBuilder</code> like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def nodeBuilder = new NodeBuilder()
+def userlist = nodeBuilder.userlist {
+    user(id: '1', firstname: 'John', lastname: 'Smith') {
+        address(type: 'home', street: '1 Main St.', city: 'Springfield', state: 'MA', zip: '12345')
+        address(type: 'work', street: '2 South St.', city: 'Boston', state: 'MA', zip: '98765')
+    }
+    user(id: '2', firstname: 'Alice', lastname: 'Doe')
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now you can process the data further, e.g. by using <a href="#gpath_expressions">GPath expressions</a>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">assert userlist.user.@firstname.join(', ') == 'John, Alice'
+assert userlist.user.find { it.@lastname == 'Smith' }.address.size() == 2</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_jsonbuilder"><a class="anchor" href="#_jsonbuilder"></a>8.2.7. JsonBuilder</h4>
+<div class="paragraph">
+<p>Groovy&#8217;s <code>JsonBuilder</code> makes it easy to create Json. For example to create this Json string:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">String carRecords = '''
+    {
+        "records": {
+        "car": {
+            "name": "HSV Maloo",
+            "make": "Holden",
+            "year": 2006,
+            "country": "Australia",
+            "record": {
+              "type": "speed",
+              "description": "production pickup truck with speed of 271kph"
+            }
+          }
+      }
+    }
+'''</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>you can use a <code>JsonBuilder</code> like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">JsonBuilder builder = new JsonBuilder()
+builder.records {
+  car {
+        name 'HSV Maloo'
+        make 'Holden'
+        year 2006
+        country 'Australia'
+        record {
+            type 'speed'
+            description 'production pickup truck with speed of 271kph'
+        }
+  }
+}
+String json = JsonOutput.prettyPrint(builder.toString())</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>We use <a href="https://github.com/lukas-krecan/JsonUnit">JsonUnit</a> to check that the builder produced the expected result:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">JsonAssert.assertJsonEquals(json, carRecords)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you need to customize the generated output you can pass a <code>JsonGenerator</code> instance when creating a <code>JsonBuilder</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import groovy.json.*
+
+def generator = new JsonGenerator.Options()
+        .excludeNulls()
+        .excludeFieldsByName('make', 'country', 'record')
+        .excludeFieldsByType(Number)
+        .addConverter(URL) { url -&gt; "http://groovy-lang.org" }
+        .build()
+
+JsonBuilder builder = new JsonBuilder(generator)
+builder.records {
+  car {
+        name 'HSV Maloo'
+        make 'Holden'
+        year 2006
+        country 'Australia'
+        homepage new URL('http://example.org')
+        record {
+            type 'speed'
+            description 'production pickup truck with speed of 271kph'
+        }
+  }
+}
+
+assert builder.toString() == '{"records":{"car":{"name":"HSV Maloo","homepage":"http://groovy-lang.org"}}}'</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_streamingjsonbuilder"><a class="anchor" href="#_streamingjsonbuilder"></a>8.2.8. StreamingJsonBuilder</h4>
+<div class="paragraph">
+<p>Unlike <code>JsonBuilder</code> which creates a data structure in memory, which is handy in those situations where you want to alter the structure programmatically before output,
+<code>StreamingJsonBuilder</code> directly streams to a writer without any intermediate memory data structure.
+If you do not need to modify the structure and want a more memory-efficient approach, use <code>StreamingJsonBuilder</code>.</p>
+</div>
+<div class="paragraph">
+<p>The usage of <code>StreamingJsonBuilder</code> is similar to <code>JsonBuilder</code>. In order to create this Json string:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">String carRecords = '''
+    {
+        "records": {
+        "car": {
+            "name": "HSV Maloo",
+            "make": "Holden",
+            "year": 2006,
+            "country": "Australia",
+            "record": {
+              "type": "speed",
+              "description": "production pickup truck with speed of 271kph"
+            }
+          }
+      }
+    }
+'''</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>you use a <code>StreamingJsonBuilder</code> like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">StringWriter writer = new StringWriter()
+StreamingJsonBuilder builder = new StreamingJsonBuilder(writer)
+builder.records {
+  car {
+        name 'HSV Maloo'
+        make 'Holden'
+        year 2006
+        country 'Australia'
+        record {
+            type 'speed'
+            description 'production pickup truck with speed of 271kph'
+        }
+  }
+}
+String json = JsonOutput.prettyPrint(writer.toString())</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>We use <a href="https://github.com/lukas-krecan/JsonUnit">JsonUnit</a> to check the expected result:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">JsonAssert.assertJsonEquals(json, carRecords)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you need to customize the generated output you can pass a <code>JsonGenerator</code> instance when creating a <code>StreamingJsonBuilder</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def generator = new JsonGenerator.Options()
+        .excludeNulls()
+        .excludeFieldsByName('make', 'country', 'record')
+        .excludeFieldsByType(Number)
+        .addConverter(URL) { url -&gt; "http://groovy-lang.org" }
+        .build()
+
+StringWriter writer = new StringWriter()
+StreamingJsonBuilder builder = new StreamingJsonBuilder(writer, generator)
+
+builder.records {
+  car {
+        name 'HSV Maloo'
+        make 'Holden'
+        year 2006
+        country 'Australia'
+        homepage new URL('http://example.org')
+        record {
+            type 'speed'
+            description 'production pickup truck with speed of 271kph'
+        }
+  }
+}
+
+assert writer.toString() == '{"records":{"car":{"name":"HSV Maloo","homepage":"http://groovy-lang.org"}}}'</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="swingbuilder"><a class="anchor" href="#swingbuilder"></a>8.2.9. SwingBuilder</h4>
+<div class="paragraph">
+<p><code>SwingBuilder</code> allows you to create full-fledged Swing GUIs in a declarative and concise fashion. It accomplishes this by employing a common idiom in Groovy, builders.
+Builders handle the busywork of creating complex objects for you, such as instantiating children, calling Swing methods, and attaching these children to their parents.
+As a consequence, your code is much more readable and maintainable, while still allowing you access to the full range of Swing components.</p>
+</div>
+<div class="paragraph">
+<p>Here&#8217;s a simple example of using <code>SwingBuilder</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import groovy.swing.SwingBuilder
+import java.awt.BorderLayout as BL
+
+count = 0
+new SwingBuilder().edt {
+  frame(title: 'Frame', size: [300, 300], show: true) {
+    borderLayout()
+    textlabel = label(text: 'Click the button!', constraints: BL.NORTH)
+    button(text:'Click Me',
+         actionPerformed: {count++; textlabel.text = "Clicked ${count} time(s)."; println "clicked"}, constraints:BL.SOUTH)
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here is what it will look like:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="assets/img/SwingBuilder001.gif" alt="SwingBuilder001">
+</div>
+</div>
+<div class="paragraph">
+<p>This hierarchy of components would normally be created through a series of repetitive instantiations, setters, and finally attaching this child to its respective parent.
+Using <code>SwingBuilder</code>, however, allows you to define this hierarchy in its native form, which makes the interface design understandable simply by reading the code.</p>
+</div>
+<div class="paragraph">
+<p>The flexibility shown here is made possible by leveraging the many programming features built-in to Groovy, such as closures, implicit constructor calling, import aliasing, and string interpolation.
+Of course, these do not have to be fully understood in order to use <code>SwingBuilder</code>; as you can see from the code above, their uses are intuitive.</p>
+</div>
+<div class="paragraph">
+<p>Here is a slightly more involved example, with an example of <code>SwingBuilder</code> code re-use via a closure.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import groovy.swing.SwingBuilder
+import javax.swing.*
+import java.awt.*
+
+def swing = new SwingBuilder()
+
+def sharedPanel = {
+     swing.panel() {
+        label("Shared Panel")
+    }
+}
+
+count = 0
+swing.edt {
+    frame(title: 'Frame', defaultCloseOperation: JFrame.EXIT_ON_CLOSE, pack: true, show: true) {
+        vbox {
+            textlabel = label('Click the button!')
+            button(
+                text: 'Click Me',
+                actionPerformed: {
+                    count++
+                    textlabel.text = "Clicked ${count} time(s)."
+                    println "Clicked!"
+                }
+            )
+            widget(sharedPanel())
+            widget(sharedPanel())
+        }
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here&#8217;s another variation that relies on observable beans and binding:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import groovy.swing.SwingBuilder
+import groovy.beans.Bindable
+
+class MyModel {
+   @Bindable int count = 0
+}
+
+def model = new MyModel()
+new SwingBuilder().edt {
+  frame(title: 'Java Frame', size: [100, 100], locationRelativeTo: null, show: true) {
+    gridLayout(cols: 1, rows: 2)
+    label(text: bind(source: model, sourceProperty: 'count', converter: { v -&gt;  v? "Clicked $v times": ''}))
+    button('Click me!', actionPerformed: { model.count++ })
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><a href="core-metaprogramming.html#xform-Bindable">@Bindable</a> is one of the core AST Transformations. It generates all the required boilerplate code to turn a simple bean into an observable one. The <code>bind()</code> node creates appropriate <code>PropertyChangeListeners</code> that will update the interested parties whenever a <code>PropertyChangeEvent</code> is fired.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_antbuilder"><a class="anchor" href="#_antbuilder"></a>8.2.10. AntBuilder</h4>
+<div class="paragraph">
+<p>Despite being primarily a build tool, <a href="http://ant.apache.org/">Apache Ant</a> is
+a very practical tool for manipulating files including zip files, copy, resource processing, &#8230;&#8203;
+But if ever you’ve been working with a <code>build.xml</code> file or some <em>Jelly script</em>
+and found yourself a little restricted by all those pointy brackets, or
+found it a bit weird using XML as a scripting language and wanted
+something a little cleaner and more straight forward, then maybe Ant
+scripting with Groovy might be what you&#8217;re after.</p>
+</div>
+<div class="paragraph">
+<p>Groovy has a helper class called <code>AntBuilder</code> which makes the scripting
+of Ant tasks really easy; allowing a real scripting language to be used
+for programming constructs (variables, methods, loops, logical
+branching, classes etc). It still looks like a neat concise version of
+Ant&#8217;s XML without all those pointy brackets; though you can mix and
+match this markup inside your script. Ant itself is a collection of jar
+files. By adding them to your classpath, you can easily use them within
+Groovy as is. We believe using <code>AntBuilder</code> leads to more concise and
+readily understood syntax.</p>
+</div>
+<div class="paragraph">
+<p><code>AntBuilder</code> exposes Ant tasks directly using the convenient builder notation that
+we are used to in Groovy. Here is the most basic example, which is printing a message
+on the standard output:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def ant = new AntBuilder()          <i class="conum" data-value="1"></i><b>(1)</b>
+ant.echo('hello from Ant!')         <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>creates an instance of <code>AntBuilder</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>executes the <code>echo</code> task with the message in parameter</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Imagine that you need to create a ZIP file:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def ant = new AntBuilder()
+ant.zip(destfile: 'sources.zip', basedir: 'src')</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In the next example, we demonstrate the use of <code>AntBuilder</code> to copy a list of files
+using a classical Ant pattern directly in Groovy:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// lets just call one task
+ant.echo("hello")
+
+// here is an example of a block of Ant inside GroovyMarkup
+ant.sequential {
+    echo("inside sequential")
+    def myDir = "target/AntTest/"
+    mkdir(dir: myDir)
+    copy(todir: myDir) {
+        fileset(dir: "src/test") {
+            include(name: "**/*.groovy")
+        }
+    }
+    echo("done")
+}
+
+// now lets do some normal Groovy again
+def file = new File(ant.project.baseDir,"target/AntTest/groovy/util/AntTest.groovy")
+assert file.exists()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Another example would be iterating over a list of files matching a specific pattern:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// lets create a scanner of filesets
+def scanner = ant.fileScanner {
+    fileset(dir:"src/test") {
+        include(name:"**/Ant*.groovy")
+    }
+}
+
+// now lets iterate over
+def found = false
+for (f in scanner) {
+    println("Found file $f")
+    found = true
+    assert f instanceof File
+    assert f.name.endsWith(".groovy")
+}
+assert found</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Or execute a JUnit test:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// lets create a scanner of filesets
+ant.junit {
+    test(name:'groovy.util.SomethingThatDoesNotExist')
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>We can even go further by compiling and executing a Java file directly from Groovy:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">ant.echo(file:'Temp.java', '''
+    class Temp {
+        public static void main(String[] args) {
+            System.out.println("Hello");
+        }
+    }
+''')
+ant.javac(srcdir:'.', includes:'Temp.java', fork:'true')
+ant.java(classpath:'.', classname:'Temp', fork:'true')
+ant.echo('Done')</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>It is worth mentioning that <code>AntBuilder</code> is included in <a href="http://gradle.org/">Gradle</a>, so you can use it in Gradle
+just like you would in Groovy. Additional documentation can be found in the
+<a href="http://gradle.org/docs/current/userguide/ant.html">Gradle manual</a>.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_clibuilder"><a class="anchor" href="#_clibuilder"></a>8.2.11. CliBuilder</h4>
+<div class="paragraph">
+<p><code>CliBuilder</code> provides a compact way to specify the available options for a commandline application and then
+automatically parse the application&#8217;s commandline parameters according to that specification. By convention,
+a distinction is made between <em>option</em> commandline parameters and any remaining parameters which are passed
+to an application as its arguments. Typically, several types of options might be supported such as <code>-V</code> or
+<code>--tabsize=4</code>. <code>CliBuilder</code> removes the burden of developing lots of code for commandline processing.
+Instead, it supports a somewhat declarative approach to declaring your options and then provides a single call
+to parse the commandline parameters with a simple mechanism to interrogate the options (you can think of this
+as a simple model for your options).</p>
+</div>
+<div class="paragraph">
+<p>Even though the details of each commandline you create could be quite different, the same main steps are
+followed each time. First, a <code>CliBuilder</code> instance is created. Then, allowed commandline options are defined.
+This can be done using a <em>dynamic api</em> style or an <em>annotation</em> style.
+The commandline parameters are then parsed according to the options specification resulting in a
+collection of options which are then interrogated.</p>
+</div>
+<div class="paragraph">
+<p>Here is a simple example <code>Greeter.groovy</code> script illustrating usage:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// import of CliBuilder not shown                          <i class="conum" data-value="1"></i><b>(1)</b>
+// specify parameters
+def cli = new CliBuilder(usage: 'groovy Greeter [option]') <i class="conum" data-value="2"></i><b>(2)</b>
+cli.a(longOpt: 'audience', args: 1, 'greeting audience')   <i class="conum" data-value="3"></i><b>(3)</b>
+cli.h(longOpt: 'help', 'display usage')                    <i class="conum" data-value="4"></i><b>(4)</b>
+
+// parse and process parameters
+def options = cli.parse(args)                              <i class="conum" data-value="5"></i><b>(5)</b>
+if (options.h) cli.usage()                                 <i class="conum" data-value="6"></i><b>(6)</b>
+else println "Hello ${options.a ? options.a : 'World'}"    <i class="conum" data-value="7"></i><b>(7)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Earlier versions of Groovy had a CliBuilder in the groovy.util package and no import was necessary.
+While still supported, this approach is now deprecated and you should instead choose the groovy.cli.picocli
+or groovy.cli.commons version. The groovy.util version points to the commons-cli version for backwards compatibility
+but will be removed in a future version of Groovy.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>define a new <code>CliBuilder</code> instance specifying an optional usage string</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>specify a <code>-a</code> option taking a single argument with an optional long variant <code>--audience</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>specify a <code>-h</code> option taking no arguments with an optional long variant <code>--help</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>parse the commandline parameters supplied to the script</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>if the <code>h</code> option is found display a usage message</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td>display a standard greeting or, if the <code>a</code> option is found, a customized greeting</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Running this script with no commandline parameters, i.e.:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-shell" data-lang="shell">&gt; groovy Greeter</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>results in the following output:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Hello World</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Running this script with <code>-h</code> as the single commandline parameter, i.e.:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-shell" data-lang="shell">&gt; groovy Greeter -h</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>results in the following output:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>usage: groovy Greeter [option]
+ -a,--audience &lt;arg&gt;   greeting audience
+ -h,--help             display usage</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Running this script with <code>--audience Groovologist</code> as the commandline parameters, i.e.:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-shell" data-lang="shell">&gt; groovy Greeter --audience Groovologist</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>results in the following output:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Hello Groovologist</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When creating the <code>CliBuilder</code> instance in the above example, we set the optional <code>usage</code> property
+within the constructor call. This follows Groovy&#8217;s normal ability to set additional properties
+of the instance during construction. There are numerous other properties which can be set
+such as <code>header</code> and <code>footer</code>. For the complete set of available properties, see the
+available properties for the <a href="http://docs.groovy-lang.org/3.0.0-alpha-3/html/gapi/index.html?groovy/util/CliBuilder.html">CliBuilder</a> class.</p>
+</div>
+<div class="paragraph">
+<p>When defining an allowed commandline option, both a short name (e.g. "h" for the <code>help</code> option shown previously)
+and a short description (e.g. "display usage" for the <code>help</code> option) must be supplied.
+In our example above, we also set some
+additional properties such as <code>longOpt</code> and <code>args</code>. The following additional
+properties are supported when specifying an allowed commandline option:</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Description</th>
+<th class="tableblock halign-left valign-top">Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">argName</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">the name of the argument for this option used in output</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">longOpt</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">the long representation or long name of the option</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">args</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">the number of argument values</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>int</code> or <code>String</code> &lt;1&gt;</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">optionalArg</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">whether the argument value is optional</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>boolean</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">required</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">whether the option is mandatory</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>boolean</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">type</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">the type of this option</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Class</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">valueSeparator</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">the character that is the value separator</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>char</code> &lt;2&gt;</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">defaultValue</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a default value</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">convert</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">converts the incoming String to the required type</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Closure</code> &lt;1&gt;</p></td>
+</tr>
+</tbody>
+</table>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>More details later</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Single character Strings are coerced to chars in special cases in Groovy</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>If you have an option with only a <code>longOpt</code> variant, you can use the special shortname of '_'
+to specify the option, e.g. : <code>cli._(longOpt: 'verbose', 'enable verbose logging')</code>.
+Some of the remaining named parameters should be fairly self-explanatory while others deserve
+a bit more explanation. But before further explanations, let&#8217;s look at ways of using
+<code>CliBuilder</code> with annotations.</p>
+</div>
+<div class="sect4">
+<h5 id="_using_annotations_and_an_interface"><a class="anchor" href="#_using_annotations_and_an_interface"></a>Using Annotations and an interface</h5>
+<div class="paragraph">
+<p>Rather than making a series of method calls (albeit in a very declarative mini-DSL form)
+to specify the allowable options, you can provide an interface specification of the allowable options where
+annotations are used to indicate and provide details for those options and for how unprocessed
+parameters are handled. Two annotations are used: <a href="http://docs.groovy-lang.org/3.0.0-alpha-3/html/gapi/index.html?groovy/cli/Option.html">groovy.cli.Option</a> and <a href="http://docs.groovy-lang.org/3.0.0-alpha-3/html/gapi/index.html?groovy/cli/Unparsed.html">groovy.cli.Unparsed</a>.</p>
+</div>
+<div class="paragraph">
+<p>Here is how such a specification can be defined:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">interface GreeterI {
+    @Option(shortName='h', description='display usage') Boolean help()        <i class="conum" data-value="1"></i><b>(1)</b>
+    @Option(shortName='a', description='greeting audience') String audience() <i class="conum" data-value="2"></i><b>(2)</b>
+    @Unparsed(description = "positional parameters") List remaining()         <i class="conum" data-value="3"></i><b>(3)</b>
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Specify a Boolean option set using <code>-h</code> or <code>--help</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Specify a String option set using <code>-a</code> or <code>--audience</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Specify where any remaining parameters will be stored</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Note how the long name is automatically determined from the interface method name.
+You can use the <code>longName</code> annotation attribute to override that behavior and specify
+a custom long name if you wish or use a longName of '_' to indicate that no long name
+is to be provided. You will need to specify a shortName in such a case.</p>
+</div>
+<div class="paragraph">
+<p>Here is how you could use the interface specification:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// import CliBuilder not shown
+def cli = new CliBuilder(usage: 'groovy Greeter')  <i class="conum" data-value="1"></i><b>(1)</b>
+def argz = '--audience Groovologist'.split()
+def options = cli.parseFromSpec(GreeterI, argz)             <i class="conum" data-value="2"></i><b>(2)</b>
+assert options.audience() == 'Groovologist'                 <i class="conum" data-value="3"></i><b>(3)</b>
+
+argz = '-h Some Other Args'.split()
+options = cli.parseFromSpec(GreeterI, argz)                 <i class="conum" data-value="4"></i><b>(4)</b>
+assert options.help()
+assert options.remaining() == ['Some', 'Other', 'Args']     <i class="conum" data-value="5"></i><b>(5)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Create a <code>CliBuilder</code> instance as before with optional properties</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Parse parameters using the interface specification</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Interrogate options using the methods from the interface</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Parse a different set of parameters</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>Interrogate the remaining parameters</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>When <code>parseFromSpec</code> is called, <code>CliBuilder</code> automatically creates an instance implementing the interface
+and populates it. You simply call the interface methods to interrogate the option values.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_using_annotations_and_an_instance"><a class="anchor" href="#_using_annotations_and_an_instance"></a>Using Annotations and an instance</h5>
+<div class="paragraph">
+<p>Alternatively, perhaps you already have a domain class containing the option information.
+You can simply annotate properties or setters from that class to enable <code>CliBuilder</code> to appropriately
+populate your domain object. Each annotation both describes that option&#8217;s properties through the annotation
+attributes and indicates the setter the <code>CliBuilder</code> will use to populate that option in your domain object.</p>
+</div>
+<div class="paragraph">
+<p>Here is how such a specification can be defined:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class GreeterC {
+    @Option(shortName='h', description='display usage')
+    Boolean help                        <i class="conum" data-value="1"></i><b>(1)</b>
+
+    private String audience
+    @Option(shortName='a', description='greeting audience')
+    void setAudience(String audience) { <i class="conum" data-value="2"></i><b>(2)</b>
+        this.audience = audience
+    }
+    String getAudience() { audience }
+
+    @Unparsed(description = "positional parameters")
+    List remaining                      <i class="conum" data-value="3"></i><b>(3)</b>
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Indicate that a Boolean property is an option</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Indicate that a String property (with explicit setter) is an option</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Specify where any remaining args will be stored</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>And here is how you could use the specification:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// import CliBuilder not shown
+def cli = new CliBuilder(usage: 'groovy Greeter [option]') <i class="conum" data-value="1"></i><b>(1)</b>
+def options = new GreeterC()                               <i class="conum" data-value="2"></i><b>(2)</b>
+def argz = '--audience Groovologist foo'.split()
+cli.parseFromInstance(options, argz)                       <i class="conum" data-value="3"></i><b>(3)</b>
+assert options.audience == 'Groovologist'                  <i class="conum" data-value="4"></i><b>(4)</b>
+assert options.remaining == ['foo']                        <i class="conum" data-value="5"></i><b>(5)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Create a <code>CliBuilder</code> instance as before with optional parameters</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Create an instance for <code>CliBuilder</code> to populate</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Parse arguments populating the supplied instance</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Interrogate the String option property</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>Interrogate the remaining arguments property</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>When <code>parseFromInstance</code> is called, <code>CliBuilder</code> automatically populates your instance.
+You simply interrogate the instance properties (or whatever accessor methods you have provided
+in your domain object) to access the option values.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_using_annotations_and_a_script"><a class="anchor" href="#_using_annotations_and_a_script"></a>Using Annotations and a script</h5>
+<div class="paragraph">
+<p>Finally, there are two additional convenience annotation aliases specifically for scripts. They
+simply combine the previously mentioned annotations and <a href="http://docs.groovy-lang.org/3.0.0-alpha-3/html/gapi/index.html?groovy/transform/Field.html">groovy.transform.Field</a>.
+The groovydoc for those annotations reveals the details: <a href="http://docs.groovy-lang.org/3.0.0-alpha-3/html/gapi/index.html?groovy/cli/OptionField.html">groovy.cli.OptionField</a> and
+<a href="http://docs.groovy-lang.org/3.0.0-alpha-3/html/gapi/index.html?groovy/cli/UnparsedField.html">groovy.cli.UnparsedField</a>.</p>
+</div>
+<div class="paragraph">
+<p>Here is an example using those annotations in a self-contained script that would be called
+with the same arguments as shown for the instance example earlier:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// import CliBuilder not shown
+import groovy.cli.OptionField
+import groovy.cli.UnparsedField
+
+@OptionField String audience
+@OptionField Boolean help
+@UnparsedField List remaining
+new CliBuilder().parseFromInstance(this, args)
+assert audience == 'Groovologist'
+assert remaining == ['foo']</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_options_with_arguments"><a class="anchor" href="#_options_with_arguments"></a>Options with arguments</h5>
+<div class="paragraph">
+<p>We saw in our initial example that some options act like flags, e.g. <code>Greeter -h</code> but
+others take an argument, e.g. <code>Greeter --audience Groovologist</code>. The simplest cases
+involve options which act like flags or have a single (potentially optional) argument.
+Here is an example involving those cases:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// import CliBuilder not shown
+def cli = new CliBuilder()
+cli.a(args: 0, 'a arg') <i class="conum" data-value="1"></i><b>(1)</b>
+cli.b(args: 1, 'b arg') <i class="conum" data-value="2"></i><b>(2)</b>
+cli.c(args: 1, optionalArg: true, 'c arg') <i class="conum" data-value="3"></i><b>(3)</b>
+def options = cli.parse('-a -b foo -c bar baz'.split()) <i class="conum" data-value="4"></i><b>(4)</b>
+
+assert options.a == true
+assert options.b == 'foo'
+assert options.c == 'bar'
+assert options.arguments() == ['baz']
+
+options = cli.parse('-a -c -b foo bar baz'.split()) <i class="conum" data-value="5"></i><b>(5)</b>
+
+assert options.a == true
+assert options.c == true
+assert options.b == 'foo'
+assert options.arguments() == ['bar', 'baz']</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>An option that is simply a flag - the default; setting args to 0 is allowed but not needed.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>An option with exactly one argument</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>An option with an optional argument; it acts like a flag if the option is left out</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>An example using this spec where an argument is supplied to the 'c' option</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>An example using this spec where no argument is supplied to the 'c' option; it&#8217;s just a flag</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Note: when an option with an optional argument is encountered, it will (somewhat) greedily consume the
+next parameter from the supplied commandline parameters. If however, the next parameter matches a known long or short
+option (with leading single or double hyphens), that will take precedence, e.g. <code>-b</code> in the above example.</p>
+</div>
+<div class="paragraph">
+<p>Option arguments may also be specified using the annotation style. Here is an interface option specification
+illustrating such a definition:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">interface WithArgsI {
+    @Option boolean a()
+    @Option String b()
+    @Option(optionalArg=true) String[] c()
+    @Unparsed List remaining()
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And here is how it is used:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def cli = new CliBuilder()
+def options = cli.parseFromSpec(WithArgsI, '-a -b foo -c bar baz'.split())
+assert options.a()
+assert options.b() == 'foo'
+assert options.c() == ['bar']
+assert options.remaining() == ['baz']
+
+options = cli.parseFromSpec(WithArgsI, '-a -c -b foo bar baz'.split())
+assert options.a()
+assert options.c() == []
+assert options.b() == 'foo'
+assert options.remaining() == ['bar', 'baz']</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This example makes use of an array-typed option specification. We cover this in more detail shortly when we discuss
+multiple arguments.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_specifying_a_type"><a class="anchor" href="#_specifying_a_type"></a>Specifying a type</h5>
+<div class="paragraph">
+<p>Arguments on the commandline are by nature Strings (or arguably can be considered Booleans for flags) but can be
+converted to richer types automatically by supplying additional typing information. For the
+annotation-based argument definition style, these types are supplied using the field types for annotation
+properties or return types of annotated methods (or the setter argument type for setter methods).
+For the dynamic method style of argument definition a special 'type' property is supported
+which allows you to specify a Class name.</p>
+</div>
+<div class="paragraph">
+<p>When an explicit type is defined, the <code>args</code> named-parameter is assumed to be 1 (except for Boolean-typed
+options where it is 0 by default). An explicit <code>args</code> parameter can still be provided if needed.
+Here is an example using types with the dynamic api argument definition style:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def argz = '''-a John -b -d 21 -e 1980 -f 3.5 -g 3.14159
+    -h cv.txt -i DOWN and some more'''.split()
+def cli = new CliBuilder()
+cli.a(type: String, 'a-arg')
+cli.b(type: boolean, 'b-arg')
+cli.c(type: Boolean, 'c-arg')
+cli.d(type: int, 'd-arg')
+cli.e(type: Long, 'e-arg')
+cli.f(type: Float, 'f-arg')
+cli.g(type: BigDecimal, 'g-arg')
+cli.h(type: File, 'h-arg')
+cli.i(type: RoundingMode, 'i-arg')
+def options = cli.parse(argz)
+assert options.a == 'John'
+assert options.b
+assert !options.c
+assert options.d == 21
+assert options.e == 1980L
+assert options.f == 3.5f
+assert options.g == 3.14159
+assert options.h == new File('cv.txt')
+assert options.i == RoundingMode.DOWN
+assert options.arguments() == ['and', 'some', 'more']</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Primitives, numeric types, files, enums and arrays thereof, are supported (they are converted using
+<a href="http://docs.groovy-lang.org/3.0.0-alpha-3/html/gapi/index.html?org/codehaus/groovy/runtime/StringGroovyMethods.html#asType">StringGroovyMethods#asType(String, Class)</a>).</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_custom_parsing_of_the_argument_string"><a class="anchor" href="#_custom_parsing_of_the_argument_string"></a>Custom parsing of the argument String</h5>
+<div class="paragraph">
+<p>If the supported types aren&#8217;t sufficient, you can supply a closure to handle the String to rich type conversion
+for you. Here is a sample using the dynamic api style:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def argz = '''-a John -b Mary -d 2016-01-01 and some more'''.split()
+def cli = new CliBuilder()
+def lower = { it.toLowerCase() }
+cli.a(convert: lower, 'a-arg')
+cli.b(convert: { it.toUpperCase() }, 'b-arg')
+cli.d(convert: { Date.parse('yyyy-MM-dd', it) }, 'd-arg')
+def options = cli.parse(argz)
+assert options.a == 'john'
+assert options.b == 'MARY'
+assert options.d.format('dd-MMM-yyyy') == '01-Jan-2016'
+assert options.arguments() == ['and', 'some', 'more']</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Alternatively, you can use the annotation style by supplying the conversion closure as an annotation parameter.
+Here is an example specification:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">interface WithConvertI {
+    @Option(convert={ it.toLowerCase() }) String a()
+    @Option(convert={ it.toUpperCase() }) String b()
+    @Option(convert={ Date.parse("yyyy-MM-dd", it) }) Date d()
+    @Unparsed List remaining()
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And an example using that specification:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Date newYears = Date.parse("yyyy-MM-dd", "2016-01-01")
+def argz = '''-a John -b Mary -d 2016-01-01 and some more'''.split()
+def cli = new CliBuilder()
+def options = cli.parseFromSpec(WithConvertI, argz)
+assert options.a() == 'john'
+assert options.b() == 'MARY'
+assert options.d() == newYears
+assert options.remaining() == ['and', 'some', 'more']</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_options_with_multiple_arguments"><a class="anchor" href="#_options_with_multiple_arguments"></a>Options with multiple arguments</h5>
+<div class="paragraph">
+<p>Multiple arguments are also supported using an <code>args</code> value greater than 1. There is a special named parameter,
+<code>valueSeparator</code>, which can also be optionally used when processing multiple arguments. It allows some additional
+flexibility in the syntax supported when supplying such argument lists on the commandline. For example,
+supplying a value separator of ',' allows a comma-delimited list of values to be passed on the commandline.</p>
+</div>
+<div class="paragraph">
+<p>The <code>args</code> value is normally an integer. It can be optionally supplied as a String. There are two special
+String symbols: <code>&plus;</code> and <code>&#42;</code>.
+The <code>&#42;</code> value means 0 or more. The <code>&plus;</code> value means 1 or more.
+The <code>&#42;</code> value is the same as using <code>&plus;</code> and also setting the <code>optionalArg</code> value to true.</p>
+</div>
+<div class="paragraph">
+<p>Accessing the multiple arguments follows a special convention. Simply add an 's' to the normal property
+you would use to access the argument option and you will retrieve all the supplied arguments as a list.
+So, for a short option named 'a', you access the first 'a' argument using <code>options.a</code> and the list of
+all arguments using <code>options.as</code>. It&#8217;s fine to have a shortname or longname ending in 's' so long as you
+don&#8217;t also have the singular variant without the 's'. So, if <code>name</code> is one of your options with multiple arguments
+and <code>guess</code> is another with a single argument, there will be no confusion using <code>options.names</code> and <code>options.guess</code>.</p>
+</div>
+<div class="paragraph">
+<p>Here is an excerpt highlighting the use of multiple arguments:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// import CliBuilder not shown
+def cli = new CliBuilder()
+cli.a(args: 2, 'a-arg')
+cli.b(args: '2', valueSeparator: ',', 'b-arg') <i class="conum" data-value="1"></i><b>(1)</b>
+cli.c(args: '+', valueSeparator: ',', 'c-arg') <i class="conum" data-value="2"></i><b>(2)</b>
+
+def options = cli.parse('-a 1 2 3 4'.split()) <i class="conum" data-value="3"></i><b>(3)</b>
+assert options.a == '1' <i class="conum" data-value="4"></i><b>(4)</b>
+assert options.as == ['1', '2'] <i class="conum" data-value="5"></i><b>(5)</b>
+assert options.arguments() == ['3', '4']
+
+options = cli.parse('-a1 -a2 3'.split()) <i class="conum" data-value="6"></i><b>(6)</b>
+assert options.as == ['1', '2']
+assert options.arguments() == ['3']
+
+options = cli.parse(['-b1,2']) <i class="conum" data-value="7"></i><b>(7)</b>
+assert options.bs == ['1', '2']
+
+options = cli.parse(['-c', '1'])
+assert options.cs == ['1']
+
+options = cli.parse(['-c1'])
+assert options.cs == ['1']
+
+options = cli.parse(['-c1,2,3'])
+assert options.cs == ['1', '2', '3']</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Args value supplied as a String and comma value separator specified</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>One or more arguments are allowed</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Two commandline parameters will be supplied as the 'b' option&#8217;s list of arguments</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Access the 'a' option&#8217;s first argument</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>Access the 'a' option&#8217;s list of arguments</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>An alternative syntax for specifying two arguments for the 'a' option</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td>The arguments to the 'b' option supplied as a comma-separated value</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>As an alternative to accessing multiple arguments using the <em>plural name</em> approach, you can use an
+array-based type for the option. In this case, all options will always be returned via the array
+which is accessed via the normal singular name. We&#8217;ll see an example of this next when discussing
+types.</p>
+</div>
+<div class="paragraph">
+<p>Multiple arguments are also supported using the annotation style of option definition by using an
+array type for the annotated class member (method or property) as this example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">interface ValSepI {
+    @Option(numberOfArguments=2) String[] a()
+    @Option(numberOfArgumentsString='2', valueSeparator=',') String[] b()
+    @Option(numberOfArgumentsString='+', valueSeparator=',') String[] c()
+    @Unparsed remaining()
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And used as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def cli = new CliBuilder()
+
+def options = cli.parseFromSpec(ValSepI, '-a 1 2 3 4'.split())
+assert options.a() == ['1', '2']
+assert options.remaining() == ['3', '4']
+
+options = cli.parseFromSpec(ValSepI, '-a1 -a2 3'.split())
+assert options.a() == ['1', '2']
+assert options.remaining() == ['3']
+
+options = cli.parseFromSpec(ValSepI, ['-b1,2'] as String[])
+assert options.b() == ['1', '2']
+
+options = cli.parseFromSpec(ValSepI, ['-c', '1'] as String[])
+assert options.c() == ['1']
+
+options = cli.parseFromSpec(ValSepI, ['-c1'] as String[])
+assert options.c() == ['1']
+
+options = cli.parseFromSpec(ValSepI, ['-c1,2,3'] as String[])
+assert options.c() == ['1', '2', '3']</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_types_and_multiple_arguments"><a class="anchor" href="#_types_and_multiple_arguments"></a>Types and multiple arguments</h5>
+<div class="paragraph">
+<p>Here is an example using types and multiple arguments with the dynamic api argument definition style:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def argz = '''-j 3 4 5 -k1.5,2.5,3.5 and some more'''.split()
+def cli = new CliBuilder()
+cli.j(args: 3, type: int[], 'j-arg')
+cli.k(args: '+', valueSeparator: ',', type: BigDecimal[], 'k-arg')
+def options = cli.parse(argz)
+assert options.js == [3, 4, 5] <i class="conum" data-value="1"></i><b>(1)</b>
+assert options.j == [3, 4, 5]  <i class="conum" data-value="1"></i><b>(1)</b>
+assert options.k == [1.5, 2.5, 3.5]
+assert options.arguments() == ['and', 'some', 'more']</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>For an array type, the trailing 's' can be used but isn&#8217;t needed</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_setting_a_default_value"><a class="anchor" href="#_setting_a_default_value"></a>Setting a default value</h5>
+<div class="paragraph">
+<p>Groovy makes it easy using the Elvis operator to provide a default value at the point of usage of some variable,
+e.g. <code>String x = someVariable ?: 'some default'</code>. But sometimes you wish to make such a default part of the
+options specification to minimise the interrogators work in later stages. <code>CliBuilder</code> supports the <code>defaultValue</code>
+property to cater for this scenario.</p>
+</div>
+<div class="paragraph">
+<p>Here is how you could use it using the dynamic api style:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def cli = new CliBuilder()
+cli.f longOpt: 'from', type: String, args: 1, defaultValue: 'one', 'f option'
+cli.t longOpt: 'to', type: int, defaultValue: '35', 't option'
+
+def options = cli.parse('-f two'.split())
+assert options.hasOption('f')
+assert options.f == 'two'
+assert !options.hasOption('t')
+assert options.t == 35
+
+options = cli.parse('-t 45'.split())
+assert !options.hasOption('from')
+assert options.from == 'one'
+assert options.hasOption('to')
+assert options.to == 45</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Similarly, you might want such a specification using the annotation style. Here is an example using an interface
+specification:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">interface WithDefaultValueI {
+    @Option(shortName='f', defaultValue='one') String from()
+    @Option(shortName='t', defaultValue='35') int to()
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Which would be used like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def cli = new CliBuilder()
+
+def options = cli.parseFromSpec(WithDefaultValueI, '-f two'.split())
+assert options.from() == 'two'
+assert options.to() == 35
+
+options = cli.parseFromSpec(WithDefaultValueI, '-t 45'.split())
+assert options.from() == 'one'
+assert options.to() == 45</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can also use the <code>defaultValue</code> annotation attribute when using annotations with an instance,
+though it&#8217;s probably just as easy to provide an initial value for the property (or backing field).</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_use_with_code_typechecked_code"><a class="anchor" href="#_use_with_code_typechecked_code"></a>Use with <code>TypeChecked</code></h5>
+<div class="paragraph">
+<p>The dynamic api style of using <code>CliBuilder</code> is inherently dynamic but you have a few options
+should you want to make use of Groovy&#8217;s static type checking capabilities. Firstly, consider using the
+annotation style, for example, here is an interface option specification:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">interface TypeCheckedI{
+    @Option String name()
+    @Option int age()
+    @Unparsed List remaining()
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And it can be used in combination with <code>@TypeChecked</code> as shown here:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@TypeChecked
+void testTypeCheckedInterface() {
+    def argz = "--name John --age 21 and some more".split()
+    def cli = new CliBuilder()
+    def options = cli.parseFromSpec(TypeCheckedI, argz)
+    String n = options.name()
+    int a = options.age()
+    assert n == 'John' &amp;&amp; a == 21
+    assert options.remaining() == ['and', 'some', 'more']
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Secondly, there is a feature of the dynamic api style which offers some support. The definition statements
+are inherently dynamic but actually return a value which we have ignored in earlier examples.
+The returned value is in fact a <code>TypedOption&lt;Type&gt;</code> and special <code>getAt</code> support allows the options
+to be interrogated using the typed option, e.g. <code>options[savedTypeOption]</code>. So, if you have statements
+similar to these in a non type checked part of your code:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def cli = new CliBuilder()
+TypedOption&lt;Integer&gt; age = cli.a(longOpt: 'age', type: Integer, 'some age option')</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then, the following statements can be in a separate part of your code which is type checked:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def args = '--age 21'.split()
+def options = cli.parse(args)
+int a = options[age]
+assert a == 21</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Finally, there is one additional convenience method offered by <code>CliBuilder</code> to even allow the
+definition part to be type checked. It is a slightly more verbose method call. Instead of using
+the short name (the <em>opt</em> name) in the method call, you use a fixed name of <code>option</code> and
+supply the <code>opt</code> value as a property. You must also specify the type directly as shown in
+the following example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import groovy.cli.TypedOption
+import groovy.transform.TypeChecked
+
+@TypeChecked
+void testTypeChecked() {
+    def cli = new CliBuilder()
+    TypedOption&lt;String&gt; name = cli.option(String, opt: 'n', longOpt: 'name', 'name option')
+    TypedOption&lt;Integer&gt; age = cli.option(Integer, longOpt: 'age', 'age option')
+    def argz = "--name John --age 21 and some more".split()
+    def options = cli.parse(argz)
+    String n = options[name]
+    int a = options[age]
+    assert n == 'John' &amp;&amp; a == 21
+    assert options.arguments() == ['and', 'some', 'more']
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_advanced_cli_usage"><a class="anchor" href="#_advanced_cli_usage"></a>Advanced CLI Usage</h5>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p><strong>NOTE</strong> Advanced CLI features</p>
+</div>
+<div class="paragraph">
+<p><code>CliBuilder</code> can be thought of as a Groovy friendly wrapper on top of either
+<a href="https://github.com/remkop/picocli">picocli</a> or <a href="https://commons.apache.org/proper/commons-cli/">Apache Commons CLI</a>.
+If there is a feature not provided by <code>CliBuilder</code> that you know is supported in the underlying
+library, the current <code>CliBuilder</code> implementation (and various Groovy language features) make it easy for you
+to call the underlying library methods directly. Doing so is a pragmatic way to leverage the Groovy-friendly
+syntax offered by <code>CliBuilder</code> and yet still access some of the underlying library&#8217;s advanced features.
+A word of caution however; future versions of <code>CliBuilder</code> could potentially use another underlying library
+and in that event, some porting work may be required for your Groovy classes and/or scripts.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="sect5">
+<h6 id="_apache_commons_cli"><a class="anchor" href="#_apache_commons_cli"></a>Apache Commons CLI</h6>
+<div class="paragraph">
+<p>As an example, here is some code for making use of Apache Commons CLI&#8217;s grouping mechanism:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import org.apache.commons.cli.*
+
+def cli = new CliBuilder()
+cli.f longOpt: 'from', 'f option'
+cli.u longOpt: 'until', 'u option'
+def optionGroup = new OptionGroup()
+optionGroup.with {
+  addOption cli.option('o', [longOpt: 'output'], 'o option')
+  addOption cli.option('d', [longOpt: 'directory'], 'd option')
+}
+cli.options.addOptionGroup optionGroup
+assert !cli.parse('-d -o'.split()) <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The parse will fail since only one option from a group can be used at a time.</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_picocli"><a class="anchor" href="#_picocli"></a>Picocli</h6>
+<div class="paragraph">
+<p>Below are some features available in the picocli version of <code>CliBuilder</code>.</p>
+</div>
+<div class="paragraph">
+<p><strong>New property: errorWriter</strong></p>
+</div>
+<div class="paragraph">
+<p>When users of your application give invalid command line arguments,
+CliBuilder writes an error message and the usage help message to the <code>stderr</code> output stream.
+It doesn&#8217;t use the <code>stdout</code> stream to prevent the error message from being parsed when your program&#8217;s
+output is used as input for another process.
+You can customize the destination by setting the <code>errorWriter</code> to a different value.</p>
+</div>
+<div class="paragraph">
+<p>On the other hand, <code>CliBuilder.usage()</code> prints the usage help message to the <code>stdout</code> stream.
+This way, when users request help (e.g. with a <code>--help</code> parameter),
+they can pipe the output to a utility like <code>less</code> or <code>grep</code>.</p>
+</div>
+<div class="paragraph">
+<p>You can specify different writers for testing.
+<em>Be aware that for backwards compatibility, setting the <code>writer</code> property to a different value
+will set <strong>both</strong> the <code>writer</code> and the <code>errorWriter</code> to the specified writer.</em></p>
+</div>
+<div class="paragraph">
+<p><strong>ANSI colors</strong></p>
+</div>
+<div class="paragraph">
+<p>The picocli version of CliBuilder renders the usage help message in ANSI colors on supported platforms automatically.
+If desired you can <a href="http://picocli.info/#_usage_help_with_styles_and_colors">customize</a> this.
+(An example follows below.)</p>
+</div>
+<div class="paragraph">
+<p><strong>New property: name</strong></p>
+</div>
+<div class="paragraph">
+<p>As before, you can set the synopsis of the usage help message with the <code>usage</code> property.
+You may be interested in a small improvement:
+if you only set the command <code>name</code>, a synopsis will be generated automatically,
+with repeating elements followed by <code>&#8230;&#8203;</code> and optional elements surrounded with <code>[</code> and <code>]</code>.
+(An example follows below.)</p>
+</div>
+<div class="paragraph">
+<p><strong>New property: usageMessage</strong></p>
+</div>
+<div class="paragraph">
+<p>This property exposes a <code>UsageMessageSpec</code> object from the underlying picocli library,
+which gives fine-grained control over various sections of the usage help message. For example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def cli = new CliBuilder()
+cli.name = "myapp"
+cli.usageMessage.with {
+    headerHeading("@|bold,underline Header heading:|@%n")
+    header("Header 1", "Header 2")                     // before the synopsis
+    synopsisHeading("%n@|bold,underline Usage:|@ ")
+    descriptionHeading("%n@|bold,underline Description heading:|@%n")
+    description("Description 1", "Description 2")      // after the synopsis
+    optionListHeading("%n@|bold,underline Options heading:|@%n")
+    footerHeading("%n@|bold,underline Footer heading:|@%n")
+    footer("Footer 1", "Footer 2")
+}
+cli.a('option a description')
+cli.b('option b description')
+cli.c(args: '*', 'option c description')
+cli.usage()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Gives this output:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="assets/img/usageMessageSpec.png" alt="usageMessageSpec">
+</div>
+</div>
+<div class="paragraph">
+<p><strong>New property: parser</strong></p>
+</div>
+<div class="paragraph">
+<p>The <code>parser</code> property gives access to the picocli <code>ParserSpec</code> object that can be used to customize the parser behavior.
+See the <a href="http://picocli.info/apidocs/picocli/CommandLine.Model.ParserSpec.html">documentation</a> for details.</p>
+</div>
+<div class="paragraph">
+<p><strong>Map options</strong></p>
+</div>
+<div class="paragraph">
+<p>Finally, if your application has options that are key-value pairs, you may be interested in picocli&#8217;s support for maps. For example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import java.util.concurrent.TimeUnit
+import static java.util.concurrent.TimeUnit.DAYS
+import static java.util.concurrent.TimeUnit.HOURS
+
+def cli = new CliBuilder()
+cli.D(args: 2,   valueSeparator: '=', 'the old way')                          <i class="conum" data-value="1"></i><b>(1)</b>
+cli.X(type: Map, 'the new way')                                               <i class="conum" data-value="2"></i><b>(2)</b>
+cli.Z(type: Map, auxiliaryTypes: [TimeUnit, Integer].toArray(), 'typed map')  <i class="conum" data-value="3"></i><b>(3)</b>
+
+def options = cli.parse('-Da=b -Dc=d -Xx=y -Xi=j -ZDAYS=2 -ZHOURS=23'.split())<i class="conum" data-value="4"></i><b>(4)</b>
+assert options.Ds == ['a', 'b', 'c', 'd']                                     <i class="conum" data-value="5"></i><b>(5)</b>
+assert options.Xs == [ 'x':'y', 'i':'j' ]                                     <i class="conum" data-value="6"></i><b>(6)</b>
+assert options.Zs == [ (DAYS as TimeUnit):2, (HOURS as TimeUnit):23 ]         <i class="conum" data-value="7"></i><b>(7)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Previously, <code>key=value</code> pairs were split up into parts and added to a list</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Picocli map support: simply specify <code>Map</code> as the type of the option</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>You can even specify the type of the map elements</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>To compare, let&#8217;s specify two key-value pairs for each option</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>Previously, all key-value pairs end up in a list and it is up to the application to work with this list</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>Picocli returns the key-value pairs as a <code>Map</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td>Both keys and values of the map can be strongly typed</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_objectgraphbuilder"><a class="anchor" href="#_objectgraphbuilder"></a>8.2.12. ObjectGraphBuilder</h4>
+<div class="paragraph">
+<p><code>ObjectGraphBuilder</code> is a builder for an arbitrary graph of beans that
+follow the JavaBean convention. It is in particular useful for creating test data.</p>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s start with a list of classes that belong to your domain:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">package com.acme
+
+class Company {
+    String name
+    Address address
+    List employees = []
+}
+
+class Address {
+    String line1
+    String line2
+    int zip
+    String state
+}
+
+class Employee {
+    String name
+    int employeeId
+    Address address
+    Company company
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then using <code>ObjectGraphBuilder</code> building a <code>Company</code> with three employees is as
+easy as:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def builder = new ObjectGraphBuilder()                          <i class="conum" data-value="1"></i><b>(1)</b>
+builder.classLoader = this.class.classLoader                    <i class="conum" data-value="2"></i><b>(2)</b>
+builder.classNameResolver = "com.acme"                          <i class="conum" data-value="3"></i><b>(3)</b>
+
+def acme = builder.company(name: 'ACME') {                      <i class="conum" data-value="4"></i><b>(4)</b>
+    3.times {
+        employee(id: it.toString(), name: "Drone $it") {        <i class="conum" data-value="5"></i><b>(5)</b>
+            address(line1:"Post street")                        <i class="conum" data-value="6"></i><b>(6)</b>
+        }
+    }
+}
+
+assert acme != null
+assert acme instanceof Company
+assert acme.name == 'ACME'
+assert acme.employees.size() == 3
+def employee = acme.employees[0]
+assert employee instanceof Employee
+assert employee.name == 'Drone 0'
+assert employee.address instanceof Address</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>creates a new object graph builder</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>sets the classloader where the classes will be resolved</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>sets the base package name for classes to be resolved</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>creates a <code>Company</code> instance</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>with 3 <code>Employee</code> instances</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>each of them having a distinct <code>Address</code></td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Behind the scenes, the object graph builder:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>will try to match a node name into a <code>Class</code>, using a default <code>ClassNameResolver</code> strategy that requires a package name</p>
+</li>
+<li>
+<p>then will create an instance of the appropriate class using a default <code>NewInstanceResolver</code> strategy that calls a no-arg constructor</p>
+</li>
+<li>
+<p>resolves the parent/child relationship for nested nodes, involving two other strategies:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>RelationNameResolver</code> will yield the name of the child property in the parent, and the name of the parent property
+in the child (if any, in this case, <code>Employee</code> has a parent property aptly named <code>company</code>)</p>
+</li>
+<li>
+<p><code>ChildPropertySetter</code> will insert the child into the parent taking into account if the child belongs to a <code>Collection</code>
+or not (in this case <code>employees</code> should be a list of <code>Employee</code> instances in <code>Company</code>).</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>All 4 strategies have a default implementation that work as expected if
+the code follows the usual conventions for writing JavaBeans. In case any of your beans or objects do not follow the convention
+you may plug your own implementation of each strategy. For example imagine that you need to build a class which is
+immutable:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@Immutable
+class Person {
+    String name
+    int age
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then if you try to create a <code>Person</code> with the builder:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def person = builder.person(name:'Jon', age:17)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>It will fail at runtime with:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Cannot set readonly property: name for class: com.acme.Person</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Fixing this can be done by changing the new instance strategy:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">builder.newInstanceResolver = { Class klazz, Map attributes -&gt;
+    if (klazz.getConstructor(Map)) {
+        def o = klazz.newInstance(attributes)
+        attributes.clear()
+        return o
+    }
+    klazz.newInstance()
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>ObjectGraphBuilder</code> supports ids per node, meaning
+that you can store a reference to a node in the builder. This is
+useful when multiple objects reference the same instance. Because a
+property named <code>id</code> may be of business meaning in some domain models
+<code>ObjectGraphBuilder</code> has a strategy named <code>IdentifierResolver</code> that you
+may configure to change the default name value. The same may
+happen with the property used for referencing a previously saved
+instance, a strategy named <code>ReferenceResolver</code> will yield the
+appropriate value (default is `refId'):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def company = builder.company(name: 'ACME') {
+    address(id: 'a1', line1: '123 Groovy Rd', zip: 12345, state: 'JV')          <i class="conum" data-value="1"></i><b>(1)</b>
+    employee(name: 'Duke', employeeId: 1, address: a1)                          <i class="conum" data-value="2"></i><b>(2)</b>
+    employee(name: 'John', employeeId: 2 ){
+      address( refId: 'a1' )                                                    <i class="conum" data-value="3"></i><b>(3)</b>
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>an address can be created with an <code>id</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>an employee can reference the address directly with its id</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>or use the <code>refId</code> attribute corresponding to the <code>id</code> of the corresponding address</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Its worth mentioning that you cannot modify the properties of a
+referenced bean.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_jmxbuilder"><a class="anchor" href="#_jmxbuilder"></a>8.2.13. JmxBuilder</h4>
+<div class="paragraph">
+<p>See <a href="#jmx_jmxbuilder">Working with JMX - JmxBuilder</a> for details.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_filetreebuilder"><a class="anchor" href="#_filetreebuilder"></a>8.2.14. FileTreeBuilder</h4>
+<div class="paragraph">
+<p><a href="http://docs.groovy-lang.org/3.0.0-alpha-3/html/gapi/index.html?groovy/util/FileTreeBuilder.html">FileTreeBuilder</a> is a builder for generating a file directory structure from a specification. For example, to create the following tree:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre> src/
+  |--- main
+  |     |--- groovy
+  |            |--- Foo.groovy
+  |--- test
+        |--- groovy
+               |--- FooTest.groovy</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can use a <code>FileTreeBuilder</code> like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">tmpDir = File.createTempDir()
+def fileTreeBuilder = new FileTreeBuilder(tmpDir)
+fileTreeBuilder.dir('src') {
+    dir('main') {
+       dir('groovy') {
+          file('Foo.groovy', 'println "Hello"')
+       }
+    }
+    dir('test') {
+       dir('groovy') {
+          file('FooTest.groovy', 'class FooTest extends GroovyTestCase {}')
+       }
+    }
+ }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To check that everything worked as expected we use the following `assert`s:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">assert new File(tmpDir, '/src/main/groovy/Foo.groovy').text == 'println "Hello"'
+assert new File(tmpDir, '/src/test/groovy/FooTest.groovy').text == 'class FooTest extends GroovyTestCase {}'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>FileTreeBuilder</code> also supports a shorthand syntax:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">tmpDir = File.createTempDir()
+def fileTreeBuilder = new FileTreeBuilder(tmpDir)
+fileTreeBuilder.src {
+    main {
+       groovy {
+          'Foo.groovy'('println "Hello"')
+       }
+    }
+    test {
+       groovy {
+          'FooTest.groovy'('class FooTest extends GroovyTestCase {}')
+       }
+    }
+ }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This produces the same directory structure as above, as shown by these `assert`s:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">assert new File(tmpDir, '/src/main/groovy/Foo.groovy').text == 'println "Hello"'
+assert new File(tmpDir, '/src/test/groovy/FooTest.groovy').text == 'class FooTest extends GroovyTestCase {}'</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 3.0.0-alpha-3<br>
+Last updated 2018-06-23 13:44:35 AEST
+</div>
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+<script>prettyPrint()</script>
+</body>
+</html>

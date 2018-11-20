@@ -1,0 +1,646 @@
+<!--
+
+     Licensed to the Apache Software Foundation (ASF) under one
+     or more contributor license agreements.  See the NOTICE file
+     distributed with this work for additional information
+     regarding copyright ownership.  The ASF licenses this file
+     to you under the Apache License, Version 2.0 (the
+     "License"); you may not use this file except in compliance
+     with the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing,
+     software distributed under the License is distributed on an
+     "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+     specific language governing permissions and limitations
+     under the License.
+
+-->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>Year (Groovy JDK enhancements)</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../stylesheet.css" title="Style">
+    <script type="text/javascript">
+        function windowTitle() {
+            parent.document.title = document.title;
+        }
+    </script>
+</head>
+
+<body class="center" onload="windowTitle();">
+
+    <!-- ========== START OF NAVBAR ========== -->
+    <a name="navbar_top"><!-- --></a>
+
+    <div class="topNav">
+        <ul class="navList" title="Navigation">
+            <li><a href="../../overview-summary.html">Overview</a></li>
+            <li><a href="package-summary.html">Package</a></li>
+            <li class="navBarCell1Rev">Class</li>
+            <li><a href="../../index-all.html">Index</a></li>
+        </ul>
+    </div>
+
+    <!-- =========== END OF NAVBAR =========== -->
+
+    <!-- ======== START OF class DATA ======== -->
+
+    <div class="header">
+        <div class="subTitle">Package: <strong>java.time</strong></div>
+        <h2>Class Year</h2>
+    </div>
+
+    <div class="contentContainer">
+
+    <!-- ========== METHOD SUMMARY =========== -->
+
+        <a name="method_summary"><!-- --></a>
+
+        <div class="summary">
+            <ul class="blockList">
+                <li class="blockList">
+                    <ul class="blockList">
+                        <li class="blockList">
+                            <h3>Methods Summary</h3>
+                            <table border="0" cellpadding="3" cellspacing="0" class="overviewSummary">
+                               <caption><span>Methods</span><span class="tabEnd">&nbsp;</span></caption>
+                                <tbody>
+                                    <tr>
+                                        <th>Return type</th>
+                                        <th>Name and parameters</th>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code>int</code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#getEra()">getEra</a></strong>()</code>
+                                            <br>
+                                            Equivalent to calling the <a href="http://docs.oracle.com/javase/8/docs/api/java/time/Year.html#get(java.time.temporal.TemporalField)" title="Class in java.time">Year#get(java.time.temporal.TemporalField)</a> method with a
+<a href="http://docs.oracle.com/javase/8/docs/api/java/time/temporal/ChronoField.html#ERA" title="Class in java.time.temporal">ChronoField#ERA</a> argument.
+
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="rawColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code>int</code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#getYearOfEra()">getYearOfEra</a></strong>()</code>
+                                            <br>
+                                            Equivalent to calling the <a href="http://docs.oracle.com/javase/8/docs/api/java/time/Year.html#get(java.time.temporal.TemporalField)" title="Class in java.time">Year#get(java.time.temporal.TemporalField)</a> method with a
+<a href="http://docs.oracle.com/javase/8/docs/api/java/time/temporal/ChronoField.html#YEAR_OF_ERA" title="Class in java.time.temporal">ChronoField#YEAR_OF_ERA</a> argument.
+
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/time/YearMonth.html" title="Class in java.time">YearMonth</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#leftShift(java.time.Month)">leftShift</a></strong>(<a href="http://docs.oracle.com/javase/8/docs/api/java/time/Month.html" title="Class in java.time">Month</a> month)</code>
+                                            <br>
+                                            Returns a <a href="http://docs.oracle.com/javase/8/docs/api/java/time/YearMonth.html" title="Class in java.time">YearMonth</a> of this year and the provided <a href="http://docs.oracle.com/javase/8/docs/api/java/time/Month.html" title="Class in java.time">Month</a>.
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="rawColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/time/LocalDate.html" title="Class in java.time">LocalDate</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#leftShift(java.time.MonthDay)">leftShift</a></strong>(<a href="http://docs.oracle.com/javase/8/docs/api/java/time/MonthDay.html" title="Class in java.time">MonthDay</a> monthDay)</code>
+                                            <br>
+                                            Returns a <a href="http://docs.oracle.com/javase/8/docs/api/java/time/LocalDate.html" title="Class in java.time">LocalDate</a> of this year on the given <a href="http://docs.oracle.com/javase/8/docs/api/java/time/MonthDay.html" title="Class in java.time">MonthDay</a>.
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/time/Year.html" title="Class in java.time">Year</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#minus(long)">minus</a></strong>(long years)</code>
+                                            <br>
+                                            Returns a <a href="http://docs.oracle.com/javase/8/docs/api/java/time/Year.html" title="Class in java.time">Year</a> that is <code>years</code> years before this year.
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="rawColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/time/Year.html" title="Class in java.time">Year</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#next()">next</a></strong>()</code>
+                                            <br>
+                                            Returns a <a href="http://docs.oracle.com/javase/8/docs/api/java/time/Year.html" title="Class in java.time">Year</a> after this year.
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/time/Year.html" title="Class in java.time">Year</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#parse(java.lang.CharSequence, java.lang.String)">parse</a></strong>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html" title="Class in java.lang">CharSequence</a> text, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="Class in java.lang">String</a> pattern)</code>
+                                            <br>
+                                            Parse text into a <a href="http://docs.oracle.com/javase/8/docs/api/java/time/Year.html" title="Class in java.time">Year</a> using the provided pattern.
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="rawColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/time/Year.html" title="Class in java.time">Year</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#plus(long)">plus</a></strong>(long years)</code>
+                                            <br>
+                                            Returns a <a href="http://docs.oracle.com/javase/8/docs/api/java/time/Year.html" title="Class in java.time">Year</a> that is <code>years</code> years after this year.
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/time/Year.html" title="Class in java.time">Year</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#previous()">previous</a></strong>()</code>
+                                            <br>
+                                            Returns a <a href="http://docs.oracle.com/javase/8/docs/api/java/time/Year.html" title="Class in java.time">Year</a> before this year.
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="rawColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/time/Period.html" title="Class in java.time">Period</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#rightShift(java.time.Year)">rightShift</a></strong>(<a href="http://docs.oracle.com/javase/8/docs/api/java/time/Year.html" title="Class in java.time">Year</a> year)</code>
+                                            <br>
+                                            Returns a <a href="http://docs.oracle.com/javase/8/docs/api/java/time/Period.html" title="Class in java.time">Period</a> between the first day of this year (inclusive) and the first day of the
+provided <a href="http://docs.oracle.com/javase/8/docs/api/java/time/Year.html" title="Class in java.time">Year</a> (exclusive).
+                                        </td>
+                                    </tr>
+                                    
+                                </tbody>
+                            </table>
+                        </li>
+                        
+                        <ul class="blockList">
+                            <li class="blockList">
+                            <h4>Methods inherited from class java.lang.<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="Class in java.lang">Object</a></h4>
+                                <p>
+                                    <code><strong><a href="../../java/lang/Object.html#addShutdownHook(groovy.lang.Closure)">addShutdownHook</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#any()">any</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#any(groovy.lang.Closure)">any</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#asBoolean()">asBoolean</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#asType(java.lang.Class)">asType</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#collect()">collect</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#collect(groovy.lang.Closure)">collect</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#collect(java.util.Collection, groovy.lang.Closure)">collect</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#contains(java.lang.Object)">contains</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#count(java.lang.Object)">count</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#dump()">dump</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#each(groovy.lang.Closure)">each</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#eachWithIndex(groovy.lang.Closure)">eachWithIndex</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#equals(java.util.List)">equals</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#every()">every</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#every(groovy.lang.Closure)">every</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#find()">find</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#find(groovy.lang.Closure)">find</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#findAll()">findAll</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#findAll(groovy.lang.Closure)">findAll</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#findIndexOf(groovy.lang.Closure)">findIndexOf</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#findIndexOf(int, groovy.lang.Closure)">findIndexOf</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#findIndexValues(groovy.lang.Closure)">findIndexValues</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#findIndexValues(java.lang.Number, groovy.lang.Closure)">findIndexValues</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#findLastIndexOf(groovy.lang.Closure)">findLastIndexOf</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#findLastIndexOf(int, groovy.lang.Closure)">findLastIndexOf</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#findResult(groovy.lang.Closure)">findResult</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#findResult(java.lang.Object, groovy.lang.Closure)">findResult</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#flatten()">flatten</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#getAt(java.lang.String)">getAt</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#getMetaClass()">getMetaClass</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#getMetaPropertyValues()">getMetaPropertyValues</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#getProperties()">getProperties</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#grep()">grep</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#grep(java.lang.Object)">grep</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#groupBy(java.lang.Object)">groupBy</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#groupBy(java.util.List)">groupBy</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#hasProperty(java.lang.String)">hasProperty</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#identity(groovy.lang.Closure)">identity</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#inject(groovy.lang.Closure)">inject</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#inject(java.lang.Object, groovy.lang.Closure)">inject</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#inspect()">inspect</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#invokeMethod(java.lang.String, java.lang.Object)">invokeMethod</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#is(java.lang.Object)">is</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#isCase(java.lang.Object)">isCase</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#iterator()">iterator</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#join(java.lang.String)">join</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#metaClass(groovy.lang.Closure)">metaClass</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#print(java.io.PrintWriter)">print</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#print(java.lang.Object)">print</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#printf(java.lang.String, java.lang.Object)">printf</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#printf(java.lang.String, java.lang.Object[])">printf</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#println()">println</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#println(java.io.PrintWriter)">println</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#println(java.lang.Object)">println</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#putAt(java.lang.String, java.lang.Object)">putAt</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#respondsTo(java.lang.String)">respondsTo</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#respondsTo(java.lang.String, java.lang.Object[])">respondsTo</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#setMetaClass(groovy.lang.MetaClass)">setMetaClass</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#size()">size</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#split(groovy.lang.Closure)">split</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#sprintf(java.lang.String, java.lang.Object)">sprintf</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#sprintf(java.lang.String, java.lang.Object[])">sprintf</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#sum()">sum</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#sum(java.lang.Object)">sum</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#tap(groovy.lang.Closure)">tap</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#toArrayString()">toArrayString</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#toSpreadMap()">toSpreadMap</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#toString()">toString</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#use(java.lang.Class, groovy.lang.Closure)">use</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#use(java.lang.Object[])">use</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#use(java.util.List, groovy.lang.Closure)">use</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#with(boolean, groovy.lang.Closure)">with</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#with(groovy.lang.Closure)">with</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#withTraits(java.lang.Class)">withTraits</a></strong></code>
+                                </p>
+                            </li>
+                        </ul>
+                        
+                        <ul class="blockList">
+                            <li class="blockList">
+                            <h4>Methods inherited from interface java.lang.<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Comparable.html" title="Class in java.lang">Comparable</a></h4>
+                                <p>
+                                    <code><strong><a href="../../java/lang/Comparable.html#numberAwareCompareTo(java.lang.Comparable)">numberAwareCompareTo</a></strong></code>
+                                </p>
+                            </li>
+                        </ul>
+                        
+                        <ul class="blockList">
+                            <li class="blockList">
+                            <h4>Methods inherited from interface java.time.temporal.<a href="http://docs.oracle.com/javase/8/docs/api/java/time/temporal/Temporal.html" title="Class in java.time.temporal">Temporal</a></h4>
+                                <p>
+                                    <code><strong><a href="../../java/time/temporal/Temporal.html#downto(java.time.temporal.Temporal, groovy.lang.Closure)">downto</a></strong></code>, <code><strong><a href="../../java/time/temporal/Temporal.html#downto(java.time.temporal.Temporal, java.time.temporal.TemporalUnit, groovy.lang.Closure)">downto</a></strong></code>, <code><strong><a href="../../java/time/temporal/Temporal.html#rightShift(java.time.temporal.Temporal)">rightShift</a></strong></code>, <code><strong><a href="../../java/time/temporal/Temporal.html#upto(java.time.temporal.Temporal, groovy.lang.Closure)">upto</a></strong></code>, <code><strong><a href="../../java/time/temporal/Temporal.html#upto(java.time.temporal.Temporal, java.time.temporal.TemporalUnit, groovy.lang.Closure)">upto</a></strong></code>
+                                </p>
+                            </li>
+                        </ul>
+                        
+                        <ul class="blockList">
+                            <li class="blockList">
+                            <h4>Methods inherited from interface java.time.temporal.<a href="http://docs.oracle.com/javase/8/docs/api/java/time/temporal/TemporalAccessor.html" title="Class in java.time.temporal">TemporalAccessor</a></h4>
+                                <p>
+                                    <code><strong><a href="../../java/time/temporal/TemporalAccessor.html#getAt(java.time.temporal.TemporalField)">getAt</a></strong></code>
+                                </p>
+                            </li>
+                        </ul>
+                        
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+    <!-- ============ METHOD DETAIL ========== -->
+
+    <a name="method_detail"><!-- --></a>
+
+
+        <div class="details">
+            <ul class="blockList">
+                <li class="blockList">
+                    <ul class="blockList">
+                        <li class="blockList">
+                            <h3>Methods Detail</h3>
+
+                            
+                            <a name="getEra()"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public int <b>getEra</b>()</h4>
+
+                                    <p>Equivalent to calling the <a href="http://docs.oracle.com/javase/8/docs/api/java/time/Year.html#get(java.time.temporal.TemporalField)" title="Class in java.time">Year#get(java.time.temporal.TemporalField)</a> method with a
+<a href="http://docs.oracle.com/javase/8/docs/api/java/time/temporal/ChronoField.html#ERA" title="Class in java.time.temporal">ChronoField#ERA</a> argument.
+<p>
+Returns the era of the year, which is currently either 0 (BC) or 1 (AD).</p>
+
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>an int representing the era</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>2.5.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="getYearOfEra()"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public int <b>getYearOfEra</b>()</h4>
+
+                                    <p>Equivalent to calling the <a href="http://docs.oracle.com/javase/8/docs/api/java/time/Year.html#get(java.time.temporal.TemporalField)" title="Class in java.time">Year#get(java.time.temporal.TemporalField)</a> method with a
+<a href="http://docs.oracle.com/javase/8/docs/api/java/time/temporal/ChronoField.html#YEAR_OF_ERA" title="Class in java.time.temporal">ChronoField#YEAR_OF_ERA</a> argument.
+<p>
+Since Year=0 represents 1 BC, the yearOfEra value of Year=0 is 1, Year=-1 is 2, and so on.</p>
+
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>the year value of the era</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>2.5.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="leftShift(java.time.Month)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/time/YearMonth.html" title="Class in java.time">YearMonth</a> <b>leftShift</b>(<a href="http://docs.oracle.com/javase/8/docs/api/java/time/Month.html" title="Class in java.time">Month</a> month)</h4>
+
+                                    <p>Returns a <a href="http://docs.oracle.com/javase/8/docs/api/java/time/YearMonth.html" title="Class in java.time">YearMonth</a> of this year and the provided <a href="http://docs.oracle.com/javase/8/docs/api/java/time/Month.html" title="Class in java.time">Month</a>.</p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>month</code> -  a Month</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>a YearMonth</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>2.5.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="leftShift(java.time.MonthDay)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/time/LocalDate.html" title="Class in java.time">LocalDate</a> <b>leftShift</b>(<a href="http://docs.oracle.com/javase/8/docs/api/java/time/MonthDay.html" title="Class in java.time">MonthDay</a> monthDay)</h4>
+
+                                    <p>Returns a <a href="http://docs.oracle.com/javase/8/docs/api/java/time/LocalDate.html" title="Class in java.time">LocalDate</a> of this year on the given <a href="http://docs.oracle.com/javase/8/docs/api/java/time/MonthDay.html" title="Class in java.time">MonthDay</a>.</p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>monthDay</code> -  a MonthDay</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>a LocalDate</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>2.5.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="minus(long)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/time/Year.html" title="Class in java.time">Year</a> <b>minus</b>(long years)</h4>
+
+                                    <p>Returns a <a href="http://docs.oracle.com/javase/8/docs/api/java/time/Year.html" title="Class in java.time">Year</a> that is <code>years</code> years before this year.</p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>years</code> -  the number of years to subtract</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>a Year</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>2.5.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="next()"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/time/Year.html" title="Class in java.time">Year</a> <b>next</b>()</h4>
+
+                                    <p>Returns a <a href="http://docs.oracle.com/javase/8/docs/api/java/time/Year.html" title="Class in java.time">Year</a> after this year.</p>
+
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>the next Year</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>2.5.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="parse(java.lang.CharSequence, java.lang.String)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/time/Year.html" title="Class in java.time">Year</a> <b>parse</b>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html" title="Class in java.lang">CharSequence</a> text, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="Class in java.lang">String</a> pattern)</h4>
+
+                                    <p>Parse text into a <a href="http://docs.oracle.com/javase/8/docs/api/java/time/Year.html" title="Class in java.time">Year</a> using the provided pattern.</p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>text</code> -     String to be parsed to create the date instance</dd>
+                                        
+                                        <dd><code>pattern</code> -  pattern used to parse the text</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>a Year representing the parsed text</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>2.5.0</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>See Also:</b></dt>
+                                        
+                                        <dd><a href="http://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html" title="Class in java.time.format">DateTimeFormatter</a></dd>
+                                        
+                                        <dd><a href="http://docs.oracle.com/javase/8/docs/api/java/time/Year.html#parse(java.lang.CharSequence, java.time.format.DateTimeFormatter)" title="Class in java.time">Year#parse(java.lang.CharSequence, java.time.format.DateTimeFormatter)</a></dd>
+                                        
+                                    </dl>
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="plus(long)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/time/Year.html" title="Class in java.time">Year</a> <b>plus</b>(long years)</h4>
+
+                                    <p>Returns a <a href="http://docs.oracle.com/javase/8/docs/api/java/time/Year.html" title="Class in java.time">Year</a> that is <code>years</code> years after this year.</p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>years</code> -  the number of years to add</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>a Year</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>2.5.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="previous()"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/time/Year.html" title="Class in java.time">Year</a> <b>previous</b>()</h4>
+
+                                    <p>Returns a <a href="http://docs.oracle.com/javase/8/docs/api/java/time/Year.html" title="Class in java.time">Year</a> before this year.</p>
+
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>the previous Year</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>2.5.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="rightShift(java.time.Year)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/time/Period.html" title="Class in java.time">Period</a> <b>rightShift</b>(<a href="http://docs.oracle.com/javase/8/docs/api/java/time/Year.html" title="Class in java.time">Year</a> year)</h4>
+
+                                    <p>Returns a <a href="http://docs.oracle.com/javase/8/docs/api/java/time/Period.html" title="Class in java.time">Period</a> between the first day of this year (inclusive) and the first day of the
+provided <a href="http://docs.oracle.com/javase/8/docs/api/java/time/Year.html" title="Class in java.time">Year</a> (exclusive).</p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>year</code> -  another Year</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>a Period between the Years</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>2.5.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+
+    <!-- ========= END OF class DATA ========= -->
+
+    <!-- ======= START OF BOTTOM NAVBAR ====== -->
+    <a name="navbar_bottom"><!-- --></a>
+    <a href="#skip-navbar_bottom" title="Skip navigation links"></a>
+
+    <div class="topNav">
+        <ul class="navList" title="Navigation">
+            <li><a href="../../overview-summary.html">Overview</a></li>
+            <li><a href="package-summary.html">Package</a></li>
+            <li class="navBarCell1Rev">Class</li>
+            <li><a href="../../index-all.html">Index</a></li>
+        </ul>
+    </div>
+    <!-- =========== END OF NAVBAR =========== -->
+
+</body>
+</html>

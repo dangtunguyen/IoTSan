@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.6.1">
+<title>Working with legacy Date/Calendar types</title>
+<link rel="stylesheet" href="./assets/css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+</head>
+<body class="book">
+<div id="header">
+<h1>Working with legacy Date/Calendar types</h1>
+<div class="details">
+<span id="revnumber">version 3.0.0-alpha-3</span>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>groovy-dateutil</code> module supports numerous extensions for working with
+Java&#8217;s classic <code>Date</code> and <code>Calendar</code> classes.</p>
+</div>
+<div class="paragraph">
+<p>You can access the properties of a <code>Date</code> or <code>Calendar</code> using the normal array index notation
+with the constant field numbers from the <code>Calendar</code> class as shown in the following example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import static java.util.Calendar.*    <i class="conum" data-value="1"></i><b>(1)</b>
+
+def cal = Calendar.instance
+cal[YEAR] = 2000                      <i class="conum" data-value="2"></i><b>(2)</b>
+cal[MONTH] = JANUARY                  <i class="conum" data-value="2"></i><b>(2)</b>
+cal[DAY_OF_MONTH] = 1                 <i class="conum" data-value="2"></i><b>(2)</b>
+assert cal[DAY_OF_WEEK] == SATURDAY   <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Import the constants</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Setting the calendar&#8217;s year, month and day of month</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Accessing the calendar&#8217;s day of week</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Groovy supports arithmetic on and iteration between <code>Date</code> and <code>Calendar</code> instances as shown in the following example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def utc = TimeZone.getTimeZone('UTC')
+Date date = Date.parse("yyyy-MM-dd HH:mm", "2010-05-23 09:01", utc)
+
+def prev = date - 1
+def next = date + 1
+
+def diffInDays = next - prev
+assert diffInDays == 2
+
+int count = 0
+prev.upto(next) { count++ }
+assert count == 3</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can parse strings into dates and output dates into formatted strings:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def orig = '2000-01-01'
+def newYear = Date.parse('yyyy-MM-dd', orig)
+assert newYear[DAY_OF_WEEK] == SATURDAY
+assert newYear.format('yyyy-MM-dd') == orig
+assert newYear.format('dd/MM/yyyy') == '01/01/2000'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can also create a new Date or Calendar based on an existing one:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def newYear = Date.parse('yyyy-MM-dd', '2000-01-01')
+def newYearsEve = newYear.copyWith(
+    year: 1999,
+    month: DECEMBER,
+    dayOfMonth: 31
+)
+assert newYearsEve[DAY_OF_WEEK] == FRIDAY</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 3.0.0-alpha-3<br>
+Last updated 2018-06-23 13:44:38 AEST
+</div>
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+<script>prettyPrint()</script>
+</body>
+</html>

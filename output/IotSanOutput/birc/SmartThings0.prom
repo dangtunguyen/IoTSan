@@ -1,0 +1,4872 @@
+/********* Start of macro definitions ******************/
+#define MAX_SYSTEM_TIME 50
+#define MAX_SUBSCRIBERS 10
+#define MAX_ARRAY_SIZE 5
+#define MAX_INT_ARRAY_SIZE 5
+#define MAX_SWITCH_DEVICES 10
+#define MAX_STORED_EVENTS 3
+#define MAX_COMMAND_REPITIONS 2
+#define MAX_NUM_EVENTS 8
+#define ST_SUNRISE_TIME 2
+#define ST_SUNSET_TIME 4
+
+/* Int value of string type */
+#define MOTION 11
+#define ACTIVE 12
+#define INACTIVE 13
+#define SWITCH 14
+#define ON 15
+#define OFF 16
+#define PRESENCE 17
+#define NOT_PRESENT 18
+#define PRESENT 19
+#define TEMPERATURE 20
+#define COOLINGSETPOINT 21
+#define COOLINGSETPOINTMIN 22
+#define COOLINGSETPOINTMAX 23
+#define THERMOSTATFANMODE 24
+#define AUTO 25
+#define CIRCULATE 26
+#define HEATINGSETPOINT 27
+#define HEATINGSETPOINTMIN 28
+#define HEATINGSETPOINTMAX 29
+#define THERMOSTATMODE 30
+#define COOL 31
+#define EMERGENCY_HEAT 32
+#define HEAT 33
+#define THERMOSTATOPERATINGSTATE 34
+#define COOLING 35
+#define FAN_ONLY 36
+#define HEATING 37
+#define IDLE 38
+#define PENDING_COOL 39
+#define PENDING_HEAT 40
+#define VENT_ECONOMIZER 41
+#define THERMOSTATSETPOINT 42
+#define THERMOSTATSETPOINTMIN 43
+#define THERMOSTATSETPOINTMAX 44
+#define LOCK 45
+#define LOCKED 46
+#define UNKNOWN 47
+#define UNLOCKED 48
+#define UNLOCKED_WITH_TIMEOUT 49
+#define SMOKE 50
+#define CLEAR 51
+#define DETECTED 52
+#define TESTED 53
+#define DOOR 54
+#define CLOSED 55
+#define CLOSING 56
+#define OPEN 57
+#define OPENING 58
+#define CONTACT 59
+#define POWER 60
+#define ILLUMINANCE 61
+#define WATER 62
+#define WET 63
+#define DRY 64
+#define VALVE 65
+#define ACCELERATION 66
+#define FORECAST 67
+#define RAIN 68
+#define SNOW 69
+#define SHOWERS 70
+#define SPRINKLES 71
+#define PRECIPITATION 72
+#define BATTERY 73
+#define LEVEL 74
+#define CARBONMONOXIDE 75
+#define ALARM 76
+#define BOTH 77
+#define SIREN 78
+#define STROBE 79
+#define BUTTON 80
+#define PUSHED 81
+#define HELD 82
+#define COLOR 83
+#define HUE 84
+#define SATURATION 85
+#define HUMIDITY 86
+#define POWERED 87
+#define MAINS 88
+#define DC 89
+#define HOME 1400
+#define AWAY 1401
+#define NIGHT 1402
+#define MODE 1403
+#define POSITION 1404
+#define SUNRISETIME 1405
+#define SUNSETTIME 1406
+/********* End of macro definitions *******************/
+
+/********* Start of enum definition *******************/
+/* mtype defines all attributes' string values (sensor) and commands' names (actuator) */
+mtype = {exit, inactive, _active, on, off, notpresent, present, fanAuto, fanCirculate, fanOn,
+   Home, Away, Night, _mode, position, _sunrise, _sunset, sunsetTime, sunriseTime, sendSms,
+   auto, cool, emergencyHeat, heat, lock, unlock, clear, detected, tested, close, open,
+   temperature, appTouch, setCoolingSetpoint, setHeatingSetpoint, put, power_meter,
+   illuminance, wet, dry, setLevel, COSmoke, alarm, both, siren, strobe, pushed, held,
+   usercodechange, setHue, setSaturation, setColor, tampered, humidity, httpPost, battery,
+   powered, mains, dc, unsubscribe};
+/********* End of enum definition *********************/
+
+#define type_95 int
+#define type_101 bool
+
+typedef int_arr { byte length; short element[MAX_INT_ARRAY_SIZE]; }
+
+typedef STSunriseSunset_rec { 
+	type_95 sunrise; 
+	type_95 sunset; 
+	bool isAlive;
+}
+typedef STSunriseSunset_arr { byte length; STSunriseSunset_rec element[MAX_ARRAY_SIZE]; }
+
+typedef STWeatherFeature_rec { 
+	type_95 forecast; 
+	bool isAlive;
+	byte currEvtIndex;
+	byte BroadcastChanIndex;
+	byte NumReceivedCommands;
+	byte NumSubscribers;
+	bool BroadcastChans[MAX_SUBSCRIBERS];
+	bool isOnline;
+}
+typedef STWeatherFeature_arr { byte length; STWeatherFeature_rec element[MAX_ARRAY_SIZE]; }
+
+typedef STMode_rec { 
+	type_95 name; 
+	type_95 id; 
+	bool isAlive;
+}
+typedef STMode_arr { byte length; STMode_rec element[MAX_ARRAY_SIZE]; }
+
+typedef STState_rec { 
+	type_95 name; 
+	type_95 value; 
+	type_95 date; 
+	bool isAlive;
+}
+typedef STState_arr { byte length; STState_rec element[MAX_ARRAY_SIZE]; }
+
+typedef STHub_rec { 
+	type_95 localIP; 
+	type_95 name; 
+	bool isAlive;
+}
+typedef STHub_arr { byte length; STHub_rec element[MAX_ARRAY_SIZE]; }
+
+typedef STEvent_rec { 
+	type_95 name; 
+	type_95 value; 
+	type_101 physical; 
+	type_95 deviceId; 
+	type_95 date; 
+	type_95 id; 
+	type_95 unit; 
+	type_101 type; 
+	bool isAlive;
+	mtype EvtType;
+}
+typedef STEvent_arr { byte length; STEvent_rec element[MAX_ARRAY_SIZE]; }
+
+typedef STAttribute_rec { 
+	type_95 name; 
+	bool isAlive;
+}
+typedef STAttribute_arr { byte length; STAttribute_rec element[MAX_ARRAY_SIZE]; }
+
+typedef STCommand_rec { 
+	type_95 name; 
+	bool isAlive;
+}
+typedef STCommand_arr { byte length; STCommand_rec element[MAX_ARRAY_SIZE]; }
+
+typedef STCapability_rec { 
+	STAttribute_arr attributes; 
+	STCommand_arr commands; 
+	type_95 name; 
+	bool isAlive;
+}
+typedef STCapability_arr { byte length; STCapability_rec element[MAX_ARRAY_SIZE]; }
+
+typedef STDevice_rec { 
+	type_95 id; 
+	type_95 gArrIndex; 
+	STEvent_arr events; 
+	STState_arr states; 
+	STState_rec batteryState; 
+	type_95 currentBattery; 
+	bool isAlive;
+	byte currEvtIndex;
+	byte BroadcastChanIndex;
+	byte NumReceivedCommands;
+	byte NumSubscribers;
+	bool BroadcastChans[MAX_SUBSCRIBERS];
+	bool isOnline;
+}
+typedef STDevice_arr { byte length; STDevice_rec element[MAX_ARRAY_SIZE]; }
+
+typedef STLocation_rec { 
+	type_101 contactBookEnabled; 
+	STMode_arr modes; 
+	type_95 timeZone; 
+	type_95 mode; 
+	STSunriseSunset_rec sunriseSunset; 
+	STWeatherFeature_rec weatherFeature; 
+	STEvent_rec latestEvt; 
+	bool isAlive;
+	byte NumReceivedCommands;
+	byte NumSubscribers;
+	bool BroadcastChans[MAX_SUBSCRIBERS];
+	bool isOnline;
+}
+typedef STLocation_arr { byte length; STLocation_rec element[MAX_ARRAY_SIZE]; }
+
+typedef STAlarm_rec { 
+	type_95 id; 
+	type_95 gArrIndex; 
+	STEvent_arr events; 
+	STState_arr states; 
+	STState_rec batteryState; 
+	type_95 currentBattery; 
+	STState_rec alarmState; 
+	type_95 currentAlarm; 
+	bool isAlive;
+	byte currEvtIndex;
+	byte BroadcastChanIndex;
+	byte NumReceivedCommands;
+	byte NumSubscribers;
+	bool BroadcastChans[MAX_SUBSCRIBERS];
+	bool isOnline;
+}
+typedef STAlarm_arr { byte length; STAlarm_rec element[MAX_ARRAY_SIZE]; }
+
+typedef STSwitch_rec { 
+	type_95 id; 
+	type_95 gArrIndex; 
+	STEvent_arr events; 
+	STState_arr states; 
+	STState_rec batteryState; 
+	type_95 currentBattery; 
+	STState_rec switchState; 
+	type_95 currentSwitch; 
+	STState_rec levelState; 
+	type_95 currentLevel; 
+	bool isAlive;
+	byte currEvtIndex;
+	byte BroadcastChanIndex;
+	byte NumReceivedCommands;
+	byte NumSubscribers;
+	bool BroadcastChans[MAX_SUBSCRIBERS];
+	bool isOnline;
+}
+typedef STSwitch_arr { byte length; STSwitch_rec element[MAX_SWITCH_DEVICES]; }
+
+typedef STBulb_rec { 
+	type_95 id; 
+	type_95 gArrIndex; 
+	STEvent_arr events; 
+	STState_arr states; 
+	STState_rec batteryState; 
+	type_95 currentBattery; 
+	STState_rec switchState; 
+	type_95 currentSwitch; 
+	STState_rec levelState; 
+	type_95 currentLevel; 
+	bool isAlive;
+	byte currEvtIndex;
+	byte BroadcastChanIndex;
+	byte NumReceivedCommands;
+	byte NumSubscribers;
+	bool BroadcastChans[MAX_SUBSCRIBERS];
+	bool isOnline;
+}
+typedef STBulb_arr { byte length; STBulb_rec element[MAX_SWITCH_DEVICES]; }
+
+typedef STTempMeas_rec { 
+	type_95 id; 
+	type_95 gArrIndex; 
+	STEvent_arr events; 
+	STState_arr states; 
+	STState_rec batteryState; 
+	type_95 currentBattery; 
+	STState_rec temperatureState; 
+	type_95 currentTemperature; 
+	bool isAlive;
+	byte currEvtIndex;
+	byte BroadcastChanIndex;
+	byte NumReceivedCommands;
+	byte NumSubscribers;
+	bool BroadcastChans[MAX_SUBSCRIBERS];
+	bool isOnline;
+}
+typedef STTempMeas_arr { byte length; STTempMeas_rec element[MAX_ARRAY_SIZE]; }
+
+typedef STCarDioMeas_rec { 
+	type_95 id; 
+	type_95 gArrIndex; 
+	STEvent_arr events; 
+	STState_arr states; 
+	STState_rec batteryState; 
+	type_95 currentBattery; 
+	STState_rec carbonDioxideState; 
+	type_95 currentCarbonDioxide; 
+	bool isAlive;
+	byte currEvtIndex;
+	byte BroadcastChanIndex;
+	byte NumReceivedCommands;
+	byte NumSubscribers;
+	bool BroadcastChans[MAX_SUBSCRIBERS];
+	bool isOnline;
+}
+typedef STCarDioMeas_arr { byte length; STCarDioMeas_rec element[MAX_ARRAY_SIZE]; }
+
+typedef STCarMoDetector_rec { 
+	type_95 id; 
+	type_95 gArrIndex; 
+	STEvent_arr events; 
+	STState_arr states; 
+	STState_rec batteryState; 
+	type_95 currentBattery; 
+	STState_rec carbonMonoxideState; 
+	type_95 currentCarbonMonoxide; 
+	bool isAlive;
+	byte currEvtIndex;
+	byte BroadcastChanIndex;
+	byte NumReceivedCommands;
+	byte NumSubscribers;
+	bool BroadcastChans[MAX_SUBSCRIBERS];
+	bool isOnline;
+}
+typedef STCarMoDetector_arr { byte length; STCarMoDetector_rec element[MAX_ARRAY_SIZE]; }
+
+typedef STDoorControl_rec { 
+	type_95 id; 
+	type_95 gArrIndex; 
+	STEvent_arr events; 
+	STState_arr states; 
+	STState_rec batteryState; 
+	type_95 currentBattery; 
+	STState_rec doorState; 
+	type_95 currentDoor; 
+	bool isAlive;
+	byte currEvtIndex;
+	byte BroadcastChanIndex;
+	byte NumReceivedCommands;
+	byte NumSubscribers;
+	bool BroadcastChans[MAX_SUBSCRIBERS];
+	bool isOnline;
+}
+typedef STDoorControl_arr { byte length; STDoorControl_rec element[MAX_ARRAY_SIZE]; }
+
+typedef STLight_rec { 
+	type_95 id; 
+	type_95 gArrIndex; 
+	STEvent_arr events; 
+	STState_arr states; 
+	STState_rec batteryState; 
+	type_95 currentBattery; 
+	STState_rec switchState; 
+	type_95 currentSwitch; 
+	STState_rec levelState; 
+	type_95 currentLevel; 
+	bool isAlive;
+	byte currEvtIndex;
+	byte BroadcastChanIndex;
+	byte NumReceivedCommands;
+	byte NumSubscribers;
+	bool BroadcastChans[MAX_SUBSCRIBERS];
+	bool isOnline;
+}
+typedef STLight_arr { byte length; STLight_rec element[MAX_ARRAY_SIZE]; }
+
+typedef STLock_rec { 
+	type_95 id; 
+	type_95 gArrIndex; 
+	STEvent_arr events; 
+	STState_arr states; 
+	STState_rec batteryState; 
+	type_95 currentBattery; 
+	STState_rec lockState; 
+	type_95 currentLock; 
+	bool isAlive;
+	byte currEvtIndex;
+	byte BroadcastChanIndex;
+	byte NumReceivedCommands;
+	byte NumSubscribers;
+	bool BroadcastChans[MAX_SUBSCRIBERS];
+	bool isOnline;
+}
+typedef STLock_arr { byte length; STLock_rec element[MAX_ARRAY_SIZE]; }
+
+typedef STMotionSensor_rec { 
+	type_95 id; 
+	type_95 gArrIndex; 
+	STEvent_arr events; 
+	STState_arr states; 
+	STState_rec batteryState; 
+	type_95 currentBattery; 
+	STState_rec motionState; 
+	type_95 currentMotion; 
+	bool isAlive;
+	byte currEvtIndex;
+	byte BroadcastChanIndex;
+	byte NumReceivedCommands;
+	byte NumSubscribers;
+	bool BroadcastChans[MAX_SUBSCRIBERS];
+	bool isOnline;
+}
+typedef STMotionSensor_arr { byte length; STMotionSensor_rec element[MAX_ARRAY_SIZE]; }
+
+typedef STPresSensor_rec { 
+	type_95 id; 
+	type_95 gArrIndex; 
+	STEvent_arr events; 
+	STState_arr states; 
+	STState_rec batteryState; 
+	type_95 currentBattery; 
+	STState_rec presenceState; 
+	type_95 currentPresence; 
+	bool isAlive;
+	byte currEvtIndex;
+	byte BroadcastChanIndex;
+	byte NumReceivedCommands;
+	byte NumSubscribers;
+	bool BroadcastChans[MAX_SUBSCRIBERS];
+	bool isOnline;
+}
+typedef STPresSensor_arr { byte length; STPresSensor_rec element[MAX_ARRAY_SIZE]; }
+
+typedef STOutlet_rec { 
+	type_95 id; 
+	type_95 gArrIndex; 
+	STEvent_arr events; 
+	STState_arr states; 
+	STState_rec batteryState; 
+	type_95 currentBattery; 
+	STState_rec switchState; 
+	type_95 currentSwitch; 
+	STState_rec levelState; 
+	type_95 currentLevel; 
+	bool isAlive;
+	byte currEvtIndex;
+	byte BroadcastChanIndex;
+	byte NumReceivedCommands;
+	byte NumSubscribers;
+	bool BroadcastChans[MAX_SUBSCRIBERS];
+	bool isOnline;
+}
+typedef STOutlet_arr { byte length; STOutlet_rec element[MAX_ARRAY_SIZE]; }
+
+typedef STSmokeDetector_rec { 
+	type_95 id; 
+	type_95 gArrIndex; 
+	STEvent_arr events; 
+	STState_arr states; 
+	STState_rec batteryState; 
+	type_95 currentBattery; 
+	STState_rec carbonMonoxideState; 
+	type_95 currentCarbonMonoxide; 
+	STState_rec smokeState; 
+	type_95 currentSmoke; 
+	bool isAlive;
+	byte currEvtIndex;
+	byte BroadcastChanIndex;
+	byte NumReceivedCommands;
+	byte NumSubscribers;
+	bool BroadcastChans[MAX_SUBSCRIBERS];
+	bool isOnline;
+}
+typedef STSmokeDetector_arr { byte length; STSmokeDetector_rec element[MAX_ARRAY_SIZE]; }
+
+typedef STTherOpState_rec { 
+	type_95 id; 
+	type_95 gArrIndex; 
+	STEvent_arr events; 
+	STState_arr states; 
+	STState_rec batteryState; 
+	type_95 currentBattery; 
+	STState_rec thermostatOperatingStateState; 
+	type_95 currentThermostatOperatingState; 
+	bool isAlive;
+	byte currEvtIndex;
+	byte BroadcastChanIndex;
+	byte NumReceivedCommands;
+	byte NumSubscribers;
+	bool BroadcastChans[MAX_SUBSCRIBERS];
+	bool isOnline;
+}
+typedef STTherOpState_arr { byte length; STTherOpState_rec element[MAX_ARRAY_SIZE]; }
+
+typedef STTherSetpoint_rec { 
+	type_95 id; 
+	type_95 gArrIndex; 
+	STEvent_arr events; 
+	STState_arr states; 
+	STState_rec batteryState; 
+	type_95 currentBattery; 
+	STState_rec thermostatSetpointState; 
+	type_95 currentThermostatSetpoint; 
+	bool isAlive;
+	byte currEvtIndex;
+	byte BroadcastChanIndex;
+	byte NumReceivedCommands;
+	byte NumSubscribers;
+	bool BroadcastChans[MAX_SUBSCRIBERS];
+	bool isOnline;
+}
+typedef STTherSetpoint_arr { byte length; STTherSetpoint_rec element[MAX_ARRAY_SIZE]; }
+
+typedef STTherMode_rec { 
+	type_95 id; 
+	type_95 gArrIndex; 
+	STEvent_arr events; 
+	STState_arr states; 
+	STState_rec batteryState; 
+	type_95 currentBattery; 
+	STState_rec thermostatModeState; 
+	type_95 currentThermostatMode; 
+	bool isAlive;
+	byte currEvtIndex;
+	byte BroadcastChanIndex;
+	byte NumReceivedCommands;
+	byte NumSubscribers;
+	bool BroadcastChans[MAX_SUBSCRIBERS];
+	bool isOnline;
+}
+typedef STTherMode_arr { byte length; STTherMode_rec element[MAX_ARRAY_SIZE]; }
+
+typedef STTherHeatSetpoint_rec { 
+	type_95 id; 
+	type_95 gArrIndex; 
+	STEvent_arr events; 
+	STState_arr states; 
+	STState_rec batteryState; 
+	type_95 currentBattery; 
+	STState_rec heatingSetpointState; 
+	type_95 currentHeatingSetpoint; 
+	bool isAlive;
+	byte currEvtIndex;
+	byte BroadcastChanIndex;
+	byte NumReceivedCommands;
+	byte NumSubscribers;
+	bool BroadcastChans[MAX_SUBSCRIBERS];
+	bool isOnline;
+}
+typedef STTherHeatSetpoint_arr { byte length; STTherHeatSetpoint_rec element[MAX_ARRAY_SIZE]; }
+
+typedef STTherFanMode_rec { 
+	type_95 id; 
+	type_95 gArrIndex; 
+	STEvent_arr events; 
+	STState_arr states; 
+	STState_rec batteryState; 
+	type_95 currentBattery; 
+	STState_rec thermostatFanModeState; 
+	type_95 currentThermostatFanMode; 
+	bool isAlive;
+	byte currEvtIndex;
+	byte BroadcastChanIndex;
+	byte NumReceivedCommands;
+	byte NumSubscribers;
+	bool BroadcastChans[MAX_SUBSCRIBERS];
+	bool isOnline;
+}
+typedef STTherFanMode_arr { byte length; STTherFanMode_rec element[MAX_ARRAY_SIZE]; }
+
+typedef STTherCoSetpoint_rec { 
+	type_95 id; 
+	type_95 gArrIndex; 
+	STEvent_arr events; 
+	STState_arr states; 
+	STState_rec batteryState; 
+	type_95 currentBattery; 
+	STState_rec coolingSetpointState; 
+	type_95 currentCoolingSetpoint; 
+	bool isAlive;
+	byte currEvtIndex;
+	byte BroadcastChanIndex;
+	byte NumReceivedCommands;
+	byte NumSubscribers;
+	bool BroadcastChans[MAX_SUBSCRIBERS];
+	bool isOnline;
+}
+typedef STTherCoSetpoint_arr { byte length; STTherCoSetpoint_rec element[MAX_ARRAY_SIZE]; }
+
+typedef STThermostat_rec { 
+	type_95 id; 
+	type_95 gArrIndex; 
+	STEvent_arr events; 
+	STState_arr states; 
+	STState_rec batteryState; 
+	type_95 currentBattery; 
+	STState_rec thermostatModeState; 
+	type_95 currentThermostatMode; 
+	STState_rec temperatureState; 
+	type_95 currentTemperature; 
+	STState_rec coolingSetpointState; 
+	type_95 currentCoolingSetpoint; 
+	STState_rec heatingSetpointState; 
+	type_95 currentHeatingSetpoint; 
+	STState_rec thermostatSetpointState; 
+	type_95 currentThermostatSetpoint; 
+	STState_rec thermostatFanModeState; 
+	type_95 currentThermostatFanMode; 
+	STState_rec thermostatOperatingStateState; 
+	type_95 currentThermostatOperatingState; 
+	bool isAlive;
+	byte currEvtIndex;
+	byte BroadcastChanIndex;
+	byte NumReceivedCommands;
+	byte NumSubscribers;
+	bool BroadcastChans[MAX_SUBSCRIBERS];
+	bool isOnline;
+}
+typedef STThermostat_arr { byte length; STThermostat_rec element[MAX_ARRAY_SIZE]; }
+
+typedef STNetworkManager_rec { 
+	type_95 configuredPhoneNumber; 
+	type_95 receivedPhoneNumber; 
+	bool isAlive;
+	byte currEvtIndex;
+	byte BroadcastChanIndex;
+	byte NumReceivedCommands;
+	byte NumSubscribers;
+	bool BroadcastChans[MAX_SUBSCRIBERS];
+	bool isOnline;
+}
+typedef STNetworkManager_arr { byte length; STNetworkManager_rec element[MAX_ARRAY_SIZE]; }
+
+typedef STContactSensor_rec { 
+	type_95 id; 
+	type_95 gArrIndex; 
+	STEvent_arr events; 
+	STState_arr states; 
+	STState_rec batteryState; 
+	type_95 currentBattery; 
+	STState_rec contactState; 
+	type_95 currentContact; 
+	bool isAlive;
+	byte currEvtIndex;
+	byte BroadcastChanIndex;
+	byte NumReceivedCommands;
+	byte NumSubscribers;
+	bool BroadcastChans[MAX_SUBSCRIBERS];
+	bool isOnline;
+}
+typedef STContactSensor_arr { byte length; STContactSensor_rec element[MAX_ARRAY_SIZE]; }
+
+typedef CInt2IntMap_rec { 
+	type_95 size; 
+	int_arr keyArr; 
+	int_arr valueArr; 
+	type_95 gArrIndex; 
+	type_95 keyToPut; 
+	type_95 valueToPut; 
+	bool isAlive;
+}
+typedef CInt2IntMap_arr { byte length; CInt2IntMap_rec element[MAX_INT_ARRAY_SIZE]; }
+
+typedef CInt2IIMMap_rec { 
+	type_95 size; 
+	int_arr keyArr; 
+	CInt2IntMap_arr valueArr; 
+	type_95 gArrIndex; 
+	type_95 keyToPut; 
+	CInt2IntMap_rec valueToPut; 
+	bool isAlive;
+}
+typedef CInt2IIMMap_arr { byte length; CInt2IIMMap_rec element[MAX_INT_ARRAY_SIZE]; }
+
+typedef CInt2IIIMMap_rec { 
+	type_95 size; 
+	int_arr keyArr; 
+	CInt2IIMMap_arr valueArr; 
+	type_95 gArrIndex; 
+	type_95 keyToPut; 
+	CInt2IIMMap_rec valueToPut; 
+	bool isAlive;
+}
+typedef CInt2IIIMMap_arr { byte length; CInt2IIIMMap_rec element[MAX_INT_ARRAY_SIZE]; }
+
+typedef STPowerMeter_rec { 
+	type_95 id; 
+	type_95 gArrIndex; 
+	STEvent_arr events; 
+	STState_arr states; 
+	STState_rec batteryState; 
+	type_95 currentBattery; 
+	STState_rec powerState; 
+	type_95 currentPower; 
+	bool isAlive;
+	byte currEvtIndex;
+	byte BroadcastChanIndex;
+	byte NumReceivedCommands;
+	byte NumSubscribers;
+	bool BroadcastChans[MAX_SUBSCRIBERS];
+	bool isOnline;
+}
+typedef STPowerMeter_arr { byte length; STPowerMeter_rec element[MAX_ARRAY_SIZE]; }
+
+typedef STApp_rec { 
+	type_95 name; 
+	type_95 value; 
+	type_95 date; 
+	type_95 id; 
+	type_95 label; 
+	bool isAlive;
+	byte currEvtIndex;
+	byte BroadcastChanIndex;
+	byte NumReceivedCommands;
+	byte NumSubscribers;
+	bool BroadcastChans[MAX_SUBSCRIBERS];
+	bool isOnline;
+}
+typedef STApp_arr { byte length; STApp_rec element[MAX_ARRAY_SIZE]; }
+
+typedef STIlMeas_rec { 
+	type_95 id; 
+	type_95 gArrIndex; 
+	STEvent_arr events; 
+	STState_arr states; 
+	STState_rec batteryState; 
+	type_95 currentBattery; 
+	STState_rec illuminanceState; 
+	type_95 currentIlluminance; 
+	bool isAlive;
+	byte currEvtIndex;
+	byte BroadcastChanIndex;
+	byte NumReceivedCommands;
+	byte NumSubscribers;
+	bool BroadcastChans[MAX_SUBSCRIBERS];
+	bool isOnline;
+}
+typedef STIlMeas_arr { byte length; STIlMeas_rec element[MAX_ARRAY_SIZE]; }
+
+typedef STWaterSensor_rec { 
+	type_95 id; 
+	type_95 gArrIndex; 
+	STEvent_arr events; 
+	STState_arr states; 
+	STState_rec batteryState; 
+	type_95 currentBattery; 
+	STState_rec waterState; 
+	type_95 currentWater; 
+	bool isAlive;
+	byte currEvtIndex;
+	byte BroadcastChanIndex;
+	byte NumReceivedCommands;
+	byte NumSubscribers;
+	bool BroadcastChans[MAX_SUBSCRIBERS];
+	bool isOnline;
+}
+typedef STWaterSensor_arr { byte length; STWaterSensor_rec element[MAX_ARRAY_SIZE]; }
+
+typedef STAccSensor_rec { 
+	type_95 id; 
+	type_95 gArrIndex; 
+	STEvent_arr events; 
+	STState_arr states; 
+	STState_rec batteryState; 
+	type_95 currentBattery; 
+	STState_rec accelerationState; 
+	type_95 currentAcceleration; 
+	bool isAlive;
+	byte currEvtIndex;
+	byte BroadcastChanIndex;
+	byte NumReceivedCommands;
+	byte NumSubscribers;
+	bool BroadcastChans[MAX_SUBSCRIBERS];
+	bool isOnline;
+}
+typedef STAccSensor_arr { byte length; STAccSensor_rec element[MAX_ARRAY_SIZE]; }
+
+typedef STSwitchLevel_rec { 
+	type_95 id; 
+	type_95 gArrIndex; 
+	STEvent_arr events; 
+	STState_arr states; 
+	STState_rec batteryState; 
+	type_95 currentBattery; 
+	STState_rec switchState; 
+	type_95 currentSwitch; 
+	STState_rec levelState; 
+	type_95 currentLevel; 
+	bool isAlive;
+	byte currEvtIndex;
+	byte BroadcastChanIndex;
+	byte NumReceivedCommands;
+	byte NumSubscribers;
+	bool BroadcastChans[MAX_SUBSCRIBERS];
+	bool isOnline;
+}
+typedef STSwitchLevel_arr { byte length; STSwitchLevel_rec element[MAX_ARRAY_SIZE]; }
+
+typedef STValve_rec { 
+	type_95 id; 
+	type_95 gArrIndex; 
+	STEvent_arr events; 
+	STState_arr states; 
+	STState_rec batteryState; 
+	type_95 currentBattery; 
+	STState_rec valveState; 
+	type_95 currentValve; 
+	bool isAlive;
+	byte currEvtIndex;
+	byte BroadcastChanIndex;
+	byte NumReceivedCommands;
+	byte NumSubscribers;
+	bool BroadcastChans[MAX_SUBSCRIBERS];
+	bool isOnline;
+}
+typedef STValve_arr { byte length; STValve_rec element[MAX_ARRAY_SIZE]; }
+
+typedef STAeonKeyFob_rec { 
+	type_95 id; 
+	type_95 gArrIndex; 
+	STEvent_arr events; 
+	STState_arr states; 
+	STState_rec batteryState; 
+	type_95 currentBattery; 
+	STState_rec buttonState; 
+	type_95 currentButton; 
+	bool isAlive;
+	byte currEvtIndex;
+	byte BroadcastChanIndex;
+	byte NumReceivedCommands;
+	byte NumSubscribers;
+	bool BroadcastChans[MAX_SUBSCRIBERS];
+	bool isOnline;
+}
+typedef STAeonKeyFob_arr { byte length; STAeonKeyFob_rec element[MAX_ARRAY_SIZE]; }
+
+typedef STThreeAxis_rec { 
+	type_95 id; 
+	type_95 gArrIndex; 
+	STEvent_arr events; 
+	STState_arr states; 
+	STState_rec batteryState; 
+	type_95 currentBattery; 
+	STState_rec threeAxisState; 
+	bool isAlive;
+	byte currEvtIndex;
+	byte BroadcastChanIndex;
+	byte NumReceivedCommands;
+	byte NumSubscribers;
+	bool BroadcastChans[MAX_SUBSCRIBERS];
+	bool isOnline;
+}
+typedef STThreeAxis_arr { byte length; STThreeAxis_rec element[MAX_ARRAY_SIZE]; }
+
+typedef STRelHumMeas_rec { 
+	type_95 id; 
+	type_95 gArrIndex; 
+	STEvent_arr events; 
+	STState_arr states; 
+	STState_rec batteryState; 
+	type_95 currentBattery; 
+	STState_rec humidityState; 
+	type_95 currentHumidity; 
+	bool isAlive;
+	byte currEvtIndex;
+	byte BroadcastChanIndex;
+	byte NumReceivedCommands;
+	byte NumSubscribers;
+	bool BroadcastChans[MAX_SUBSCRIBERS];
+	bool isOnline;
+}
+typedef STRelHumMeas_arr { byte length; STRelHumMeas_rec element[MAX_ARRAY_SIZE]; }
+
+
+/*************** Start of devices declaration ****************/
+hidden byte doorLock_STLock;
+hidden byte tomPresence_STPresSensor;
+hidden byte frontDoorSensor_STMotionSensor;
+hidden byte livingRoomBulb_STSwitch;
+hidden byte bedRoomBulb_STSwitch;
+hidden byte livingRoomSensor_STMotionSensor;
+hidden byte bedRoomSensor_STMotionSensor;
+hidden byte bedRoomDoor_STContactSensor;
+
+STLock_arr _g_STLockArr;
+STPresSensor_arr _g_STPresSensorArr;
+STMotionSensor_arr _g_STMotionSensorArr;
+STSwitch_arr _g_STSwitchArr;
+STContactSensor_arr _g_STContactSensorArr;
+
+byte STCurrentSystemTime;
+byte STCurrentTemperature;
+STNetworkManager_rec _STNetworkManager;
+bool httpPostAllowed = false;
+STLocation_rec location;
+hidden byte UnlockDoor_location; /* location's broadcast channel index */
+hidden byte GoodNight_location; /* location's broadcast channel index */
+/*************** End of devices declaration ******************/
+
+/*************** Start of global variables of smart apps *****/
+hidden STApp_rec AutoModeChange_app;   
+hidden STPresSensor_arr AutoModeChange_people;   
+hidden type_95 AutoModeChange_newMode1;   
+hidden type_95 AutoModeChange_newMode2;   
+hidden STApp_rec GoodNight_app;   
+hidden STMotionSensor_arr GoodNight_motionSensors;   
+hidden type_95 GoodNight_minutes;   
+hidden type_95 GoodNight_timeOfDay;   
+hidden STSwitch_arr GoodNight_switches;   
+hidden type_95 GoodNight_newMode;   
+hidden type_95 GoodNight_recipients;   
+hidden type_95 GoodNight_sendPushMessage;   
+hidden type_95 GoodNight_phoneNumber;   
+hidden type_95 GoodNight_modeStartTime;   
+hidden STApp_rec LightFollowsMe_app;   
+hidden STMotionSensor_rec LightFollowsMe_motion1;   
+hidden type_95 LightFollowsMe_minutes1;   
+hidden STSwitch_arr LightFollowsMe_switches;   
+hidden STApp_rec UnlockDoor_app;   
+hidden STLock_arr UnlockDoor_locks;   
+hidden STApp_rec LightOffWhenClosed_app;   
+hidden STContactSensor_rec LightOffWhenClosed_contact1;   
+hidden STSwitch_rec LightOffWhenClosed_switch1;   
+/*************** End of global variables of smart apps *******/
+
+/*************** Start of assignment methods *****************/
+hidden short _index;
+hidden short i;
+hidden short i0;
+hidden short i1;
+hidden short i2;
+hidden short i3;
+hidden short i4;
+hidden short i5;
+hidden short i6;
+hidden short i7;
+hidden short i8;
+hidden short i9;
+hidden short i10;
+hidden short i11;
+hidden short i12;
+hidden short i13;
+hidden short i14;
+hidden short i15;
+hidden short i16;
+hidden short i17;
+hidden short i18;
+hidden short i19;
+hidden short i20;
+hidden short i21;
+hidden short i22;
+hidden short i23;
+hidden short i24;
+hidden short i25;
+hidden short i26;
+hidden short i27;
+hidden short i28;
+hidden short i29;
+hidden short i30;
+hidden short i31;
+hidden short i32;
+hidden short i33;
+hidden short i34;
+hidden short i35;
+hidden short i36;
+hidden short i37;
+hidden short i38;
+hidden short i39;
+hidden short i40;
+hidden short i41;
+hidden short i42;
+
+inline assign_STSunriseSunset_rec(rec1, rec2)
+{
+   rec1.sunrise = rec2.sunrise;
+   rec1.sunset = rec2.sunset;
+   rec1.isAlive = rec2.isAlive;
+}
+inline assign_STWeatherFeature_rec(rec1, rec2)
+{
+   rec1.forecast = rec2.forecast;
+   rec1.isAlive = rec2.isAlive;
+   rec1.NumReceivedCommands = rec2.NumReceivedCommands;
+   rec1.currEvtIndex = rec2.currEvtIndex;
+}
+inline assign_STMode_rec(rec1, rec2)
+{
+   rec1.name = rec2.name;
+   rec1.id = rec2.id;
+   rec1.isAlive = rec2.isAlive;
+}
+inline assign_STState_rec(rec1, rec2)
+{
+   rec1.name = rec2.name;
+   rec1.value = rec2.value;
+   rec1.date = rec2.date;
+   rec1.isAlive = rec2.isAlive;
+}
+inline assign_STHub_rec(rec1, rec2)
+{
+   rec1.localIP = rec2.localIP;
+   rec1.name = rec2.name;
+   rec1.isAlive = rec2.isAlive;
+}
+inline assign_STEvent_rec(rec1, rec2)
+{
+   rec1.name = rec2.name;
+   rec1.value = rec2.value;
+   rec1.physical = rec2.physical;
+   rec1.deviceId = rec2.deviceId;
+   rec1.date = rec2.date;
+   rec1.id = rec2.id;
+   rec1.unit = rec2.unit;
+   rec1.type = rec2.type;
+   rec1.isAlive = rec2.isAlive;
+   rec1.EvtType = rec2.EvtType;
+}
+inline assign_STAttribute_rec(rec1, rec2)
+{
+   rec1.name = rec2.name;
+   rec1.isAlive = rec2.isAlive;
+}
+inline assign_STCommand_rec(rec1, rec2)
+{
+   rec1.name = rec2.name;
+   rec1.isAlive = rec2.isAlive;
+}
+inline assign_STCapability_rec(rec1, rec2)
+{
+   assign_STAttribute_arr(rec1.attributes, rec2.attributes);
+   assign_STCommand_arr(rec1.commands, rec2.commands);
+   rec1.name = rec2.name;
+   rec1.isAlive = rec2.isAlive;
+}
+inline assign_STDevice_rec(rec1, rec2)
+{
+   rec1.id = rec2.id;
+   rec1.gArrIndex = rec2.gArrIndex;
+   assign_STEvent_arr(rec1.events, rec2.events);
+   assign_STState_arr(rec1.states, rec2.states);
+   assign_STState_rec(rec1.batteryState, rec2.batteryState);
+   rec1.currentBattery = rec2.currentBattery;
+   rec1.isAlive = rec2.isAlive;
+   rec1.NumReceivedCommands = rec2.NumReceivedCommands;
+   rec1.currEvtIndex = rec2.currEvtIndex;
+}
+inline assign_STLocation_rec(rec1, rec2)
+{
+   rec1.contactBookEnabled = rec2.contactBookEnabled;
+   assign_STMode_arr(rec1.modes, rec2.modes);
+   rec1.timeZone = rec2.timeZone;
+   rec1.mode = rec2.mode;
+   assign_STSunriseSunset_rec(rec1.sunriseSunset, rec2.sunriseSunset);
+   assign_STWeatherFeature_rec(rec1.weatherFeature, rec2.weatherFeature);
+   assign_STEvent_rec(rec1.latestEvt, rec2.latestEvt);
+   rec1.isAlive = rec2.isAlive;
+   rec1.NumReceivedCommands = rec2.NumReceivedCommands;
+   rec1.LatestCommandType = rec2.LatestCommandType;
+   rec1.LatestCommandID = rec2.LatestCommandID;
+}
+inline assign_STAlarm_rec(rec1, rec2)
+{
+   rec1.id = rec2.id;
+   rec1.gArrIndex = rec2.gArrIndex;
+   assign_STEvent_arr(rec1.events, rec2.events);
+   assign_STState_arr(rec1.states, rec2.states);
+   assign_STState_rec(rec1.batteryState, rec2.batteryState);
+   rec1.currentBattery = rec2.currentBattery;
+   assign_STState_rec(rec1.alarmState, rec2.alarmState);
+   rec1.currentAlarm = rec2.currentAlarm;
+   rec1.isAlive = rec2.isAlive;
+   rec1.NumReceivedCommands = rec2.NumReceivedCommands;
+   rec1.currEvtIndex = rec2.currEvtIndex;
+}
+inline assign_STSwitch_rec(rec1, rec2)
+{
+   rec1.id = rec2.id;
+   rec1.gArrIndex = rec2.gArrIndex;
+   assign_STEvent_arr(rec1.events, rec2.events);
+   assign_STState_arr(rec1.states, rec2.states);
+   assign_STState_rec(rec1.batteryState, rec2.batteryState);
+   rec1.currentBattery = rec2.currentBattery;
+   assign_STState_rec(rec1.switchState, rec2.switchState);
+   rec1.currentSwitch = rec2.currentSwitch;
+   assign_STState_rec(rec1.levelState, rec2.levelState);
+   rec1.currentLevel = rec2.currentLevel;
+   rec1.isAlive = rec2.isAlive;
+   rec1.NumReceivedCommands = rec2.NumReceivedCommands;
+   rec1.currEvtIndex = rec2.currEvtIndex;
+}
+inline assign_STBulb_rec(rec1, rec2)
+{
+   rec1.id = rec2.id;
+   rec1.gArrIndex = rec2.gArrIndex;
+   assign_STEvent_arr(rec1.events, rec2.events);
+   assign_STState_arr(rec1.states, rec2.states);
+   assign_STState_rec(rec1.batteryState, rec2.batteryState);
+   rec1.currentBattery = rec2.currentBattery;
+   assign_STState_rec(rec1.switchState, rec2.switchState);
+   rec1.currentSwitch = rec2.currentSwitch;
+   assign_STState_rec(rec1.levelState, rec2.levelState);
+   rec1.currentLevel = rec2.currentLevel;
+   rec1.isAlive = rec2.isAlive;
+   rec1.NumReceivedCommands = rec2.NumReceivedCommands;
+   rec1.currEvtIndex = rec2.currEvtIndex;
+}
+inline assign_STTempMeas_rec(rec1, rec2)
+{
+   rec1.id = rec2.id;
+   rec1.gArrIndex = rec2.gArrIndex;
+   assign_STEvent_arr(rec1.events, rec2.events);
+   assign_STState_arr(rec1.states, rec2.states);
+   assign_STState_rec(rec1.batteryState, rec2.batteryState);
+   rec1.currentBattery = rec2.currentBattery;
+   assign_STState_rec(rec1.temperatureState, rec2.temperatureState);
+   rec1.currentTemperature = rec2.currentTemperature;
+   rec1.isAlive = rec2.isAlive;
+   rec1.NumReceivedCommands = rec2.NumReceivedCommands;
+   rec1.currEvtIndex = rec2.currEvtIndex;
+}
+inline assign_STCarDioMeas_rec(rec1, rec2)
+{
+   rec1.id = rec2.id;
+   rec1.gArrIndex = rec2.gArrIndex;
+   assign_STEvent_arr(rec1.events, rec2.events);
+   assign_STState_arr(rec1.states, rec2.states);
+   assign_STState_rec(rec1.batteryState, rec2.batteryState);
+   rec1.currentBattery = rec2.currentBattery;
+   assign_STState_rec(rec1.carbonDioxideState, rec2.carbonDioxideState);
+   rec1.currentCarbonDioxide = rec2.currentCarbonDioxide;
+   rec1.isAlive = rec2.isAlive;
+   rec1.NumReceivedCommands = rec2.NumReceivedCommands;
+   rec1.currEvtIndex = rec2.currEvtIndex;
+}
+inline assign_STCarMoDetector_rec(rec1, rec2)
+{
+   rec1.id = rec2.id;
+   rec1.gArrIndex = rec2.gArrIndex;
+   assign_STEvent_arr(rec1.events, rec2.events);
+   assign_STState_arr(rec1.states, rec2.states);
+   assign_STState_rec(rec1.batteryState, rec2.batteryState);
+   rec1.currentBattery = rec2.currentBattery;
+   assign_STState_rec(rec1.carbonMonoxideState, rec2.carbonMonoxideState);
+   rec1.currentCarbonMonoxide = rec2.currentCarbonMonoxide;
+   rec1.isAlive = rec2.isAlive;
+   rec1.NumReceivedCommands = rec2.NumReceivedCommands;
+   rec1.currEvtIndex = rec2.currEvtIndex;
+}
+inline assign_STDoorControl_rec(rec1, rec2)
+{
+   rec1.id = rec2.id;
+   rec1.gArrIndex = rec2.gArrIndex;
+   assign_STEvent_arr(rec1.events, rec2.events);
+   assign_STState_arr(rec1.states, rec2.states);
+   assign_STState_rec(rec1.batteryState, rec2.batteryState);
+   rec1.currentBattery = rec2.currentBattery;
+   assign_STState_rec(rec1.doorState, rec2.doorState);
+   rec1.currentDoor = rec2.currentDoor;
+   rec1.isAlive = rec2.isAlive;
+   rec1.NumReceivedCommands = rec2.NumReceivedCommands;
+   rec1.currEvtIndex = rec2.currEvtIndex;
+}
+inline assign_STLight_rec(rec1, rec2)
+{
+   rec1.id = rec2.id;
+   rec1.gArrIndex = rec2.gArrIndex;
+   assign_STEvent_arr(rec1.events, rec2.events);
+   assign_STState_arr(rec1.states, rec2.states);
+   assign_STState_rec(rec1.batteryState, rec2.batteryState);
+   rec1.currentBattery = rec2.currentBattery;
+   assign_STState_rec(rec1.switchState, rec2.switchState);
+   rec1.currentSwitch = rec2.currentSwitch;
+   assign_STState_rec(rec1.levelState, rec2.levelState);
+   rec1.currentLevel = rec2.currentLevel;
+   rec1.isAlive = rec2.isAlive;
+   rec1.NumReceivedCommands = rec2.NumReceivedCommands;
+   rec1.currEvtIndex = rec2.currEvtIndex;
+}
+inline assign_STLock_rec(rec1, rec2)
+{
+   rec1.id = rec2.id;
+   rec1.gArrIndex = rec2.gArrIndex;
+   assign_STEvent_arr(rec1.events, rec2.events);
+   assign_STState_arr(rec1.states, rec2.states);
+   assign_STState_rec(rec1.batteryState, rec2.batteryState);
+   rec1.currentBattery = rec2.currentBattery;
+   assign_STState_rec(rec1.lockState, rec2.lockState);
+   rec1.currentLock = rec2.currentLock;
+   rec1.isAlive = rec2.isAlive;
+   rec1.NumReceivedCommands = rec2.NumReceivedCommands;
+   rec1.currEvtIndex = rec2.currEvtIndex;
+}
+inline assign_STMotionSensor_rec(rec1, rec2)
+{
+   rec1.id = rec2.id;
+   rec1.gArrIndex = rec2.gArrIndex;
+   assign_STEvent_arr(rec1.events, rec2.events);
+   assign_STState_arr(rec1.states, rec2.states);
+   assign_STState_rec(rec1.batteryState, rec2.batteryState);
+   rec1.currentBattery = rec2.currentBattery;
+   assign_STState_rec(rec1.motionState, rec2.motionState);
+   rec1.currentMotion = rec2.currentMotion;
+   rec1.isAlive = rec2.isAlive;
+   rec1.NumReceivedCommands = rec2.NumReceivedCommands;
+   rec1.currEvtIndex = rec2.currEvtIndex;
+}
+inline assign_STPresSensor_rec(rec1, rec2)
+{
+   rec1.id = rec2.id;
+   rec1.gArrIndex = rec2.gArrIndex;
+   assign_STEvent_arr(rec1.events, rec2.events);
+   assign_STState_arr(rec1.states, rec2.states);
+   assign_STState_rec(rec1.batteryState, rec2.batteryState);
+   rec1.currentBattery = rec2.currentBattery;
+   assign_STState_rec(rec1.presenceState, rec2.presenceState);
+   rec1.currentPresence = rec2.currentPresence;
+   rec1.isAlive = rec2.isAlive;
+   rec1.NumReceivedCommands = rec2.NumReceivedCommands;
+   rec1.currEvtIndex = rec2.currEvtIndex;
+}
+inline assign_STOutlet_rec(rec1, rec2)
+{
+   rec1.id = rec2.id;
+   rec1.gArrIndex = rec2.gArrIndex;
+   assign_STEvent_arr(rec1.events, rec2.events);
+   assign_STState_arr(rec1.states, rec2.states);
+   assign_STState_rec(rec1.batteryState, rec2.batteryState);
+   rec1.currentBattery = rec2.currentBattery;
+   assign_STState_rec(rec1.switchState, rec2.switchState);
+   rec1.currentSwitch = rec2.currentSwitch;
+   assign_STState_rec(rec1.levelState, rec2.levelState);
+   rec1.currentLevel = rec2.currentLevel;
+   rec1.isAlive = rec2.isAlive;
+   rec1.NumReceivedCommands = rec2.NumReceivedCommands;
+   rec1.currEvtIndex = rec2.currEvtIndex;
+}
+inline assign_STSmokeDetector_rec(rec1, rec2)
+{
+   rec1.id = rec2.id;
+   rec1.gArrIndex = rec2.gArrIndex;
+   assign_STEvent_arr(rec1.events, rec2.events);
+   assign_STState_arr(rec1.states, rec2.states);
+   assign_STState_rec(rec1.batteryState, rec2.batteryState);
+   rec1.currentBattery = rec2.currentBattery;
+   assign_STState_rec(rec1.carbonMonoxideState, rec2.carbonMonoxideState);
+   rec1.currentCarbonMonoxide = rec2.currentCarbonMonoxide;
+   assign_STState_rec(rec1.smokeState, rec2.smokeState);
+   rec1.currentSmoke = rec2.currentSmoke;
+   rec1.isAlive = rec2.isAlive;
+   rec1.NumReceivedCommands = rec2.NumReceivedCommands;
+   rec1.currEvtIndex = rec2.currEvtIndex;
+}
+inline assign_STTherOpState_rec(rec1, rec2)
+{
+   rec1.id = rec2.id;
+   rec1.gArrIndex = rec2.gArrIndex;
+   assign_STEvent_arr(rec1.events, rec2.events);
+   assign_STState_arr(rec1.states, rec2.states);
+   assign_STState_rec(rec1.batteryState, rec2.batteryState);
+   rec1.currentBattery = rec2.currentBattery;
+   assign_STState_rec(rec1.thermostatOperatingStateState, rec2.thermostatOperatingStateState);
+   rec1.currentThermostatOperatingState = rec2.currentThermostatOperatingState;
+   rec1.isAlive = rec2.isAlive;
+   rec1.NumReceivedCommands = rec2.NumReceivedCommands;
+   rec1.currEvtIndex = rec2.currEvtIndex;
+}
+inline assign_STTherSetpoint_rec(rec1, rec2)
+{
+   rec1.id = rec2.id;
+   rec1.gArrIndex = rec2.gArrIndex;
+   assign_STEvent_arr(rec1.events, rec2.events);
+   assign_STState_arr(rec1.states, rec2.states);
+   assign_STState_rec(rec1.batteryState, rec2.batteryState);
+   rec1.currentBattery = rec2.currentBattery;
+   assign_STState_rec(rec1.thermostatSetpointState, rec2.thermostatSetpointState);
+   rec1.currentThermostatSetpoint = rec2.currentThermostatSetpoint;
+   rec1.isAlive = rec2.isAlive;
+   rec1.NumReceivedCommands = rec2.NumReceivedCommands;
+   rec1.currEvtIndex = rec2.currEvtIndex;
+}
+inline assign_STTherMode_rec(rec1, rec2)
+{
+   rec1.id = rec2.id;
+   rec1.gArrIndex = rec2.gArrIndex;
+   assign_STEvent_arr(rec1.events, rec2.events);
+   assign_STState_arr(rec1.states, rec2.states);
+   assign_STState_rec(rec1.batteryState, rec2.batteryState);
+   rec1.currentBattery = rec2.currentBattery;
+   assign_STState_rec(rec1.thermostatModeState, rec2.thermostatModeState);
+   rec1.currentThermostatMode = rec2.currentThermostatMode;
+   rec1.isAlive = rec2.isAlive;
+   rec1.NumReceivedCommands = rec2.NumReceivedCommands;
+   rec1.currEvtIndex = rec2.currEvtIndex;
+}
+inline assign_STTherHeatSetpoint_rec(rec1, rec2)
+{
+   rec1.id = rec2.id;
+   rec1.gArrIndex = rec2.gArrIndex;
+   assign_STEvent_arr(rec1.events, rec2.events);
+   assign_STState_arr(rec1.states, rec2.states);
+   assign_STState_rec(rec1.batteryState, rec2.batteryState);
+   rec1.currentBattery = rec2.currentBattery;
+   assign_STState_rec(rec1.heatingSetpointState, rec2.heatingSetpointState);
+   rec1.currentHeatingSetpoint = rec2.currentHeatingSetpoint;
+   rec1.isAlive = rec2.isAlive;
+   rec1.NumReceivedCommands = rec2.NumReceivedCommands;
+   rec1.currEvtIndex = rec2.currEvtIndex;
+}
+inline assign_STTherFanMode_rec(rec1, rec2)
+{
+   rec1.id = rec2.id;
+   rec1.gArrIndex = rec2.gArrIndex;
+   assign_STEvent_arr(rec1.events, rec2.events);
+   assign_STState_arr(rec1.states, rec2.states);
+   assign_STState_rec(rec1.batteryState, rec2.batteryState);
+   rec1.currentBattery = rec2.currentBattery;
+   assign_STState_rec(rec1.thermostatFanModeState, rec2.thermostatFanModeState);
+   rec1.currentThermostatFanMode = rec2.currentThermostatFanMode;
+   rec1.isAlive = rec2.isAlive;
+   rec1.NumReceivedCommands = rec2.NumReceivedCommands;
+   rec1.currEvtIndex = rec2.currEvtIndex;
+}
+inline assign_STTherCoSetpoint_rec(rec1, rec2)
+{
+   rec1.id = rec2.id;
+   rec1.gArrIndex = rec2.gArrIndex;
+   assign_STEvent_arr(rec1.events, rec2.events);
+   assign_STState_arr(rec1.states, rec2.states);
+   assign_STState_rec(rec1.batteryState, rec2.batteryState);
+   rec1.currentBattery = rec2.currentBattery;
+   assign_STState_rec(rec1.coolingSetpointState, rec2.coolingSetpointState);
+   rec1.currentCoolingSetpoint = rec2.currentCoolingSetpoint;
+   rec1.isAlive = rec2.isAlive;
+   rec1.NumReceivedCommands = rec2.NumReceivedCommands;
+   rec1.currEvtIndex = rec2.currEvtIndex;
+}
+inline assign_STThermostat_rec(rec1, rec2)
+{
+   rec1.id = rec2.id;
+   rec1.gArrIndex = rec2.gArrIndex;
+   assign_STEvent_arr(rec1.events, rec2.events);
+   assign_STState_arr(rec1.states, rec2.states);
+   assign_STState_rec(rec1.batteryState, rec2.batteryState);
+   rec1.currentBattery = rec2.currentBattery;
+   assign_STState_rec(rec1.thermostatModeState, rec2.thermostatModeState);
+   rec1.currentThermostatMode = rec2.currentThermostatMode;
+   assign_STState_rec(rec1.temperatureState, rec2.temperatureState);
+   rec1.currentTemperature = rec2.currentTemperature;
+   assign_STState_rec(rec1.coolingSetpointState, rec2.coolingSetpointState);
+   rec1.currentCoolingSetpoint = rec2.currentCoolingSetpoint;
+   assign_STState_rec(rec1.heatingSetpointState, rec2.heatingSetpointState);
+   rec1.currentHeatingSetpoint = rec2.currentHeatingSetpoint;
+   assign_STState_rec(rec1.thermostatSetpointState, rec2.thermostatSetpointState);
+   rec1.currentThermostatSetpoint = rec2.currentThermostatSetpoint;
+   assign_STState_rec(rec1.thermostatFanModeState, rec2.thermostatFanModeState);
+   rec1.currentThermostatFanMode = rec2.currentThermostatFanMode;
+   assign_STState_rec(rec1.thermostatOperatingStateState, rec2.thermostatOperatingStateState);
+   rec1.currentThermostatOperatingState = rec2.currentThermostatOperatingState;
+   rec1.isAlive = rec2.isAlive;
+   rec1.NumReceivedCommands = rec2.NumReceivedCommands;
+   rec1.currEvtIndex = rec2.currEvtIndex;
+}
+inline assign_STNetworkManager_rec(rec1, rec2)
+{
+   rec1.configuredPhoneNumber = rec2.configuredPhoneNumber;
+   rec1.receivedPhoneNumber = rec2.receivedPhoneNumber;
+   rec1.isAlive = rec2.isAlive;
+   rec1.NumReceivedCommands = rec2.NumReceivedCommands;
+   rec1.currEvtIndex = rec2.currEvtIndex;
+}
+inline assign_STContactSensor_rec(rec1, rec2)
+{
+   rec1.id = rec2.id;
+   rec1.gArrIndex = rec2.gArrIndex;
+   assign_STEvent_arr(rec1.events, rec2.events);
+   assign_STState_arr(rec1.states, rec2.states);
+   assign_STState_rec(rec1.batteryState, rec2.batteryState);
+   rec1.currentBattery = rec2.currentBattery;
+   assign_STState_rec(rec1.contactState, rec2.contactState);
+   rec1.currentContact = rec2.currentContact;
+   rec1.isAlive = rec2.isAlive;
+   rec1.NumReceivedCommands = rec2.NumReceivedCommands;
+   rec1.currEvtIndex = rec2.currEvtIndex;
+}
+inline assign_STPowerMeter_rec(rec1, rec2)
+{
+   rec1.id = rec2.id;
+   rec1.gArrIndex = rec2.gArrIndex;
+   assign_STEvent_arr(rec1.events, rec2.events);
+   assign_STState_arr(rec1.states, rec2.states);
+   assign_STState_rec(rec1.batteryState, rec2.batteryState);
+   rec1.currentBattery = rec2.currentBattery;
+   assign_STState_rec(rec1.powerState, rec2.powerState);
+   rec1.currentPower = rec2.currentPower;
+   rec1.isAlive = rec2.isAlive;
+   rec1.NumReceivedCommands = rec2.NumReceivedCommands;
+   rec1.currEvtIndex = rec2.currEvtIndex;
+}
+inline assign_STApp_rec(rec1, rec2)
+{
+   rec1.name = rec2.name;
+   rec1.value = rec2.value;
+   rec1.date = rec2.date;
+   rec1.id = rec2.id;
+   rec1.label = rec2.label;
+   rec1.isAlive = rec2.isAlive;
+   rec1.NumReceivedCommands = rec2.NumReceivedCommands;
+   rec1.currEvtIndex = rec2.currEvtIndex;
+}
+inline assign_STIlMeas_rec(rec1, rec2)
+{
+   rec1.id = rec2.id;
+   rec1.gArrIndex = rec2.gArrIndex;
+   assign_STEvent_arr(rec1.events, rec2.events);
+   assign_STState_arr(rec1.states, rec2.states);
+   assign_STState_rec(rec1.batteryState, rec2.batteryState);
+   rec1.currentBattery = rec2.currentBattery;
+   assign_STState_rec(rec1.illuminanceState, rec2.illuminanceState);
+   rec1.currentIlluminance = rec2.currentIlluminance;
+   rec1.isAlive = rec2.isAlive;
+   rec1.NumReceivedCommands = rec2.NumReceivedCommands;
+   rec1.currEvtIndex = rec2.currEvtIndex;
+}
+inline assign_STWaterSensor_rec(rec1, rec2)
+{
+   rec1.id = rec2.id;
+   rec1.gArrIndex = rec2.gArrIndex;
+   assign_STEvent_arr(rec1.events, rec2.events);
+   assign_STState_arr(rec1.states, rec2.states);
+   assign_STState_rec(rec1.batteryState, rec2.batteryState);
+   rec1.currentBattery = rec2.currentBattery;
+   assign_STState_rec(rec1.waterState, rec2.waterState);
+   rec1.currentWater = rec2.currentWater;
+   rec1.isAlive = rec2.isAlive;
+   rec1.NumReceivedCommands = rec2.NumReceivedCommands;
+   rec1.currEvtIndex = rec2.currEvtIndex;
+}
+inline assign_STAccSensor_rec(rec1, rec2)
+{
+   rec1.id = rec2.id;
+   rec1.gArrIndex = rec2.gArrIndex;
+   assign_STEvent_arr(rec1.events, rec2.events);
+   assign_STState_arr(rec1.states, rec2.states);
+   assign_STState_rec(rec1.batteryState, rec2.batteryState);
+   rec1.currentBattery = rec2.currentBattery;
+   assign_STState_rec(rec1.accelerationState, rec2.accelerationState);
+   rec1.currentAcceleration = rec2.currentAcceleration;
+   rec1.isAlive = rec2.isAlive;
+   rec1.NumReceivedCommands = rec2.NumReceivedCommands;
+   rec1.currEvtIndex = rec2.currEvtIndex;
+}
+inline assign_STSwitchLevel_rec(rec1, rec2)
+{
+   rec1.id = rec2.id;
+   rec1.gArrIndex = rec2.gArrIndex;
+   assign_STEvent_arr(rec1.events, rec2.events);
+   assign_STState_arr(rec1.states, rec2.states);
+   assign_STState_rec(rec1.batteryState, rec2.batteryState);
+   rec1.currentBattery = rec2.currentBattery;
+   assign_STState_rec(rec1.switchState, rec2.switchState);
+   rec1.currentSwitch = rec2.currentSwitch;
+   assign_STState_rec(rec1.levelState, rec2.levelState);
+   rec1.currentLevel = rec2.currentLevel;
+   rec1.isAlive = rec2.isAlive;
+   rec1.NumReceivedCommands = rec2.NumReceivedCommands;
+   rec1.currEvtIndex = rec2.currEvtIndex;
+}
+inline assign_STValve_rec(rec1, rec2)
+{
+   rec1.id = rec2.id;
+   rec1.gArrIndex = rec2.gArrIndex;
+   assign_STEvent_arr(rec1.events, rec2.events);
+   assign_STState_arr(rec1.states, rec2.states);
+   assign_STState_rec(rec1.batteryState, rec2.batteryState);
+   rec1.currentBattery = rec2.currentBattery;
+   assign_STState_rec(rec1.valveState, rec2.valveState);
+   rec1.currentValve = rec2.currentValve;
+   rec1.isAlive = rec2.isAlive;
+   rec1.NumReceivedCommands = rec2.NumReceivedCommands;
+   rec1.currEvtIndex = rec2.currEvtIndex;
+}
+inline assign_STAeonKeyFob_rec(rec1, rec2)
+{
+   rec1.id = rec2.id;
+   rec1.gArrIndex = rec2.gArrIndex;
+   assign_STEvent_arr(rec1.events, rec2.events);
+   assign_STState_arr(rec1.states, rec2.states);
+   assign_STState_rec(rec1.batteryState, rec2.batteryState);
+   rec1.currentBattery = rec2.currentBattery;
+   assign_STState_rec(rec1.buttonState, rec2.buttonState);
+   rec1.currentButton = rec2.currentButton;
+   rec1.isAlive = rec2.isAlive;
+   rec1.NumReceivedCommands = rec2.NumReceivedCommands;
+   rec1.currEvtIndex = rec2.currEvtIndex;
+}
+inline assign_STThreeAxis_rec(rec1, rec2)
+{
+   rec1.id = rec2.id;
+   rec1.gArrIndex = rec2.gArrIndex;
+   assign_STEvent_arr(rec1.events, rec2.events);
+   assign_STState_arr(rec1.states, rec2.states);
+   assign_STState_rec(rec1.batteryState, rec2.batteryState);
+   rec1.currentBattery = rec2.currentBattery;
+   assign_STState_rec(rec1.threeAxisState, rec2.threeAxisState);
+   rec1.isAlive = rec2.isAlive;
+   rec1.NumReceivedCommands = rec2.NumReceivedCommands;
+   rec1.currEvtIndex = rec2.currEvtIndex;
+}
+inline assign_STRelHumMeas_rec(rec1, rec2)
+{
+   rec1.id = rec2.id;
+   rec1.gArrIndex = rec2.gArrIndex;
+   assign_STEvent_arr(rec1.events, rec2.events);
+   assign_STState_arr(rec1.states, rec2.states);
+   assign_STState_rec(rec1.batteryState, rec2.batteryState);
+   rec1.currentBattery = rec2.currentBattery;
+   assign_STState_rec(rec1.humidityState, rec2.humidityState);
+   rec1.currentHumidity = rec2.currentHumidity;
+   rec1.isAlive = rec2.isAlive;
+   rec1.NumReceivedCommands = rec2.NumReceivedCommands;
+   rec1.currEvtIndex = rec2.currEvtIndex;
+}
+inline assign_STSunriseSunset_arr(arr1, arr2)
+{
+   arr1.length = arr2.length;
+   for(i0 : 0 .. MAX_ARRAY_SIZE-1) {
+      assign_STSunriseSunset_rec(arr1.element[i0], arr2.element[i0]);
+   }
+}
+inline assign_STWeatherFeature_arr(arr1, arr2)
+{
+   arr1.length = arr2.length;
+   for(i1 : 0 .. MAX_ARRAY_SIZE-1) {
+      assign_STWeatherFeature_rec(arr1.element[i1], arr2.element[i1]);
+   }
+}
+inline assign_STMode_arr(arr1, arr2)
+{
+   arr1.length = arr2.length;
+   for(i2 : 0 .. MAX_ARRAY_SIZE-1) {
+      assign_STMode_rec(arr1.element[i2], arr2.element[i2]);
+   }
+}
+inline assign_STState_arr(arr1, arr2)
+{
+   arr1.length = arr2.length;
+   for(i3 : 0 .. MAX_ARRAY_SIZE-1) {
+      assign_STState_rec(arr1.element[i3], arr2.element[i3]);
+   }
+}
+inline assign_STHub_arr(arr1, arr2)
+{
+   arr1.length = arr2.length;
+   for(i4 : 0 .. MAX_ARRAY_SIZE-1) {
+      assign_STHub_rec(arr1.element[i4], arr2.element[i4]);
+   }
+}
+inline assign_STLocation_arr(arr1, arr2)
+{
+   arr1.length = arr2.length;
+   for(i5 : 0 .. MAX_ARRAY_SIZE-1) {
+      assign_STLocation_rec(arr1.element[i5], arr2.element[i5]);
+   }
+}
+inline assign_STAttribute_arr(arr1, arr2)
+{
+   arr1.length = arr2.length;
+   for(i6 : 0 .. MAX_ARRAY_SIZE-1) {
+      assign_STAttribute_rec(arr1.element[i6], arr2.element[i6]);
+   }
+}
+inline assign_STCommand_arr(arr1, arr2)
+{
+   arr1.length = arr2.length;
+   for(i7 : 0 .. MAX_ARRAY_SIZE-1) {
+      assign_STCommand_rec(arr1.element[i7], arr2.element[i7]);
+   }
+}
+inline assign_STCapability_arr(arr1, arr2)
+{
+   arr1.length = arr2.length;
+   for(i8 : 0 .. MAX_ARRAY_SIZE-1) {
+      assign_STCapability_rec(arr1.element[i8], arr2.element[i8]);
+   }
+}
+inline assign_STDevice_arr(arr1, arr2)
+{
+   arr1.length = arr2.length;
+   for(i9 : 0 .. MAX_ARRAY_SIZE-1) {
+      assign_STDevice_rec(arr1.element[i9], arr2.element[i9]);
+   }
+}
+inline assign_STEvent_arr(arr1, arr2)
+{
+   arr1.length = arr2.length;
+   for(i10 : 0 .. MAX_ARRAY_SIZE-1) {
+      assign_STEvent_rec(arr1.element[i10], arr2.element[i10]);
+   }
+}
+inline assign_STAlarm_arr(arr1, arr2)
+{
+   arr1.length = arr2.length;
+   for(i11 : 0 .. MAX_ARRAY_SIZE-1) {
+      assign_STAlarm_rec(arr1.element[i11], arr2.element[i11]);
+   }
+}
+inline assign_STSwitch_arr(arr1, arr2)
+{
+   arr1.length = arr2.length;
+   for(i12 : 0 .. MAX_ARRAY_SIZE-1) {
+      assign_STSwitch_rec(arr1.element[i12], arr2.element[i12]);
+   }
+}
+inline assign_STBulb_arr(arr1, arr2)
+{
+   arr1.length = arr2.length;
+   for(i13 : 0 .. MAX_ARRAY_SIZE-1) {
+      assign_STBulb_rec(arr1.element[i13], arr2.element[i13]);
+   }
+}
+inline assign_STTempMeas_arr(arr1, arr2)
+{
+   arr1.length = arr2.length;
+   for(i14 : 0 .. MAX_ARRAY_SIZE-1) {
+      assign_STTempMeas_rec(arr1.element[i14], arr2.element[i14]);
+   }
+}
+inline assign_STCarDioMeas_arr(arr1, arr2)
+{
+   arr1.length = arr2.length;
+   for(i15 : 0 .. MAX_ARRAY_SIZE-1) {
+      assign_STCarDioMeas_rec(arr1.element[i15], arr2.element[i15]);
+   }
+}
+inline assign_STCarMoDetector_arr(arr1, arr2)
+{
+   arr1.length = arr2.length;
+   for(i16 : 0 .. MAX_ARRAY_SIZE-1) {
+      assign_STCarMoDetector_rec(arr1.element[i16], arr2.element[i16]);
+   }
+}
+inline assign_STDoorControl_arr(arr1, arr2)
+{
+   arr1.length = arr2.length;
+   for(i17 : 0 .. MAX_ARRAY_SIZE-1) {
+      assign_STDoorControl_rec(arr1.element[i17], arr2.element[i17]);
+   }
+}
+inline assign_STLight_arr(arr1, arr2)
+{
+   arr1.length = arr2.length;
+   for(i18 : 0 .. MAX_ARRAY_SIZE-1) {
+      assign_STLight_rec(arr1.element[i18], arr2.element[i18]);
+   }
+}
+inline assign_STLock_arr(arr1, arr2)
+{
+   arr1.length = arr2.length;
+   for(i19 : 0 .. MAX_ARRAY_SIZE-1) {
+      assign_STLock_rec(arr1.element[i19], arr2.element[i19]);
+   }
+}
+inline assign_STMotionSensor_arr(arr1, arr2)
+{
+   arr1.length = arr2.length;
+   for(i20 : 0 .. MAX_ARRAY_SIZE-1) {
+      assign_STMotionSensor_rec(arr1.element[i20], arr2.element[i20]);
+   }
+}
+inline assign_STPresSensor_arr(arr1, arr2)
+{
+   arr1.length = arr2.length;
+   for(i21 : 0 .. MAX_ARRAY_SIZE-1) {
+      assign_STPresSensor_rec(arr1.element[i21], arr2.element[i21]);
+   }
+}
+inline assign_STOutlet_arr(arr1, arr2)
+{
+   arr1.length = arr2.length;
+   for(i22 : 0 .. MAX_ARRAY_SIZE-1) {
+      assign_STOutlet_rec(arr1.element[i22], arr2.element[i22]);
+   }
+}
+inline assign_STSmokeDetector_arr(arr1, arr2)
+{
+   arr1.length = arr2.length;
+   for(i23 : 0 .. MAX_ARRAY_SIZE-1) {
+      assign_STSmokeDetector_rec(arr1.element[i23], arr2.element[i23]);
+   }
+}
+inline assign_STTherOpState_arr(arr1, arr2)
+{
+   arr1.length = arr2.length;
+   for(i24 : 0 .. MAX_ARRAY_SIZE-1) {
+      assign_STTherOpState_rec(arr1.element[i24], arr2.element[i24]);
+   }
+}
+inline assign_STTherSetpoint_arr(arr1, arr2)
+{
+   arr1.length = arr2.length;
+   for(i25 : 0 .. MAX_ARRAY_SIZE-1) {
+      assign_STTherSetpoint_rec(arr1.element[i25], arr2.element[i25]);
+   }
+}
+inline assign_STTherMode_arr(arr1, arr2)
+{
+   arr1.length = arr2.length;
+   for(i26 : 0 .. MAX_ARRAY_SIZE-1) {
+      assign_STTherMode_rec(arr1.element[i26], arr2.element[i26]);
+   }
+}
+inline assign_STTherHeatSetpoint_arr(arr1, arr2)
+{
+   arr1.length = arr2.length;
+   for(i27 : 0 .. MAX_ARRAY_SIZE-1) {
+      assign_STTherHeatSetpoint_rec(arr1.element[i27], arr2.element[i27]);
+   }
+}
+inline assign_STTherFanMode_arr(arr1, arr2)
+{
+   arr1.length = arr2.length;
+   for(i28 : 0 .. MAX_ARRAY_SIZE-1) {
+      assign_STTherFanMode_rec(arr1.element[i28], arr2.element[i28]);
+   }
+}
+inline assign_STTherCoSetpoint_arr(arr1, arr2)
+{
+   arr1.length = arr2.length;
+   for(i29 : 0 .. MAX_ARRAY_SIZE-1) {
+      assign_STTherCoSetpoint_rec(arr1.element[i29], arr2.element[i29]);
+   }
+}
+inline assign_STThermostat_arr(arr1, arr2)
+{
+   arr1.length = arr2.length;
+   for(i30 : 0 .. MAX_ARRAY_SIZE-1) {
+      assign_STThermostat_rec(arr1.element[i30], arr2.element[i30]);
+   }
+}
+inline assign_STNetworkManager_arr(arr1, arr2)
+{
+   arr1.length = arr2.length;
+   for(i31 : 0 .. MAX_ARRAY_SIZE-1) {
+      assign_STNetworkManager_rec(arr1.element[i31], arr2.element[i31]);
+   }
+}
+inline assign_STContactSensor_arr(arr1, arr2)
+{
+   arr1.length = arr2.length;
+   for(i32 : 0 .. MAX_ARRAY_SIZE-1) {
+      assign_STContactSensor_rec(arr1.element[i32], arr2.element[i32]);
+   }
+}
+inline assign_STPowerMeter_arr(arr1, arr2)
+{
+   arr1.length = arr2.length;
+   for(i33 : 0 .. MAX_ARRAY_SIZE-1) {
+      assign_STPowerMeter_rec(arr1.element[i33], arr2.element[i33]);
+   }
+}
+inline assign_STApp_arr(arr1, arr2)
+{
+   arr1.length = arr2.length;
+   for(i34 : 0 .. MAX_ARRAY_SIZE-1) {
+      assign_STApp_rec(arr1.element[i34], arr2.element[i34]);
+   }
+}
+inline assign_STIlMeas_arr(arr1, arr2)
+{
+   arr1.length = arr2.length;
+   for(i35 : 0 .. MAX_ARRAY_SIZE-1) {
+      assign_STIlMeas_rec(arr1.element[i35], arr2.element[i35]);
+   }
+}
+inline assign_STWaterSensor_arr(arr1, arr2)
+{
+   arr1.length = arr2.length;
+   for(i36 : 0 .. MAX_ARRAY_SIZE-1) {
+      assign_STWaterSensor_rec(arr1.element[i36], arr2.element[i36]);
+   }
+}
+inline assign_STAccSensor_arr(arr1, arr2)
+{
+   arr1.length = arr2.length;
+   for(i37 : 0 .. MAX_ARRAY_SIZE-1) {
+      assign_STAccSensor_rec(arr1.element[i37], arr2.element[i37]);
+   }
+}
+inline assign_STSwitchLevel_arr(arr1, arr2)
+{
+   arr1.length = arr2.length;
+   for(i38 : 0 .. MAX_ARRAY_SIZE-1) {
+      assign_STSwitchLevel_rec(arr1.element[i38], arr2.element[i38]);
+   }
+}
+inline assign_STValve_arr(arr1, arr2)
+{
+   arr1.length = arr2.length;
+   for(i39 : 0 .. MAX_ARRAY_SIZE-1) {
+      assign_STValve_rec(arr1.element[i39], arr2.element[i39]);
+   }
+}
+inline assign_STAeonKeyFob_arr(arr1, arr2)
+{
+   arr1.length = arr2.length;
+   for(i40 : 0 .. MAX_ARRAY_SIZE-1) {
+      assign_STAeonKeyFob_rec(arr1.element[i40], arr2.element[i40]);
+   }
+}
+inline assign_STThreeAxis_arr(arr1, arr2)
+{
+   arr1.length = arr2.length;
+   for(i41 : 0 .. MAX_ARRAY_SIZE-1) {
+      assign_STThreeAxis_rec(arr1.element[i41], arr2.element[i41]);
+   }
+}
+inline assign_STRelHumMeas_arr(arr1, arr2)
+{
+   arr1.length = arr2.length;
+   for(i42 : 0 .. MAX_ARRAY_SIZE-1) {
+      assign_STRelHumMeas_rec(arr1.element[i42], arr2.element[i42]);
+   }
+}
+inline assign_int_arr(arr1, arr2)
+{
+	arr1.length = arr2.length;
+	for(i0 : 0 .. MAX_INT_ARRAY_SIZE-1) {
+		arr1.element[i0] = arr2.element[i0];
+	}
+}
+/*************** End of assignment methods *******************/
+
+/*************** Start of event handler inline methods *******/
+hidden STPresSensor_rec m14_person;   
+inline AutoModeChange_presenceEvtHandler(evt) {
+   type_95 m14_result;   
+   type_95 m14_index5;   
+   type_95 m13_mode;   
+   type_95 m14__ret;   
+   type_95 m14_JJJCTEMP_5;   
+   STEvent_rec _ST_Command;
+
+   /* Default initialization */
+   d_step {
+      m14_person.isAlive = 0;
+      _ST_Command.id = evt.id;
+      _ST_Command.physical = 0;
+   }
+loc_4:
+   if
+   :: atomic { 
+         (evt.value != 18)-> 
+         goto loc_5;
+      }
+   :: atomic { 
+         (! (evt.value != 18))-> 
+         goto loc_18;
+      }
+   fi;
+loc_5:
+   if
+   :: atomic { 
+         (location.mode == AutoModeChange_newMode2)-> 
+         goto loc_6;
+      }
+   :: atomic { 
+         (! (location.mode == AutoModeChange_newMode2))-> 
+         goto loc_7;
+      }
+   fi;
+loc_6:
+   goto done;
+loc_7:
+   atomic { 
+      skip;
+      d_step {
+         m13_mode = AutoModeChange_newMode2;
+      }
+      skip;
+      goto loc_8;
+   }
+loc_8:
+   if
+   :: atomic { 
+         (m13_mode != 1400)-> 
+         goto loc_9;
+      }
+   :: atomic { 
+         (! (m13_mode != 1400))-> 
+         goto loc_16;
+      }
+   fi;
+loc_9:
+   if
+   :: atomic { 
+         (m13_mode != 1401)-> 
+         goto loc_10;
+      }
+   :: atomic { 
+         (! (m13_mode != 1401))-> 
+         goto loc_14;
+      }
+   fi;
+loc_10:
+   if
+   :: atomic { 
+         (m13_mode != 1402)-> 
+         goto loc_11;
+      }
+   :: atomic { 
+         (! (m13_mode != 1402))-> 
+         goto loc_13;
+      }
+   fi;
+loc_11:
+   atomic { 
+      skip;
+      d_step {
+         skip;
+      }
+      skip;
+      goto loc_6;
+   }
+loc_13:
+   atomic { 
+      skip;
+      d_step {
+         _ST_Command.EvtType = Night;
+         HandleLocationEvt(_ST_Command);
+      }
+      skip;
+      goto loc_11;
+   }
+loc_14:
+   atomic { 
+      skip;
+      d_step {
+         _ST_Command.EvtType = Away;
+         HandleLocationEvt(_ST_Command);
+      }
+      skip;
+      goto loc_11;
+   }
+loc_16:
+   atomic { 
+      skip;
+      d_step {
+         _ST_Command.EvtType = Home;
+         HandleLocationEvt(_ST_Command);
+      }
+      skip;
+      goto loc_11;
+   }
+loc_18:
+   if
+   :: atomic { 
+         (location.mode == AutoModeChange_newMode1)-> 
+         goto loc_19;
+      }
+   :: atomic { 
+         (! (location.mode == AutoModeChange_newMode1))-> 
+         goto loc_20;
+      }
+   fi;
+loc_19:
+   atomic { 
+      skip;
+      d_step {
+         skip;
+      }
+      skip;
+      goto loc_6;
+   }
+loc_20:
+   atomic { 
+      skip;
+      d_step {
+         m14_result = 1;
+         m14_index5 = 0;
+      }
+      skip;
+      goto loc_25;
+   }
+loc_25:
+   atomic { 
+      skip;
+      d_step {
+         m14_JJJCTEMP_5 = AutoModeChange_people.length;
+      }
+      skip;
+      goto loc_26;
+   }
+loc_26:
+   if
+   :: atomic { 
+         (m14_index5 < m14_JJJCTEMP_5)-> 
+         goto loc_27;
+      }
+   :: atomic { 
+         (! (m14_index5 < m14_JJJCTEMP_5))-> 
+         goto loc_33;
+      }
+   fi;
+loc_27:
+   atomic { 
+      skip;
+      d_step {
+         assign_STPresSensor_rec(m14_person, AutoModeChange_people.element[m14_index5]);
+         m14_JJJCTEMP_5 = m14_person.currentPresence;
+      }
+      skip;
+      goto loc_29;
+   }
+loc_29:
+   if
+   :: atomic { 
+         (m14_JJJCTEMP_5 != 19)-> 
+         goto loc_30;
+      }
+   :: atomic { 
+         (! (m14_JJJCTEMP_5 != 19))-> 
+         goto loc_31;
+      }
+   fi;
+loc_30:
+   atomic { 
+      skip;
+      d_step {
+         m14_index5 = (m14_index5 + 1);
+      }
+      skip;
+      goto loc_25;
+   }
+loc_31:
+   atomic { 
+      skip;
+      d_step {
+         m14_result = 0;
+      }
+      skip;
+      goto loc_33;
+   }
+loc_33:
+   atomic { 
+      skip;
+      d_step {
+         m14__ret = m14_result;
+         m14_JJJCTEMP_5 = m14__ret;
+      }
+      skip;
+      goto loc_37;
+   }
+loc_37:
+   if
+   :: atomic { 
+         (m14_JJJCTEMP_5 == 0)-> 
+         goto loc_19;
+      }
+   :: atomic { 
+         (! (m14_JJJCTEMP_5 == 0))-> 
+         goto loc_38;
+      }
+   fi;
+loc_38:
+   atomic { 
+      skip;
+      d_step {
+         m13_mode = AutoModeChange_newMode1;
+      }
+      skip;
+      goto loc_39;
+   }
+loc_39:
+   if
+   :: atomic { 
+         (m13_mode != 1400)-> 
+         goto loc_40;
+      }
+   :: atomic { 
+         (! (m13_mode != 1400))-> 
+         goto loc_47;
+      }
+   fi;
+loc_40:
+   if
+   :: atomic { 
+         (m13_mode != 1401)-> 
+         goto loc_41;
+      }
+   :: atomic { 
+         (! (m13_mode != 1401))-> 
+         goto loc_45;
+      }
+   fi;
+loc_41:
+   if
+   :: atomic { 
+         (m13_mode != 1402)-> 
+         goto loc_42;
+      }
+   :: atomic { 
+         (! (m13_mode != 1402))-> 
+         goto loc_44;
+      }
+   fi;
+loc_42:
+   atomic { 
+      skip;
+      d_step {
+         skip;
+      }
+      skip;
+      goto loc_19;
+   }
+loc_44:
+   atomic { 
+      skip;
+      d_step {
+         _ST_Command.EvtType = Night;
+         HandleLocationEvt(_ST_Command);
+      }
+      skip;
+      goto loc_42;
+   }
+loc_45:
+   atomic { 
+      skip;
+      d_step {
+         _ST_Command.EvtType = Away;
+         HandleLocationEvt(_ST_Command);
+      }
+      skip;
+      goto loc_42;
+   }
+loc_47:
+   atomic { 
+      skip;
+      d_step {
+         _ST_Command.EvtType = Home;
+         HandleLocationEvt(_ST_Command);
+      }
+      skip;
+      goto loc_42;
+   }
+done: skip;
+}
+
+inline GoodNight_installedEvtHandler(evt) {
+   STEvent_rec _ST_Command;
+
+   /* Default initialization */
+   d_step {
+      _ST_Command.id = evt.id;
+      _ST_Command.physical = 0;
+   }
+loc_50:
+   atomic { 
+      skip;
+      d_step {
+         skip;
+      }
+      skip;
+      goto loc_51;
+   }
+loc_51:
+   if
+   :: atomic { 
+         (GoodNight_modeStartTime != 0)-> 
+         goto loc_52;
+      }
+   :: atomic { 
+         (! (GoodNight_modeStartTime != 0))-> 
+         goto loc_55;
+      }
+   fi;
+loc_52:
+   atomic { 
+      skip;
+      d_step {
+         skip;
+      }
+      skip;
+      goto loc_54;
+   }
+loc_54:
+   goto done;
+loc_55:
+   atomic { 
+      skip;
+      d_step {
+         GoodNight_modeStartTime = 0;
+      }
+      skip;
+      goto loc_52;
+   }
+done: skip;
+}
+
+hidden STMotionSensor_rec m10_it;   
+hidden STState_arr m10_collectResult1;   
+hidden STState_rec m10_findResult1;   
+hidden STState_arr m10_states;   
+hidden STSwitch_rec m11_it;   
+hidden STState_rec m10_m4_8__ret;   
+hidden STState_rec m10_sensor;   
+hidden STMotionSensor_rec m10_m4_8_JJJCTEMP_0;   
+hidden STState_rec m10_it_0;   
+inline GoodNight_switchOffEvtHandler(evt) {
+   type_95 m8_startTime;   
+   type_95 m7__ret;   
+   type_95 m12_m13_mode;   
+   type_95 m10_index4;   
+   type_95 m10_index3;   
+   type_95 m11__ret;   
+   type_95 m11_index2;   
+   type_95 m10_threshold;   
+   type_95 m8_m9_startTime;   
+   type_95 m8__ret;   
+   type_95 m8_modeStartTime;   
+   type_95 m10_m5__ret;   
+   type_95 m10_elapsed;   
+   type_95 m8_m9_timeVal;   
+   type_95 m8_t0;   
+   type_95 m10__ret;   
+   type_95 m8_m5__ret;   
+   type_95 m8_m9_timeZone;   
+   type_95 m10_m4_8_attributeName;   
+   type_95 m11_result;   
+   type_95 m8_m9__ret;   
+   type_95 m11_JJJCTEMP_5;   
+   STEvent_rec _ST_Command;
+
+   /* Default initialization */
+   d_step {
+      m10_it.isAlive = 0;
+      m10_collectResult1.length = 0;
+      m10_findResult1.isAlive = 0;
+      m10_states.length = 0;
+      m11_it.isAlive = 0;
+      m10_m4_8__ret.isAlive = 0;
+      m10_sensor.isAlive = 0;
+      m10_m4_8_JJJCTEMP_0.isAlive = 0;
+      m10_it_0.isAlive = 0;
+      _ST_Command.id = evt.id;
+      _ST_Command.physical = 0;
+   }
+loc_59:
+   atomic { 
+      skip;
+      d_step {
+         skip;
+      }
+      skip;
+      goto loc_60;
+   }
+loc_60:
+   if
+   :: atomic { 
+         (location.mode == GoodNight_newMode)-> 
+         goto loc_61;
+      }
+   :: atomic { 
+         (! (location.mode == GoodNight_newMode))-> 
+         goto loc_175;
+      }
+   fi;
+loc_61:
+   atomic { 
+      skip;
+      d_step {
+         m7__ret = 0;
+         m8_startTime = m7__ret;
+      }
+      skip;
+      goto loc_64;
+   }
+loc_64:
+   atomic { 
+      skip;
+      d_step {
+         skip;
+      }
+      skip;
+      goto loc_65;
+   }
+loc_65:
+   if
+   :: atomic { 
+         (m8_startTime == 0)-> 
+         goto loc_66;
+      }
+   :: atomic { 
+         (! (m8_startTime == 0))-> 
+         goto loc_67;
+      }
+   fi;
+loc_66:
+   goto done;
+loc_67:
+   atomic { 
+      skip;
+      d_step {
+         m8_m5__ret = (STCurrentSystemTime * 3600000);
+         m8_t0 = m8_m5__ret;
+         m8_m5__ret = (STCurrentSystemTime * 3600000);
+         m8_modeStartTime = m8_m5__ret;
+         m8_m9_startTime = m8_modeStartTime;
+         m8_m9_timeVal = GoodNight_timeOfDay;
+         m8_m9_timeZone = location.timeZone;
+         m8_m9__ret = (m8_m9_timeVal * 3600000);
+         m8_startTime = m8_m9__ret;
+      }
+      skip;
+      goto loc_83;
+   }
+loc_83:
+   if
+   :: atomic { 
+         (m8_t0 < m8_startTime)-> 
+         goto loc_84;
+      }
+   :: atomic { 
+         (! (m8_t0 < m8_startTime))-> 
+         goto loc_172;
+      }
+   fi;
+loc_84:
+   atomic { 
+      skip;
+      d_step {
+         m8__ret = 0;
+         m8_startTime = m8__ret;
+      }
+      skip;
+      goto loc_87;
+   }
+loc_87:
+   atomic { 
+      skip;
+      d_step {
+         skip;
+      }
+      skip;
+      goto loc_88;
+   }
+loc_88:
+   if
+   :: atomic { 
+         (m8_startTime == 0)-> 
+         goto loc_66;
+      }
+   :: atomic { 
+         (! (m8_startTime == 0))-> 
+         goto loc_89;
+      }
+   fi;
+loc_89:
+   atomic { 
+      skip;
+      d_step {
+         m10_threshold = (1000 * 60);
+         m10_threshold = (m10_threshold * GoodNight_minutes);
+         m10_threshold = (m10_threshold - 1000);
+         m10_index3 = 0;
+      }
+      skip;
+      goto loc_95;
+   }
+loc_95:
+   atomic { 
+      skip;
+      d_step {
+         m8_startTime = GoodNight_motionSensors.length;
+      }
+      skip;
+      goto loc_96;
+   }
+loc_96:
+   if
+   :: atomic { 
+         (m10_index3 < m8_startTime)-> 
+         goto loc_97;
+      }
+   :: atomic { 
+         (! (m10_index3 < m8_startTime))-> 
+         goto loc_106;
+      }
+   fi;
+loc_97:
+   atomic { 
+      skip;
+      d_step {
+         assign_STMotionSensor_rec(m10_it, GoodNight_motionSensors.element[m10_index3]);
+         assign_STMotionSensor_rec(m10_m4_8_JJJCTEMP_0, m10_it);
+         m10_m4_8_attributeName = 11;
+         assign_STState_rec(m10_m4_8__ret, m10_m4_8_JJJCTEMP_0.motionState);
+         assign_STState_rec(m10_m4_8__ret, m10_m4_8__ret);
+         m10_collectResult1.length++;
+         assign_STState_rec(m10_collectResult1.element[m10_index3], m10_m4_8__ret);
+         m10_index3 = (m10_index3 + 1);
+      }
+      skip;
+      goto loc_95;
+   }
+loc_106:
+   atomic { 
+      skip;
+      d_step {
+         assign_STState_arr(m10_states, m10_collectResult1);
+      }
+      skip;
+      goto loc_107;
+   }
+loc_107:
+   if
+   :: atomic { 
+         (m10_states.length == 0)-> 
+         goto loc_108;
+      }
+   :: atomic { 
+         (! (m10_states.length == 0))-> 
+         goto loc_145;
+      }
+   fi;
+loc_108:
+   atomic { 
+      skip;
+      d_step {
+         m10__ret = 1;
+         m8_startTime = m10__ret;
+      }
+      skip;
+      goto loc_111;
+   }
+loc_111:
+   atomic { 
+      skip;
+      d_step {
+         skip;
+      }
+      skip;
+      goto loc_112;
+   }
+loc_112:
+   if
+   :: atomic { 
+         (m8_startTime == 0)-> 
+         goto loc_66;
+      }
+   :: atomic { 
+         (! (m8_startTime == 0))-> 
+         goto loc_113;
+      }
+   fi;
+loc_113:
+   atomic { 
+      skip;
+      d_step {
+         m11_result = 1;
+         m11_index2 = 0;
+      }
+      skip;
+      goto loc_118;
+   }
+loc_118:
+   atomic { 
+      skip;
+      d_step {
+         m11_JJJCTEMP_5 = GoodNight_switches.length;
+      }
+      skip;
+      goto loc_119;
+   }
+loc_119:
+   if
+   :: atomic { 
+         (m11_index2 < m11_JJJCTEMP_5)-> 
+         goto loc_120;
+      }
+   :: atomic { 
+         (! (m11_index2 < m11_JJJCTEMP_5))-> 
+         goto loc_126;
+      }
+   fi;
+loc_120:
+   atomic { 
+      skip;
+      d_step {
+         assign_STSwitch_rec(m11_it, GoodNight_switches.element[m11_index2]);
+         m11_JJJCTEMP_5 = m11_it.currentSwitch;
+      }
+      skip;
+      goto loc_122;
+   }
+loc_122:
+   if
+   :: atomic { 
+         (m11_JJJCTEMP_5 != 15)-> 
+         goto loc_123;
+      }
+   :: atomic { 
+         (! (m11_JJJCTEMP_5 != 15))-> 
+         goto loc_124;
+      }
+   fi;
+loc_123:
+   atomic { 
+      skip;
+      d_step {
+         m11_index2 = (m11_index2 + 1);
+      }
+      skip;
+      goto loc_118;
+   }
+loc_124:
+   atomic { 
+      skip;
+      d_step {
+         m11_result = 0;
+      }
+      skip;
+      goto loc_126;
+   }
+loc_126:
+   atomic { 
+      skip;
+      d_step {
+         m11__ret = m11_result;
+         m8_startTime = m11__ret;
+      }
+      skip;
+      goto loc_130;
+   }
+loc_130:
+   if
+   :: atomic { 
+         (m8_startTime == 0)-> 
+         goto loc_66;
+      }
+   :: atomic { 
+         (! (m8_startTime == 0))-> 
+         goto loc_131;
+      }
+   fi;
+loc_131:
+   atomic { 
+      skip;
+      d_step {
+         m12_m13_mode = GoodNight_newMode;
+      }
+      skip;
+      goto loc_133;
+   }
+loc_133:
+   if
+   :: atomic { 
+         (m12_m13_mode != 1400)-> 
+         goto loc_134;
+      }
+   :: atomic { 
+         (! (m12_m13_mode != 1400))-> 
+         goto loc_143;
+      }
+   fi;
+loc_134:
+   if
+   :: atomic { 
+         (m12_m13_mode != 1401)-> 
+         goto loc_135;
+      }
+   :: atomic { 
+         (! (m12_m13_mode != 1401))-> 
+         goto loc_141;
+      }
+   fi;
+loc_135:
+   if
+   :: atomic { 
+         (m12_m13_mode != 1402)-> 
+         goto loc_136;
+      }
+   :: atomic { 
+         (! (m12_m13_mode != 1402))-> 
+         goto loc_140;
+      }
+   fi;
+loc_136:
+   atomic { 
+      skip;
+      d_step {
+         skip;
+      }
+      skip;
+      goto loc_66;
+   }
+loc_140:
+   atomic { 
+      skip;
+      d_step {
+         _ST_Command.EvtType = Night;
+         HandleLocationEvt(_ST_Command);
+      }
+      skip;
+      goto loc_136;
+   }
+loc_141:
+   atomic { 
+      skip;
+      d_step {
+         _ST_Command.EvtType = Away;
+         HandleLocationEvt(_ST_Command);
+      }
+      skip;
+      goto loc_136;
+   }
+loc_143:
+   atomic { 
+      skip;
+      d_step {
+         _ST_Command.EvtType = Home;
+         HandleLocationEvt(_ST_Command);
+      }
+      skip;
+      goto loc_136;
+   }
+loc_145:
+   atomic { 
+      skip;
+      d_step {
+         m10_index4 = 0;
+      }
+      skip;
+      goto loc_147;
+   }
+loc_147:
+   atomic { 
+      skip;
+      d_step {
+         m11_JJJCTEMP_5 = m10_states.length;
+      }
+      skip;
+      goto loc_148;
+   }
+loc_148:
+   if
+   :: atomic { 
+         (m10_index4 < m11_JJJCTEMP_5)-> 
+         goto loc_149;
+      }
+   :: atomic { 
+         (! (m10_index4 < m11_JJJCTEMP_5))-> 
+         goto loc_154;
+      }
+   fi;
+loc_149:
+   atomic { 
+      skip;
+      d_step {
+         assign_STState_rec(m10_it_0, m10_states.element[m10_index4]);
+         m11_JJJCTEMP_5 = m10_it_0.value;
+      }
+      skip;
+      goto loc_151;
+   }
+loc_151:
+   if
+   :: atomic { 
+         (m11_JJJCTEMP_5 != 12)-> 
+         goto loc_152;
+      }
+   :: atomic { 
+         (! (m11_JJJCTEMP_5 != 12))-> 
+         goto loc_153;
+      }
+   fi;
+loc_152:
+   atomic { 
+      skip;
+      d_step {
+         m10_index4 = (m10_index4 + 1);
+      }
+      skip;
+      goto loc_147;
+   }
+loc_153:
+   atomic { 
+      skip;
+      d_step {
+         assign_STState_rec(m10_findResult1, m10_it_0);
+      }
+      skip;
+      goto loc_152;
+   }
+loc_154:
+   if
+   :: atomic { 
+         (m10_findResult1.isAlive == 0)-> 
+         goto loc_155;
+      }
+   :: atomic { 
+         (! (m10_findResult1.isAlive == 0))-> 
+         goto loc_169;
+      }
+   fi;
+loc_155:
+   atomic { 
+      skip;
+      d_step {
+         assign_STState_rec(m10_sensor, m10_states.element[0]);
+         m10_m5__ret = (STCurrentSystemTime * 3600000);
+         m11_JJJCTEMP_5 = m10_m5__ret;
+         m8_startTime = m10_sensor.date;
+         m10_elapsed = (m11_JJJCTEMP_5 - m8_startTime);
+      }
+      skip;
+      goto loc_162;
+   }
+loc_162:
+   if
+   :: atomic { 
+         (m10_elapsed < m10_threshold)-> 
+         goto loc_163;
+      }
+   :: atomic { 
+         (! (m10_elapsed < m10_threshold))-> 
+         goto loc_166;
+      }
+   fi;
+loc_163:
+   atomic { 
+      skip;
+      d_step {
+         m10__ret = 0;
+         m8_startTime = m10__ret;
+      }
+      skip;
+      goto loc_111;
+   }
+loc_166:
+   atomic { 
+      skip;
+      d_step {
+         m10__ret = 1;
+         m8_startTime = m10__ret;
+      }
+      skip;
+      goto loc_111;
+   }
+loc_169:
+   atomic { 
+      skip;
+      d_step {
+         m10__ret = 0;
+         m8_startTime = m10__ret;
+      }
+      skip;
+      goto loc_111;
+   }
+loc_172:
+   atomic { 
+      skip;
+      d_step {
+         m8__ret = 1;
+         m8_startTime = m8__ret;
+      }
+      skip;
+      goto loc_87;
+   }
+loc_175:
+   atomic { 
+      skip;
+      d_step {
+         m7__ret = 1;
+         m8_startTime = m7__ret;
+      }
+      skip;
+      goto loc_64;
+   }
+done: skip;
+}
+
+hidden STState_rec m3_5_m10_it_0;   
+hidden STState_arr m3_5_m10_collectResult1;   
+hidden STState_arr m3_5_m10_states;   
+hidden STState_rec m3_5_m10_m4_5__ret;   
+hidden STMotionSensor_rec m3_5_m10_m4_5_JJJCTEMP_0;   
+hidden STMotionSensor_rec m3_5_m10_it;   
+hidden STState_rec m3_5_m10_sensor;   
+hidden STSwitch_rec m3_5_m11_it;   
+hidden STState_rec m3_5_m10_findResult1;   
+inline GoodNight_motionInactiveEvtHandler(evt) {
+   type_95 m3_5_m12_m13_mode;   
+   type_95 m8_m9_timeZone_0;   
+   type_95 m3_5_m8_t0;   
+   type_95 m8_m9__ret_0;   
+   type_95 m8_m9_startTime_0;   
+   type_95 m3_5_m8_m9__ret;   
+   type_95 m3_5_m7__ret;   
+   type_95 m2_h;   
+   type_95 m3_5_m10_m4_5_attributeName;   
+   type_95 m3_5_m8__ret;   
+   type_95 m3_5_m8_m9_startTime;   
+   type_95 m3_5_m10__ret;   
+   type_95 m3_5_m10_elapsed;   
+   type_95 m8_m9_timeVal_0;   
+   type_95 m2_JJJCTEMP_0;   
+   type_95 m3_5_m10_index4;   
+   type_95 m8_modeStartTime_0;   
+   type_95 m3_5_m10_index3;   
+   type_95 m8_m5__ret_0;   
+   type_95 m3_5_m11__ret;   
+   type_95 m3_5_m8_m9_timeVal;   
+   type_95 m3_5_m8_m5__ret;   
+   type_95 m3_5_m11_result;   
+   type_95 m3_5_m8_m9_timeZone;   
+   type_95 m7__ret_0;   
+   type_95 m3_5_m8_startTime;   
+   type_95 m8_startTime_0;   
+   type_95 m3_5_m8_modeStartTime;   
+   type_95 m8__ret_0;   
+   type_95 m2_amount;   
+   type_95 m3_5_m10_m5__ret;   
+   type_95 m8_t0_0;   
+   type_95 m3_5_m10_threshold;   
+   type_95 m3_5_m11_index2;   
+   type_95 m3_5_m10_JJJCTEMP_13;   
+   STEvent_rec _ST_Command;
+
+   /* Default initialization */
+   d_step {
+      m3_5_m10_it_0.isAlive = 0;
+      m3_5_m10_collectResult1.length = 0;
+      m3_5_m10_states.length = 0;
+      m3_5_m10_m4_5__ret.isAlive = 0;
+      m3_5_m10_m4_5_JJJCTEMP_0.isAlive = 0;
+      m3_5_m10_it.isAlive = 0;
+      m3_5_m10_sensor.isAlive = 0;
+      m3_5_m11_it.isAlive = 0;
+      m3_5_m10_findResult1.isAlive = 0;
+      _ST_Command.id = evt.id;
+      _ST_Command.physical = 0;
+   }
+loc_179:
+   if
+   :: atomic { 
+         (GoodNight_modeStartTime != 0)-> 
+         goto loc_180;
+      }
+   :: atomic { 
+         (! (GoodNight_modeStartTime != 0))-> 
+         goto loc_346;
+      }
+   fi;
+loc_180:
+   atomic { 
+      skip;
+      d_step {
+         skip;
+      }
+      skip;
+      goto loc_181;
+   }
+loc_181:
+   if
+   :: atomic { 
+         (location.mode == GoodNight_newMode)-> 
+         goto loc_182;
+      }
+   :: atomic { 
+         (! (location.mode == GoodNight_newMode))-> 
+         goto loc_343;
+      }
+   fi;
+loc_182:
+   atomic { 
+      skip;
+      d_step {
+         m7__ret_0 = 0;
+         m3_5_m8_m9_startTime = m7__ret_0;
+      }
+      skip;
+      goto loc_185;
+   }
+loc_185:
+   atomic { 
+      skip;
+      d_step {
+         skip;
+      }
+      skip;
+      goto loc_186;
+   }
+loc_186:
+   if
+   :: atomic { 
+         (m3_5_m8_m9_startTime == 0)-> 
+         goto loc_187;
+      }
+   :: atomic { 
+         (! (m3_5_m8_m9_startTime == 0))-> 
+         goto loc_188;
+      }
+   fi;
+loc_187:
+   goto done;
+loc_188:
+   atomic { 
+      skip;
+      d_step {
+         m8_m5__ret_0 = (STCurrentSystemTime * 3600000);
+         m8_t0_0 = m8_m5__ret_0;
+         m8_m5__ret_0 = (STCurrentSystemTime * 3600000);
+         m8_modeStartTime_0 = m8_m5__ret_0;
+         m8_m9_startTime_0 = m8_modeStartTime_0;
+         m8_m9_timeVal_0 = GoodNight_timeOfDay;
+         m8_m9_timeZone_0 = location.timeZone;
+         m8_m9__ret_0 = (m8_m9_timeVal_0 * 3600000);
+         m8_startTime_0 = m8_m9__ret_0;
+      }
+      skip;
+      goto loc_204;
+   }
+loc_204:
+   if
+   :: atomic { 
+         (m8_t0_0 < m8_startTime_0)-> 
+         goto loc_205;
+      }
+   :: atomic { 
+         (! (m8_t0_0 < m8_startTime_0))-> 
+         goto loc_340;
+      }
+   fi;
+loc_205:
+   atomic { 
+      skip;
+      d_step {
+         m8__ret_0 = 0;
+         m3_5_m8_m9_startTime = m8__ret_0;
+      }
+      skip;
+      goto loc_208;
+   }
+loc_208:
+   atomic { 
+      skip;
+      d_step {
+         skip;
+      }
+      skip;
+      goto loc_209;
+   }
+loc_209:
+   if
+   :: atomic { 
+         (m3_5_m8_m9_startTime == 0)-> 
+         goto loc_187;
+      }
+   :: atomic { 
+         (! (m3_5_m8_m9_startTime == 0))-> 
+         goto loc_210;
+      }
+   fi;
+loc_210:
+   atomic { 
+      skip;
+      d_step {
+         m3_5_m8_m9_startTime = (GoodNight_minutes * 60);
+         m2_amount = m3_5_m8_m9_startTime;
+         if 
+         :: ! (3600 == 0) -> 
+            m2_JJJCTEMP_0 = (m2_amount / 3600);
+         :: else -> 
+            assert(0);
+         fi; 
+         m2_h = (m2_JJJCTEMP_0 + 1);
+         m3_5_m8_m9_startTime = STCurrentSystemTime;
+         m3_5_m8_m9_startTime = (m3_5_m8_m9_startTime + m2_h);
+         STCurrentSystemTime = m3_5_m8_m9_startTime;
+      }
+      skip;
+      goto loc_221;
+   }
+loc_221:
+   if
+   :: atomic { 
+         (location.mode == GoodNight_newMode)-> 
+         goto loc_222;
+      }
+   :: atomic { 
+         (! (location.mode == GoodNight_newMode))-> 
+         goto loc_337;
+      }
+   fi;
+loc_222:
+   atomic { 
+      skip;
+      d_step {
+         m3_5_m7__ret = 0;
+         m3_5_m12_m13_mode = m3_5_m7__ret;
+      }
+      skip;
+      goto loc_225;
+   }
+loc_225:
+   atomic { 
+      skip;
+      d_step {
+         skip;
+      }
+      skip;
+      goto loc_226;
+   }
+loc_226:
+   if
+   :: atomic { 
+         (m3_5_m12_m13_mode == 0)-> 
+         goto loc_227;
+      }
+   :: atomic { 
+         (! (m3_5_m12_m13_mode == 0))-> 
+         goto loc_229;
+      }
+   fi;
+loc_227:
+   atomic { 
+      skip;
+      d_step {
+         skip;
+      }
+      skip;
+      goto loc_187;
+   }
+loc_229:
+   atomic { 
+      skip;
+      d_step {
+         m3_5_m8_m5__ret = (STCurrentSystemTime * 3600000);
+         m3_5_m8_t0 = m3_5_m8_m5__ret;
+         m3_5_m8_m5__ret = (STCurrentSystemTime * 3600000);
+         m3_5_m8_modeStartTime = m3_5_m8_m5__ret;
+         m3_5_m8_m9_startTime = m3_5_m8_modeStartTime;
+         m3_5_m8_m9_timeVal = GoodNight_timeOfDay;
+         m3_5_m8_m9_timeZone = location.timeZone;
+         m3_5_m8_m9__ret = (m3_5_m8_m9_timeVal * 3600000);
+         m3_5_m8_startTime = m3_5_m8_m9__ret;
+      }
+      skip;
+      goto loc_245;
+   }
+loc_245:
+   if
+   :: atomic { 
+         (m3_5_m8_t0 < m3_5_m8_startTime)-> 
+         goto loc_246;
+      }
+   :: atomic { 
+         (! (m3_5_m8_t0 < m3_5_m8_startTime))-> 
+         goto loc_334;
+      }
+   fi;
+loc_246:
+   atomic { 
+      skip;
+      d_step {
+         m3_5_m8__ret = 0;
+         m3_5_m10_JJJCTEMP_13 = m3_5_m8__ret;
+      }
+      skip;
+      goto loc_249;
+   }
+loc_249:
+   atomic { 
+      skip;
+      d_step {
+         skip;
+      }
+      skip;
+      goto loc_250;
+   }
+loc_250:
+   if
+   :: atomic { 
+         (m3_5_m10_JJJCTEMP_13 == 0)-> 
+         goto loc_227;
+      }
+   :: atomic { 
+         (! (m3_5_m10_JJJCTEMP_13 == 0))-> 
+         goto loc_251;
+      }
+   fi;
+loc_251:
+   atomic { 
+      skip;
+      d_step {
+         m3_5_m12_m13_mode = (1000 * 60);
+         m3_5_m12_m13_mode = (m3_5_m12_m13_mode * GoodNight_minutes);
+         m3_5_m10_threshold = (m3_5_m12_m13_mode - 1000);
+         m3_5_m10_index3 = 0;
+      }
+      skip;
+      goto loc_257;
+   }
+loc_257:
+   atomic { 
+      skip;
+      d_step {
+         m3_5_m12_m13_mode = GoodNight_motionSensors.length;
+      }
+      skip;
+      goto loc_258;
+   }
+loc_258:
+   if
+   :: atomic { 
+         (m3_5_m10_index3 < m3_5_m12_m13_mode)-> 
+         goto loc_259;
+      }
+   :: atomic { 
+         (! (m3_5_m10_index3 < m3_5_m12_m13_mode))-> 
+         goto loc_268;
+      }
+   fi;
+loc_259:
+   atomic { 
+      skip;
+      d_step {
+         assign_STMotionSensor_rec(m3_5_m10_it, GoodNight_motionSensors.element[m3_5_m10_index3]);
+         assign_STMotionSensor_rec(m3_5_m10_m4_5_JJJCTEMP_0, m3_5_m10_it);
+         m3_5_m10_m4_5_attributeName = 11;
+         assign_STState_rec(m3_5_m10_m4_5__ret, m3_5_m10_m4_5_JJJCTEMP_0.motionState);
+         assign_STState_rec(m3_5_m10_it_0, m3_5_m10_m4_5__ret);
+         m3_5_m10_collectResult1.length++;
+         assign_STState_rec(m3_5_m10_collectResult1.element[m3_5_m10_index3], m3_5_m10_it_0);
+         m3_5_m10_index3 = (m3_5_m10_index3 + 1);
+      }
+      skip;
+      goto loc_257;
+   }
+loc_268:
+   atomic { 
+      skip;
+      d_step {
+         assign_STState_arr(m3_5_m10_states, m3_5_m10_collectResult1);
+      }
+      skip;
+      goto loc_269;
+   }
+loc_269:
+   if
+   :: atomic { 
+         (m3_5_m10_states.length == 0)-> 
+         goto loc_270;
+      }
+   :: atomic { 
+         (! (m3_5_m10_states.length == 0))-> 
+         goto loc_307;
+      }
+   fi;
+loc_270:
+   atomic { 
+      skip;
+      d_step {
+         m3_5_m10__ret = 1;
+         m3_5_m10_JJJCTEMP_13 = m3_5_m10__ret;
+      }
+      skip;
+      goto loc_273;
+   }
+loc_273:
+   atomic { 
+      skip;
+      d_step {
+         skip;
+      }
+      skip;
+      goto loc_274;
+   }
+loc_274:
+   if
+   :: atomic { 
+         (m3_5_m10_JJJCTEMP_13 == 0)-> 
+         goto loc_227;
+      }
+   :: atomic { 
+         (! (m3_5_m10_JJJCTEMP_13 == 0))-> 
+         goto loc_275;
+      }
+   fi;
+loc_275:
+   atomic { 
+      skip;
+      d_step {
+         m3_5_m11_result = 1;
+         m3_5_m11_index2 = 0;
+      }
+      skip;
+      goto loc_280;
+   }
+loc_280:
+   atomic { 
+      skip;
+      d_step {
+         m3_5_m8_m9_startTime = GoodNight_switches.length;
+      }
+      skip;
+      goto loc_281;
+   }
+loc_281:
+   if
+   :: atomic { 
+         (m3_5_m11_index2 < m3_5_m8_m9_startTime)-> 
+         goto loc_282;
+      }
+   :: atomic { 
+         (! (m3_5_m11_index2 < m3_5_m8_m9_startTime))-> 
+         goto loc_288;
+      }
+   fi;
+loc_282:
+   atomic { 
+      skip;
+      d_step {
+         assign_STSwitch_rec(m3_5_m11_it, GoodNight_switches.element[m3_5_m11_index2]);
+         m3_5_m8_m9_startTime = m3_5_m11_it.currentSwitch;
+      }
+      skip;
+      goto loc_284;
+   }
+loc_284:
+   if
+   :: atomic { 
+         (m3_5_m8_m9_startTime != 15)-> 
+         goto loc_285;
+      }
+   :: atomic { 
+         (! (m3_5_m8_m9_startTime != 15))-> 
+         goto loc_286;
+      }
+   fi;
+loc_285:
+   atomic { 
+      skip;
+      d_step {
+         m3_5_m11_index2 = (m3_5_m11_index2 + 1);
+      }
+      skip;
+      goto loc_280;
+   }
+loc_286:
+   atomic { 
+      skip;
+      d_step {
+         m3_5_m11_result = 0;
+      }
+      skip;
+      goto loc_288;
+   }
+loc_288:
+   atomic { 
+      skip;
+      d_step {
+         m3_5_m11__ret = m3_5_m11_result;
+         m3_5_m10_JJJCTEMP_13 = m3_5_m11__ret;
+      }
+      skip;
+      goto loc_292;
+   }
+loc_292:
+   if
+   :: atomic { 
+         (m3_5_m10_JJJCTEMP_13 == 0)-> 
+         goto loc_227;
+      }
+   :: atomic { 
+         (! (m3_5_m10_JJJCTEMP_13 == 0))-> 
+         goto loc_293;
+      }
+   fi;
+loc_293:
+   atomic { 
+      skip;
+      d_step {
+         m3_5_m12_m13_mode = GoodNight_newMode;
+      }
+      skip;
+      goto loc_295;
+   }
+loc_295:
+   if
+   :: atomic { 
+         (m3_5_m12_m13_mode != 1400)-> 
+         goto loc_296;
+      }
+   :: atomic { 
+         (! (m3_5_m12_m13_mode != 1400))-> 
+         goto loc_305;
+      }
+   fi;
+loc_296:
+   if
+   :: atomic { 
+         (m3_5_m12_m13_mode != 1401)-> 
+         goto loc_297;
+      }
+   :: atomic { 
+         (! (m3_5_m12_m13_mode != 1401))-> 
+         goto loc_303;
+      }
+   fi;
+loc_297:
+   if
+   :: atomic { 
+         (m3_5_m12_m13_mode != 1402)-> 
+         goto loc_298;
+      }
+   :: atomic { 
+         (! (m3_5_m12_m13_mode != 1402))-> 
+         goto loc_302;
+      }
+   fi;
+loc_298:
+   atomic { 
+      skip;
+      d_step {
+         skip;
+      }
+      skip;
+      goto loc_227;
+   }
+loc_302:
+   atomic { 
+      skip;
+      d_step {
+         _ST_Command.EvtType = Night;
+         HandleLocationEvt(_ST_Command);
+      }
+      skip;
+      goto loc_298;
+   }
+loc_303:
+   atomic { 
+      skip;
+      d_step {
+         _ST_Command.EvtType = Away;
+         HandleLocationEvt(_ST_Command);
+      }
+      skip;
+      goto loc_298;
+   }
+loc_305:
+   atomic { 
+      skip;
+      d_step {
+         _ST_Command.EvtType = Home;
+         HandleLocationEvt(_ST_Command);
+      }
+      skip;
+      goto loc_298;
+   }
+loc_307:
+   atomic { 
+      skip;
+      d_step {
+         m3_5_m10_index4 = 0;
+      }
+      skip;
+      goto loc_309;
+   }
+loc_309:
+   atomic { 
+      skip;
+      d_step {
+         m3_5_m12_m13_mode = m3_5_m10_states.length;
+      }
+      skip;
+      goto loc_310;
+   }
+loc_310:
+   if
+   :: atomic { 
+         (m3_5_m10_index4 < m3_5_m12_m13_mode)-> 
+         goto loc_311;
+      }
+   :: atomic { 
+         (! (m3_5_m10_index4 < m3_5_m12_m13_mode))-> 
+         goto loc_316;
+      }
+   fi;
+loc_311:
+   atomic { 
+      skip;
+      d_step {
+         assign_STState_rec(m3_5_m10_it_0, m3_5_m10_states.element[m3_5_m10_index4]);
+         m3_5_m12_m13_mode = m3_5_m10_it_0.value;
+      }
+      skip;
+      goto loc_313;
+   }
+loc_313:
+   if
+   :: atomic { 
+         (m3_5_m12_m13_mode != 12)-> 
+         goto loc_314;
+      }
+   :: atomic { 
+         (! (m3_5_m12_m13_mode != 12))-> 
+         goto loc_315;
+      }
+   fi;
+loc_314:
+   atomic { 
+      skip;
+      d_step {
+         m3_5_m10_index4 = (m3_5_m10_index4 + 1);
+      }
+      skip;
+      goto loc_309;
+   }
+loc_315:
+   atomic { 
+      skip;
+      d_step {
+         assign_STState_rec(m3_5_m10_findResult1, m3_5_m10_it_0);
+      }
+      skip;
+      goto loc_314;
+   }
+loc_316:
+   if
+   :: atomic { 
+         (m3_5_m10_findResult1.isAlive == 0)-> 
+         goto loc_317;
+      }
+   :: atomic { 
+         (! (m3_5_m10_findResult1.isAlive == 0))-> 
+         goto loc_331;
+      }
+   fi;
+loc_317:
+   atomic { 
+      skip;
+      d_step {
+         assign_STState_rec(m3_5_m10_sensor, m3_5_m10_states.element[0]);
+         m3_5_m10_m5__ret = (STCurrentSystemTime * 3600000);
+         m3_5_m10_JJJCTEMP_13 = m3_5_m10_m5__ret;
+         m3_5_m12_m13_mode = m3_5_m10_sensor.date;
+         m3_5_m10_elapsed = (m3_5_m10_JJJCTEMP_13 - m3_5_m12_m13_mode);
+      }
+      skip;
+      goto loc_324;
+   }
+loc_324:
+   if
+   :: atomic { 
+         (m3_5_m10_elapsed < m3_5_m10_threshold)-> 
+         goto loc_325;
+      }
+   :: atomic { 
+         (! (m3_5_m10_elapsed < m3_5_m10_threshold))-> 
+         goto loc_328;
+      }
+   fi;
+loc_325:
+   atomic { 
+      skip;
+      d_step {
+         m3_5_m10__ret = 0;
+         m3_5_m10_JJJCTEMP_13 = m3_5_m10__ret;
+      }
+      skip;
+      goto loc_273;
+   }
+loc_328:
+   atomic { 
+      skip;
+      d_step {
+         m3_5_m10__ret = 1;
+         m3_5_m10_JJJCTEMP_13 = m3_5_m10__ret;
+      }
+      skip;
+      goto loc_273;
+   }
+loc_331:
+   atomic { 
+      skip;
+      d_step {
+         m3_5_m10__ret = 0;
+         m3_5_m10_JJJCTEMP_13 = m3_5_m10__ret;
+      }
+      skip;
+      goto loc_273;
+   }
+loc_334:
+   atomic { 
+      skip;
+      d_step {
+         m3_5_m8__ret = 1;
+         m3_5_m10_JJJCTEMP_13 = m3_5_m8__ret;
+      }
+      skip;
+      goto loc_249;
+   }
+loc_337:
+   atomic { 
+      skip;
+      d_step {
+         m3_5_m7__ret = 1;
+         m3_5_m12_m13_mode = m3_5_m7__ret;
+      }
+      skip;
+      goto loc_225;
+   }
+loc_340:
+   atomic { 
+      skip;
+      d_step {
+         m8__ret_0 = 1;
+         m3_5_m8_m9_startTime = m8__ret_0;
+      }
+      skip;
+      goto loc_208;
+   }
+loc_343:
+   atomic { 
+      skip;
+      d_step {
+         m7__ret_0 = 1;
+         m3_5_m8_m9_startTime = m7__ret_0;
+      }
+      skip;
+      goto loc_185;
+   }
+loc_346:
+   atomic { 
+      skip;
+      d_step {
+         GoodNight_modeStartTime = 0;
+      }
+      skip;
+      goto loc_180;
+   }
+done: skip;
+}
+
+inline GoodNight_modeChangeEvtHandler(evt) {
+   type_95 m5__ret;   
+   STEvent_rec _ST_Command;
+
+   /* Default initialization */
+   d_step {
+      _ST_Command.id = evt.id;
+      _ST_Command.physical = 0;
+   }
+loc_348:
+   atomic { 
+      skip;
+      d_step {
+         m5__ret = (STCurrentSystemTime * 3600000);
+         m5__ret = m5__ret;
+         GoodNight_modeStartTime = m5__ret;
+      }
+      skip;
+      goto loc_353;
+   }
+loc_353:
+   goto done;
+done: skip;
+}
+
+hidden STState_rec m3_2_motionState;   
+hidden STSwitch_rec it;   
+hidden STMotionSensor_rec m3_2_m4_2_JJJCTEMP_0;   
+hidden STSwitch_rec m3_2_m6_3_JJJCTEMP_0;   
+hidden STSwitch_rec m1_1_JJJCTEMP_0;   
+hidden STState_rec m3_2_m4_2__ret;   
+hidden STSwitch_rec m3_2_it;   
+inline LightFollowsMe_motionEvtHandler(evt) {
+   type_95 m2_h_0;   
+   type_95 m3_2_m5__ret;   
+   type_95 m2_amount_0;   
+   type_95 index6;   
+   type_95 m2_JJJCTEMP_0_0;   
+   type_95 m3_2_index7;   
+   type_95 m3_2_m4_2_attributeName;   
+   type_95 m3_2_threshold;   
+   type_95 m3_2_elapsed;   
+   type_95 m3_2_JJJCTEMP_9;   
+   type_95 JJJCTEMP_6;   
+   STEvent_rec _ST_Command;
+
+   /* Default initialization */
+   d_step {
+      m3_2_motionState.isAlive = 0;
+      it.isAlive = 0;
+      m3_2_m4_2_JJJCTEMP_0.isAlive = 0;
+      m3_2_m6_3_JJJCTEMP_0.isAlive = 0;
+      m1_1_JJJCTEMP_0.isAlive = 0;
+      m3_2_m4_2__ret.isAlive = 0;
+      m3_2_it.isAlive = 0;
+      _ST_Command.id = evt.id;
+      _ST_Command.physical = 0;
+   }
+loc_355:
+   if
+   :: atomic { 
+         (evt.value != 12)-> 
+         goto loc_356;
+      }
+   :: atomic { 
+         (! (evt.value != 12))-> 
+         goto loc_398;
+      }
+   fi;
+loc_356:
+   if
+   :: atomic { 
+         (evt.value != 13)-> 
+         goto loc_357;
+      }
+   :: atomic { 
+         (! (evt.value != 13))-> 
+         goto loc_358;
+      }
+   fi;
+loc_357:
+   goto done;
+loc_358:
+   atomic { 
+      skip;
+      d_step {
+         m2_h_0 = (LightFollowsMe_minutes1 * 60);
+         m2_amount_0 = m2_h_0;
+         if 
+         :: ! (3600 == 0) -> 
+            m2_JJJCTEMP_0_0 = (m2_amount_0 / 3600);
+         :: else -> 
+            assert(0);
+         fi; 
+         m2_h_0 = (m2_JJJCTEMP_0_0 + 1);
+         m3_2_JJJCTEMP_9 = STCurrentSystemTime;
+         m2_h_0 = (m3_2_JJJCTEMP_9 + m2_h_0);
+         STCurrentSystemTime = m2_h_0;
+         assign_STMotionSensor_rec(m3_2_m4_2_JJJCTEMP_0, LightFollowsMe_motion1);
+         m3_2_m4_2_attributeName = 11;
+         assign_STState_rec(m3_2_m4_2__ret, m3_2_m4_2_JJJCTEMP_0.motionState);
+         assign_STState_rec(m3_2_motionState, m3_2_m4_2__ret);
+         m3_2_JJJCTEMP_9 = m3_2_motionState.value;
+      }
+      skip;
+      goto loc_375;
+   }
+loc_375:
+   if
+   :: atomic { 
+         (m3_2_JJJCTEMP_9 != 13)-> 
+         goto loc_376;
+      }
+   :: atomic { 
+         (! (m3_2_JJJCTEMP_9 != 13))-> 
+         goto loc_378;
+      }
+   fi;
+loc_376:
+   atomic { 
+      skip;
+      d_step {
+         skip;
+      }
+      skip;
+      goto loc_357;
+   }
+loc_378:
+   atomic { 
+      skip;
+      d_step {
+         m3_2_m5__ret = (STCurrentSystemTime * 3600000);
+         m2_h_0 = m3_2_m5__ret;
+         m3_2_JJJCTEMP_9 = m3_2_motionState.date;
+         m3_2_elapsed = (m2_h_0 - m3_2_JJJCTEMP_9);
+         m3_2_JJJCTEMP_9 = (1000 * 60);
+         m3_2_JJJCTEMP_9 = (m3_2_JJJCTEMP_9 * LightFollowsMe_minutes1);
+         m3_2_threshold = (m3_2_JJJCTEMP_9 - 1000);
+      }
+      skip;
+      goto loc_387;
+   }
+loc_387:
+   if
+   :: atomic { 
+         (m3_2_elapsed < m3_2_threshold)-> 
+         goto loc_376;
+      }
+   :: atomic { 
+         (! (m3_2_elapsed < m3_2_threshold))-> 
+         goto loc_388;
+      }
+   fi;
+loc_388:
+   atomic { 
+      skip;
+      d_step {
+         m3_2_index7 = 0;
+      }
+      skip;
+      goto loc_390;
+   }
+loc_390:
+   atomic { 
+      skip;
+      d_step {
+         JJJCTEMP_6 = LightFollowsMe_switches.length;
+      }
+      skip;
+      goto loc_391;
+   }
+loc_391:
+   if
+   :: atomic { 
+         (m3_2_index7 < JJJCTEMP_6)-> 
+         goto loc_392;
+      }
+   :: atomic { 
+         (! (m3_2_index7 < JJJCTEMP_6))-> 
+         goto loc_376;
+      }
+   fi;
+loc_392:
+   atomic { 
+      skip;
+      d_step {
+         assign_STSwitch_rec(m3_2_it, LightFollowsMe_switches.element[m3_2_index7]);
+         assign_STSwitch_rec(m3_2_m6_3_JJJCTEMP_0, m3_2_it);
+         _ST_Command.EvtType = off;
+         HandleSTSwitchEvt(m3_2_m6_3_JJJCTEMP_0.gArrIndex, _ST_Command);
+         m3_2_index7 = (m3_2_index7 + 1);
+      }
+      skip;
+      goto loc_390;
+   }
+loc_398:
+   atomic { 
+      skip;
+      d_step {
+         index6 = 0;
+      }
+      skip;
+      goto loc_400;
+   }
+loc_400:
+   atomic { 
+      skip;
+      d_step {
+         JJJCTEMP_6 = LightFollowsMe_switches.length;
+      }
+      skip;
+      goto loc_401;
+   }
+loc_401:
+   if
+   :: atomic { 
+         (index6 < JJJCTEMP_6)-> 
+         goto loc_402;
+      }
+   :: atomic { 
+         (! (index6 < JJJCTEMP_6))-> 
+         goto loc_408;
+      }
+   fi;
+loc_402:
+   atomic { 
+      skip;
+      d_step {
+         assign_STSwitch_rec(it, LightFollowsMe_switches.element[index6]);
+         assign_STSwitch_rec(m1_1_JJJCTEMP_0, it);
+         _ST_Command.EvtType = on;
+         HandleSTSwitchEvt(m1_1_JJJCTEMP_0.gArrIndex, _ST_Command);
+         index6 = (index6 + 1);
+      }
+      skip;
+      goto loc_400;
+   }
+loc_408:
+   atomic { 
+      skip;
+      d_step {
+         skip;
+      }
+      skip;
+      goto loc_357;
+   }
+done: skip;
+}
+
+hidden STLock_rec it_0;   
+hidden STLock_rec m0_0_JJJCTEMP_0;   
+inline UnlockDoor_changedLocationModeEvtHandler(evt) {
+   type_95 index0;   
+   type_95 JJJCTEMP_4;   
+   STEvent_rec _ST_Command;
+
+   /* Default initialization */
+   d_step {
+      it_0.isAlive = 0;
+      m0_0_JJJCTEMP_0.isAlive = 0;
+      _ST_Command.id = evt.id;
+      _ST_Command.physical = 0;
+   }
+loc_410:
+   atomic { 
+      skip;
+      d_step {
+         index0 = 0;
+      }
+      skip;
+      goto loc_412;
+   }
+loc_412:
+   atomic { 
+      skip;
+      d_step {
+         JJJCTEMP_4 = UnlockDoor_locks.length;
+      }
+      skip;
+      goto loc_413;
+   }
+loc_413:
+   if
+   :: atomic { 
+         (index0 < JJJCTEMP_4)-> 
+         goto loc_414;
+      }
+   :: atomic { 
+         (! (index0 < JJJCTEMP_4))-> 
+         goto loc_420;
+      }
+   fi;
+loc_414:
+   atomic { 
+      skip;
+      d_step {
+         assign_STLock_rec(it_0, UnlockDoor_locks.element[index0]);
+         assign_STLock_rec(m0_0_JJJCTEMP_0, it_0);
+         _ST_Command.EvtType = unlock;
+         HandleSTLockEvt(m0_0_JJJCTEMP_0.gArrIndex, _ST_Command);
+         index0 = (index0 + 1);
+      }
+      skip;
+      goto loc_412;
+   }
+loc_420:
+   goto done;
+done: skip;
+}
+
+hidden STSwitch_rec m6_9_JJJCTEMP_0;   
+inline LightOffWhenClosed_contactClosedEvtHandler(evt) {
+   STEvent_rec _ST_Command;
+
+   /* Default initialization */
+   d_step {
+      m6_9_JJJCTEMP_0.isAlive = 0;
+      _ST_Command.id = evt.id;
+      _ST_Command.physical = 0;
+   }
+loc_422:
+   atomic { 
+      skip;
+      d_step {
+         assign_STSwitch_rec(m6_9_JJJCTEMP_0, LightOffWhenClosed_switch1);
+         _ST_Command.EvtType = off;
+         HandleSTSwitchEvt(m6_9_JJJCTEMP_0.gArrIndex, _ST_Command);
+      }
+      skip;
+      goto loc_426;
+   }
+loc_426:
+   goto done;
+done: skip;
+}
+/*************** End of event handler inline methods *********/
+
+/********* Start of utility definitions ****************/
+/* mtype m; int result */
+inline getIntValueFromMtype(m, result)
+{
+	if
+	:: m == inactive -> result = INACTIVE;
+	:: m == _active -> result = ACTIVE;
+	:: m == on -> result = ON;
+	:: m == off -> result = OFF;
+	:: m == notpresent -> result = NOT_PRESENT;
+	:: m == present -> result = PRESENT;
+	:: m == fanAuto -> result = AUTO;
+	:: m == fanCirculate -> result = CIRCULATE;
+	:: m == fanOn -> result = ON;
+	:: m == auto -> result = AUTO;
+	:: m == cool -> result = COOL;
+	:: m == emergencyHeat -> result = EMERGENCY_HEAT;
+	:: m == heat -> result = HEAT;
+	:: m == lock -> result = LOCKED;
+	:: m == unlock -> result = UNLOCKED;
+	:: m == clear -> result = CLEAR;
+	:: m == detected -> result = DETECTED;
+	:: m == tested -> result = TESTED;
+	:: m == close -> result = CLOSED;
+	:: m == open -> result = OPEN;
+	:: m == Home -> result = HOME;
+	:: m == Away -> result = AWAY;
+	:: m == Night -> result = NIGHT;
+	:: m == temperature -> result = TEMPERATURE;
+	:: m == alarm -> result = ALARM;
+	:: m == both -> result = BOTH;
+	:: m == siren -> result = SIREN;
+	:: m == strobe -> result = STROBE;
+	:: m == pushed -> result = PUSHED;
+	:: m == held -> result = HELD;
+	:: m == setLevel -> result = LEVEL;
+	:: else -> result = 0;
+	fi
+}
+/* byte currIndex; byte prevIndex */
+inline getPrevStoredEvtIndex(currIndex, prevIndex)
+{
+	if
+	:: currIndex == 0 -> prevIndex = (MAX_STORED_EVENTS-1);
+	:: !(currIndex == 0) -> prevIndex = (currIndex-1);
+	fi
+}
+inline ResetGlobalVariables()
+{
+	/* Reset system variables */
+	location.NumReceivedCommands = 0;
+
+	/* Reset device variables */
+	_g_STLockArr.element[doorLock_STLock].NumReceivedCommands = 0;
+	_g_STPresSensorArr.element[tomPresence_STPresSensor].NumReceivedCommands = 0;
+	_g_STMotionSensorArr.element[frontDoorSensor_STMotionSensor].NumReceivedCommands = 0;
+	_g_STSwitchArr.element[livingRoomBulb_STSwitch].NumReceivedCommands = 0;
+	_g_STSwitchArr.element[bedRoomBulb_STSwitch].NumReceivedCommands = 0;
+	_g_STMotionSensorArr.element[livingRoomSensor_STMotionSensor].NumReceivedCommands = 0;
+	_g_STMotionSensorArr.element[bedRoomSensor_STMotionSensor].NumReceivedCommands = 0;
+	_g_STContactSensorArr.element[bedRoomDoor_STContactSensor].NumReceivedCommands = 0;
+}
+inline ResetDeviceDefaultState()
+{
+	/* Reset default state of devices */
+		_g_STLockArr.element[doorLock_STLock].currentLock = LOCKED;
+		_g_STLockArr.element[doorLock_STLock].lockState.value = LOCKED;
+		_g_STPresSensorArr.element[tomPresence_STPresSensor].currentPresence = PRESENT;
+		_g_STPresSensorArr.element[tomPresence_STPresSensor].presenceState.value = PRESENT;
+		_g_STMotionSensorArr.element[frontDoorSensor_STMotionSensor].currentMotion = INACTIVE;
+		_g_STMotionSensorArr.element[frontDoorSensor_STMotionSensor].motionState.value = INACTIVE;
+		_g_STSwitchArr.element[livingRoomBulb_STSwitch].currentSwitch = OFF;
+		_g_STSwitchArr.element[livingRoomBulb_STSwitch].switchState.value = OFF;
+		_g_STSwitchArr.element[bedRoomBulb_STSwitch].currentSwitch = OFF;
+		_g_STSwitchArr.element[bedRoomBulb_STSwitch].switchState.value = OFF;
+		_g_STMotionSensorArr.element[livingRoomSensor_STMotionSensor].currentMotion = INACTIVE;
+		_g_STMotionSensorArr.element[livingRoomSensor_STMotionSensor].motionState.value = INACTIVE;
+		_g_STMotionSensorArr.element[bedRoomSensor_STMotionSensor].currentMotion = INACTIVE;
+		_g_STMotionSensorArr.element[bedRoomSensor_STMotionSensor].motionState.value = INACTIVE;
+		_g_STContactSensorArr.element[bedRoomDoor_STContactSensor].currentContact = CLOSED;
+		_g_STContactSensorArr.element[bedRoomDoor_STContactSensor].contactState.value = CLOSED;
+}
+/********* End of utility definitions ******************/
+
+/*************** Start of location manager *******************/
+hidden byte _index0;
+inline HandleLocationEvt(Evt)
+{
+	short HandleLocationEvt_mode;
+
+	d_step {
+		if
+		:: (Evt.EvtType == Home) || (Evt.EvtType == Night) || (Evt.EvtType == Away) -> {
+			/* Check conflict commands */
+			if
+			:: (location.latestEvt.id == Evt.id) && (location.latestEvt.date == STCurrentSystemTime*3600000) -> assert(Evt.EvtType == location.latestEvt.EvtType);
+			:: else -> skip;
+			fi
+
+			/* Increase number of received commands per event */
+			if
+			:: (Evt.id == location.latestEvt.id) || (location.latestEvt.id == 0) -> location.NumReceivedCommands++;
+			:: else -> skip;
+			fi
+			/* Check DOS attack or infinite loop of commands */
+			if
+			:: (location.NumReceivedCommands >= MAX_COMMAND_REPITIONS) -> assert(0);
+			:: else -> skip;
+			fi
+
+			/* Update current mode */
+			getIntValueFromMtype(Evt.EvtType, HandleLocationEvt_mode);
+			location.mode = HandleLocationEvt_mode;
+			Evt.name = MODE;
+			Evt.value = HandleLocationEvt_mode;
+			Evt.date = STCurrentSystemTime*3600000;
+			Evt.isAlive = 1;
+		}
+		:: else -> skip;
+		fi
+		/* Store the current event */
+		assign_STEvent_rec(location.latestEvt, Evt);
+
+		/* Broadcast the mode change event to subscribers */
+			for(_index0 : 0 .. location.NumSubscribers-1) {
+				location.BroadcastChans[_index0] = true;
+			}
+	}
+}
+inline ChangeLocationMode(Evt)
+{
+	d_step {
+		if
+		:: Evt.EvtType == present -> location.mode = HOME;
+		:: else -> skip;
+		fi
+	}
+}
+inline InitializeLocation()
+{
+	location.NumSubscribers = 0;
+	location.mode = HOME;
+	location.modes.length = 3;
+	location.modes.element[0].name = HOME;
+	location.modes.element[0].isAlive = 1;
+	location.modes.element[1].name = AWAY;
+	location.modes.element[1].isAlive = 1;
+	location.modes.element[2].name = NIGHT;
+	location.modes.element[2].isAlive = 1;
+	location.sunriseSunset.sunrise = ST_SUNRISE_TIME;
+	location.sunriseSunset.sunset = ST_SUNSET_TIME;
+	location.sunriseSunset.isAlive = 1;
+}
+/*************** End of location manager *********************/
+
+/*************** Start of network manager ********************/
+inline HandleNetworkEvt(_ST_Command)
+{
+	d_step {
+		/* Verify the recipient for sendSms */
+		if
+		:: (_ST_Command.EvtType == sendSms) -> {
+			if
+			:: (_STNetworkManager.configuredPhoneNumber == 0) -> assert(0);
+			:: (_STNetworkManager.configuredPhoneNumber != _STNetworkManager.receivedPhoneNumber) -> assert(0);
+			:: else -> skip;
+			fi
+		}
+		:: (_ST_Command.EvtType == httpPost) -> {
+			if
+			:: (httpPostAllowed == false) -> assert(0);
+			:: !((httpPostAllowed == false)) -> skip;
+			fi
+		}
+		:: (_ST_Command.EvtType == unsubscribe) -> assert(0);
+		:: else -> skip;
+		fi
+	}
+}
+/*************** End of network manager **********************/
+
+/*************** Start of actuator device event handler ******/
+hidden byte _index1;
+inline HandleSTLockEvt(deviceIndex, Evt)
+{
+	byte latestEvtIndex1;
+	short HandleSTLockEvt_state;
+
+	d_step {
+		_g_STLockArr.element[deviceIndex].isOnline = 1;
+		/* Smart app cannot change lock code */
+		if
+		:: Evt.EvtType == usercodechange -> assert(0);
+		:: else -> skip;
+		fi
+
+		/* Validate the counter */
+		if
+		:: _g_STLockArr.element[deviceIndex].currEvtIndex >= MAX_STORED_EVENTS -> _g_STLockArr.element[deviceIndex].currEvtIndex = 0;
+		:: else -> skip;
+		fi
+
+		/* Check conflict commands */
+		getPrevStoredEvtIndex(_g_STLockArr.element[deviceIndex].currEvtIndex, latestEvtIndex1);
+		if
+		:: (Evt.physical == 0) && (_g_STLockArr.element[deviceIndex].events.element[latestEvtIndex1].id == Evt.id) && (_g_STLockArr.element[deviceIndex].events.element[latestEvtIndex1].date == STCurrentSystemTime*3600000) -> 
+			assert(Evt.EvtType == _g_STLockArr.element[deviceIndex].events.element[latestEvtIndex1].EvtType);
+		:: else -> skip;
+		fi
+
+		/* Increase number of received commands per event */
+		if
+		:: (Evt.physical == 0) && (_g_STLockArr.element[deviceIndex].events.element[latestEvtIndex1].id == 0) || ((_g_STLockArr.element[deviceIndex].events.element[latestEvtIndex1].id == Evt.id) && (_g_STLockArr.element[deviceIndex].events.element[latestEvtIndex1].date == STCurrentSystemTime*3600000)) -> _g_STLockArr.element[deviceIndex].NumReceivedCommands++;
+		:: else -> skip;
+		fi
+		/* Check DOS attack or infinite loop of commands */
+		if
+		:: (_g_STLockArr.element[deviceIndex].NumReceivedCommands >= MAX_COMMAND_REPITIONS) -> assert(0);
+		:: else -> skip;
+		fi
+
+		/* Update current state if it is different from latest state */
+		if
+		:: (Evt.EvtType != _g_STLockArr.element[deviceIndex].events.element[latestEvtIndex1].EvtType) || (_g_STLockArr.element[deviceIndex].events.element[latestEvtIndex1].id == 0) -> {
+			getIntValueFromMtype(Evt.EvtType, HandleSTLockEvt_state);
+			_g_STLockArr.element[deviceIndex].currentLock = HandleSTLockEvt_state;
+			_g_STLockArr.element[deviceIndex].lockState.value = HandleSTLockEvt_state;
+			_g_STLockArr.element[deviceIndex].lockState.name = LOCK;
+			_g_STLockArr.element[deviceIndex].lockState.date = STCurrentSystemTime*3600000;
+			_g_STLockArr.element[deviceIndex].lockState.isAlive = 1;
+
+			/* Store new state */
+			assign_STState_rec(_g_STLockArr.element[deviceIndex].states.element[_g_STLockArr.element[deviceIndex].currEvtIndex], _g_STLockArr.element[deviceIndex].lockState);
+
+			/* Store the current event */
+			Evt.name = LOCK;
+			Evt.value = HandleSTLockEvt_state;
+			Evt.date = STCurrentSystemTime*3600000;
+			Evt.isAlive = 1;
+			assign_STEvent_rec(_g_STLockArr.element[deviceIndex].events.element[_g_STLockArr.element[deviceIndex].currEvtIndex], Evt);
+
+			/* Increment the counter */
+			_g_STLockArr.element[deviceIndex].currEvtIndex++;
+
+			/* Broadcast the state change event to subscribers */
+			for(_index1 : 0 .. _g_STLockArr.element[deviceIndex].NumSubscribers-1) {
+				_g_STLockArr.element[deviceIndex].BroadcastChans[_index1] = true;
+			}
+		}
+		:: else -> skip;
+		fi
+	}
+}
+hidden byte _index2;
+inline HandleSTSwitchEvt(deviceIndex, Evt)
+{
+	byte latestEvtIndex2;
+	short HandleSTSwitchEvt_state;
+
+	d_step {
+		_g_STSwitchArr.element[deviceIndex].isOnline = 1;
+		/* Validate the counter */
+		if
+		:: _g_STSwitchArr.element[deviceIndex].currEvtIndex >= MAX_STORED_EVENTS -> _g_STSwitchArr.element[deviceIndex].currEvtIndex = 0;
+		:: else -> skip;
+		fi
+
+		/* Check conflict commands */
+		getPrevStoredEvtIndex(_g_STSwitchArr.element[deviceIndex].currEvtIndex, latestEvtIndex2);
+		if
+		:: (Evt.physical == 0) && (_g_STSwitchArr.element[deviceIndex].events.element[latestEvtIndex2].id == Evt.id) && (_g_STSwitchArr.element[deviceIndex].events.element[latestEvtIndex2].date == STCurrentSystemTime*3600000) -> 
+			assert(Evt.EvtType == _g_STSwitchArr.element[deviceIndex].events.element[latestEvtIndex2].EvtType);
+		:: else -> skip;
+		fi
+
+		/* Increase number of received commands per event */
+		if
+		:: (Evt.physical == 0) && (_g_STSwitchArr.element[deviceIndex].events.element[latestEvtIndex2].id == 0) || ((_g_STSwitchArr.element[deviceIndex].events.element[latestEvtIndex2].id == Evt.id) && (_g_STSwitchArr.element[deviceIndex].events.element[latestEvtIndex2].date == STCurrentSystemTime*3600000)) -> _g_STSwitchArr.element[deviceIndex].NumReceivedCommands++;
+		:: else -> skip;
+		fi
+		/* Check DOS attack or infinite loop of commands */
+		if
+		:: (_g_STSwitchArr.element[deviceIndex].NumReceivedCommands >= MAX_COMMAND_REPITIONS) -> assert(0);
+		:: else -> skip;
+		fi
+
+		/* Update current state if it is different from latest state */
+		if
+		:: (Evt.EvtType != _g_STSwitchArr.element[deviceIndex].events.element[latestEvtIndex2].EvtType) || (_g_STSwitchArr.element[deviceIndex].events.element[latestEvtIndex2].id == 0) -> {
+			getIntValueFromMtype(Evt.EvtType, HandleSTSwitchEvt_state);
+			_g_STSwitchArr.element[deviceIndex].currentSwitch = HandleSTSwitchEvt_state;
+			_g_STSwitchArr.element[deviceIndex].switchState.value = HandleSTSwitchEvt_state;
+			_g_STSwitchArr.element[deviceIndex].switchState.name = SWITCH;
+			_g_STSwitchArr.element[deviceIndex].switchState.date = STCurrentSystemTime*3600000;
+			_g_STSwitchArr.element[deviceIndex].switchState.isAlive = 1;
+
+			/* Store new state */
+			assign_STState_rec(_g_STSwitchArr.element[deviceIndex].states.element[_g_STSwitchArr.element[deviceIndex].currEvtIndex], _g_STSwitchArr.element[deviceIndex].switchState);
+
+			/* Store the current event */
+			Evt.name = SWITCH;
+			Evt.value = HandleSTSwitchEvt_state;
+			Evt.date = STCurrentSystemTime*3600000;
+			Evt.isAlive = 1;
+			assign_STEvent_rec(_g_STSwitchArr.element[deviceIndex].events.element[_g_STSwitchArr.element[deviceIndex].currEvtIndex], Evt);
+
+			/* Increment the counter */
+			_g_STSwitchArr.element[deviceIndex].currEvtIndex++;
+
+			/* Broadcast the state change event to subscribers */
+			for(_index2 : 0 .. _g_STSwitchArr.element[deviceIndex].NumSubscribers-1) {
+				_g_STSwitchArr.element[deviceIndex].BroadcastChans[_index2] = true;
+			}
+		}
+		:: else -> skip;
+		fi
+	}
+}
+/*************** End of actuator device event handler ********/
+
+/*************** Start of sensor device event handler ********/
+hidden byte _index3;
+inline HandleSTPresSensorEvt(deviceIndex, Evt)
+{
+	d_step {
+		/* Validate the currEvtIndex */
+		if
+		:: _g_STPresSensorArr.element[deviceIndex].currEvtIndex >= MAX_STORED_EVENTS -> _g_STPresSensorArr.element[deviceIndex].currEvtIndex = 0;
+		:: else -> skip;
+		fi
+
+		/* Store the generated event */
+		assign_STEvent_rec(_g_STPresSensorArr.element[deviceIndex].events.element[_g_STPresSensorArr.element[deviceIndex].currEvtIndex], Evt);
+
+		/* Update current state */
+		_g_STPresSensorArr.element[deviceIndex].currentPresence = Evt.value;
+		_g_STPresSensorArr.element[deviceIndex].presenceState.name = Evt.name;
+		_g_STPresSensorArr.element[deviceIndex].presenceState.value = Evt.value;
+		_g_STPresSensorArr.element[deviceIndex].presenceState.date = Evt.date;
+		_g_STPresSensorArr.element[deviceIndex].presenceState.isAlive = 1;
+
+		/* Store new state */
+		assign_STState_rec(_g_STPresSensorArr.element[deviceIndex].states.element[_g_STPresSensorArr.element[deviceIndex].currEvtIndex], _g_STPresSensorArr.element[deviceIndex].presenceState);
+
+		/* Increment the counter */
+		_g_STPresSensorArr.element[deviceIndex].currEvtIndex++;
+
+		/* Broadcast the generated event to subscribers */
+		for(_index3 : 0 .. _g_STPresSensorArr.element[deviceIndex].NumSubscribers-1) {
+			_g_STPresSensorArr.element[deviceIndex].BroadcastChans[_index3] = true;
+		}
+	}
+}
+hidden byte _index4;
+inline HandleSTMotionSensorEvt(deviceIndex, Evt)
+{
+	d_step {
+		/* Validate the currEvtIndex */
+		if
+		:: _g_STMotionSensorArr.element[deviceIndex].currEvtIndex >= MAX_STORED_EVENTS -> _g_STMotionSensorArr.element[deviceIndex].currEvtIndex = 0;
+		:: else -> skip;
+		fi
+
+		/* Store the generated event */
+		assign_STEvent_rec(_g_STMotionSensorArr.element[deviceIndex].events.element[_g_STMotionSensorArr.element[deviceIndex].currEvtIndex], Evt);
+
+		/* Update current state */
+		_g_STMotionSensorArr.element[deviceIndex].currentMotion = Evt.value;
+		_g_STMotionSensorArr.element[deviceIndex].motionState.name = Evt.name;
+		_g_STMotionSensorArr.element[deviceIndex].motionState.value = Evt.value;
+		_g_STMotionSensorArr.element[deviceIndex].motionState.date = Evt.date;
+		_g_STMotionSensorArr.element[deviceIndex].motionState.isAlive = 1;
+
+		/* Store new state */
+		assign_STState_rec(_g_STMotionSensorArr.element[deviceIndex].states.element[_g_STMotionSensorArr.element[deviceIndex].currEvtIndex], _g_STMotionSensorArr.element[deviceIndex].motionState);
+
+		/* Increment the counter */
+		_g_STMotionSensorArr.element[deviceIndex].currEvtIndex++;
+
+		/* Broadcast the generated event to subscribers */
+		for(_index4 : 0 .. _g_STMotionSensorArr.element[deviceIndex].NumSubscribers-1) {
+			_g_STMotionSensorArr.element[deviceIndex].BroadcastChans[_index4] = true;
+		}
+	}
+}
+hidden byte _index5;
+inline HandleSTContactSensorEvt(deviceIndex, Evt)
+{
+	d_step {
+		/* Validate the currEvtIndex */
+		if
+		:: _g_STContactSensorArr.element[deviceIndex].currEvtIndex >= MAX_STORED_EVENTS -> _g_STContactSensorArr.element[deviceIndex].currEvtIndex = 0;
+		:: else -> skip;
+		fi
+
+		/* Store the generated event */
+		assign_STEvent_rec(_g_STContactSensorArr.element[deviceIndex].events.element[_g_STContactSensorArr.element[deviceIndex].currEvtIndex], Evt);
+
+		/* Update current state */
+		_g_STContactSensorArr.element[deviceIndex].currentContact = Evt.value;
+		_g_STContactSensorArr.element[deviceIndex].contactState.name = Evt.name;
+		_g_STContactSensorArr.element[deviceIndex].contactState.value = Evt.value;
+		_g_STContactSensorArr.element[deviceIndex].contactState.date = Evt.date;
+		_g_STContactSensorArr.element[deviceIndex].contactState.isAlive = 1;
+
+		/* Store new state */
+		assign_STState_rec(_g_STContactSensorArr.element[deviceIndex].states.element[_g_STContactSensorArr.element[deviceIndex].currEvtIndex], _g_STContactSensorArr.element[deviceIndex].contactState);
+
+		/* Increment the counter */
+		_g_STContactSensorArr.element[deviceIndex].currEvtIndex++;
+
+		/* Broadcast the generated event to subscribers */
+		for(_index5 : 0 .. _g_STContactSensorArr.element[deviceIndex].NumSubscribers-1) {
+			_g_STContactSensorArr.element[deviceIndex].BroadcastChans[_index5] = true;
+		}
+	}
+}
+/*************** End of sensor device event handler **********/
+
+/*************** Start of events generator *******************/
+hidden byte STPresSensorIndex;
+hidden byte STMotionSensorIndex;
+hidden byte STContactSensorIndex;
+bool eventProcessed, sunriseDone, sunsetDone;
+proctype SmartThings()
+{
+	byte powerMeter;
+	byte evtId;
+	STEvent_rec generatedEvent;
+	byte latestEvtIndex6;
+	bool allEvtsHandled, systemTimeIncrementNeeded;
+
+	d_step {
+		STCurrentSystemTime = 1;
+		generatedEvent.id = evtId;
+		generatedEvent.date = STCurrentSystemTime*3600000;
+		generatedEvent.isAlive = 1;
+		generatedEvent.physical = 1;
+		sunriseDone = false;
+		sunsetDone = false;
+	}
+	GoodNight_installedEvtHandler(generatedEvent);
+	ResetDeviceDefaultState();
+
+	for(evtId : 2 .. MAX_NUM_EVENTS) {
+		d_step {
+			ResetGlobalVariables();
+			eventProcessed = false;
+			STCurrentSystemTime = evtId;
+			generatedEvent.date = STCurrentSystemTime*3600000;
+			generatedEvent.id = evtId;
+			generatedEvent.isAlive = 1;
+			generatedEvent.physical = 1;
+		}
+
+		/* Randomly select system temperature */
+		if
+		:: STCurrentTemperature = 1;
+		:: STCurrentTemperature = 2;
+		:: STCurrentTemperature = 3;
+		fi
+
+		/* Generate location events */
+		if
+		:: (STCurrentSystemTime >= location.sunriseSunset.sunrise) && (sunriseDone == false) -> {
+			sunriseDone = true;
+			generatedEvent.EvtType = sunriseTime;
+			generatedEvent.value = STCurrentSystemTime;
+			generatedEvent.name = SUNRISETIME;
+			HandleLocationEvt(generatedEvent);
+			skip;
+			goto loc_StartOfEvtHandlers;
+		}
+		:: (STCurrentSystemTime >= location.sunriseSunset.sunset) && (sunsetDone == false) -> {
+			sunsetDone = true;
+			generatedEvent.EvtType = sunsetTime;
+			generatedEvent.value = STCurrentSystemTime;
+			generatedEvent.name = SUNSETTIME;
+			HandleLocationEvt(generatedEvent);
+			skip;
+			goto loc_StartOfEvtHandlers;
+		}
+		:: else -> skip;
+		fi
+
+		/* Randomly generate an event */
+		if
+		/* Generate events for presence sensor */
+		:: {
+			d_step {
+				STPresSensorIndex++;
+				/* Validate counter */
+				if
+				:: STPresSensorIndex >= _g_STPresSensorArr.length -> STPresSensorIndex = 0;
+				:: else -> skip;
+				fi
+			}
+
+			if
+			:: generatedEvent.EvtType = notpresent; generatedEvent.value = NOT_PRESENT;
+			:: generatedEvent.EvtType = present; generatedEvent.value = PRESENT;
+			fi
+			generatedEvent.name = PRESENCE;
+			HandleSTPresSensorEvt(STPresSensorIndex, generatedEvent);
+		}
+		/* Generate events for motion sensors */
+		:: {
+			d_step {
+				STMotionSensorIndex++;
+				/* Validate counter */
+				if
+				:: STMotionSensorIndex >= _g_STMotionSensorArr.length -> STMotionSensorIndex = 0;
+				:: else -> skip;
+				fi
+			}
+
+			if
+			:: generatedEvent.EvtType = inactive; generatedEvent.value = INACTIVE;
+			:: generatedEvent.EvtType = _active; generatedEvent.value = ACTIVE;
+			fi
+			generatedEvent.name = MOTION;
+			HandleSTMotionSensorEvt(STMotionSensorIndex, generatedEvent);
+		}
+		/* Generate events for presence sensor */
+		:: {
+			d_step {
+				STContactSensorIndex++;
+				/* Validate counter */
+				if
+				:: STContactSensorIndex >= _g_STContactSensorArr.length -> STContactSensorIndex = 0;
+				:: else -> skip;
+				fi
+			}
+
+			if
+			:: generatedEvent.EvtType = close; generatedEvent.value = CLOSED;
+			:: generatedEvent.EvtType = open; generatedEvent.value = OPEN;
+			fi
+			generatedEvent.name = CONTACT;
+			HandleSTContactSensorEvt(STContactSensorIndex, generatedEvent);
+		}
+		fi
+
+loc_StartOfEvtHandlers:
+		allEvtsHandled = true;
+		systemTimeIncrementNeeded = false;
+
+		/* Handlers of UnlockDoor */
+		if
+		:: location.BroadcastChans[UnlockDoor_location] == true -> atomic {
+			allEvtsHandled = false;
+			/* Reset broadcast event indicator */
+			location.BroadcastChans[UnlockDoor_location] = false;
+
+			/* Fetch current data of global variables */
+			d_step {
+				assign_STLock_rec(UnlockDoor_locks.element[0], _g_STLockArr.element[doorLock_STLock]);
+			}
+
+			if
+			:: (location.latestEvt.EvtType == Home) || (location.latestEvt.EvtType == Away) || (location.latestEvt.EvtType == Night) -> UnlockDoor_changedLocationModeEvtHandler(location.latestEvt);
+			:: else -> skip;
+			fi
+		}
+		:: else -> skip;
+		fi
+
+		/* Handlers of AutoModeChange */
+		if
+		:: _g_STPresSensorArr.element[AutoModeChange_people.element[0].gArrIndex].BroadcastChans[AutoModeChange_people.element[0].BroadcastChanIndex] == true -> atomic {
+			allEvtsHandled = false;
+			/* Reset broadcast event indicator */
+			 _g_STPresSensorArr.element[AutoModeChange_people.element[0].gArrIndex].BroadcastChans[AutoModeChange_people.element[0].BroadcastChanIndex] = false
+
+			/* Get latest event */
+			getPrevStoredEvtIndex(_g_STPresSensorArr.element[AutoModeChange_people.element[0].gArrIndex].currEvtIndex, latestEvtIndex6);
+			assign_STEvent_rec(generatedEvent, _g_STPresSensorArr.element[AutoModeChange_people.element[0].gArrIndex].events.element[latestEvtIndex6]);
+
+			/* Fetch current data of global variables */
+			d_step {
+				assign_STPresSensor_rec(AutoModeChange_people.element[0], _g_STPresSensorArr.element[tomPresence_STPresSensor]);
+			}
+
+			if
+			:: true -> AutoModeChange_presenceEvtHandler(generatedEvent);
+			:: else -> skip;
+			fi
+		}
+		:: else -> skip;
+		fi
+
+		/* Handlers of GoodNight */
+		if
+		:: _g_STMotionSensorArr.element[GoodNight_motionSensors.element[0].gArrIndex].BroadcastChans[GoodNight_motionSensors.element[0].BroadcastChanIndex] == true -> atomic {
+			allEvtsHandled = false;
+			/* Reset broadcast event indicator */
+			 _g_STMotionSensorArr.element[GoodNight_motionSensors.element[0].gArrIndex].BroadcastChans[GoodNight_motionSensors.element[0].BroadcastChanIndex] = false
+
+			/* Get latest event */
+			getPrevStoredEvtIndex(_g_STMotionSensorArr.element[GoodNight_motionSensors.element[0].gArrIndex].currEvtIndex, latestEvtIndex6);
+			assign_STEvent_rec(generatedEvent, _g_STMotionSensorArr.element[GoodNight_motionSensors.element[0].gArrIndex].events.element[latestEvtIndex6]);
+
+			/* Fetch current data of global variables */
+			d_step {
+				assign_STMotionSensor_rec(GoodNight_motionSensors.element[0], _g_STMotionSensorArr.element[frontDoorSensor_STMotionSensor]);
+				assign_STMotionSensor_rec(GoodNight_motionSensors.element[1], _g_STMotionSensorArr.element[livingRoomSensor_STMotionSensor]);
+				assign_STMotionSensor_rec(GoodNight_motionSensors.element[2], _g_STMotionSensorArr.element[bedRoomSensor_STMotionSensor]);
+				assign_STSwitch_rec(GoodNight_switches.element[0], _g_STSwitchArr.element[livingRoomBulb_STSwitch]);
+				assign_STSwitch_rec(GoodNight_switches.element[1], _g_STSwitchArr.element[bedRoomBulb_STSwitch]);
+			}
+
+			if
+			:: generatedEvent.EvtType == _active -> skip;
+			:: generatedEvent.EvtType == inactive -> GoodNight_motionInactiveEvtHandler(generatedEvent);
+			:: else -> skip;
+			fi
+		}
+		:: else -> skip;
+		fi
+		if
+		:: _g_STMotionSensorArr.element[GoodNight_motionSensors.element[1].gArrIndex].BroadcastChans[GoodNight_motionSensors.element[1].BroadcastChanIndex] == true -> atomic {
+			allEvtsHandled = false;
+			/* Reset broadcast event indicator */
+			 _g_STMotionSensorArr.element[GoodNight_motionSensors.element[1].gArrIndex].BroadcastChans[GoodNight_motionSensors.element[1].BroadcastChanIndex] = false
+
+			/* Get latest event */
+			getPrevStoredEvtIndex(_g_STMotionSensorArr.element[GoodNight_motionSensors.element[1].gArrIndex].currEvtIndex, latestEvtIndex6);
+			assign_STEvent_rec(generatedEvent, _g_STMotionSensorArr.element[GoodNight_motionSensors.element[1].gArrIndex].events.element[latestEvtIndex6]);
+
+			/* Fetch current data of global variables */
+			d_step {
+				assign_STMotionSensor_rec(GoodNight_motionSensors.element[0], _g_STMotionSensorArr.element[frontDoorSensor_STMotionSensor]);
+				assign_STMotionSensor_rec(GoodNight_motionSensors.element[1], _g_STMotionSensorArr.element[livingRoomSensor_STMotionSensor]);
+				assign_STMotionSensor_rec(GoodNight_motionSensors.element[2], _g_STMotionSensorArr.element[bedRoomSensor_STMotionSensor]);
+				assign_STSwitch_rec(GoodNight_switches.element[0], _g_STSwitchArr.element[livingRoomBulb_STSwitch]);
+				assign_STSwitch_rec(GoodNight_switches.element[1], _g_STSwitchArr.element[bedRoomBulb_STSwitch]);
+			}
+
+			if
+			:: generatedEvent.EvtType == _active -> skip;
+			:: generatedEvent.EvtType == inactive -> GoodNight_motionInactiveEvtHandler(generatedEvent);
+			:: else -> skip;
+			fi
+		}
+		:: else -> skip;
+		fi
+		if
+		:: _g_STMotionSensorArr.element[GoodNight_motionSensors.element[2].gArrIndex].BroadcastChans[GoodNight_motionSensors.element[2].BroadcastChanIndex] == true -> atomic {
+			allEvtsHandled = false;
+			/* Reset broadcast event indicator */
+			 _g_STMotionSensorArr.element[GoodNight_motionSensors.element[2].gArrIndex].BroadcastChans[GoodNight_motionSensors.element[2].BroadcastChanIndex] = false
+
+			/* Get latest event */
+			getPrevStoredEvtIndex(_g_STMotionSensorArr.element[GoodNight_motionSensors.element[2].gArrIndex].currEvtIndex, latestEvtIndex6);
+			assign_STEvent_rec(generatedEvent, _g_STMotionSensorArr.element[GoodNight_motionSensors.element[2].gArrIndex].events.element[latestEvtIndex6]);
+
+			/* Fetch current data of global variables */
+			d_step {
+				assign_STMotionSensor_rec(GoodNight_motionSensors.element[0], _g_STMotionSensorArr.element[frontDoorSensor_STMotionSensor]);
+				assign_STMotionSensor_rec(GoodNight_motionSensors.element[1], _g_STMotionSensorArr.element[livingRoomSensor_STMotionSensor]);
+				assign_STMotionSensor_rec(GoodNight_motionSensors.element[2], _g_STMotionSensorArr.element[bedRoomSensor_STMotionSensor]);
+				assign_STSwitch_rec(GoodNight_switches.element[0], _g_STSwitchArr.element[livingRoomBulb_STSwitch]);
+				assign_STSwitch_rec(GoodNight_switches.element[1], _g_STSwitchArr.element[bedRoomBulb_STSwitch]);
+			}
+
+			if
+			:: generatedEvent.EvtType == _active -> skip;
+			:: generatedEvent.EvtType == inactive -> GoodNight_motionInactiveEvtHandler(generatedEvent);
+			:: else -> skip;
+			fi
+		}
+		:: else -> skip;
+		fi
+		if
+		:: _g_STSwitchArr.element[GoodNight_switches.element[0].gArrIndex].BroadcastChans[GoodNight_switches.element[0].BroadcastChanIndex] == true -> atomic {
+			allEvtsHandled = false;
+			/* Reset broadcast event indicator */
+			 _g_STSwitchArr.element[GoodNight_switches.element[0].gArrIndex].BroadcastChans[GoodNight_switches.element[0].BroadcastChanIndex] = false
+
+			/* Get latest event */
+			getPrevStoredEvtIndex(_g_STSwitchArr.element[GoodNight_switches.element[0].gArrIndex].currEvtIndex, latestEvtIndex6);
+			assign_STEvent_rec(generatedEvent, _g_STSwitchArr.element[GoodNight_switches.element[0].gArrIndex].events.element[latestEvtIndex6]);
+
+			/* Fetch current data of global variables */
+			d_step {
+				assign_STMotionSensor_rec(GoodNight_motionSensors.element[0], _g_STMotionSensorArr.element[frontDoorSensor_STMotionSensor]);
+				assign_STMotionSensor_rec(GoodNight_motionSensors.element[1], _g_STMotionSensorArr.element[livingRoomSensor_STMotionSensor]);
+				assign_STMotionSensor_rec(GoodNight_motionSensors.element[2], _g_STMotionSensorArr.element[bedRoomSensor_STMotionSensor]);
+				assign_STSwitch_rec(GoodNight_switches.element[0], _g_STSwitchArr.element[livingRoomBulb_STSwitch]);
+				assign_STSwitch_rec(GoodNight_switches.element[1], _g_STSwitchArr.element[bedRoomBulb_STSwitch]);
+			}
+
+			if
+			:: generatedEvent.EvtType == off -> GoodNight_switchOffEvtHandler(generatedEvent);
+			:: else -> skip;
+			fi
+		}
+		:: else -> skip;
+		fi
+		if
+		:: _g_STSwitchArr.element[GoodNight_switches.element[1].gArrIndex].BroadcastChans[GoodNight_switches.element[1].BroadcastChanIndex] == true -> atomic {
+			allEvtsHandled = false;
+			/* Reset broadcast event indicator */
+			 _g_STSwitchArr.element[GoodNight_switches.element[1].gArrIndex].BroadcastChans[GoodNight_switches.element[1].BroadcastChanIndex] = false
+
+			/* Get latest event */
+			getPrevStoredEvtIndex(_g_STSwitchArr.element[GoodNight_switches.element[1].gArrIndex].currEvtIndex, latestEvtIndex6);
+			assign_STEvent_rec(generatedEvent, _g_STSwitchArr.element[GoodNight_switches.element[1].gArrIndex].events.element[latestEvtIndex6]);
+
+			/* Fetch current data of global variables */
+			d_step {
+				assign_STMotionSensor_rec(GoodNight_motionSensors.element[0], _g_STMotionSensorArr.element[frontDoorSensor_STMotionSensor]);
+				assign_STMotionSensor_rec(GoodNight_motionSensors.element[1], _g_STMotionSensorArr.element[livingRoomSensor_STMotionSensor]);
+				assign_STMotionSensor_rec(GoodNight_motionSensors.element[2], _g_STMotionSensorArr.element[bedRoomSensor_STMotionSensor]);
+				assign_STSwitch_rec(GoodNight_switches.element[0], _g_STSwitchArr.element[livingRoomBulb_STSwitch]);
+				assign_STSwitch_rec(GoodNight_switches.element[1], _g_STSwitchArr.element[bedRoomBulb_STSwitch]);
+			}
+
+			if
+			:: generatedEvent.EvtType == off -> GoodNight_switchOffEvtHandler(generatedEvent);
+			:: else -> skip;
+			fi
+		}
+		:: else -> skip;
+		fi
+		if
+		:: location.BroadcastChans[GoodNight_location] == true -> atomic {
+			allEvtsHandled = false;
+			/* Reset broadcast event indicator */
+			location.BroadcastChans[GoodNight_location] = false;
+
+			/* Fetch current data of global variables */
+			d_step {
+				assign_STMotionSensor_rec(GoodNight_motionSensors.element[0], _g_STMotionSensorArr.element[frontDoorSensor_STMotionSensor]);
+				assign_STMotionSensor_rec(GoodNight_motionSensors.element[1], _g_STMotionSensorArr.element[livingRoomSensor_STMotionSensor]);
+				assign_STMotionSensor_rec(GoodNight_motionSensors.element[2], _g_STMotionSensorArr.element[bedRoomSensor_STMotionSensor]);
+				assign_STSwitch_rec(GoodNight_switches.element[0], _g_STSwitchArr.element[livingRoomBulb_STSwitch]);
+				assign_STSwitch_rec(GoodNight_switches.element[1], _g_STSwitchArr.element[bedRoomBulb_STSwitch]);
+			}
+
+			if
+			:: (location.latestEvt.EvtType == Home) || (location.latestEvt.EvtType == Away) || (location.latestEvt.EvtType == Night) -> GoodNight_modeChangeEvtHandler(location.latestEvt);
+			:: else -> skip;
+			fi
+		}
+		:: else -> skip;
+		fi
+
+		/* Handlers of LightOffWhenClosed */
+		if
+		:: _g_STContactSensorArr.element[LightOffWhenClosed_contact1.gArrIndex].BroadcastChans[LightOffWhenClosed_contact1.BroadcastChanIndex] == true -> atomic {
+			allEvtsHandled = false;
+			/* Reset broadcast event indicator */
+			 _g_STContactSensorArr.element[LightOffWhenClosed_contact1.gArrIndex].BroadcastChans[LightOffWhenClosed_contact1.BroadcastChanIndex] = false
+
+			/* Get latest event */
+			getPrevStoredEvtIndex(_g_STContactSensorArr.element[LightOffWhenClosed_contact1.gArrIndex].currEvtIndex, latestEvtIndex6);
+			assign_STEvent_rec(generatedEvent, _g_STContactSensorArr.element[LightOffWhenClosed_contact1.gArrIndex].events.element[latestEvtIndex6]);
+
+			/* Fetch current data of global variables */
+			d_step {
+				assign_STContactSensor_rec(LightOffWhenClosed_contact1, _g_STContactSensorArr.element[bedRoomDoor_STContactSensor]);
+				assign_STSwitch_rec(LightOffWhenClosed_switch1, _g_STSwitchArr.element[bedRoomBulb_STSwitch]);
+			}
+
+			if
+			:: generatedEvent.EvtType == close -> LightOffWhenClosed_contactClosedEvtHandler(generatedEvent);
+			:: else -> skip;
+			fi
+		}
+		:: else -> skip;
+		fi
+
+		/* Handlers of LightFollowsMe */
+		if
+		:: _g_STMotionSensorArr.element[LightFollowsMe_motion1.gArrIndex].BroadcastChans[LightFollowsMe_motion1.BroadcastChanIndex] == true -> atomic {
+			allEvtsHandled = false;
+			/* Reset broadcast event indicator */
+			 _g_STMotionSensorArr.element[LightFollowsMe_motion1.gArrIndex].BroadcastChans[LightFollowsMe_motion1.BroadcastChanIndex] = false
+
+			/* Get latest event */
+			getPrevStoredEvtIndex(_g_STMotionSensorArr.element[LightFollowsMe_motion1.gArrIndex].currEvtIndex, latestEvtIndex6);
+			assign_STEvent_rec(generatedEvent, _g_STMotionSensorArr.element[LightFollowsMe_motion1.gArrIndex].events.element[latestEvtIndex6]);
+
+			/* Fetch current data of global variables */
+			d_step {
+				assign_STMotionSensor_rec(LightFollowsMe_motion1, _g_STMotionSensorArr.element[livingRoomSensor_STMotionSensor]);
+				assign_STSwitch_rec(LightFollowsMe_switches.element[0], _g_STSwitchArr.element[livingRoomBulb_STSwitch]);
+			}
+
+			if
+			:: true -> LightFollowsMe_motionEvtHandler(generatedEvent);
+			:: else -> skip;
+			fi
+		}
+		:: else -> skip;
+		fi
+
+		if
+		:: allEvtsHandled == false -> {
+			if
+			:: STCurrentSystemTime >= MAX_SYSTEM_TIME -> assert(0);
+			:: else -> skip;
+			fi
+
+			if
+			:: systemTimeIncrementNeeded == true -> STCurrentSystemTime++;
+			:: else -> skip;
+			fi
+			goto loc_StartOfEvtHandlers;
+		}
+		:: !(allEvtsHandled == false) -> eventProcessed = true;
+		fi
+	}
+}
+/*************** End of events generator *********************/
+
+init {
+	int gDeviceId;
+
+	atomic {
+		InitializeLocation();
+
+		doorLock_STLock = _g_STLockArr.length;
+		_g_STLockArr.element[doorLock_STLock].id = gDeviceId;
+		_g_STLockArr.element[doorLock_STLock].gArrIndex = doorLock_STLock;
+		_g_STLockArr.element[doorLock_STLock].NumSubscribers = 0;
+		_g_STLockArr.element[doorLock_STLock].events.length = MAX_STORED_EVENTS;
+		_g_STLockArr.element[doorLock_STLock].states.length = MAX_STORED_EVENTS;
+		_g_STLockArr.element[doorLock_STLock].isAlive = 1;
+		_g_STLockArr.element[doorLock_STLock].isOnline = 1;
+		_g_STLockArr.element[doorLock_STLock].currentLock = LOCKED;
+		_g_STLockArr.element[doorLock_STLock].lockState.value = LOCKED;
+		_g_STLockArr.length++;
+		gDeviceId++;
+		tomPresence_STPresSensor = _g_STPresSensorArr.length;
+		_g_STPresSensorArr.element[tomPresence_STPresSensor].id = gDeviceId;
+		_g_STPresSensorArr.element[tomPresence_STPresSensor].gArrIndex = tomPresence_STPresSensor;
+		_g_STPresSensorArr.element[tomPresence_STPresSensor].NumSubscribers = 0;
+		_g_STPresSensorArr.element[tomPresence_STPresSensor].events.length = MAX_STORED_EVENTS;
+		_g_STPresSensorArr.element[tomPresence_STPresSensor].states.length = MAX_STORED_EVENTS;
+		_g_STPresSensorArr.element[tomPresence_STPresSensor].isAlive = 1;
+		_g_STPresSensorArr.element[tomPresence_STPresSensor].isOnline = 1;
+		_g_STPresSensorArr.element[tomPresence_STPresSensor].currentPresence = PRESENT;
+		_g_STPresSensorArr.element[tomPresence_STPresSensor].presenceState.value = PRESENT;
+		_g_STPresSensorArr.length++;
+		gDeviceId++;
+		frontDoorSensor_STMotionSensor = _g_STMotionSensorArr.length;
+		_g_STMotionSensorArr.element[frontDoorSensor_STMotionSensor].id = gDeviceId;
+		_g_STMotionSensorArr.element[frontDoorSensor_STMotionSensor].gArrIndex = frontDoorSensor_STMotionSensor;
+		_g_STMotionSensorArr.element[frontDoorSensor_STMotionSensor].NumSubscribers = 0;
+		_g_STMotionSensorArr.element[frontDoorSensor_STMotionSensor].events.length = MAX_STORED_EVENTS;
+		_g_STMotionSensorArr.element[frontDoorSensor_STMotionSensor].states.length = MAX_STORED_EVENTS;
+		_g_STMotionSensorArr.element[frontDoorSensor_STMotionSensor].isAlive = 1;
+		_g_STMotionSensorArr.element[frontDoorSensor_STMotionSensor].isOnline = 1;
+		_g_STMotionSensorArr.element[frontDoorSensor_STMotionSensor].currentMotion = INACTIVE;
+		_g_STMotionSensorArr.element[frontDoorSensor_STMotionSensor].motionState.value = INACTIVE;
+		_g_STMotionSensorArr.length++;
+		gDeviceId++;
+		livingRoomBulb_STSwitch = _g_STSwitchArr.length;
+		_g_STSwitchArr.element[livingRoomBulb_STSwitch].id = gDeviceId;
+		_g_STSwitchArr.element[livingRoomBulb_STSwitch].gArrIndex = livingRoomBulb_STSwitch;
+		_g_STSwitchArr.element[livingRoomBulb_STSwitch].NumSubscribers = 0;
+		_g_STSwitchArr.element[livingRoomBulb_STSwitch].events.length = MAX_STORED_EVENTS;
+		_g_STSwitchArr.element[livingRoomBulb_STSwitch].states.length = MAX_STORED_EVENTS;
+		_g_STSwitchArr.element[livingRoomBulb_STSwitch].isAlive = 1;
+		_g_STSwitchArr.element[livingRoomBulb_STSwitch].isOnline = 1;
+		_g_STSwitchArr.element[livingRoomBulb_STSwitch].currentSwitch = OFF;
+		_g_STSwitchArr.element[livingRoomBulb_STSwitch].switchState.value = OFF;
+		_g_STSwitchArr.length++;
+		gDeviceId++;
+		bedRoomBulb_STSwitch = _g_STSwitchArr.length;
+		_g_STSwitchArr.element[bedRoomBulb_STSwitch].id = gDeviceId;
+		_g_STSwitchArr.element[bedRoomBulb_STSwitch].gArrIndex = bedRoomBulb_STSwitch;
+		_g_STSwitchArr.element[bedRoomBulb_STSwitch].NumSubscribers = 0;
+		_g_STSwitchArr.element[bedRoomBulb_STSwitch].events.length = MAX_STORED_EVENTS;
+		_g_STSwitchArr.element[bedRoomBulb_STSwitch].states.length = MAX_STORED_EVENTS;
+		_g_STSwitchArr.element[bedRoomBulb_STSwitch].isAlive = 1;
+		_g_STSwitchArr.element[bedRoomBulb_STSwitch].isOnline = 1;
+		_g_STSwitchArr.element[bedRoomBulb_STSwitch].currentSwitch = OFF;
+		_g_STSwitchArr.element[bedRoomBulb_STSwitch].switchState.value = OFF;
+		_g_STSwitchArr.length++;
+		gDeviceId++;
+		livingRoomSensor_STMotionSensor = _g_STMotionSensorArr.length;
+		_g_STMotionSensorArr.element[livingRoomSensor_STMotionSensor].id = gDeviceId;
+		_g_STMotionSensorArr.element[livingRoomSensor_STMotionSensor].gArrIndex = livingRoomSensor_STMotionSensor;
+		_g_STMotionSensorArr.element[livingRoomSensor_STMotionSensor].NumSubscribers = 0;
+		_g_STMotionSensorArr.element[livingRoomSensor_STMotionSensor].events.length = MAX_STORED_EVENTS;
+		_g_STMotionSensorArr.element[livingRoomSensor_STMotionSensor].states.length = MAX_STORED_EVENTS;
+		_g_STMotionSensorArr.element[livingRoomSensor_STMotionSensor].isAlive = 1;
+		_g_STMotionSensorArr.element[livingRoomSensor_STMotionSensor].isOnline = 1;
+		_g_STMotionSensorArr.element[livingRoomSensor_STMotionSensor].currentMotion = INACTIVE;
+		_g_STMotionSensorArr.element[livingRoomSensor_STMotionSensor].motionState.value = INACTIVE;
+		_g_STMotionSensorArr.length++;
+		gDeviceId++;
+		bedRoomSensor_STMotionSensor = _g_STMotionSensorArr.length;
+		_g_STMotionSensorArr.element[bedRoomSensor_STMotionSensor].id = gDeviceId;
+		_g_STMotionSensorArr.element[bedRoomSensor_STMotionSensor].gArrIndex = bedRoomSensor_STMotionSensor;
+		_g_STMotionSensorArr.element[bedRoomSensor_STMotionSensor].NumSubscribers = 0;
+		_g_STMotionSensorArr.element[bedRoomSensor_STMotionSensor].events.length = MAX_STORED_EVENTS;
+		_g_STMotionSensorArr.element[bedRoomSensor_STMotionSensor].states.length = MAX_STORED_EVENTS;
+		_g_STMotionSensorArr.element[bedRoomSensor_STMotionSensor].isAlive = 1;
+		_g_STMotionSensorArr.element[bedRoomSensor_STMotionSensor].isOnline = 1;
+		_g_STMotionSensorArr.element[bedRoomSensor_STMotionSensor].currentMotion = INACTIVE;
+		_g_STMotionSensorArr.element[bedRoomSensor_STMotionSensor].motionState.value = INACTIVE;
+		_g_STMotionSensorArr.length++;
+		gDeviceId++;
+		bedRoomDoor_STContactSensor = _g_STContactSensorArr.length;
+		_g_STContactSensorArr.element[bedRoomDoor_STContactSensor].id = gDeviceId;
+		_g_STContactSensorArr.element[bedRoomDoor_STContactSensor].gArrIndex = bedRoomDoor_STContactSensor;
+		_g_STContactSensorArr.element[bedRoomDoor_STContactSensor].NumSubscribers = 0;
+		_g_STContactSensorArr.element[bedRoomDoor_STContactSensor].events.length = MAX_STORED_EVENTS;
+		_g_STContactSensorArr.element[bedRoomDoor_STContactSensor].states.length = MAX_STORED_EVENTS;
+		_g_STContactSensorArr.element[bedRoomDoor_STContactSensor].isAlive = 1;
+		_g_STContactSensorArr.element[bedRoomDoor_STContactSensor].isOnline = 1;
+		_g_STContactSensorArr.element[bedRoomDoor_STContactSensor].currentContact = CLOSED;
+		_g_STContactSensorArr.element[bedRoomDoor_STContactSensor].contactState.value = CLOSED;
+		_g_STContactSensorArr.length++;
+		gDeviceId++;
+
+		/* Initialization for UnlockDoor */
+		UnlockDoor_locks.length = 1;
+		assign_STLock_rec(UnlockDoor_locks.element[0], _g_STLockArr.element[doorLock_STLock]);
+		/* Broadcast channel index of location assignment */
+		UnlockDoor_location = location.NumSubscribers;
+		location.NumSubscribers++;
+		/* Other input info assignment */
+
+		/* Initialization for AutoModeChange */
+		AutoModeChange_people.length = 1;
+		assign_STPresSensor_rec(AutoModeChange_people.element[0], _g_STPresSensorArr.element[tomPresence_STPresSensor]);
+		AutoModeChange_people.element[0].BroadcastChanIndex = _g_STPresSensorArr.element[tomPresence_STPresSensor].NumSubscribers;
+		_g_STPresSensorArr.element[tomPresence_STPresSensor].NumSubscribers++;
+		/* Other input info assignment */
+		AutoModeChange_newMode1 = 1401;
+		AutoModeChange_newMode2 = 1400;
+
+		/* Initialization for GoodNight */
+		GoodNight_motionSensors.length = 3;
+		assign_STMotionSensor_rec(GoodNight_motionSensors.element[0], _g_STMotionSensorArr.element[frontDoorSensor_STMotionSensor]);
+		GoodNight_motionSensors.element[0].BroadcastChanIndex = _g_STMotionSensorArr.element[frontDoorSensor_STMotionSensor].NumSubscribers;
+		_g_STMotionSensorArr.element[frontDoorSensor_STMotionSensor].NumSubscribers++;
+		assign_STMotionSensor_rec(GoodNight_motionSensors.element[1], _g_STMotionSensorArr.element[livingRoomSensor_STMotionSensor]);
+		GoodNight_motionSensors.element[1].BroadcastChanIndex = _g_STMotionSensorArr.element[livingRoomSensor_STMotionSensor].NumSubscribers;
+		_g_STMotionSensorArr.element[livingRoomSensor_STMotionSensor].NumSubscribers++;
+		assign_STMotionSensor_rec(GoodNight_motionSensors.element[2], _g_STMotionSensorArr.element[bedRoomSensor_STMotionSensor]);
+		GoodNight_motionSensors.element[2].BroadcastChanIndex = _g_STMotionSensorArr.element[bedRoomSensor_STMotionSensor].NumSubscribers;
+		_g_STMotionSensorArr.element[bedRoomSensor_STMotionSensor].NumSubscribers++;
+		GoodNight_switches.length = 2;
+		assign_STSwitch_rec(GoodNight_switches.element[0], _g_STSwitchArr.element[livingRoomBulb_STSwitch]);
+		GoodNight_switches.element[0].BroadcastChanIndex = _g_STSwitchArr.element[livingRoomBulb_STSwitch].NumSubscribers;
+		_g_STSwitchArr.element[livingRoomBulb_STSwitch].NumSubscribers++;
+		assign_STSwitch_rec(GoodNight_switches.element[1], _g_STSwitchArr.element[bedRoomBulb_STSwitch]);
+		GoodNight_switches.element[1].BroadcastChanIndex = _g_STSwitchArr.element[bedRoomBulb_STSwitch].NumSubscribers;
+		_g_STSwitchArr.element[bedRoomBulb_STSwitch].NumSubscribers++;
+		/* Broadcast channel index of location assignment */
+		GoodNight_location = location.NumSubscribers;
+		location.NumSubscribers++;
+		/* Other input info assignment */
+		GoodNight_minutes = 30;
+		GoodNight_newMode = 1402;
+		GoodNight_sendPushMessage = 1501;
+
+		/* Initialization for LightOffWhenClosed */
+		assign_STContactSensor_rec(LightOffWhenClosed_contact1, _g_STContactSensorArr.element[bedRoomDoor_STContactSensor]);
+		LightOffWhenClosed_contact1.BroadcastChanIndex = _g_STContactSensorArr.element[bedRoomDoor_STContactSensor].NumSubscribers;
+		_g_STContactSensorArr.element[bedRoomDoor_STContactSensor].NumSubscribers++;
+		assign_STSwitch_rec(LightOffWhenClosed_switch1, _g_STSwitchArr.element[bedRoomBulb_STSwitch]);
+		/* Other input info assignment */
+
+		/* Initialization for LightFollowsMe */
+		assign_STMotionSensor_rec(LightFollowsMe_motion1, _g_STMotionSensorArr.element[livingRoomSensor_STMotionSensor]);
+		LightFollowsMe_motion1.BroadcastChanIndex = _g_STMotionSensorArr.element[livingRoomSensor_STMotionSensor].NumSubscribers;
+		_g_STMotionSensorArr.element[livingRoomSensor_STMotionSensor].NumSubscribers++;
+		LightFollowsMe_switches.length = 1;
+		assign_STSwitch_rec(LightFollowsMe_switches.element[0], _g_STSwitchArr.element[livingRoomBulb_STSwitch]);
+		/* Other input info assignment */
+		LightFollowsMe_minutes1 = 10;
+
+		/* Start all of the processes */
+		run SmartThings();
+	}
+}

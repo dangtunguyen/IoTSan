@@ -1,0 +1,307 @@
+public class STColorCtrl extends STDevice
+{
+    public STState colorState;
+    public int currentColor;
+    public STState hueState;
+    public int currentHue;
+    public STState saturationState;
+    public int currentSaturation;
+    public STState switchState;
+    public int currentSwitch;
+    public STState levelState;
+    public int currentLevel;
+    public boolean STCommand_STColorCtrl_on;
+    public boolean STCommand_STColorCtrl_off;
+    public boolean STCommand_STColorCtrl_setLevel;
+    public boolean STCommand_STColorCtrl_setHue;
+    public boolean STCommand_STColorCtrl_setSaturation;
+    public boolean STCommand_STColorCtrl_setColor;
+
+    public int currentValue(int)
+    {
+        int attributeName, $ret;
+        STColorCtrl JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        attributeName := @parameter0;
+        lookupswitch(attributeName)
+        {
+            case 14: goto label0;
+            case 74: goto label1;
+            case 83: goto label2;
+            case 84: goto label3;
+            case 85: goto label4;
+            default: goto label5;
+        };
+
+     label0:
+        $ret = JJJCTEMP$0.[STColorCtrl.currentSwitch:int];
+        return $ret;
+
+     label1:
+        $ret = JJJCTEMP$0.[STColorCtrl.currentLevel:int];
+        return $ret;
+
+     label2:
+        $ret = JJJCTEMP$0.[STColorCtrl.currentColor:int];
+        return $ret;
+
+     label3:
+        $ret = JJJCTEMP$0.[STColorCtrl.currentHue:int];
+        return $ret;
+
+     label4:
+        $ret = JJJCTEMP$0.[STColorCtrl.currentSaturation:int];
+        return $ret;
+
+     label5:
+        $ret = JJJCTEMP$0.[STColorCtrl.currentSwitch:int];
+        return $ret;
+    }
+
+    public int latestValue(int)
+    {
+        int attributeName, $ret;
+        STColorCtrl JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        attributeName := @parameter0;
+        lookupswitch(attributeName)
+        {
+            case 14: goto label0;
+            case 74: goto label1;
+            case 83: goto label2;
+            case 84: goto label3;
+            case 85: goto label4;
+            default: goto label5;
+        };
+
+     label0:
+        $ret = JJJCTEMP$0.[STColorCtrl.currentSwitch:int];
+        return $ret;
+
+     label1:
+        $ret = JJJCTEMP$0.[STColorCtrl.currentLevel:int];
+        return $ret;
+
+     label2:
+        $ret = JJJCTEMP$0.[STColorCtrl.currentColor:int];
+        return $ret;
+
+     label3:
+        $ret = JJJCTEMP$0.[STColorCtrl.currentHue:int];
+        return $ret;
+
+     label4:
+        $ret = JJJCTEMP$0.[STColorCtrl.currentSaturation:int];
+        return $ret;
+
+     label5:
+        $ret = JJJCTEMP$0.[STColorCtrl.currentSwitch:int];
+        return $ret;
+    }
+
+    public STState currentState(int)
+    {
+        STState $ret;
+        int attributeName;
+        STColorCtrl JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        attributeName := @parameter0;
+        lookupswitch(attributeName)
+        {
+            case 14: goto label0;
+            case 74: goto label1;
+            case 83: goto label2;
+            case 84: goto label3;
+            case 85: goto label4;
+            default: goto label5;
+        };
+
+     label0:
+        $ret = JJJCTEMP$0.[STColorCtrl.switchState:STState];
+        return $ret;
+
+     label1:
+        $ret = JJJCTEMP$0.[STColorCtrl.levelState:STState];
+        return $ret;
+
+     label2:
+        $ret = JJJCTEMP$0.[STColorCtrl.colorState:STState];
+        return $ret;
+
+     label3:
+        $ret = JJJCTEMP$0.[STColorCtrl.hueState:STState];
+        return $ret;
+
+     label4:
+        $ret = JJJCTEMP$0.[STColorCtrl.saturationState:STState];
+        return $ret;
+
+     label5:
+        $ret = JJJCTEMP$0.[STColorCtrl.switchState:STState];
+        return $ret;
+    }
+
+    public STState latestState(int)
+    {
+        STState $ret;
+        int attributeName;
+        STColorCtrl JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        attributeName := @parameter0;
+        lookupswitch(attributeName)
+        {
+            case 14: goto label0;
+            case 74: goto label1;
+            case 83: goto label2;
+            case 84: goto label3;
+            case 85: goto label4;
+            default: goto label5;
+        };
+
+     label0:
+        $ret = JJJCTEMP$0.[STColorCtrl.switchState:STState];
+        return $ret;
+
+     label1:
+        $ret = JJJCTEMP$0.[STColorCtrl.levelState:STState];
+        return $ret;
+
+     label2:
+        $ret = JJJCTEMP$0.[STColorCtrl.colorState:STState];
+        return $ret;
+
+     label3:
+        $ret = JJJCTEMP$0.[STColorCtrl.hueState:STState];
+        return $ret;
+
+     label4:
+        $ret = JJJCTEMP$0.[STColorCtrl.saturationState:STState];
+        return $ret;
+
+     label5:
+        $ret = JJJCTEMP$0.[STColorCtrl.switchState:STState];
+        return $ret;
+    }
+
+    public void on()
+    {
+        STColorCtrl JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        JJJCTEMP$0.[STColorCtrl.STCommand_STColorCtrl_on:boolean] = 1;
+        return;
+    }
+
+    public void on(int)
+    {
+        int delay;
+        STColorCtrl JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        delay := @parameter0;
+        JJJCTEMP$0.[STColorCtrl.STCommand_STColorCtrl_on:boolean] = 1;
+        return;
+    }
+
+    public void off()
+    {
+        STColorCtrl JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        JJJCTEMP$0.[STColorCtrl.STCommand_STColorCtrl_off:boolean] = 1;
+        return;
+    }
+
+    public void off(int)
+    {
+        int delay;
+        STColorCtrl JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        delay := @parameter0;
+        JJJCTEMP$0.[STColorCtrl.STCommand_STColorCtrl_off:boolean] = 1;
+        return;
+    }
+
+    public void setLevel(int)
+    {
+        int level;
+        STColorCtrl JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        level := @parameter0;
+        JJJCTEMP$0.[STColorCtrl.currentLevel:int] = level;
+        JJJCTEMP$0.[STColorCtrl.STCommand_STColorCtrl_setLevel:boolean] = 1;
+        return;
+    }
+
+    public void setLevel(int, int)
+    {
+        int delay, level;
+        STColorCtrl JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        level := @parameter0;
+        delay := @parameter1;
+        JJJCTEMP$0.[STColorCtrl.currentLevel:int] = level;
+        JJJCTEMP$0.[STColorCtrl.STCommand_STColorCtrl_setLevel:boolean] = 1;
+        return;
+    }
+
+    public void setHue(int)
+    {
+        int hue;
+        STColorCtrl JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        hue := @parameter0;
+        JJJCTEMP$0.[STColorCtrl.currentHue:int] = hue;
+        JJJCTEMP$0.[STColorCtrl.STCommand_STColorCtrl_setHue:boolean] = 1;
+        return;
+    }
+
+    public void setSaturation(int)
+    {
+        int saturation;
+        STColorCtrl JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        saturation := @parameter0;
+        JJJCTEMP$0.[STColorCtrl.currentSaturation:int] = saturation;
+        JJJCTEMP$0.[STColorCtrl.STCommand_STColorCtrl_setSaturation:boolean] = 1;
+        return;
+    }
+
+    public void setColor(int)
+    {
+        int JJJCTEMP$4, JJJCTEMP$3, JJJCTEMP$2, JJJCTEMP$1, color;
+        STColorCtrl JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        color := @parameter0;
+        JJJCTEMP$1 = color >> 24;
+        JJJCTEMP$0.[STColorCtrl.currentSwitch:int] = JJJCTEMP$1;
+        JJJCTEMP$2 = color >> 16;
+        JJJCTEMP$0.[STColorCtrl.currentLevel:int] = JJJCTEMP$2;
+        JJJCTEMP$3 = color >> 8;
+        JJJCTEMP$0.[STColorCtrl.currentHue:int] = JJJCTEMP$3;
+        JJJCTEMP$4 = color & 15;
+        JJJCTEMP$0.[STColorCtrl.currentSaturation:int] = JJJCTEMP$4;
+        JJJCTEMP$0.[STColorCtrl.currentColor:int] = color;
+        JJJCTEMP$0.[STColorCtrl.STCommand_STColorCtrl_setColor:boolean] = 1;
+        return;
+    }
+
+    public void <init>()
+    {
+        STColorCtrl JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        specialinvoke JJJCTEMP$0.[STDevice.<init>():void]();
+        return;
+    }
+}

@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.6.1">
+<title>Testing Guide</title>
+<link rel="stylesheet" href="./assets/css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+<h1>Testing Guide</h1>
+<div class="details">
+<span id="revnumber">version 3.0.0-alpha-3</span>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_introduction">1. Introduction</a></li>
+<li><a href="#_language_features">2. Language Features</a>
+<ul class="sectlevel2">
+<li><a href="#_power_assertions">2.1. Power Assertions</a></li>
+<li><a href="#_mocking_and_stubbing">2.2. Mocking and Stubbing</a>
+<ul class="sectlevel3">
+<li><a href="#_map_coercion">2.2.1. Map Coercion</a></li>
+<li><a href="#_closure_coercion">2.2.2. Closure Coercion</a></li>
+<li><a href="#_mockfor_and_stubfor">2.2.3. MockFor and StubFor</a></li>
+<li><a href="#testing_guide_emc">2.2.4. Expando Meta-Class (EMC)</a></li>
+</ul>
+</li>
+<li><a href="#_gdk_methods">2.3. GDK Methods</a>
+<ul class="sectlevel3">
+<li><a href="#_iterable_combinations">2.3.1. Iterable#combinations</a></li>
+<li><a href="#_iterable_eachcombination">2.3.2. Iterable#eachCombination</a></li>
+</ul>
+</li>
+<li><a href="#_tool_support">2.4. Tool Support</a>
+<ul class="sectlevel3">
+<li><a href="#_test_code_coverage">2.4.1. Test Code Coverage</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_testing_with_junit">3. Testing with JUnit</a>
+<ul class="sectlevel2">
+<li><a href="#_junit_3">3.1. JUnit 3</a>
+<ul class="sectlevel3">
+<li><a href="#_assertion_methods">3.1.1. Assertion Methods</a></li>
+<li><a href="#_shouldfail_methods">3.1.2. shouldFail Methods</a></li>
+<li><a href="#_notyetimplemented_method">3.1.3. notYetImplemented Method</a></li>
+</ul>
+</li>
+<li><a href="#_junit_4">3.2. JUnit 4</a></li>
+<li><a href="#_junit_5">3.3. JUnit 5</a></li>
+</ul>
+</li>
+<li><a href="#_testing_with_spock">4. Testing with Spock</a>
+<ul class="sectlevel2">
+<li><a href="#_specifications">4.1. Specifications</a></li>
+<li><a href="#_more_spock">4.2. More Spock</a></li>
+</ul>
+</li>
+<li><a href="#_functional_tests_with_geb">5. Functional Tests with Geb</a>
+<ul class="sectlevel2">
+<li><a href="#_a_geb_script">5.1. A Geb Script</a></li>
+<li><a href="#_more_geb">5.2. More Geb</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_introduction"><a class="anchor" href="#_introduction"></a>1. Introduction</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The Groovy programming language comes with great support for writing tests. In addition to the language
+features and test integration with state-of-the-art testing libraries and frameworks, the Groovy ecosystem has born
+a rich set of testing libraries and frameworks.</p>
+</div>
+<div class="paragraph">
+<p>This chapter will start with language specific testing features and continue with a closer look at JUnit
+integration, Spock for specifications, and Geb for functional tests. Finally, we&#8217;ll do an overview of other testing
+libraries known to be working with Groovy.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_language_features"><a class="anchor" href="#_language_features"></a>2. Language Features</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Besides integrated support for JUnit, the Groovy programming language comes with features that have proven
+to be very valuable for test-driven development. This section gives insight on them.</p>
+</div>
+<div class="sect2">
+<h3 id="_power_assertions"><a class="anchor" href="#_power_assertions"></a>2.1. Power Assertions</h3>
+<div class="paragraph">
+<p>Writing tests means formulating assumptions by using assertions. In Java this can be done by using the <code>assert</code>
+keyword that has been added in J2SE 1.4. In Java, <code>assert</code> statements can be enabled via the JVM parameters <code>-ea</code>
+(or <code>-enableassertions</code>) and <code>-da</code> (or <code>-disableassertions</code>). Assertion statements in Java are disabled by default.</p>
+</div>
+<div class="paragraph">
+<p>Groovy comes with a rather <em>powerful variant</em> of <code>assert</code> also known as <em>power assertion statement</em>. Groovy&#8217;s power
+<code>assert</code> differs from the Java version in its output given the boolean expression validates to <code>false</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def x = 1
+assert x == 2
+
+// Output:             <i class="conum" data-value="1"></i><b>(1)</b>
+//
+// Assertion failed:
+// assert x == 2
+//        | |
+//        1 false</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>This section shows the std-err output</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The <code>java.lang.AssertionError</code> that is thrown whenever the assertion can not be validated successfully, contains
+an extended version of the original exception message. The power assertion output shows evaluation results from
+the outer to the inner expression.</p>
+</div>
+<div class="paragraph">
+<p>The power assertion statements true power unleashes in complex Boolean statements, or statements with
+collections or other <code>toString</code>-enabled classes:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def x = [1,2,3,4,5]
+assert (x &lt;&lt; 6) == [6,7,8,9,10]
+
+// Output:
+//
+// Assertion failed:
+// assert (x &lt;&lt; 6) == [6,7,8,9,10]
+//         | |     |
+//         | |     false
+//         | [1, 2, 3, 4, 5, 6]
+//         [1, 2, 3, 4, 5, 6]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Another important difference from Java is that in Groovy assertions are <em>enabled by default</em>. It has been a language design
+decision to remove the possibility to deactivate assertions. Or, as Bertrand Meyer stated, <code>it makes no sense to take
+off your swim ring if you put your feet into real water</code>.</p>
+</div>
+<div class="paragraph">
+<p>One thing to be aware of are methods with side-effects inside Boolean expressions in power assertion statements. As
+the internal error message construction mechanism does only store references to instances under target,
+ it happens that the error message text is invalid at rendering time in case of side-effecting methods involved:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">assert [[1,2,3,3,3,3,4]].first().unique() == [1,2,3]
+
+// Output:
+//
+// Assertion failed:
+// assert [[1,2,3,3,3,3,4]].first().unique() == [1,2,3]
+//                          |       |        |
+//                          |       |        false
+//                          |       [1, 2, 3, 4]
+//                          [1, 2, 3, 4]           <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The error message shows the actual state of the collection, not the state before the <code>unique</code> method was applied</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+If you choose to provide a custom assertion error message this can be done by using the Java syntax <code>assert
+expression1 : expression2</code> where <code>expression1</code> is the Boolean expression and <code>expression2</code> is the custom error message.
+ Be aware though that this will disable the power assert and will fully fallback to custom
+ error messages on assertion errors.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_mocking_and_stubbing"><a class="anchor" href="#_mocking_and_stubbing"></a>2.2. Mocking and Stubbing</h3>
+<div class="paragraph">
+<p>Groovy has excellent built-in support for a range of mocking and stubbing alternatives. When using Java, dynamic mocking
+frameworks are very popular. A key reason for this is that it is hard work creating custom hand-crafted mocks using Java.
+Such frameworks can be used easily with Groovy if you choose but creating custom mocks is much easier in Groovy. You
+can often get away with simple maps or closures to build your custom mocks.</p>
+</div>
+<div class="paragraph">
+<p>The following sections show ways to create mocks and stubs with Groovy language features only.</p>
+</div>
+<div class="sect3">
+<h4 id="_map_coercion"><a class="anchor" href="#_map_coercion"></a>2.2.1. Map Coercion</h4>
+<div class="paragraph">
+<p>By using maps or expandos, we can incorporate desired behaviour of a collaborator very easily as shown here:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class TranslationService {
+    String convert(String key) {
+        return "test"
+    }
+}
+
+def service = [convert: { String key -&gt; 'some text' }] as TranslationService
+assert 'some text' == service.convert('key.text')</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>as</code> operator can be used to coerce a map to a particular class. The given map keys are interpreted as
+method names and the values, being <code>groovy.lang.Closure</code> blocks, are interpreted as method code blocks.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Be aware that map coercion can get into the way if you deal with custom <code>java.util.Map</code> descendant classes in combination
+with the <code>as</code> operator. The map coercion mechanism is targeted directly at certain collection classes, it doesn&#8217;t take
+custom classes into account.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_closure_coercion"><a class="anchor" href="#_closure_coercion"></a>2.2.2. Closure Coercion</h4>
+<div class="paragraph">
+<p>The 'as' operator can be used with closures in a neat way which is great for developer testing in simple scenarios.
+We haven&#8217;t found this technique to be so powerful that we want to do away with dynamic mocking, but it can be very
+useful in simple cases none-the-less.</p>
+</div>
+<div class="paragraph">
+<p>Classes or interfaces holding a single method, including SAM (single abstract method) classes, can be used to coerce
+a closure block to be an object of the given type. Be aware that for doing this, Groovy internally create a proxy object
+descending for the given class. So the object will not be a direct instance of the given class. This important if, for
+example, the generated proxy object&#8217;s meta-class is altered afterwards.</p>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s have an example on coercing a closure to be of a specific type:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def service = { String key -&gt; 'some text' } as TranslationService
+assert 'some text' == service.convert('key.text')</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Groovy supports a feature called implicit SAM coercion. This means that the <code>as</code> operator is not necessary in situations
+where the runtime can infer the target SAM type. This type of coercion might be useful in tests to mock entire SAM
+classes:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">abstract class BaseService {
+    abstract void doSomething()
+}
+
+BaseService service = { -&gt; println 'doing something' }
+service.doSomething()</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_mockfor_and_stubfor"><a class="anchor" href="#_mockfor_and_stubfor"></a>2.2.3. MockFor and StubFor</h4>
+<div class="paragraph">
+<p>The Groovy mocking and stubbing classes can be found in the <code>groovy.mock.interceptor</code> package.</p>
+</div>
+<div class="paragraph">
+<p>The <code>MockFor</code> class supports (typically unit) testing of classes in isolation by allowing a <em>strictly ordered</em> expectation
+of the behavior of collaborators to be defined. A typical test scenario involves a class under test and one or more collaborators. In such a scenario it is
+often desirable to just test the business logic of the class under test. One strategy for doing that is to replace
+the collaborator instances with simplified mock objects to help isolate out the logic in the test target. MockFor
+allows such mocks to be created using meta-programming. The desired behavior of collaborators is defined as a behavior
+specification. The behavior is enforced and checked automatically.</p>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s assume our target classes looked like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Person {
+    String first, last
+}
+
+class Family {
+    Person father, mother
+    def nameOfMother() { "$mother.first $mother.last" }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>With <code>MockFor</code>, a mock expectation is always sequence dependent and its use automatically ends with a call to <code>verify</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def mock = new MockFor(Person)      <i class="conum" data-value="1"></i><b>(1)</b>
+mock.demand.getFirst{ 'dummy' }
+mock.demand.getLast{ 'name' }
+mock.use {                          <i class="conum" data-value="2"></i><b>(2)</b>
+    def mary = new Person(first:'Mary', last:'Smith')
+    def f = new Family(mother:mary)
+    assert f.nameOfMother() == 'dummy name'
+}
+mock.expect.verify()                <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>a new mock is created by a new instance of <code>MockFor</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>a <code>Closure</code> is passed to <code>use</code> which enables the mocking functionality</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>a call to <code>verify</code> checks whether the sequence and number of method calls is as expected</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The <code>StubFor</code> class supports (typically unit) testing of classes in isolation by allowing a <em>loosely-ordered</em> expectation
+of the behavior of collaborators to be defined. A typical test scenario involves a class under test and one or more
+collaborators. In such a scenario it is often desirable to just test the business logic of the CUT. One strategy for
+doing that is to replace the collaborator instances with simplified stub objects to help isolate out the logic
+in the target class. <code>StubFor</code> allows such stubs to be created using meta-programming. The desired behavior of
+collaborators is defined as a behavior specification.</p>
+</div>
+<div class="paragraph">
+<p>In contrast to <code>MockFor</code> the stub expectation checked with <code>verify</code> is sequence independent and its use is optional:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def stub = new StubFor(Person)      <i class="conum" data-value="1"></i><b>(1)</b>
+stub.demand.with {                  <i class="conum" data-value="2"></i><b>(2)</b>
+    getLast{ 'name' }
+    getFirst{ 'dummy' }
+}
+stub.use {                          <i class="conum" data-value="3"></i><b>(3)</b>
+    def john = new Person(first:'John', last:'Smith')
+    def f = new Family(father:john)
+    assert f.father.first == 'dummy'
+    assert f.father.last == 'name'
+}
+stub.expect.verify()                <i class="conum" data-value="4"></i><b>(4)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>a new stub is created by a new instance of <code>StubFor</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>the <code>with</code> method is used for delegating all calls inside the closure to the <code>StubFor</code> instance</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>a <code>Closure</code> is passed to <code>use</code> which enables the stubbing functionality</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>a call to <code>verify</code> (optional) checks whether the number of method calls is as expected</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p><code>MockFor</code> and <code>StubFor</code> can not be used to test statically compiled classes e.g for Java classes or Groovy classes that
+make use of <code>@CompileStatic</code>. To stub and/or mock these classes you can use Spock or one of the Java mocking libraries.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="testing_guide_emc"><a class="anchor" href="#testing_guide_emc"></a>2.2.4. Expando Meta-Class (EMC)</h4>
+<div class="paragraph">
+<p>Groovy includes a special <code>MetaClass</code> the so-called <code>ExpandoMetaClass</code> (EMC). It allows to dynamically add methods,
+constructors, properties and static methods using a neat closure syntax.</p>
+</div>
+<div class="paragraph">
+<p>Every <code>java.lang.Class</code> is supplied with a special <code>metaClass</code> property that will give a reference to an
+<code>ExpandoMetaClass</code> instance. The expando meta-class is not restricted to custom classes, it can be used for
+JDK classes like for example <code>java.lang.String</code> as well:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">String.metaClass.swapCase = {-&gt;
+    def sb = new StringBuffer()
+    delegate.each {
+        sb &lt;&lt; (Character.isUpperCase(it as char) ? Character.toLowerCase(it as char) :
+            Character.toUpperCase(it as char))
+    }
+    sb.toString()
+}
+
+def s = "heLLo, worLD!"
+assert s.swapCase() == 'HEllO, WORld!'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>ExpandoMetaClass</code> is a rather good candidate for mocking functionality as it allows for more advanced stuff
+like mocking static methods</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Book {
+    String title
+}
+
+Book.metaClass.static.create &lt;&lt; { String title -&gt; new Book(title:title) }
+
+def b = Book.create("The Stand")
+assert b.title == 'The Stand'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>or even constructors</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Book.metaClass.constructor &lt;&lt; { String title -&gt; new Book(title:title) }
+
+def b = new Book("The Stand")
+assert b.title == 'The Stand'</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Mocking constructors might seem like a hack that&#8217;s better not even to be considered but even there might be valid
+use cases. An example can be found in Grails where domain class constructors are added at run-time with the
+help of <code>ExpandoMetaClass</code>. This lets the domain object register itself in the Spring application context and allows
+for injection of services or other beans controlled by the dependency-injection container.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>If you want to change the <code>metaClass</code> property on a per test method level you need to remove the changes that were
+done to the meta-class, otherwise those changes would be persistent across test method calls. Changes are removed by
+replacing the meta-class in the <code>GroovyMetaClassRegistry</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">GroovySystem.metaClassRegistry.setMetaClass(java.lang.String, null)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Another alternative is to register a <code>MetaClassRegistryChangeEventListener</code>, track the changed classes and remove
+the changes in the cleanup method of your chosen testing runtime. A good example can be found
+<a href="https://github.com/grails/grails-core/blob/master/grails-bootstrap/src/main/groovy/grails/build/support/MetaClassRegistryCleaner.java">in the Grails web
+development framework</a>.</p>
+</div>
+<div class="paragraph">
+<p>Besides using the <code>ExpandoMetaClass</code> on a class-level, there is also support for using the meta-class on a per-object
+level:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def b = new Book(title: "The Stand")
+b.metaClass.getTitle {-&gt; 'My Title' }
+
+assert b.title == 'My Title'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In this case the meta-class change is related to the instance only. Depending on the test scenario this might be a better
+fit than the global meta-class change.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_gdk_methods"><a class="anchor" href="#_gdk_methods"></a>2.3. GDK Methods</h3>
+<div class="paragraph">
+<p>The following section gives a brief overview on GDK methods that can be leveraged in test case scenarios, for example for
+test data generation.</p>
+</div>
+<div class="sect3">
+<h4 id="_iterable_combinations"><a class="anchor" href="#_iterable_combinations"></a>2.3.1. Iterable#combinations</h4>
+<div class="paragraph">
+<p>The <code>combinations</code> method that is added on <code>java.lang.Iterable</code> compliant classes can be used to get a list of
+combinations from a list containing two or more sub-lists:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">void testCombinations() {
+    def combinations = [[2, 3],[4, 5, 6]].combinations()
+    assert combinations == [[2, 4], [3, 4], [2, 5], [3, 5], [2, 6], [3, 6]]
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The method could be used in test case scenarios to generate all possible argument combinations for a specific method
+call.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_iterable_eachcombination"><a class="anchor" href="#_iterable_eachcombination"></a>2.3.2. Iterable#eachCombination</h4>
+<div class="paragraph">
+<p>The <code>eachCombination</code> method that is added on <code>java.lang.Iterable</code> can be used to apply a function (or in this
+ case a <code>groovy.lang.Closure</code>) to each if the combinations that has been built by the <code>combinations</code> method:</p>
+</div>
+<div class="paragraph">
+<p><code>eachCombination</code> is a GDK method that is added to all classes conforming to the <code>java.lang.Iterable</code> interface.
+It applies a function on each combination of the input lists:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">void testEachCombination() {
+    [[2, 3],[4, 5, 6]].eachCombination { println it[0] + it[1] }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The method could be used in the testing context to call methods with each of the generated combinations.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_tool_support"><a class="anchor" href="#_tool_support"></a>2.4. Tool Support</h3>
+<div class="sect3">
+<h4 id="_test_code_coverage"><a class="anchor" href="#_test_code_coverage"></a>2.4.1. Test Code Coverage</h4>
+<div class="paragraph">
+<p>Code coverage is a useful measure of the effectiveness of (unit) tests. A program with high code coverage has a
+lower chance to hold critical bugs than a program with no or low coverage. To get code coverage metrics,
+the generated byte-code usually needs to be instrumented before the tests are executed. One tool with Groovy support
+ for this task is <a href="http://cobertura.github.io/cobertura/">Cobertura</a>.</p>
+</div>
+<div class="paragraph">
+<p>Various frameworks and build tools come with Cobertura integration. For Grails, there is the <a href="http://grails.org/plugin/code-coverage">code coverage plugin</a> based
+on Cobertura, for Gradle there is the <a href="https://github.com/eriwen/gradle-cobertura-plugin">gradle-cobertura plugin</a>, to name only two of them.</p>
+</div>
+<div class="paragraph">
+<p>The following code listing shows an example on how to enable Cobertura test coverage reports in a Gradle build script from
+a Groovy project:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def pluginVersion = '&lt;plugin version&gt;'
+def groovyVersion = '&lt;groovy version&gt;'
+def junitVersion = '&lt;junit version&gt;'
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.eriwen:gradle-cobertura-plugin:${pluginVersion}'
+    }
+}
+
+apply plugin: 'groovy'
+apply plugin: 'cobertura'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile "org.codehaus.groovy:groovy-all:${groovyVersion}"
+    testCompile "junit:junit:${junitVersion}"
+}
+
+cobertura {
+    format = 'html'
+    includes = ['**/*.java', '**/*.groovy']
+    excludes = ['com/thirdparty/**/*.*']
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Several output formats can be chosen for Cobertura coverage reports and test code coverage reports can be added to
+continuous integration build tasks.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_testing_with_junit"><a class="anchor" href="#_testing_with_junit"></a>3. Testing with JUnit</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Groovy simplifies JUnit testing in the following ways:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>You use the same overall practices as you would when testing with Java but you
+can adopt much of Groovy&#8217;s concise syntax in your tests making them succinct. You can even use
+the capabilities for writing testing domain specific languages (DSLs) if you feel so inclined.</p>
+</li>
+<li>
+<p>There are numerous helper classes that simplify many testing activities. The details differ
+in some cases depending on the version of JUnit you are using. We&#8217;ll cover those details shortly.</p>
+</li>
+<li>
+<p>Groovy&#8217;s PowerAssert mechanism is wonderful to use in your tests</p>
+</li>
+<li>
+<p>Groovy deems that tests are so important you should be able to run them as easily as scripts or classes.
+This is why Groovy includes an automatic test runner when using the <code>groovy</code> command or the GroovyConsole.
+This gives you some additional options over and above running your tests</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>In the following sections we will have a closer look at JUnit 3, 4 and 5 Groovy integration.</p>
+</div>
+<div class="sect2">
+<h3 id="_junit_3"><a class="anchor" href="#_junit_3"></a>3.1. JUnit 3</h3>
+<div class="paragraph">
+<p>Maybe one of the most prominent Groovy classes supporting JUnit 3 tests is the <code>GroovyTestCase</code> class. Being
+derived from <code>junit.framework.TestCase</code> it offers a bunch of additional methods that make testing in Groovy a breeze.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Although <code>GroovyTestCase</code> inherits from <code>TestCase</code> doesn&#8217;t mean you can&#8217;t use JUnit 4 features in your project. In fact,
+the most recent Groovy versions come with a bundled JUnit 4 and that comes with a backwards compatible <code>TestCase</code>
+implementation. There have been some discussion on the Groovy mailing-list on whether to use <code>GroovyTestCase</code> or JUnit 4
+with the result that it is mostly a matter of taste, but with <code>GroovyTestCase</code> you get a bunch of methods for free that
+make certain types of tests easier to write.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>In this section, we will have a look at some of the methods provided by <code>GroovyTestCase</code>. A full list of these can be
+found in the JavaDoc documentation for <a href="http://docs.groovy-lang.org/3.0.0-alpha-3/html/gapi/index.html?groovy/util/GroovyTestCase.html">groovy.util.GroovyTestCase</a> ,
+don&#8217;t forget it is inherited from <code>junit.framework.TestCase</code> which inherits all the <code>assert*</code> methods.</p>
+</div>
+<div class="sect3">
+<h4 id="_assertion_methods"><a class="anchor" href="#_assertion_methods"></a>3.1.1. Assertion Methods</h4>
+<div class="paragraph">
+<p><code>GroovyTestCase</code> is inherited from <code>junit.framework.TestCase</code> therefore it inherits a large number of assertion methods
+being available to be called in every test method:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class MyTestCase extends GroovyTestCase {
+
+    void testAssertions() {
+        assertTrue(1 == 1)
+        assertEquals("test", "test")
+
+        def x = "42"
+        assertNotNull "x must not be null", x
+        assertNull null
+
+        assertSame x, x
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As can be seen above, in contrast to Java it is possible to leave out the parenthesis in most situations which
+leads to even more readability of JUnit assertion method call expressions.</p>
+</div>
+<div class="paragraph">
+<p>An interesting assertion method that is added by <code>GroovyTestCase</code> is <code>assertScript</code>. It ensures that the given Groovy
+code string succeeds without any exception:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">void testScriptAssertions() {
+    assertScript '''
+        def x = 1
+        def y = 2
+
+        assert x + y == 3
+    '''
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_shouldfail_methods"><a class="anchor" href="#_shouldfail_methods"></a>3.1.2. shouldFail Methods</h4>
+<div class="paragraph">
+<p><code>shouldFail</code> can be used to check whether the given code block fails or not. In case it fails, the assertion does hold,
+otherwise the assertion fails:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">void testInvalidIndexAccess1() {
+    def numbers = [1,2,3,4]
+    shouldFail {
+        numbers.get(4)
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The example above uses the basic <code>shouldFail</code> method interface that takes a <code>groovy.lang.Closure</code> as a single argument.
+ The <code>Closure</code> instance holds the code that is supposed to be breaking during run-time.</p>
+</div>
+<div class="paragraph">
+<p>If we wanted to assert <code>shouldFail</code> on a specific <code>java.lang.Exception</code> type we could have done so by using the <code>shouldFail</code>
+implementation that takes the <code>Exception</code> class as first argument and the <code>Closure</code> as second argument:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">void testInvalidIndexAccess2() {
+    def numbers = [1,2,3,4]
+    shouldFail IndexOutOfBoundsException, {
+        numbers.get(4)
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If anything other than <code>IndexOutOfBoundsException</code> (or a descendant class of it) is thrown, the test case will fail.</p>
+</div>
+<div class="paragraph">
+<p>A pretty nice feature of <code>shouldFail</code> hasn&#8217;t been visible so far: it returns the exception message. This is really
+useful if you want to assert on the exception error message:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">void testInvalidIndexAccess3() {
+    def numbers = [1,2,3,4]
+    def msg = shouldFail IndexOutOfBoundsException, {
+        numbers.get(4)
+    }
+    assert msg.contains('Index: 4, Size: 4') || msg.contains('Index 4 out-of-bounds for length 4')
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_notyetimplemented_method"><a class="anchor" href="#_notyetimplemented_method"></a>3.1.3. notYetImplemented Method</h4>
+<div class="paragraph">
+<p>The <code>notYetImplemented</code> method has been greatly influenced by HtmlUnit. It allows to write a test method but mark it
+as not yet implemented. As long as the test method fails and is marked with <code>notYetImplemented</code> the test goes green:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">void testNotYetImplemented1() {
+    if (notYetImplemented()) return   <i class="conum" data-value="1"></i><b>(1)</b>
+
+    assert 1 == 2                     <i class="conum" data-value="2"></i><b>(2)</b>
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>a call to <code>notYetImplemented</code> is necessary for <code>GroovyTestCase</code> to get the current method stack.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>as long as the test evaluates to <code>false</code> the test execution will be successful.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>An alternative to the <code>notYetImplemented</code> method is the <code>@NotYetImplemented</code> annotation. It allows for annotating a
+method as not yet implemented, with the exact same behavior as <code>GroovyTestCase#notYetImplemented</code> but without the need
+for the <code>notYetImplemented</code> method call:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@NotYetImplemented
+void testNotYetImplemented2() {
+    assert 1 == 2
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_junit_4"><a class="anchor" href="#_junit_4"></a>3.2. JUnit 4</h3>
+<div class="paragraph">
+<p>Groovy can be used to write JUnit 4 test cases without any restrictions. The <code>groovy.test.GroovyAssert</code> holds
+various static methods that can be used as replacement for the <code>GroovyTestCase</code> methods in JUnit 4 tests:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import org.junit.Test
+
+import static groovy.test.GroovyAssert.shouldFail
+
+class JUnit4ExampleTests {
+
+    @Test
+    void indexOutOfBoundsAccess() {
+        def numbers = [1,2,3,4]
+        shouldFail {
+            numbers.get(4)
+        }
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As can be seen in the example above, the static methods found in <code>GroovyAssert</code> are imported at the beginning of the
+ class definition thus <code>shouldFail</code> can be used the same way it can be used in a <code>GroovyTestCase</code>.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<code>groovy.test.GroovyAssert</code> descends from <code>org.junit.Assert</code> that means it inherits all JUnit assertion methods. However,
+with the introduction of the power assertion statement, it turned out to be <em>good practice to rely on assertion statements</em>
+instead of using the JUnit assertion methods with the improved message being the main reason.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>It is worth mentioning that <code>GroovyAssert.shouldFail</code> is not absolutely identical to <code>GroovyTestCase.shouldFail</code>. While
+<code>GroovyTestCase.shouldFail</code> returns the exception message, <code>GroovyAssert.shouldFail</code> returns the exception itself. It
+takes a few more keystrokes to get the message, but in return you can access other properties and methods of the
+exception:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@Test
+void shouldFailReturn() {
+    def e = shouldFail {
+        throw new RuntimeException('foo',
+                                   new RuntimeException('bar'))
+    }
+    assert e instanceof RuntimeException
+    assert e.message == 'foo'
+    assert e.cause.message == 'bar'
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_junit_5"><a class="anchor" href="#_junit_5"></a>3.3. JUnit 5</h3>
+<div class="paragraph">
+<p>Much of the approach and helper classes described under JUnit4 apply when using JUnit5 however JUnit5
+uses some slightly different class annotations when writing your tests. See the <a href="http://junit.org">JUnit5</a> documentation
+for more details.</p>
+</div>
+<div class="paragraph">
+<p>Create your test classes as per normal JUnit5 guidelines as shown in this example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class MyTest {
+  @Test
+  void streamSum() {
+    assertTrue(Stream.of(1, 2, 3)
+      .mapToInt(i -&gt; i)
+      .sum() &gt; 5, () -&gt; "Sum should be greater than 5")
+  }
+
+  @RepeatedTest(value=2, name = "{displayName} {currentRepetition}/{totalRepetitions}")
+  void streamSumRepeated() {
+    assert Stream.of(1, 2, 3).mapToInt(i -&gt; i).sum() == 6
+  }
+
+  private boolean isPalindrome(s) { s == s.reverse()  }
+
+  @ParameterizedTest                                                              <i class="conum" data-value="1"></i><b>(1)</b>
+  @ValueSource(strings = [ "racecar", "radar", "able was I ere I saw elba" ])
+  void palindromes(String candidate) {
+    assert isPalindrome(candidate)
+  }
+
+  @TestFactory
+  def dynamicTestCollection() {[
+    dynamicTest("Add test") { -&gt; assert 1 + 1 == 2 },
+    dynamicTest("Multiply Test", () -&gt; { assert 2 * 3 == 6 })
+  ]}
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>This test requires the additional <code>org.junit.jupiter:junit-jupiter-params</code> dependency if not already in your project.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>You can run the tests in your IDE or build tool if it supports and is configured for JUnit5.
+If you run the above test in the GroovyConsole or via the <code>groovy</code> command, you will see a short text summary of the
+result of running the test:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>JUnit5 launcher: passed=8, failed=0, skipped=0, time=246ms</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>More detailed information is available at the <code>FINE</code> logging level. You can configure your logging to display such
+information or do it programmatically as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@BeforeAll
+static void init() {
+  def logger = Logger.getLogger(LoggingListener.name)
+  logger.level = Level.FINE
+  logger.addHandler(new ConsoleHandler(level: Level.FINE))
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_testing_with_spock"><a class="anchor" href="#_testing_with_spock"></a>4. Testing with Spock</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Spock is a testing and specification framework for Java and Groovy applications. What makes it stand out from the
+crowd is its beautiful and highly expressive specification DSL. In practice, Spock specifications are written as
+Groovy classes. Although written in Groovy they can be used to test Java classes. Spock can be used for unit,
+integration or BDD (behavior-driven-development) testing, it doesn&#8217;t put itself into a specific category of testing
+frameworks or libraries.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Beside these awesome features Spock is a good example on how to leverage advanced Groovy programming
+language features in third party libraries, for example, by using Groovy AST transformations.
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+This section should not serve as detailed guide on how to use Spock, it should rather give an impression what Spock
+is about and how it can be leveraged for unit, integration, functional or any other type of testing.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The next section we will have an first look at the anatomy of a Spock specification. It should give a
+pretty good feeling on what Spock is up to.</p>
+</div>
+<div class="sect2">
+<h3 id="_specifications"><a class="anchor" href="#_specifications"></a>4.1. Specifications</h3>
+<div class="paragraph">
+<p>Spock lets you write specifications that describe features (properties, aspects) exhibited by a system of
+interest. The "system" can be anything between a single class and an entire application, a more advanced term for it is
+<em>system under specification</em>. The <em>feature description</em> starts from a specific snapshot of the system and its
+collaborators, this snapshot is called the <em>feature&#8217;s fixture</em>.</p>
+</div>
+<div class="paragraph">
+<p>Spock specification classes are derived from <code>spock.lang.Specification</code>. A concrete specification class might consist
+of fields, fixture methods, features methods and helper methods.</p>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s have a look at a simple specification with a single feature method for an imaginary <code>Stack</code> class:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class StackSpec extends Specification {
+
+    def "adding an element leads to size increase"() {  <i class="conum" data-value="1"></i><b>(1)</b>
+        setup: "a new stack instance is created"        <i class="conum" data-value="2"></i><b>(2)</b>
+            def stack = new Stack()
+
+        when:                                           <i class="conum" data-value="3"></i><b>(3)</b>
+            stack.push 42
+
+        then:                                           <i class="conum" data-value="4"></i><b>(4)</b>
+            stack.size() == 1
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Feature method, is by convention named with a String literal.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Setup block, here is where any setup work for this feature needs to be done.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>When block describes a stimulus, a certain action under target by this feature specification.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Then block any expressions that can be used to validate the result of the code that was triggered by the when block.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Spock feature specifications are defined as methods inside a <code>spock.lang.Specification</code> class. They describe the feature
+by using a String literal instead of a method name.</p>
+</div>
+<div class="paragraph">
+<p>A feature method holds multiple blocks, in our example we used <code>setup</code>, <code>when</code> and <code>then</code>. The <code>setup</code> block is special
+in that it is optional and allows to configure local variables visible inside the feature method. The <code>when</code> block
+defines the stimulus and is a companion of the <code>then</code> block which describes the response to the stimulus.</p>
+</div>
+<div class="paragraph">
+<p>Note that the <code>setup</code> method in the <code>StackSpec</code> above additionally
+  has a description String. Description Strings are optional and can be added after block labels (like <code>setup</code>, <code>when</code>,
+  <code>then</code>).</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_more_spock"><a class="anchor" href="#_more_spock"></a>4.2. More Spock</h3>
+<div class="paragraph">
+<p>Spock provides much more features like data tables or advanced mocking capabilities. Feel free to consult the
+<a href="https://github.com/spockframework/spock">Spock GitHub page</a> for more documentation and download information.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_functional_tests_with_geb"><a class="anchor" href="#_functional_tests_with_geb"></a>5. Functional Tests with Geb</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Geb is a functional web testing and scraper library that integrates with JUnit and Spock. It is based upon the
+Selenium web drivers and, like Spock, provides a Groovy DSL to write functional tests for web applications.</p>
+</div>
+<div class="paragraph">
+<p>Geb has great features that make it a good fit for a functional testing library:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>DOM access via a JQuery-like <code>$</code> function</p>
+</li>
+<li>
+<p>implements the <em>page pattern</em></p>
+</li>
+<li>
+<p>support for modularization of certain web components (e.g. menu-bars, etc.) with <em>modules</em></p>
+</li>
+<li>
+<p>integration with JavaScript via the JS variable</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+This section should not serve as detailed guide on how to use Geb, it should rather give an impression what Geb
+is about and how it can be leveraged functional testing.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The next section will give an example on how Geb can be used to write a functional test for a simple
+ web page with a single search field.</p>
+</div>
+<div class="sect2">
+<h3 id="_a_geb_script"><a class="anchor" href="#_a_geb_script"></a>5.1. A Geb Script</h3>
+<div class="paragraph">
+<p>Although Geb can be used standalone in a Groovy script, in many scenarios it&#8217;s used in combination with other testing
+frameworks. Geb comes with various base classes that can be used in JUnit 3, 4, TestNG or Spock tests. The base classes
+are part of additional Geb modules that need to be added as a dependency.</p>
+</div>
+<div class="paragraph">
+<p>For example, the following <code>@Grab</code> dependencies have to be used to run Geb with the Selenium Firefox driver in
+JUnit4 tests. The module that is needed for JUnit 3/4 support is <code>geb-junit</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@Grapes([
+    @Grab("org.gebish:geb-core:0.9.2"),
+    @Grab("org.gebish:geb-junit:0.9.2"),
+    @Grab("org.seleniumhq.selenium:selenium-firefox-driver:2.26.0"),
+    @Grab("org.seleniumhq.selenium:selenium-support:2.26.0")
+])</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The central class in Geb is the <code>geb.Browser</code> class. As its name implies it is used
+ to browse pages and access DOM elements:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def browser = new Browser(driver: new FirefoxDriver(), baseUrl: 'http://myhost:8080/myapp')  <i class="conum" data-value="1"></i><b>(1)</b>
+browser.drive {
+    go "/login"                        <i class="conum" data-value="2"></i><b>(2)</b>
+
+    $("#username").text = 'John'       <i class="conum" data-value="3"></i><b>(3)</b>
+    $("#password").text = 'Doe'
+
+    $("#loginButton").click()
+
+    assert title == "My Application - Dashboard"
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>A new <code>Browser</code> instance is created. In this case it uses the Selenium <code>FirefoxDriver</code> and sets the <code>baseUrl</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td><code>go</code> is used to navigate to an URL or relative URI</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td><code>$</code> together with CSS selectors is used to access the <code>username</code> and <code>password</code> DOM fields.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The <code>Browser</code> class comes with a <code>drive</code> method that delegates all method/property calls to the current
+<code>browser</code> instance. The <code>Browser</code> configuration must not be done inline, it can also be externalized in a
+<code>GebConfig.groovy</code> configuration file for example. In practice, the usage of the <code>Browser</code> class is mostly hidden
+by Geb test base classes. They delegate all missing properties and method calls to the current <code>browser</code> instance
+that exists in the background:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class SearchTests extends geb.junit4.GebTest {
+
+    @Test
+    void executeSeach() {
+        go 'http://somehost/mayapp/search'              <i class="conum" data-value="1"></i><b>(1)</b>
+        $('#searchField').text = 'John Doe'             <i class="conum" data-value="2"></i><b>(2)</b>
+        $('#searchButton').click()                      <i class="conum" data-value="3"></i><b>(3)</b>
+
+        assert $('.searchResult a').first().text() == 'Mr. John Doe' <i class="conum" data-value="4"></i><b>(4)</b>
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>Browser#go</code> takes a relative or absolute link and calls the page.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td><code>Browser#$</code> is used to access DOM content. Any CSS selectors supported by the underlying Selenium drivers are allowed</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td><code>click</code> is used to click a button.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td><code>$</code> is used to get the first link out of the <code>searchResult</code> block</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The example above shows a simple Geb web test with the JUnit 4 base class <code>geb.junit4.GebTest</code>. Note that in this case
+the <code>Browser</code> configuration is externalized. <code>GebTest</code> delegates methods like <code>go</code> and <code>$</code> to the underlying <code>browser</code>
+ instance.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_more_geb"><a class="anchor" href="#_more_geb"></a>5.2. More Geb</h3>
+<div class="paragraph">
+<p>In the previous section we only scratched the surface of the available Geb features. More information on Geb can be found
+at the <a href="http://gebish.org">project homepage</a>.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 3.0.0-alpha-3<br>
+Last updated 2018-06-23 13:44:45 AEST
+</div>
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+<script>prettyPrint()</script>
+</body>
+</html>

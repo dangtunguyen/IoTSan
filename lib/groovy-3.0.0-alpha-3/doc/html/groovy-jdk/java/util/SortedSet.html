@@ -1,0 +1,1476 @@
+<!--
+
+     Licensed to the Apache Software Foundation (ASF) under one
+     or more contributor license agreements.  See the NOTICE file
+     distributed with this work for additional information
+     regarding copyright ownership.  The ASF licenses this file
+     to you under the Apache License, Version 2.0 (the
+     "License"); you may not use this file except in compliance
+     with the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing,
+     software distributed under the License is distributed on an
+     "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+     specific language governing permissions and limitations
+     under the License.
+
+-->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>SortedSet (Groovy JDK enhancements)</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../stylesheet.css" title="Style">
+    <script type="text/javascript">
+        function windowTitle() {
+            parent.document.title = document.title;
+        }
+    </script>
+</head>
+
+<body class="center" onload="windowTitle();">
+
+    <!-- ========== START OF NAVBAR ========== -->
+    <a name="navbar_top"><!-- --></a>
+
+    <div class="topNav">
+        <ul class="navList" title="Navigation">
+            <li><a href="../../overview-summary.html">Overview</a></li>
+            <li><a href="package-summary.html">Package</a></li>
+            <li class="navBarCell1Rev">Class</li>
+            <li><a href="../../index-all.html">Index</a></li>
+        </ul>
+    </div>
+
+    <!-- =========== END OF NAVBAR =========== -->
+
+    <!-- ======== START OF class DATA ======== -->
+
+    <div class="header">
+        <div class="subTitle">Package: <strong>java.util</strong></div>
+        <h2>Interface SortedSet</h2>
+    </div>
+
+    <div class="contentContainer">
+
+    <!-- ========== METHOD SUMMARY =========== -->
+
+        <a name="method_summary"><!-- --></a>
+
+        <div class="summary">
+            <ul class="blockList">
+                <li class="blockList">
+                    <ul class="blockList">
+                        <li class="blockList">
+                            <h3>Methods Summary</h3>
+                            <table border="0" cellpadding="3" cellspacing="0" class="overviewSummary">
+                               <caption><span>Methods</span><span class="tabEnd">&nbsp;</span></caption>
+                                <tbody>
+                                    <tr>
+                                        <th>Return type</th>
+                                        <th>Name and parameters</th>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html" title="Class in java.util">SortedSet</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#asImmutable()">asImmutable</a></strong>()</code>
+                                            <br>
+                                            A convenience method for creating an immutable SortedSet.
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="rawColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html" title="Class in java.util">SortedSet</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#asSynchronized()">asSynchronized</a></strong>()</code>
+                                            <br>
+                                            A convenience method for creating a synchronized SortedSet.
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html" title="Class in java.util">SortedSet</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#asUnmodifiable()">asUnmodifiable</a></strong>()</code>
+                                            <br>
+                                            Creates an unmodifiable view of a SortedSet.
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="rawColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html" title="Class in java.util">SortedSet</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#drop(int)">drop</a></strong>(int num)</code>
+                                            <br>
+                                            Drops the given number of elements from the head of this List.
+
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html" title="Class in java.util">SortedSet</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#dropRight(int)">dropRight</a></strong>(int num)</code>
+                                            <br>
+                                            Drops the given number of elements from the tail of this SortedSet.
+
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="rawColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html" title="Class in java.util">SortedSet</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#dropWhile(groovy.lang.Closure)">dropWhile</a></strong>(<a href="http://docs.groovy-lang.org/latest/html/gapi/groovy/lang/Closure.html" title="Class in groovy.lang">Closure</a> condition)</code>
+                                            <br>
+                                            Returns a suffix of this SortedSet where elements are dropped from the front
+while the given Closure evaluates to true.
+
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html" title="Class in java.util">SortedSet</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#each(groovy.lang.Closure)">each</a></strong>(<a href="http://docs.groovy-lang.org/latest/html/gapi/groovy/lang/Closure.html" title="Class in groovy.lang">Closure</a> closure)</code>
+                                            <br>
+                                            Iterates through a SortedSet, passing each item to the given closure.
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="rawColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html" title="Class in java.util">SortedSet</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#eachWithIndex(groovy.lang.Closure)">eachWithIndex</a></strong>(<a href="http://docs.groovy-lang.org/latest/html/gapi/groovy/lang/Closure.html" title="Class in groovy.lang">Closure</a> closure)</code>
+                                            <br>
+                                            Iterates through a SortedSet,
+passing each item and the item's index (a counter starting at
+zero) to the given closure.
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html" title="Class in java.util">SortedSet</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#flatten()">flatten</a></strong>()</code>
+                                            <br>
+                                            Flatten a SortedSet.  
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="rawColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html" title="Class in java.util">SortedSet</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#init()">init</a></strong>()</code>
+                                            <br>
+                                            Returns the items from the SortedSet excluding the last item. 
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html" title="Class in java.util">SortedSet</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#intersect(java.lang.Iterable)">intersect</a></strong>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html" title="Class in java.lang">Iterable</a> right)</code>
+                                            <br>
+                                            Create a SortedSet composed of the intersection of a SortedSet and an Iterable.  
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="rawColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html" title="Class in java.util">SortedSet</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#intersect(java.lang.Iterable, java.util.Comparator)">intersect</a></strong>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html" title="Class in java.lang">Iterable</a> right, <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Comparator.html" title="Class in java.util">Comparator</a> comparator)</code>
+                                            <br>
+                                            Create a SortedSet composed of the intersection of a SortedSet and an Iterable.  
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html" title="Class in java.util">SortedSet</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#leftShift(java.lang.Object)">leftShift</a></strong>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="Class in java.lang">Object</a> value)</code>
+                                            <br>
+                                            Overloads the left shift operator to provide an easy way to append
+objects to a SortedSet.
+
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="rawColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html" title="Class in java.util">SortedSet</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#minus(java.lang.Iterable)">minus</a></strong>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html" title="Class in java.lang">Iterable</a> removeMe)</code>
+                                            <br>
+                                            Create a SortedSet composed of the elements of the first SortedSet minus the
+elements of the given Iterable.
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html" title="Class in java.util">SortedSet</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#minus(java.lang.Object)">minus</a></strong>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="Class in java.lang">Object</a> removeMe)</code>
+                                            <br>
+                                            Create a SortedSet composed of the elements of the first SortedSet minus the given element.
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="rawColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html" title="Class in java.util">SortedSet</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#minus(java.util.Collection)">minus</a></strong>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="Class in java.util">Collection</a> removeMe)</code>
+                                            <br>
+                                            Create a SortedSet composed of the elements of the first SortedSet minus the
+elements of the given Collection.
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html" title="Class in java.util">SortedSet</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#plus(java.lang.Iterable)">plus</a></strong>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html" title="Class in java.lang">Iterable</a> right)</code>
+                                            <br>
+                                            Create a SortedSet as a union of a SortedSet and an Iterable.
+
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="rawColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html" title="Class in java.util">SortedSet</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#plus(java.lang.Object)">plus</a></strong>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="Class in java.lang">Object</a> right)</code>
+                                            <br>
+                                            Create a SortedSet as a union of a SortedSet and an Object.
+
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html" title="Class in java.util">SortedSet</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#plus(java.util.Collection)">plus</a></strong>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="Class in java.util">Collection</a> right)</code>
+                                            <br>
+                                            Create a SortedSet as a union of a SortedSet and a Collection.
+
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="rawColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html" title="Class in java.util">SortedSet</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#sort()">sort</a></strong>()</code>
+                                            <br>
+                                            Avoids doing unnecessary work when sorting an already sorted set (i.e. an identity function for an already sorted set).
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html" title="Class in java.util">SortedSet</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#tail()">tail</a></strong>()</code>
+                                            <br>
+                                            Returns the items from the SortedSet excluding the first item.
+
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="rawColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html" title="Class in java.util">SortedSet</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#take(int)">take</a></strong>(int num)</code>
+                                            <br>
+                                            Returns the first <code>num</code> elements from the head of this SortedSet.
+
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html" title="Class in java.util">SortedSet</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#takeRight(int)">takeRight</a></strong>(int num)</code>
+                                            <br>
+                                            Returns the last <code>num</code> elements from the tail of this SortedSet.
+
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="rawColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html" title="Class in java.util">SortedSet</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#takeWhile(groovy.lang.Closure)">takeWhile</a></strong>(<a href="http://docs.groovy-lang.org/latest/html/gapi/groovy/lang/Closure.html" title="Class in groovy.lang">Closure</a> condition)</code>
+                                            <br>
+                                            Returns the longest prefix of this SortedSet where each element
+passed to the given closure condition evaluates to true.
+
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="Class in java.util">Set</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#toSorted()">toSorted</a></strong>()</code>
+                                            <br>
+                                            Avoids doing unnecessary work when sorting an already sorted set
+                                        </td>
+                                    </tr>
+                                    
+                                </tbody>
+                            </table>
+                        </li>
+                        
+                        <ul class="blockList">
+                            <li class="blockList">
+                            <h4>Methods inherited from interface java.util.<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="Class in java.util">Set</a></h4>
+                                <p>
+                                    <code><strong><a href="../../java/util/Set.html#asImmutable()">asImmutable</a></strong></code>, <code><strong><a href="../../java/util/Set.html#asSynchronized()">asSynchronized</a></strong></code>, <code><strong><a href="../../java/util/Set.html#asUnmodifiable()">asUnmodifiable</a></strong></code>, <code><strong><a href="../../java/util/Set.html#each(groovy.lang.Closure)">each</a></strong></code>, <code><strong><a href="../../java/util/Set.html#eachWithIndex(groovy.lang.Closure)">eachWithIndex</a></strong></code>, <code><strong><a href="../../java/util/Set.html#equals(java.util.Set)">equals</a></strong></code>, <code><strong><a href="../../java/util/Set.html#findAll()">findAll</a></strong></code>, <code><strong><a href="../../java/util/Set.html#findAll(groovy.lang.Closure)">findAll</a></strong></code>, <code><strong><a href="../../java/util/Set.html#flatten()">flatten</a></strong></code>, <code><strong><a href="../../java/util/Set.html#grep()">grep</a></strong></code>, <code><strong><a href="../../java/util/Set.html#grep(java.lang.Object)">grep</a></strong></code>, <code><strong><a href="../../java/util/Set.html#intersect(java.lang.Iterable)">intersect</a></strong></code>, <code><strong><a href="../../java/util/Set.html#intersect(java.lang.Iterable, java.util.Comparator)">intersect</a></strong></code>, <code><strong><a href="../../java/util/Set.html#leftShift(java.lang.Object)">leftShift</a></strong></code>, <code><strong><a href="../../java/util/Set.html#minus(java.lang.Iterable)">minus</a></strong></code>, <code><strong><a href="../../java/util/Set.html#minus(java.lang.Object)">minus</a></strong></code>, <code><strong><a href="../../java/util/Set.html#minus(java.util.Collection)">minus</a></strong></code>, <code><strong><a href="../../java/util/Set.html#plus(java.lang.Iterable)">plus</a></strong></code>, <code><strong><a href="../../java/util/Set.html#plus(java.lang.Object)">plus</a></strong></code>, <code><strong><a href="../../java/util/Set.html#plus(java.util.Collection)">plus</a></strong></code>, <code><strong><a href="../../java/util/Set.html#split(groovy.lang.Closure)">split</a></strong></code>
+                                </p>
+                            </li>
+                        </ul>
+                        
+                        <ul class="blockList">
+                            <li class="blockList">
+                            <h4>Methods inherited from interface java.util.<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="Class in java.util">Collection</a></h4>
+                                <p>
+                                    <code><strong><a href="../../java/util/Collection.html#addAll(java.lang.Iterable)">addAll</a></strong></code>, <code><strong><a href="../../java/util/Collection.html#addAll(java.lang.Object[])">addAll</a></strong></code>, <code><strong><a href="../../java/util/Collection.html#addAll(java.util.Iterator)">addAll</a></strong></code>, <code><strong><a href="../../java/util/Collection.html#asBoolean()">asBoolean</a></strong></code>, <code><strong><a href="../../java/util/Collection.html#asImmutable()">asImmutable</a></strong></code>, <code><strong><a href="../../java/util/Collection.html#asSynchronized()">asSynchronized</a></strong></code>, <code><strong><a href="../../java/util/Collection.html#asType(java.lang.Class)">asType</a></strong></code>, <code><strong><a href="../../java/util/Collection.html#asUnmodifiable()">asUnmodifiable</a></strong></code>, <code><strong><a href="../../java/util/Collection.html#collectNested(groovy.lang.Closure)">collectNested</a></strong></code>, <code><strong><a href="../../java/util/Collection.html#each(groovy.lang.Closure)">each</a></strong></code>, <code><strong><a href="../../java/util/Collection.html#eachWithIndex(groovy.lang.Closure)">eachWithIndex</a></strong></code>, <code><strong><a href="../../java/util/Collection.html#find()">find</a></strong></code>, <code><strong><a href="../../java/util/Collection.html#find(groovy.lang.Closure)">find</a></strong></code>, <code><strong><a href="../../java/util/Collection.html#findAll()">findAll</a></strong></code>, <code><strong><a href="../../java/util/Collection.html#findAll(groovy.lang.Closure)">findAll</a></strong></code>, <code><strong><a href="../../java/util/Collection.html#flatten()">flatten</a></strong></code>, <code><strong><a href="../../java/util/Collection.html#getAt(java.lang.String)">getAt</a></strong></code>, <code><strong><a href="../../java/util/Collection.html#getIndices()">getIndices</a></strong></code>, <code><strong><a href="../../java/util/Collection.html#grep()">grep</a></strong></code>, <code><strong><a href="../../java/util/Collection.html#grep(java.lang.Object)">grep</a></strong></code>, <code><strong><a href="../../java/util/Collection.html#inject(groovy.lang.Closure)">inject</a></strong></code>, <code><strong><a href="../../java/util/Collection.html#inject(java.lang.Object, groovy.lang.Closure)">inject</a></strong></code>, <code><strong><a href="../../java/util/Collection.html#intersect(java.util.Collection)">intersect</a></strong></code>, <code><strong><a href="../../java/util/Collection.html#intersect(java.util.Collection, java.util.Comparator)">intersect</a></strong></code>, <code><strong><a href="../../java/util/Collection.html#isCase(java.lang.Object)">isCase</a></strong></code>, <code><strong><a href="../../java/util/Collection.html#leftShift(java.lang.Object)">leftShift</a></strong></code>, <code><strong><a href="../../java/util/Collection.html#minus(java.util.Collection)">minus</a></strong></code>, <code><strong><a href="../../java/util/Collection.html#plus(java.lang.Iterable)">plus</a></strong></code>, <code><strong><a href="../../java/util/Collection.html#plus(java.lang.Object)">plus</a></strong></code>, <code><strong><a href="../../java/util/Collection.html#plus(java.util.Collection)">plus</a></strong></code>, <code><strong><a href="../../java/util/Collection.html#removeAll(groovy.lang.Closure)">removeAll</a></strong></code>, <code><strong><a href="../../java/util/Collection.html#removeAll(java.lang.Object[])">removeAll</a></strong></code>, <code><strong><a href="../../java/util/Collection.html#removeElement(java.lang.Object)">removeElement</a></strong></code>, <code><strong><a href="../../java/util/Collection.html#retainAll(groovy.lang.Closure)">retainAll</a></strong></code>, <code><strong><a href="../../java/util/Collection.html#retainAll(java.lang.Object[])">retainAll</a></strong></code>, <code><strong><a href="../../java/util/Collection.html#split(groovy.lang.Closure)">split</a></strong></code>, <code><strong><a href="../../java/util/Collection.html#toListString()">toListString</a></strong></code>, <code><strong><a href="../../java/util/Collection.html#toListString(int)">toListString</a></strong></code>, <code><strong><a href="../../java/util/Collection.html#toSet()">toSet</a></strong></code>, <code><strong><a href="../../java/util/Collection.html#unique()">unique</a></strong></code>, <code><strong><a href="../../java/util/Collection.html#unique(boolean)">unique</a></strong></code>, <code><strong><a href="../../java/util/Collection.html#unique(boolean, groovy.lang.Closure)">unique</a></strong></code>, <code><strong><a href="../../java/util/Collection.html#unique(boolean, java.util.Comparator)">unique</a></strong></code>, <code><strong><a href="../../java/util/Collection.html#unique(groovy.lang.Closure)">unique</a></strong></code>, <code><strong><a href="../../java/util/Collection.html#unique(java.util.Comparator)">unique</a></strong></code>
+                                </p>
+                            </li>
+                        </ul>
+                        
+                        <ul class="blockList">
+                            <li class="blockList">
+                            <h4>Methods inherited from interface java.lang.<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html" title="Class in java.lang">Iterable</a></h4>
+                                <p>
+                                    <code><strong><a href="../../java/lang/Iterable.html#any(groovy.lang.Closure)">any</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#asCollection()">asCollection</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#asList()">asList</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#asType(java.lang.Class)">asType</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#bufferedIterator()">bufferedIterator</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#collate(int)">collate</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#collate(int, boolean)">collate</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#collate(int, int)">collate</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#collate(int, int, boolean)">collate</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#collect()">collect</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#collect(groovy.lang.Closure)">collect</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#collect(java.util.Collection, groovy.lang.Closure)">collect</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#collectEntries()">collectEntries</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#collectEntries(groovy.lang.Closure)">collectEntries</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#collectEntries(java.util.Map)">collectEntries</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#collectEntries(java.util.Map, groovy.lang.Closure)">collectEntries</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#collectMany(groovy.lang.Closure)">collectMany</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#collectMany(java.util.Collection, groovy.lang.Closure)">collectMany</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#collectNested(groovy.lang.Closure)">collectNested</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#collectNested(java.util.Collection, groovy.lang.Closure)">collectNested</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#combinations()">combinations</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#combinations(groovy.lang.Closure)">combinations</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#contains(java.lang.Object)">contains</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#containsAll(java.lang.Object[])">containsAll</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#count(groovy.lang.Closure)">count</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#count(java.lang.Object)">count</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#countBy(groovy.lang.Closure)">countBy</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#disjoint(java.lang.Iterable)">disjoint</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#drop(int)">drop</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#dropRight(int)">dropRight</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#dropWhile(groovy.lang.Closure)">dropWhile</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#each(groovy.lang.Closure)">each</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#eachCombination(groovy.lang.Closure)">eachCombination</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#eachPermutation(groovy.lang.Closure)">eachPermutation</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#eachWithIndex(groovy.lang.Closure)">eachWithIndex</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#every(groovy.lang.Closure)">every</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#findIndexOf(groovy.lang.Closure)">findIndexOf</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#findIndexOf(int, groovy.lang.Closure)">findIndexOf</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#findIndexValues(groovy.lang.Closure)">findIndexValues</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#findIndexValues(java.lang.Number, groovy.lang.Closure)">findIndexValues</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#findLastIndexOf(groovy.lang.Closure)">findLastIndexOf</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#findLastIndexOf(int, groovy.lang.Closure)">findLastIndexOf</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#findResult(groovy.lang.Closure)">findResult</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#findResult(java.lang.Object, groovy.lang.Closure)">findResult</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#findResults(groovy.lang.Closure)">findResults</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#first()">first</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#flatten()">flatten</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#flatten(groovy.lang.Closure)">flatten</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#getAt(int)">getAt</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#groupBy(groovy.lang.Closure)">groupBy</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#groupBy(java.lang.Object)">groupBy</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#groupBy(java.util.List)">groupBy</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#head()">head</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#indexed()">indexed</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#indexed(int)">indexed</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#init()">init</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#inits()">inits</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#intersect(java.lang.Iterable)">intersect</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#intersect(java.lang.Iterable, java.util.Comparator)">intersect</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#isEmpty()">isEmpty</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#join(java.lang.String)">join</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#last()">last</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#max()">max</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#max(groovy.lang.Closure)">max</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#max(java.util.Comparator)">max</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#min()">min</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#min(groovy.lang.Closure)">min</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#min(java.util.Comparator)">min</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#minus(java.lang.Iterable)">minus</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#minus(java.lang.Object)">minus</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#multiply(java.lang.Number)">multiply</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#permutations()">permutations</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#permutations(groovy.lang.Closure)">permutations</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#plus(java.lang.Iterable)">plus</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#plus(java.lang.Object)">plus</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#size()">size</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#sort()">sort</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#sort(boolean)">sort</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#sort(boolean, groovy.lang.Closure)">sort</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#sort(boolean, java.util.Comparator)">sort</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#sort(groovy.lang.Closure)">sort</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#sum()">sum</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#sum(groovy.lang.Closure)">sum</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#sum(java.lang.Object)">sum</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#sum(java.lang.Object, groovy.lang.Closure)">sum</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#tail()">tail</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#tails()">tails</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#take(int)">take</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#takeRight(int)">takeRight</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#takeWhile(groovy.lang.Closure)">takeWhile</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#toList()">toList</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#toSet()">toSet</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#toSorted()">toSorted</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#toSorted(groovy.lang.Closure)">toSorted</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#toSorted(java.util.Comparator)">toSorted</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#toSpreadMap()">toSpreadMap</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#toUnique()">toUnique</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#toUnique(groovy.lang.Closure)">toUnique</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#toUnique(java.util.Comparator)">toUnique</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#withIndex()">withIndex</a></strong></code>, <code><strong><a href="../../java/lang/Iterable.html#withIndex(int)">withIndex</a></strong></code>
+                                </p>
+                            </li>
+                        </ul>
+                        
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+    <!-- ============ METHOD DETAIL ========== -->
+
+    <a name="method_detail"><!-- --></a>
+
+
+        <div class="details">
+            <ul class="blockList">
+                <li class="blockList">
+                    <ul class="blockList">
+                        <li class="blockList">
+                            <h3>Methods Detail</h3>
+
+                            
+                            <a name="asImmutable()"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html" title="Class in java.util">SortedSet</a> <b>asImmutable</b>()</h4>
+
+                                    <p>A convenience method for creating an immutable SortedSet.</p>
+
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>an unmodifiable view of a copy of the original, i.e. an effectively immutable copy</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>1.0</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>See Also:</b></dt>
+                                        
+                                        <dd><a href="../../java/util/List.html#asImmutable()" title="GDK enhancement for java.util.List">List#asImmutable()</a></dd>
+                                        
+                                        <dd><a href="../../java/util/SortedSet.html#asUnmodifiable()" title="GDK enhancement for java.util.SortedSet">SortedSet#asUnmodifiable()</a></dd>
+                                        
+                                    </dl>
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="asSynchronized()"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html" title="Class in java.util">SortedSet</a> <b>asSynchronized</b>()</h4>
+
+                                    <p>A convenience method for creating a synchronized SortedSet.</p>
+
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>a synchronized SortedSet</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>1.0</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>See Also:</b></dt>
+                                        
+                                        <dd><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collections.html#synchronizedSortedSet(java.util.SortedSet)" title="Class in java.util">Collections#synchronizedSortedSet(java.util.SortedSet)</a></dd>
+                                        
+                                    </dl>
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="asUnmodifiable()"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html" title="Class in java.util">SortedSet</a> <b>asUnmodifiable</b>()</h4>
+
+                                    <p>Creates an unmodifiable view of a SortedSet.</p>
+
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>an unmodifiable view of the SortedSet</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>2.5.0</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>See Also:</b></dt>
+                                        
+                                        <dd><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collections.html#unmodifiableSortedSet(java.util.SortedSet)" title="Class in java.util">Collections#unmodifiableSortedSet(java.util.SortedSet)</a></dd>
+                                        
+                                        <dd><a href="../../java/util/List.html#asUnmodifiable()" title="GDK enhancement for java.util.List">List#asUnmodifiable()</a></dd>
+                                        
+                                    </dl>
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="drop(int)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html" title="Class in java.util">SortedSet</a> <b>drop</b>(int num)</h4>
+
+                                    <p>Drops the given number of elements from the head of this List.
+<pre class="groovyTestCase">
+def strings = [ 'a', 'b', 'c' ] as SortedSet
+assert strings.drop( 0 ) == [ 'a', 'b', 'c' ] as SortedSet
+assert strings.drop( 2 ) == [ 'c' ] as SortedSet
+assert strings.drop( 5 ) == [] as SortedSet
+</pre></p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>num</code> -   the number of elements to drop from this Iterable</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>a SortedSet consisting of all the elements of this Iterable minus the first <code>num</code> elements,
+        or an empty list if it has less then <code>num</code> elements.</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>2.4.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="dropRight(int)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html" title="Class in java.util">SortedSet</a> <b>dropRight</b>(int num)</h4>
+
+                                    <p>Drops the given number of elements from the tail of this SortedSet.
+<pre class="groovyTestCase">
+def strings = [ 'a', 'b', 'c' ] as SortedSet
+assert strings.dropRight( 0 ) == [ 'a', 'b', 'c' ] as SortedSet
+assert strings.dropRight( 2 ) == [ 'a' ] as SortedSet
+assert strings.dropRight( 5 ) == [] as SortedSet
+</pre></p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>num</code> -   the number of elements to drop from this SortedSet</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>a List consisting of all the elements of this SortedSet minus the last <code>num</code> elements,
+        or an empty SortedSet if it has less then <code>num</code> elements.</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>2.4.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="dropWhile(groovy.lang.Closure)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html" title="Class in java.util">SortedSet</a> <b>dropWhile</b>(<a href="http://docs.groovy-lang.org/latest/html/gapi/groovy/lang/Closure.html" title="Class in groovy.lang">Closure</a> condition)</h4>
+
+                                    <p>Returns a suffix of this SortedSet where elements are dropped from the front
+while the given Closure evaluates to true.
+Similar to Iterable#dropWhile(groovy.lang.Closure)
+except that it attempts to preserve the type of the original SortedSet.
+<pre class="groovyTestCase">
+def nums = [ 1, 2, 3 ] as SortedSet
+assert nums.dropWhile{ it < 4 } == [] as SortedSet
+assert nums.dropWhile{ it < 2 } == [ 2, 3 ] as SortedSet
+assert nums.dropWhile{ it != 3 } == [ 3 ] as SortedSet
+assert nums.dropWhile{ it == 0 } == [ 1, 2, 3 ] as SortedSet
+</pre></p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>condition</code> -  the closure that must evaluate to true to continue dropping elements</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>the shortest suffix of the given SortedSet such that the given closure condition
+        evaluates to true for each element dropped from the front of the SortedSet</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>2.4.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="each(groovy.lang.Closure)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html" title="Class in java.util">SortedSet</a> <b>each</b>(<a href="http://docs.groovy-lang.org/latest/html/gapi/groovy/lang/Closure.html" title="Class in groovy.lang">Closure</a> closure)</h4>
+
+                                    <p>Iterates through a SortedSet, passing each item to the given closure.</p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>closure</code> -  the closure applied on each element found</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>the self SortedSet</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>2.4.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="eachWithIndex(groovy.lang.Closure)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html" title="Class in java.util">SortedSet</a> <b>eachWithIndex</b>(<a href="http://docs.groovy-lang.org/latest/html/gapi/groovy/lang/Closure.html" title="Class in groovy.lang">Closure</a> closure)</h4>
+
+                                    <p>Iterates through a SortedSet,
+passing each item and the item's index (a counter starting at
+zero) to the given closure.</p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>closure</code> -  a Closure to operate on each item</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>the self SortedSet</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>2.4.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="flatten()"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html" title="Class in java.util">SortedSet</a> <b>flatten</b>()</h4>
+
+                                    <p>Flatten a SortedSet.  This SortedSet and any nested arrays or
+collections have their contents (recursively) added to the new SortedSet.
+<pre class="groovyTestCase">
+Set nested = [[0,1],[2],3,[4],5]
+SortedSet sorted = new TreeSet({ a, b -> (a instanceof List ? a[0] : a) <=> (b instanceof List ? b[0] : b) } as Comparator)
+sorted.addAll(nested)
+assert [0,1,2,3,4,5] as SortedSet == sorted.flatten()
+</pre></p>
+
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>a flattened SortedSet</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>2.4.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="init()"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html" title="Class in java.util">SortedSet</a> <b>init</b>()</h4>
+
+                                    <p>Returns the items from the SortedSet excluding the last item. Leaves the original SortedSet unchanged.
+<pre class="groovyTestCase">
+def sortedSet = [3, 4, 2] as SortedSet
+assert sortedSet.init() == [2, 3] as SortedSet
+assert sortedSet == [3, 4, 2] as SortedSet
+</pre></p>
+
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>a SortedSet without its last element</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>2.4.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="intersect(java.lang.Iterable)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html" title="Class in java.util">SortedSet</a> <b>intersect</b>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html" title="Class in java.lang">Iterable</a> right)</h4>
+
+                                    <p>Create a SortedSet composed of the intersection of a SortedSet and an Iterable.  Any
+elements that exist in both iterables are added to the resultant collection.
+<pre class="groovyTestCase">assert [4,5] as SortedSet == ([1,2,3,4,5] as SortedSet).intersect([4,5,6,7,8])</pre>
+By default, Groovy uses a NumberAwareComparator when determining if an
+element exists in both collections.</p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>right</code> -  an Iterable</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>a Set as an intersection of a SortedSet and an Iterable</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>2.4.0</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>See Also:</b></dt>
+                                        
+                                        <dd>SortedSet#intersect(Iterable, Comparator)</dd>
+                                        
+                                    </dl>
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="intersect(java.lang.Iterable, java.util.Comparator)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html" title="Class in java.util">SortedSet</a> <b>intersect</b>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html" title="Class in java.lang">Iterable</a> right, <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Comparator.html" title="Class in java.util">Comparator</a> comparator)</h4>
+
+                                    <p>Create a SortedSet composed of the intersection of a SortedSet and an Iterable.  Any
+elements that exist in both iterables are added to the resultant collection.
+<pre class="groovyTestCase">assert [4,5] as SortedSet == ([1,2,3,4,5] as SortedSet).intersect([4,5,6,7,8])</pre></p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>right</code> -  an Iterable</dd>
+                                        
+                                        <dd><code>comparator</code> -  a Comparator</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>a Set as an intersection of a SortedSet and an Iterable</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>2.5.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="leftShift(java.lang.Object)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html" title="Class in java.util">SortedSet</a> <b>leftShift</b>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="Class in java.lang">Object</a> value)</h4>
+
+                                    <p>Overloads the left shift operator to provide an easy way to append
+objects to a SortedSet.
+<pre class="groovyTestCase">def set = [1,2] as SortedSet
+set &lt;&lt; 3
+assert set == [1,2,3] as SortedSet</pre></p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>value</code> -  an Object to be added to the SortedSet.</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>same SortedSet, after the value was added to it.</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>2.4.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="minus(java.lang.Iterable)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html" title="Class in java.util">SortedSet</a> <b>minus</b>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html" title="Class in java.lang">Iterable</a> removeMe)</h4>
+
+                                    <p>Create a SortedSet composed of the elements of the first SortedSet minus the
+elements of the given Iterable.</p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>removeMe</code> -  the items to remove from the SortedSet</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>the resulting SortedSet</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>2.4.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="minus(java.lang.Object)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html" title="Class in java.util">SortedSet</a> <b>minus</b>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="Class in java.lang">Object</a> removeMe)</h4>
+
+                                    <p>Create a SortedSet composed of the elements of the first SortedSet minus the given element.</p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>removeMe</code> -  the element to remove from the SortedSet</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>the resulting SortedSet</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>2.4.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="minus(java.util.Collection)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html" title="Class in java.util">SortedSet</a> <b>minus</b>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="Class in java.util">Collection</a> removeMe)</h4>
+
+                                    <p>Create a SortedSet composed of the elements of the first SortedSet minus the
+elements of the given Collection.</p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>removeMe</code> -  the items to remove from the SortedSet</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>the resulting SortedSet</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>2.4.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="plus(java.lang.Iterable)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html" title="Class in java.util">SortedSet</a> <b>plus</b>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html" title="Class in java.lang">Iterable</a> right)</h4>
+
+                                    <p>Create a SortedSet as a union of a SortedSet and an Iterable.
+This operation will always create a new object for the result,
+while the operands remain unchanged.</p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>right</code> -  the right Iterable</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>the merged SortedSet</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>2.4.0</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>See Also:</b></dt>
+                                        
+                                        <dd>Collection#plus(Collection)</dd>
+                                        
+                                    </dl>
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="plus(java.lang.Object)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html" title="Class in java.util">SortedSet</a> <b>plus</b>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="Class in java.lang">Object</a> right)</h4>
+
+                                    <p>Create a SortedSet as a union of a SortedSet and an Object.
+This operation will always create a new object for the result,
+while the operands remain unchanged.
+<pre class="groovyTestCase">assert [1,2,3] == [1,2] + 3</pre></p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>right</code> -  an object to add/append</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>the resulting SortedSet</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>2.4.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="plus(java.util.Collection)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html" title="Class in java.util">SortedSet</a> <b>plus</b>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="Class in java.util">Collection</a> right)</h4>
+
+                                    <p>Create a SortedSet as a union of a SortedSet and a Collection.
+This operation will always create a new object for the result,
+while the operands remain unchanged.</p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>right</code> -  the right Collection</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>the merged SortedSet</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>2.4.0</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>See Also:</b></dt>
+                                        
+                                        <dd>Collection#plus(Collection)</dd>
+                                        
+                                    </dl>
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="sort()"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html" title="Class in java.util">SortedSet</a> <b>sort</b>()</h4>
+
+                                    <p>Avoids doing unnecessary work when sorting an already sorted set (i.e. an identity function for an already sorted set).</p>
+
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>the set</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>1.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="tail()"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html" title="Class in java.util">SortedSet</a> <b>tail</b>()</h4>
+
+                                    <p>Returns the items from the SortedSet excluding the first item.
+<pre class="groovyTestCase">
+def sortedSet = [3, 4, 2] as SortedSet
+assert sortedSet.tail() == [3, 4] as SortedSet
+assert sortedSet == [3, 4, 2] as SortedSet
+</pre></p>
+
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>a SortedSet without its first element</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>2.4.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="take(int)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html" title="Class in java.util">SortedSet</a> <b>take</b>(int num)</h4>
+
+                                    <p>Returns the first <code>num</code> elements from the head of this SortedSet.
+<pre class="groovyTestCase">
+def strings = [ 'a', 'b', 'c' ] as SortedSet
+assert strings.take( 0 ) == [] as SortedSet
+assert strings.take( 2 ) == [ 'a', 'b' ] as SortedSet
+assert strings.take( 5 ) == [ 'a', 'b', 'c' ] as SortedSet
+</pre></p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>num</code> -   the number of elements to take from this SortedSet</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>a SortedSet consisting of the first <code>num</code> elements from this List,
+        or else all the elements from the SortedSet if it has less then <code>num</code> elements.</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>2.4.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="takeRight(int)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html" title="Class in java.util">SortedSet</a> <b>takeRight</b>(int num)</h4>
+
+                                    <p>Returns the last <code>num</code> elements from the tail of this SortedSet.
+<pre class="groovyTestCase">
+def strings = [ 'a', 'b', 'c' ] as SortedSet
+assert strings.takeRight( 0 ) == [] as SortedSet
+assert strings.takeRight( 2 ) == [ 'b', 'c' ] as SortedSet
+assert strings.takeRight( 5 ) == [ 'a', 'b', 'c' ] as SortedSet
+</pre></p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>num</code> -   the number of elements to take from this SortedSet</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>a SortedSet consisting of the last <code>num</code> elements from this SortedSet,
+        or else all the elements from the SortedSet if it has less then <code>num</code> elements.</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>2.4.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="takeWhile(groovy.lang.Closure)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/util/SortedSet.html" title="Class in java.util">SortedSet</a> <b>takeWhile</b>(<a href="http://docs.groovy-lang.org/latest/html/gapi/groovy/lang/Closure.html" title="Class in groovy.lang">Closure</a> condition)</h4>
+
+                                    <p>Returns the longest prefix of this SortedSet where each element
+passed to the given closure condition evaluates to true.
+Similar to Iterable#takeWhile(groovy.lang.Closure)
+except that it attempts to preserve the type of the original SortedSet.
+<pre class="groovyTestCase">
+def nums = [ 1, 2, 3 ] as SortedSet
+assert nums.takeWhile{ it < 1 } == [] as SortedSet
+assert nums.takeWhile{ it < 2 } == [ 1 ] as SortedSet
+assert nums.takeWhile{ it < 4 } == [ 1, 2, 3 ] as SortedSet
+</pre></p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>condition
+</code> -  the closure that must evaluate to true to
+                 continue taking elements</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>a prefix of the given SortedSet where each element passed to
+        the given closure evaluates to true</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>2.4.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="toSorted()"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="Class in java.util">Set</a> <b>toSorted</b>()</h4>
+
+                                    <p>Avoids doing unnecessary work when sorting an already sorted set</p>
+
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>an ordered copy of the sorted set</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>2.4.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+
+    <!-- ========= END OF class DATA ========= -->
+
+    <!-- ======= START OF BOTTOM NAVBAR ====== -->
+    <a name="navbar_bottom"><!-- --></a>
+    <a href="#skip-navbar_bottom" title="Skip navigation links"></a>
+
+    <div class="topNav">
+        <ul class="navList" title="Navigation">
+            <li><a href="../../overview-summary.html">Overview</a></li>
+            <li><a href="package-summary.html">Package</a></li>
+            <li class="navBarCell1Rev">Class</li>
+            <li><a href="../../index-all.html">Index</a></li>
+        </ul>
+    </div>
+    <!-- =========== END OF NAVBAR =========== -->
+
+</body>
+</html>

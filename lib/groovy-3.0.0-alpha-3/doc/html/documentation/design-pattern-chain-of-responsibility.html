@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.6.1">
+<title>Chain of Responsibility Pattern</title>
+<link rel="stylesheet" href="./assets/css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+<h1>Chain of Responsibility Pattern</h1>
+<div class="details">
+<span id="revnumber">version 3.0.0-alpha-3</span>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_example">1. Example</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>In the Chain of Responsibility Pattern, objects using and implementing an interface (one or more methods) are intentionally loosely coupled. A set of objects that <em>implement</em> the interface are organised in a list (or in rare cases a tree). Objects using the interface make requests from the first <em>implementor</em> object. It will decide whether to perform any action itself and whether to pass the request further down the line in the list (or tree). Sometimes a default implementation for some request is also coded into the pattern if none of the implementors respond to the request.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_example"><a class="anchor" href="#_example"></a>1. Example</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In this example, the script sends requests to the <code>lister</code> object. The <code>lister</code> points to a <code>UnixLister</code> object. If it can&#8217;t handle the request, it sends the request to the <code>WindowsLister</code>. If it can&#8217;t handle the request, it sends the request to the <code>DefaultLister</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class UnixLister {
+    private nextInLine
+    UnixLister(next) { nextInLine = next }
+    def listFiles(dir) {
+        if (System.getProperty('os.name') == 'Linux') {
+            println "ls $dir".execute().text
+        } else {
+            nextInLine.listFiles(dir)
+        }
+    }
+}
+
+class WindowsLister {
+    private nextInLine
+    WindowsLister(next) { nextInLine = next }
+    def listFiles(dir) {
+        if (System.getProperty('os.name') == 'Windows XP') {
+            println "cmd.exe /c dir $dir".execute().text
+        } else {
+            nextInLine.listFiles(dir)
+        }
+    }
+}
+
+class DefaultLister {
+    def listFiles(dir) {
+        new File(dir).eachFile { f -&gt; println f }
+    }
+}
+
+def lister = new UnixLister(new WindowsLister(new DefaultLister()))
+
+lister.listFiles('Downloads')</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The output will be a list of files (with slightly different format depending on the operating system).</p>
+</div>
+<div class="paragraph">
+<p>Here is a UML representation:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="assets/img/ChainOfResponsibilityClasses.gif" alt="ChainOfResponsibilityClasses">
+</div>
+</div>
+<div class="paragraph">
+<p>Variations to this pattern:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>we could have an explicit interface, e.g. <code>Lister</code>, to statically type the implementations but because of <em>duck-typing</em> this is optional</p>
+</li>
+<li>
+<p>we could use a chain tree instead of a list, e.g. <code>if (animal.hasBackbone())</code> delegate to <code>VertebrateHandler</code> else delegate to <code>InvertebrateHandler</code></p>
+</li>
+<li>
+<p>we could always pass down the chain even if we processed a request</p>
+</li>
+<li>
+<p>we could decide at some point to not respond and not pass down the chain</p>
+</li>
+<li>
+<p>we could use Groovy’s meta-programming capabilities to pass unknown methods down the chain</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 3.0.0-alpha-3<br>
+Last updated 2018-06-23 13:44:39 AEST
+</div>
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+<script>prettyPrint()</script>
+</body>
+</html>

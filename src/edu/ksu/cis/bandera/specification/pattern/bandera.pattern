@@ -1,0 +1,237 @@
+pattern {
+  name = "Absence"
+  scope = "Globally"
+  parameters = {P}
+  format = "{P} is absent globally"
+  ltl = "[](!{P})"
+  url = "www.cis.ksu.edu/santos/spec-patterns/"
+  description = "Absence Globally means ..."
+}
+
+pattern {
+  name = "Absence"
+  scope = "Before R"
+  parameters = {P, R}
+  format = "{P} is absent before {R}"
+  ltl = "<>{R} -> (!{P} U {R})"
+  url = "www.cis.ksu.edu/santos/spec-patterns/"
+  description = "Absence Before R means ..."
+}
+
+pattern {
+  name = "Absence"
+  scope = "After Q"
+  parameters = {P, Q}
+  format = "{P} is absent after {Q}"
+  ltl = "[]({Q} -> [](!{P}))"
+  url = "www.cis.ksu.edu/santos/spec-patterns/"
+  description = "Absence After Q means ..."
+}
+
+pattern {
+  name = "Absence"
+  scope = "Between Q and R"
+  parameters = {P, Q, R}
+  format = "{P} is absent between {Q} and {R}"
+  ltl = "[](({Q} && !{R} && <>{R}) -> (!{P} U {R}))"
+  url = "www.cis.ksu.edu/santos/spec-patterns/"
+  description = "Absence Between Q and R means ..."
+}
+
+pattern {
+  name = "Absence"
+  scope = "After Q until R"
+  parameters = {P, Q, R}
+  format = "{P} is absent after {Q} until {R}"
+  ltl = "[](({Q} && !{R}) -> (!{P} U ({R} || []!{P})))"
+  url = "www.cis.ksu.edu/santos/spec-patterns/"
+  description = "Absence After Q until R means ..."
+}
+
+pattern {
+  name = "Existence"
+  scope = "Globally"
+  parameters = {P}
+  format = "{P} exists globally"
+  ltl = "<>({P})"
+  url = "www.cis.ksu.edu/santos/spec-patterns/"
+}
+
+pattern {
+  name = "Existence"
+  scope = "Before R"
+  parameters = {P, R}
+  format = "{P} exists before {R}"
+  ltl = "!{R} U (({P} && !{R}) || []!{R})"
+  url = "www.cis.ksu.edu/santos/spec-patterns/"
+}
+
+pattern {
+  name = "Existence"
+  scope = "After Q"
+  parameters = {P, Q}
+  format = "{P} exists after {Q}"
+  ltl = "[](!{Q}) || <>({Q} && <>{P}))"
+  url = "www.cis.ksu.edu/santos/spec-patterns/"
+}
+
+pattern {
+  name = "Existence"
+  scope = "Between Q and R"
+  parameters = {P, Q, R}
+  format = "{P} exists between {Q} and {R}"
+  ltl = "[](({Q} && !{R}) -> (!{R} U (({P} && !{R}) || []!{R})))"
+  url = "www.cis.ksu.edu/santos/spec-patterns/"
+}
+
+pattern {
+  name = "Existence"
+  scope = "After Q until R"
+  parameters = {P, Q, R}
+  format = "{P} exists after {Q} until {R}"
+  ltl = "[](({Q} && !{R}) -> (!{R} U ({P} && !{R})))"
+  url = "www.cis.ksu.edu/santos/spec-patterns/"
+}
+
+pattern {
+  name = "Universality"
+  scope = "Globally"
+  parameters = {P}
+  format = "{P} is universal globally"
+  ltl = "[]({P})"
+  url = "www.cis.ksu.edu/santos/spec-patterns/"
+}
+
+pattern {
+  name = "Universality"
+  scope = "Before R"
+  parameters = {P, R}
+  format = "{P} is universal before {R}"
+  ltl = "<>{R} -> ({P} U {R})"
+  url = "www.cis.ksu.edu/santos/spec-patterns/"
+}
+
+pattern {
+  name = "Universality"
+  scope = "After Q"
+  parameters = {P, Q}
+  format = "{P} is universal after {Q}"
+  ltl = "[]({Q} -> []({P}))"
+  url = "www.cis.ksu.edu/santos/spec-patterns/"
+}
+
+pattern {
+  name = "Universality"
+  scope = "Between Q and R"
+  parameters = {P, Q, R}
+  format = "{P} is universal between {Q} and {R}"
+  ltl = "[](({Q} && !{R} && <>{R}) -> ({P} U {R}))"
+  url = "www.cis.ksu.edu/santos/spec-patterns/"
+}
+
+pattern {
+  name = "Universality"
+  scope = "After Q until R"
+  parameters = {P, Q, R}
+  format = "{P} is universal after {Q} until {R}"
+  ltl = "[](({Q} && !{R}) -> ({P} U ({R} || []{P})))"
+  url = "www.cis.ksu.edu/santos/spec-patterns/"
+}
+
+pattern {
+  name = "Precedence"
+  scope = "Globally"
+  parameters = {P, S}
+  format = "{S} precedes {P} globally"
+  ltl = "!{P} U ({S} || []!{P})"
+  url = "www.cis.ksu.edu/santos/spec-patterns/"
+}
+
+pattern {
+  name = "Precedence"
+  scope = "Before R"
+  parameters = {P, R, S}
+  format = "{S} precedes {P} before {R}"
+  ltl = "<>{R} -> (!{P} U ({S} || {R}))"
+  url = "www.cis.ksu.edu/santos/spec-patterns/"
+}
+
+pattern {
+  name = "Precedence"
+  scope = "After Q"
+  parameters = {P, Q, S}
+  format = "{S} precedes {P} after {Q}"
+  ltl = "[]!{Q} || <>({Q} && (!{P} U ({S} || []!{P})))"
+  url = "www.cis.ksu.edu/santos/spec-patterns/"
+}
+
+pattern {
+  name = "Precedence"
+  scope = "Between Q and R"
+  parameters = {P, Q, R, S}
+  format = "{S} precedes {P} between {Q} and {R}"
+  ltl = "[](({Q} && !{R} && <>{R}) -> (!{P} U ({S} || {R})))"
+  url = "www.cis.ksu.edu/santos/spec-patterns/"
+}
+
+pattern {
+  name = "Precedence"
+  scope = "After Q until R"
+  parameters = {P, Q, R, S}
+  format = "{S} precedes {P} after {Q} until {R}"
+  ltl = "[](({Q} && !{R}) -> (!{P} U (({S} || {R}) || []!{P})))"
+  url = "www.cis.ksu.edu/santos/spec-patterns/"
+}
+
+pattern {
+  name = "Response"
+  scope = "Globally"
+  parameters = {P, S}
+  format = "{S} responds to {P} globally"
+  ltl = "[]({P} -> <>{S})"
+  url = "www.cis.ksu.edu/santos/spec-patterns/"
+}
+
+pattern {
+  name = "Response"
+  scope = "Before R"
+  parameters = {P, R, S}
+  format = "{S} responds to {P} before {R}"
+  ltl = "(<>{R} -> ({P} -> (!{R} U ({S} && !{R})))) U {R}"
+  url = "www.cis.ksu.edu/santos/spec-patterns/"
+}
+
+pattern {
+  name = "Response"
+  scope = "After Q"
+  parameters = {P, Q, S}
+  format = "{S} responds to {P} after {Q}"
+  ltl = "[]({Q} -> []({P} -> <>{S}))"
+  url = "www.cis.ksu.edu/santos/spec-patterns/"
+}
+
+pattern {
+  name = "Response"
+  scope = "Between Q and R"
+  parameters = {P, Q, R, S}
+  format = "{S} responds to {P} between {Q} and {R}"
+  ltl = "[](({Q} && !{R} && <>{R}) -> ({P} -> (!{R} U ({S} && !{R}))) U {R})"
+  url = "www.cis.ksu.edu/santos/spec-patterns/"
+}
+
+pattern {
+  name = "Response"
+  scope = "After Q until R"
+  parameters = {P, Q, R, S}
+  format = "{S} responds to {P} after {Q} until {R}"
+  ltl = "[]({Q} && !{R} -> (({P} -> (!{R} U ({S} && !{R}))) U ({R} || []({P} -> (!{R} U ({S} && !{R})))))"
+  url = "www.cis.ksu.edu/santos/spec-patterns/"
+}
+
+pattern {
+  name = "Constrained-Response, Precedence Chain"
+  scope = "Globally"
+  parameters = {A, B, C, D, E}
+  format = "{B} responds to {A} without {C} leads to {D} precedes {E}"
+  ltl = "[](({A} -> (!{C} U {B})) -> <>({B} && (!{E} U ({D} || []!{E}))))"
+}

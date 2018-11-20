@@ -1,0 +1,45 @@
+public class STCapability extends java.lang.Object
+{
+    public STAttribute[] attributes;
+    public STCommand[] commands;
+    public int name;
+
+    public STAttribute[] getAttributes()
+    {
+        STAttribute[] $ret;
+        STCapability JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        $ret = JJJCTEMP$0.[STCapability.attributes:STAttribute[]];
+        return $ret;
+    }
+
+    public STCommand[] getCommands()
+    {
+        STCommand[] $ret;
+        STCapability JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        $ret = JJJCTEMP$0.[STCapability.commands:STCommand[]];
+        return $ret;
+    }
+
+    public int getName()
+    {
+        int $ret;
+        STCapability JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        $ret = JJJCTEMP$0.[STCapability.name:int];
+        return $ret;
+    }
+
+    public void <init>()
+    {
+        STCapability JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        specialinvoke JJJCTEMP$0.[java.lang.Object.<init>():void]();
+        return;
+    }
+}

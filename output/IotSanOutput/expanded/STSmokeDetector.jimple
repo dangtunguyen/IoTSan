@@ -1,0 +1,108 @@
+public class STSmokeDetector extends STCarMoDetector
+{
+    public STState smokeState;
+    public int currentSmoke;
+
+    public STState currentState(int)
+    {
+        STState $ret;
+        STSmokeDetector JJJCTEMP$0;
+        int attributeName;
+
+        JJJCTEMP$0 := @this;
+        attributeName := @parameter0;
+        if attributeName != 50 goto label0;
+
+        $ret = JJJCTEMP$0.[STSmokeDetector.smokeState:STState];
+        return $ret;
+
+     label0:
+        if attributeName != 75 goto label1;
+
+        $ret = JJJCTEMP$0.[STCarMoDetector.carbonMonoxideState:STState];
+        return $ret;
+
+     label1:
+        $ret = JJJCTEMP$0.[STDevice.batteryState:STState];
+        return $ret;
+    }
+
+    public int currentValue(int)
+    {
+        STSmokeDetector JJJCTEMP$0;
+        int attributeName, $ret;
+
+        JJJCTEMP$0 := @this;
+        attributeName := @parameter0;
+        if attributeName != 50 goto label0;
+
+        $ret = JJJCTEMP$0.[STSmokeDetector.currentSmoke:int];
+        return $ret;
+
+     label0:
+        if attributeName != 75 goto label1;
+
+        $ret = JJJCTEMP$0.[STCarMoDetector.currentCarbonMonoxide:int];
+        return $ret;
+
+     label1:
+        $ret = JJJCTEMP$0.[STDevice.currentBattery:long];
+        return $ret;
+    }
+
+    public STState latestState(int)
+    {
+        STState $ret;
+        STSmokeDetector JJJCTEMP$0;
+        int attributeName;
+
+        JJJCTEMP$0 := @this;
+        attributeName := @parameter0;
+        if attributeName != 50 goto label0;
+
+        $ret = JJJCTEMP$0.[STSmokeDetector.smokeState:STState];
+        return $ret;
+
+     label0:
+        if attributeName != 75 goto label1;
+
+        $ret = JJJCTEMP$0.[STCarMoDetector.carbonMonoxideState:STState];
+        return $ret;
+
+     label1:
+        $ret = JJJCTEMP$0.[STDevice.batteryState:STState];
+        return $ret;
+    }
+
+    public int latestValue(int)
+    {
+        STSmokeDetector JJJCTEMP$0;
+        int attributeName, $ret;
+
+        JJJCTEMP$0 := @this;
+        attributeName := @parameter0;
+        if attributeName != 50 goto label0;
+
+        $ret = JJJCTEMP$0.[STSmokeDetector.currentSmoke:int];
+        return $ret;
+
+     label0:
+        if attributeName != 75 goto label1;
+
+        $ret = JJJCTEMP$0.[STCarMoDetector.currentCarbonMonoxide:int];
+        return $ret;
+
+     label1:
+        $ret = JJJCTEMP$0.[STDevice.currentBattery:long];
+        return $ret;
+    }
+
+    public void <init>()
+    {
+        STSmokeDetector JJJCTEMP$0;
+
+        JJJCTEMP$0 := @this;
+        specialinvoke JJJCTEMP$0.[STCarMoDetector.<init>():void]();
+        return;
+    }
+}

@@ -1,0 +1,33 @@
+Bandera is a open-source tool kit for model-checking concurrent Java software.  Bandera is developed and maintained primarily by the researchers at the SAnToS Laboratory at Kansas State University and supported by signficant collaboration with researchers from the Automated Software Engineering Group at NASA Ames and the LASER Group at the University of Massachussetts at Amherst.
+
+Bandera is distributed under a General Public License (GPL).
+
+For current information about the Bandera project, please consult the project URL (http://www.cis.ksu.edu/bandera).
+
+Research and development of Bandera has been supported by the following grants and contracts:
+- Army Research Office CIP/SW URI award DAAD190110564. 
+- Cooperative Agreement, NCC-1-399, sponsored by Honeywell Technology Center and NASA Langley Research Center. 
+- DARPA/AFRL project AFRL-F33615-00-C-3044. 
+- NASA Ames Laboratory award NAG-02-1209 
+- NSF-EIA Experimental Software Systems (ESS) award 9708184 
+- NSF-CCR CAREER award 9703094. 
+- NSF-CCR CAREER award 9896354. 
+- NSF-CCR Postdoctoral Associate award 9901605. 
+- NSF-CCR/DARPA Evolutionary Design of Complex Systems (EDCS) award 9633388. 
+- Rockwell-Collins Advanced Technology Center 
+- Sun Microsystems Academic Equipment Grant EDUD-7824-000130-US.
+
+Some icons were created and are copyrighted by Jeff Bucchino, "The Wizard of Draws" (http://www.wizardofdraws.com).
+
+Bandera leverages the work of many open source and free software projects including the following:
+- OpenJGraph graphing library that is licensed under the LGPL (http://openjgraph.sourceforge.net/).
+- GEF graphing library that is licensed under the BSD License (http://gef.tigris.org/).
+- Log4j logging library that is licensed under the Apache License (http://jakarta.apache.org/log4j/docs/index.html).
+- CUP Parser Generator for Java library under the BSD License (http://www.cs.princeton.edu/~appel/modern/java/CUP/).
+- Byte Code Engineering Library (BCEL) under the Apache License (http://jakarta.apache.org/bcel/).
+- Xerces XML library licensed under the Apache License (http://xml.apache.org/xerces2-j/index.html).
+- Castor XML data binding library under the BSD License (http://castor.exolab.org/).
+- ANT build tool under the Apache License (http://ant.apache.org/index.html).
+- Soot/Jimple framework under the LGPL (http://www.sable.mcgill.ca/soot/).
+- Java Wizard Framework (JWF) under the LGPL (http://sourceforge.net/projects/jwf/).
+We would like to thank the hard work and dedication of those that originated and contributed to these projects.

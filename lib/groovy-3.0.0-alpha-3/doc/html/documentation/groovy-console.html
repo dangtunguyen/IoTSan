@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.6.1">
+<title>groovyConsole, the Groovy swing console</title>
+<link rel="stylesheet" href="./assets/css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+<h1>groovyConsole, the Groovy swing console</h1>
+<div class="details">
+<span id="revnumber">version 3.0.0-alpha-3</span>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#title-heading">1. Groovy : Groovy Console</a></li>
+<li><a href="#GroovyConsole-Basics">2. Basics</a></li>
+<li><a href="#GroovyConsole-Features">3. Features</a>
+<ul class="sectlevel2">
+<li><a href="#GroovyConsole-Command-lineOptionsandArguments">3.1. Command-line Options and Arguments</a></li>
+<li><a href="#GroovyConsole-RunningScripts">3.2. Running Scripts</a></li>
+<li><a href="#GroovyConsole-EditingFiles">3.3. Editing Files</a></li>
+<li><a href="#GroovyConsole-Historyandresults">3.4. History and results</a></li>
+<li><a href="#GroovyConsole-Interrupt">3.5. Interrupting a script</a></li>
+<li><a href="#GroovyConsole-Andmore">3.6. And more</a></li>
+</ul>
+</li>
+<li><a href="#GroovyConsole-EmbeddingtheConsole">4. Embedding the Console</a></li>
+<li><a href="#GroovyConsole-Visualizingscriptoutputresults">5. Visualizing script output results</a></li>
+<li><a href="#GroovyConsole-ASTbrowser">6. AST browser</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="title-heading"><a class="anchor" href="#title-heading"></a>1. Groovy : Groovy Console</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The Groovy Swing Console allows a user to enter and run Groovy scripts.
+This page documents the features of this user interface.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="GroovyConsole-Basics"><a class="anchor" href="#GroovyConsole-Basics"></a>2. Basics</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><span class="image"><img src="assets/img/GroovyConsole.gif" alt="image"></span></p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Groovy Console is launched via <code>groovyConsole</code> or
+<code>groovyConsole.bat</code>, both located in <code>$GROOVY_HOME/bin</code></p>
+</li>
+<li>
+<p>The Console has an input area and an output area.</p>
+</li>
+<li>
+<p>You type a Groovy script in the input area.</p>
+</li>
+<li>
+<p>When you select <code>Run</code> from the <code>Actions</code> menu, the console
+compiles the script and runs it.</p>
+</li>
+<li>
+<p>Anything that would normally be printed on <code>System.out</code> is printed in
+the output area.</p>
+</li>
+<li>
+<p>If the script returns a non-null result, that result is printed.</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="GroovyConsole-Features"><a class="anchor" href="#GroovyConsole-Features"></a>3. Features</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="GroovyConsole-Command-lineOptionsandArguments"><a class="anchor" href="#GroovyConsole-Command-lineOptionsandArguments"></a>3.1. Command-line Options and Arguments</h3>
+<div class="paragraph">
+<p>The Groovy Console supports several options to control classpath and other features.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">./bin/groovyConsole --help
+Usage: groovyConsole [options] [filename]
+The Groovy Swing Console allows a user to enter and run Groovy scripts.
+      --configscript=PARAM   A script for tweaking the compiler configuration options
+      -cp, -classpath, --classpath
+                             Specify where to find the class files - must be first
+                               argument
+  -D, --define=&lt;name=value&gt;  Define a system property
+  -h, --help                 Display this help message
+  -i, --indy                 Enable InvokeDynamic (Indy) compilation for scripts
+      -pa, --parameters      Generate metadata for reflection on method parameter
+                               names (jdk8+ only)
+  -V, --version              Display the version</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="GroovyConsole-RunningScripts"><a class="anchor" href="#GroovyConsole-RunningScripts"></a>3.2. Running Scripts</h3>
+<div class="paragraph">
+<p>There are several shortcuts that you can use to run scripts or code snippets:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>Ctrl+Enter</code> and <code>Ctrl+R</code> are both shortcut keys for <code>Run Script</code>.</p>
+</li>
+<li>
+<p>If you highlight just part of the text in the input area, then Groovy
+runs just that text.</p>
+</li>
+<li>
+<p>The result of a script is the the value of the last expression
+executed.</p>
+</li>
+<li>
+<p>You can turn the System.out capture on and off by selecting <code>Capture
+System.out</code> from the <code>Actions</code> menu</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="GroovyConsole-EditingFiles"><a class="anchor" href="#GroovyConsole-EditingFiles"></a>3.3. Editing Files</h3>
+<div class="paragraph">
+<p>You can open any text file, edit it, run it (as a Groovy Script) and
+then save it again when you are finished.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Select <code>File &gt; Open</code> (shortcut key <code>ctrl+O</code>) to open a file</p>
+</li>
+<li>
+<p>Select <code>File &gt; Save</code> (shortcut key <code>ctrl+S</code>) to save a file</p>
+</li>
+<li>
+<p>Select <code>File &gt; New File</code> (shortcut key <code>ctrl+Q</code>) to start again with a
+blank input area</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="GroovyConsole-Historyandresults"><a class="anchor" href="#GroovyConsole-Historyandresults"></a>3.4. History and results</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>You can pop-up a gui inspector on the last (non-null) result by
+selecting <code>Inspect Last</code> from the <code>Actions</code> menu. The inspector is a
+convenient way to view lists and maps.</p>
+</li>
+<li>
+<p>The console remembers the last ten script runs. You can scroll back
+and forth through the history by selecting <code>Next</code> and <code>Previous</code>
+from the <code>Edit</code> menu. <code>Ctrl-N</code> and <code>ctrl-P</code> are convenient shortcut keys.</p>
+</li>
+<li>
+<p>The last (non-null) result is bound to a variable named <code>_</code> (an
+underscore).</p>
+</li>
+<li>
+<p>The last result (null and non-null) for every run in the history is
+bound into a list variable named <code><em></code> (two underscores). The result of
+the last run is <code></em>[-1]</code>, the result of the second to last run is
+<code>__[-2]</code> and so forth.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="GroovyConsole-Interrupt"><a class="anchor" href="#GroovyConsole-Interrupt"></a>3.5. Interrupting a script</h3>
+<div class="paragraph">
+<p>The Groovy console is a very handy tool to develop scripts. Often, you will
+find yourself running a script multiple times until it works the way you want
+it to. However, what if your code takes too long to finish or worse, creates
+an infinite loop? Interrupting script execution can be achieved by clicking
+the <code>interrupt</code> button on the small dialog box that pops up when a script
+is executing or through the <code>interrupt</code> icon in the tool bar.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="assets/img/gconsole-toolbar.png" alt="Toolbar"></span></p>
+</div>
+<div class="paragraph">
+<p>However, this may not be sufficient to interrupt a script: clicking the button
+will interrupt the execution thread, but if your code doesn&#8217;t handle the interrupt
+flag, the script is likely to keep running without you being able to effectively
+stop it. To avoid that, you have to make sure that the <code>Script &gt; Allow interruption</code>
+menu item is flagged. This will automatically apply an AST transformation to your
+script which will take care of checking the interrupt flag (<code>@ThreadInterrupt</code>).
+This way, you guarantee that the script can be interrupted even if you don&#8217;t explicitly
+handle interruption, at the cost of extra execution time.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="GroovyConsole-Andmore"><a class="anchor" href="#GroovyConsole-Andmore"></a>3.6. And more</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>You can change the font size by selecting <code>Smaller Font</code> or <code>Larger
+Font</code> from the <code>Actions menu</code></p>
+</li>
+<li>
+<p>The console can be run as an Applet thanks to <code>groovy.ui.ConsoleApplet</code></p>
+</li>
+<li>
+<p>Code is auto indented when you hit return</p>
+</li>
+<li>
+<p>You can drag&#8217;n&#8217;drop a Groovy script over the text area to open a file</p>
+</li>
+<li>
+<p>You can modify the classpath with which the script in the console is
+being run by adding a new JAR or a directory to the classpath from the
+<code>Script</code> menu</p>
+</li>
+<li>
+<p>Error hyperlinking from the output area when a compilation error is
+expected or when an exception is thrown</p>
+</li>
+<li>
+<p>You can enable InvokeDynamic (Indy) compilation mode by selecting
+<code>Enable Indy Compilation</code> from the <code>Script</code> menu</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="GroovyConsole-EmbeddingtheConsole"><a class="anchor" href="#GroovyConsole-EmbeddingtheConsole"></a>4. Embedding the Console</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To embed a Swing console in your application, simply create the Console
+object, load some variables, and then launch it. The console can be embedded in
+either Java or Groovy code. The Java code for this is:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">import groovy.ui.Console;
+
+    ...
+    Console console = new Console();
+    console.setVariable("var1", getValueOfVar1());
+    console.setVariable("var2", getValueOfVar2());
+    console.run();
+    ...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Once the console is launched, you can use the variable values in Groovy
+code.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="GroovyConsole-Visualizingscriptoutputresults"><a class="anchor" href="#GroovyConsole-Visualizingscriptoutputresults"></a>5. Visualizing script output results</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You can customize the way script output results are visualized. Let’s
+see how we can customize this. For example, viewing a map result would
+show something like this:</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="assets/img/gconsole-sc-without-visu.png" alt="image"></span></p>
+</div>
+<div class="paragraph">
+<p>What you see here is the usual textual representation of a Map. But,
+what if we enabled custom visualization of certain results? The Swing
+console allows you to do just that. First of all, you have to ensure
+that the visualization option is ticked: <code>View &#8594; Visualize Script
+Results</code> — for the record, all settings of the Groovy Console are stored
+and remembered thanks to the Preference API. There are a few result
+visualizations built-in: if the script returns a <code>java.awt.Image</code>, a
+<code>javax.swing.Icon</code>, or a <code>java.awt.Component</code> with no parent, the object is
+displayed instead of its <code>toString()</code> representation. Otherwise,
+everything else is still just represented as text. Now, create the
+following Groovy script in <code>~/.groovy/OutputTransforms.groovy</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import javax.swing.*
+
+transforms &lt;&lt; { result -&gt;
+    if (result instanceof Map) {
+        def table = new JTable(
+            result.collect{ k, v -&gt;
+                [k, v?.inspect()] as Object[]
+            } as Object[][],
+            ['Key', 'Value'] as Object[])
+        table.preferredViewportSize = table.preferredSize
+        return new JScrollPane(table)
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The Groovy Swing console will execute that script on startup, injecting
+a transforms list in the binding of the script, so that you can add your
+own script results representations. In our case, we transform the Map
+into a nice-looking Swing JTable. And we’re now able to visualize maps
+in a friendly and attractive fashion, as the screenshot below shows:</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="assets/img/gconsole-sc-with-visu.png" alt="image"></span></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="GroovyConsole-ASTbrowser"><a class="anchor" href="#GroovyConsole-ASTbrowser"></a>6. AST browser</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Groovy Console can visualize the AST (Abstract Syntax Tree) representing
+the currently edited script, as shown by the screenshot below. This is
+particularly handy when you want to develop AST transformations.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="assets/img/astbrowser.png" alt="AST Browser"></span></p>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 3.0.0-alpha-3<br>
+Last updated 2018-06-23 13:44:47 AEST
+</div>
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+<script>prettyPrint()</script>
+</body>
+</html>

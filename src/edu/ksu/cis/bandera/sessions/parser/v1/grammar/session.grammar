@@ -1,0 +1,100 @@
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * Bandera, a Java(TM) analysis and transformation toolkit           *
+ * Copyright (C) 1998, 1999   Robby (robby@cis.ksu.edu)              *
+ * All rights reserved.                                              *
+ *                                                                   *
+ * This work was done as a project in the SAnToS Laboratory,         *
+ * Department of Computing and Information Sciences, Kansas State    *
+ * University, USA (http://www.cis.ksu.edu/santos).                  *
+ * It is understood that any modification not identified as such is  *
+ * not covered by the preceding statement.                           *
+ *                                                                   *
+ * This work is free software; you can redistribute it and/or        *
+ * modify it under the terms of the GNU Library General Public       *
+ * License as published by the Free Software Foundation; either      *
+ * version 2 of the License, or (at your option) any later version.  *
+ *                                                                   *
+ * This work is distributed in the hope that it will be useful,      *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of    *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU *
+ * Library General Public License for more details.                  *
+ *                                                                   *
+ * You should have received a copy of the GNU Library General Public *
+ * License along with this toolkit; if not, write to the             *
+ * Free Software Foundation, Inc., 59 Temple Place - Suite 330,      *
+ * Boston, MA  02111-1307, USA.                                      *
+ *                                                                   *
+ * Java is a trademark of Sun Microsystems, Inc.                     *
+ *                                                                   *
+ * To submit a bug report, send a comment, or get the latest news on *
+ * this project and other SAnToS projects, please visit the web-site *
+ *                http://www.cis.ksu.edu/santos                      *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+/* changed the package -tcw */
+Package edu.ksu.cis.bandera.sessions.parser.v1;
+
+/*****************************************************************************
+ * Helpers                                                                   *
+ *****************************************************************************/
+Helpers
+
+character		= [0..255];
+ht			= 9;
+lf			= 10;
+ff			= 12;
+cr			= 13;
+sp			= ' ';
+alpha			= [['a' .. 'z'] + ['A' .. 'Z']] | '$' | '_';
+digit			= ['0' .. '9'];
+line_terminator		= lf | cr | cr lf; 
+input_character		= [character - [cr + lf]];
+not_star		= [input_character - '*'] | line_terminator;
+not_star_not_slash	= [input_character - ['*' + '/']] | line_terminator;
+octal_digit		= ['0'..'7'];
+zero_to_three		= ['0'..'3'];
+non_zero_digit		= ['1'..'9'];
+octal_numeral		= '0' octal_digit+;
+octal_escape		= '\' (octal_digit octal_digit?
+			| zero_to_three octal_digit octal_digit);
+escape_sequence		= '\b' | '\t' | '\n' | '\f' | '\r' | '\"' | '\' '''
+			| '\\' | octal_escape;
+string_character	= [input_character - ['"' + '\']] | escape_sequence;
+alpha_numeric		= alpha | digit;
+
+/*****************************************************************************
+ * Tokens                                                                    *
+ *****************************************************************************/
+Tokens
+
+white_space		= (sp | ht | ff | line_terminator)*;
+
+l_brace			= '{';
+r_brace			= '}';
+plus			= '+';
+equal			= '=';
+session                 = 'session';
+string_literal		= '"' string_character* '"';
+id			= (alpha (alpha | digit)*);
+
+/*****************************************************************************
+ * Ignored Tokens                                                            *
+ *****************************************************************************/
+Ignored Tokens
+
+white_space;
+
+/*****************************************************************************
+ * Productions                                                               *
+ *****************************************************************************/
+Productions
+
+unit			= P.session*;
+
+session			= T.session id l_brace resource* r_brace;
+
+resource		= {string} id equal strings;
+
+strings			= {string} string_literal
+			| {strings} strings plus string_literal;
+

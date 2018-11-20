@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.6.1">
+<title>Flyweight Pattern</title>
+<link rel="stylesheet" href="./assets/css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+<h1>Flyweight Pattern</h1>
+<div class="details">
+<span id="revnumber">version 3.0.0-alpha-3</span>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_example">1. Example</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <a href="http://en.wikipedia.org/wiki/Flyweight_pattern">Flyweight Pattern</a> is a pattern for greatly reducing memory requirements by not requiring that heavy-weight objects be created in large numbers when dealing with systems that contain many things that are mostly the same. If for instance, a document was modelled using a complex character class that knew about unicode, fonts, positioning, etc., then the memory requirements could be quite large for large documents if each physical character in the document required its own character class instance. Instead, characters themselves might be kept within Strings and we might have one character class (or a small number such as one character class for each font type) that knew the specifics of how to deal with characters.</p>
+</div>
+<div class="paragraph">
+<p>In such circumstances, we call the state that is shared with many other things (e.g. the character type) <em>instrinsic</em> state. It is captured within the heavy-weight class. The state which distinguishes the physical character (maybe just its ASCII code or Unicode) is called its <em>extrinsic</em> state.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_example"><a class="anchor" href="#_example"></a>1. Example</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>First we are going to model some complex aircraft (the first being a hoax competitor of the second - not that is relevant to the example).</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Boeing797 {
+    def wingspan = '80.8 m'
+    def capacity = 1000
+    def speed = '1046 km/h'
+    def range = '14400 km'
+    // ...
+}</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="assets/img/b797-hoax.jpg" alt="b797 hoax">
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Airbus380 {
+    def wingspan = '79.8 m'
+    def capacity = 555
+    def speed = '912 km/h'
+    def range = '10370 km'
+    // ...
+}</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="assets/img/a380.jpg" alt="a380">
+</div>
+</div>
+<div class="paragraph">
+<p>If we want to model our fleet, our first attempt might involve using many instances of these heavy-weight objects. It turns out though that only a few small pieces of state (our extrinsic state) change for each aircraft, so we will have singletons for the heavy-weight objects and capture the extrinsic state (bought date and asset number in the code below) separately.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class FlyweightFactory {
+    static instances = [797: new Boeing797(), 380: new Airbus380()]
+}
+
+class Aircraft {
+    private type         // instrinsic state
+    private assetNumber  // extrinsic state
+    private bought       // extrinsic state
+    Aircraft(typeCode, assetNumber, bought) {
+        type = FlyweightFactory.instances[typeCode]
+        this.assetNumber = assetNumber
+        this.bought = bought
+    }
+    def describe() {
+        println """
+        Asset Number: $assetNumber
+        Capacity: $type.capacity people
+        Speed: $type.speed
+        Range: $type.range
+        Bought: $bought
+        """
+    }
+}
+
+def fleet = [
+    new Aircraft(380, 1001, '10-May-2007'),
+    new Aircraft(380, 1002, '10-Nov-2007'),
+    new Aircraft(797, 1003, '10-May-2008'),
+    new Aircraft(797, 1004, '10-Nov-2008')
+]
+
+fleet.each { p -&gt; p.describe() }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>So here, even if our fleet contained hundreds of planes, we would only have one heavy-weight object for each type of aircraft.</p>
+</div>
+<div class="paragraph">
+<p>As a further efficiency measure, we might use lazy creation of the flyweight objects rather than create the initial map up front as in the above example.</p>
+</div>
+<div class="paragraph">
+<p>Running this script results in:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Asset Number: 1001
+Capacity: 555 people
+Speed: 912 km/h
+Range: 10370 km
+Bought: 10-May-2007
+
+Asset Number: 1002
+Capacity: 555 people
+Speed: 912 km/h
+Range: 10370 km
+Bought: 10-Nov-2007
+
+Asset Number: 1003
+Capacity: 1000 people
+Speed: 1046 km/h
+Range: 14400 km
+Bought: 10-May-2008
+
+Asset Number: 1004
+Capacity: 1000 people
+Speed: 1046 km/h
+Range: 14400 km
+Bought: 10-Nov-2008</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 3.0.0-alpha-3<br>
+Last updated 2018-06-23 13:44:39 AEST
+</div>
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+<script>prettyPrint()</script>
+</body>
+</html>

@@ -1,0 +1,3775 @@
+Request cookies of https://account.smartthings.com/login/smartthings:
+XSRF-TOKEN:5cpf1bh9ioamdb71tdvlp9rbki47h1mhn34024p8s48k8aivpe1ugr6v6hc19fis
+_xb3c:
+************************************
+Home page:
+<!doctype html>
+<html lang="en">
+ <head> 
+  <meta charset="UTF-8"> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  <meta http-equiv="X-UA-Compatible" content="ie=edge"> 
+  <title>Login Redirect</title> 
+ </head> 
+ <body> 
+  <p>please wait..</p> 
+  <script>
+	(() => {
+		window.location.replace('https://graph-na02-useast1.api.smartthings.com:443');
+	})();
+</script>   
+ </body>
+</html>
+Redirect URL:https://graph-na02-useast1.api.smartthings.com
+Home page's cookies:
+_JTKN:eyJraWQiOiJEQV9DdlZEbUY0Q21EaG4tUXgxcGZ4NWtHRUo3UW1IblZ5TVpFR2V3ZVZjIiwiYWxnIjoiUlMyNTYifQ.eyJwcmluY2lwYWwiOiJ1c2VyX3V1aWQ6OTIzNmVmZTgtYWEwOC00ZWUyLTg3OWMtZWU1YTVkNTQ4ZTM0IiwidXNlcl9uYW1lIjoidG5ndXkyMDhAdWNyLmVkdSIsInNjb3BlIjpbIm1vYmlsZSJdLCJmdWxsTmFtZSI6IlR1IE5ndXllbiIsImV4cCI6MTUxNjA5MzYxOSwidXVpZCI6IjkyMzZlZmU4LWFhMDgtNGVlMi04NzljLWVlNWE1ZDU0OGUzNCIsImVtYWlsIjoidG5ndXkyMDhAdWNyLmVkdSIsImF1dGhvcml0aWVzIjpbIlJPTEVfREVWRUxPUEVSIiwiUk9MRV9VU0VSIl0sImNsaWVudF9pZCI6IjhmNGRiZTZkLTkwNjYtNGQwZS05OWQwLWRmMWFjN2U2OWE3ZSJ9.afl9KfDVPYtkRPWronzFxy4WB4TfGzcbQtiJutIVBM5npuMIB5EeSGXImQBIoDCn4tMqe7nRN0EorWEMezUy_QZlLhg2pAq1j8_c_UynfO_EIXSwJSngmL78HQZIVxGOlq74zhu4JpNjjwAjBog2HANRiomQepNOrozMGc95Oj095uVoq69JoKY-plPei-hSN4-r4h9aw8tiF9OJgMFcDVhyjnssvVymlPP0psr6i5-GhSGDEArF5xLRmj4j5AhPDPG5hckae1peXe2shmDtZwOvmcatSrtCiQliCf1_7eUpGn91hx0z_XE-jMVfbrXO5U5V-hxHGXSHgQIcEpnNyA
+JSESSIONID:0817b218-f8db-b4d7-bd33-e291361db320
+_xb3c:
+************************************
+Redirected page:
+<!doctype html>
+<!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]-->
+<!--[if IE 7 ]>    <html lang="en" class="no-js ie7"> <![endif]-->
+<!--[if IE 8 ]>    <html lang="en" class="no-js ie8"> <![endif]-->
+<!--[if IE 9 ]>    <html lang="en" class="no-js ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!-->
+<html lang="en" class="no-js">
+ <!--<![endif]-->
+ <head> 
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+  <title>SmartThings</title> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  <link rel="shortcut icon" type="image/x-icon" href="/assets/components/common/favicon-e139278c1f23d5ca93e5b74b58622e9d.ico"> 
+  <link rel="apple-touch-icon" href="/assets/components/common/apple-touch-icon-b7275dbac7a4078e4f44859751581016.png"> 
+  <link rel="apple-touch-icon" sizes="114x114" href="/assets/components/common/apple-touch-icon-retina-35ea8b3c6aa433fa74ebc97d0b5a2a53.png"> 
+  <link rel="stylesheet" href="/assets/base/bootstrap-framework-449e81f998287c2a7231536d26e3b2b6.css"> 
+  <link rel="stylesheet" href="/assets/base/common-f1637902ac11f16a5c6e994298845cb0.css"> 
+  <script src="/assets/libs/underscore/underscore-6e1f1c149dc88c708f9bfce4a061187f.js" type="text/javascript"></script> 
+  <script src="/assets/apps/main/main-app-5811442e0bc96e2d7374677668e7edc4.js" type="text/javascript"></script> 
+  <script src="/assets/libs/bootstrap/bootstrap-e3bccdc29cf6e1d0f3e7bc54ccf086ef.js" type="text/javascript"></script> 
+  <!--[if lt IE 9]>
+	<script src="/assets/libs/html5shiv/html5shiv-4163e58056c3c7ff50f91c9d141fefaa.js" type="text/javascript" ></script>
+	<![endif]--> 
+  <script type="text/javascript">
+			window.heap=window.heap||[],heap.load=function(t,e){window.heap.appid=t,window.heap.config=e;var a=document.createElement("script");a.type="text/javascript",a.async=!0,a.src=("https:"===document.location.protocol?"https:":"http:")+"//cdn.heapanalytics.com/js/heap-"+t+".js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(a,n);for(var o=function(t){return function(){heap.push([t].concat(Array.prototype.slice.call(arguments,0)))}},p=["clearEventProperties","identify","setEventProperties","track","unsetEventProperty"],c=0;c<p.length;c++)heap[p[c]]=o(p[c])};
+			heap.load("2894297474");
+		</script> 
+  <meta name="layout" content="bootstrap-fixed"> 
+ </head> 
+ <body class="production-env"> 
+  <!-- Google Tag Manager --> 
+  <noscript>
+   <iframe src="//www.googletagmanager.com/ns.html?id=GTM-M4C995" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+  </noscript> 
+  <script type="application/javascript">
+(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-M4C995');
+</script> 
+  <!-- End Google Tag Manager --> 
+  <header class="header-main minimized"> 
+   <div class="login-tab"> 
+    <div class="login-tab-welcome"> 
+     <div class="st-arrow-container"> 
+      <div class="st-arrow-dropdown"></div> 
+     </div> Welcome back, 
+     <strong class="username"><a href="/user/show">tnguy208@ucr.edu</a></strong> 
+    </div> 
+    <ul> 
+     <li><a href="/logout/index">Logout</a></li> 
+    </ul> 
+   </div> 
+   <div> 
+    <div class="gradient-top-bar"></div> 
+    <div class="clearfix"> 
+     <div id="topNavigation" style="display:none;"> 
+      <div class="mobile-menu-brand">
+       <img src="/assets/components/common/smartthings-logo.png" alt="logo">
+      </div> 
+      <div class="mobile-menu-icon">
+       <div>
+        <div></div>
+       </div>
+      </div> 
+     </div> 
+    </div> 
+   </div> 
+  </header> 
+  <div class="mobile-menu"> 
+   <ul class="ul-reset"> 
+    <li><a href="/user/show">Logged in as: tnguy208@ucr.edu</a></li> 
+    <li><a href="/logout/index">Logout</a></li> 
+    <li><a href="https://shop.smartthings.com">Shop</a></li> 
+    <li><a href="http://smartthings.com">Learn More</a></li> 
+    <li><a href="http://smartthings.com/build">Build</a></li> 
+    <li><a href="http://support.smartthings.com">Support</a></li> 
+    <ul class="logged-in-menu ul-reset"> 
+     <li class="menu-title">Developer Tools:</li> 
+     <li class=""><a href="/location/list"><span class="hidden-sm hidden-xs">My </span>Locations</a></li> 
+     <li class=""><a href="/hub/list"><span class="hidden-sm hidden-xs">My </span>Hubs</a></li> 
+     <li class=""><a href="/device/list"><span class="hidden-sm hidden-xs">My </span>Devices</a></li> 
+     <li class=""><a href="/ide/apps"><span class="hidden-sm hidden-xs">My </span>SmartApps</a></li> 
+     <li class=""><a href="/ide/devices"><span class="hidden-sm hidden-xs">My </span>Device Handlers</a></li> 
+     <li class=""><a href="/ide/submissions"><span class="hidden-sm hidden-xs">My </span>Publication Requests</a></li> 
+     <li class=""><a href="/ide/logs">Logs</a></li> 
+     <li class=""><a href="http://docs.smartthings.com/" target="_newWindow">Documentation</a></li> 
+    </ul> 
+   </ul> 
+  </div> 
+  <div class="dev-nav-wrap"> 
+   <div class="navbar navbar-default main"> 
+    <div class="container-fluid"> 
+     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1"> 
+      <ul class="nav navbar-nav main"> 
+       <li class=""><a href="/location/list"><span class="hidden-sm hidden-xs">My </span>Locations</a></li> 
+       <li class=""><a href="/hub/list"><span class="hidden-sm hidden-xs">My </span>Hubs</a></li> 
+       <li class=""><a href="/device/list"><span class="hidden-sm hidden-xs">My </span>Devices</a></li> 
+       <li class=""><a href="/ide/apps"><span class="hidden-sm hidden-xs">My </span>SmartApps</a></li> 
+       <li class=""><a href="/ide/devices"><span class="hidden-sm hidden-xs">My </span>Device Handlers</a></li> 
+       <li class=""><a href="/ide/submissions"><span class="hidden-sm hidden-xs">My </span>Publication Requests</a></li> 
+       <li class=""><a href="/ide/logs">Live Logging</a></li> 
+       <li class=""><a href="http://docs.smartthings.com/" target="_newWindow">Documentation</a></li> 
+      </ul> 
+     </div> 
+    </div> 
+   </div> 
+  </div> 
+  <script id="success-template" type="text/x-handlebars-template">
+	<div class="inner-wrap">
+		<div class="alert alert-success alert-dismissible flash">
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+			{{message}}
+		</div>
+	</div>
+</script> 
+  <script type="application/javascript">
+	function _resize_window_delayed() {
+		setTimeout(function() {
+			window.dispatchEvent(new Event('resize'));
+		}, 50)
+	}
+</script> 
+  <div id="flash-message-container" class="row"> 
+  </div> 
+  <div class="content home"> 
+   <div class="inner-wrap"> 
+    <div class="clearfix" role="navigation"> 
+     <img src="/assets/components/common/imac-screenshot@2x-75ee1bf4ec46222d2f768a5e21541206.png" class="imac-screenshot"> 
+     <div class="intro-text"> 
+      <p>Using these tools you can <a href="/hub/list">manage your hubs</a> and <a href="/device/list">devices</a>, give them unique names, and organize them into <a href="/location/list">locations</a> and <a href="/group/list">groups</a>. </p>
+      <p>Access your developer tools: <a href="/ide/apps">create your own apps</a>, <a href="/ide/devices">create your own device types</a>, <a href="/ide/logs">view your logs</a>, and access <a href="http://docs.smartthings.com/" target="_newWindow">developer documentation</a>.</p> 
+     </div> 
+    </div> 
+   </div> 
+  </div> 
+  <div class="inner-wrap clearfix"></div> 
+  <div class="footer main" role="contentinfo"> 
+   <div class="inner-wrap clearfix"> 
+    <div class="pull-left">
+      © 2018 SmartThings, Inc. All rights reserved. 
+    </div> 
+    <ul class="pull-right footer-links"> 
+     <li><a href="http://www.smartthings.com/benefits/" target="_blank">Benefits</a></li> 
+     <li>&nbsp;&nbsp;|&nbsp;&nbsp;</li> 
+     <li><a href="https://shop.smartthings.com" target="_blank">Shop</a></li> 
+     <li>&nbsp;&nbsp;|&nbsp;&nbsp;</li> 
+     <li><a href="http://blog.smartthings.com/" target="_blank">Blog</a></li> 
+     <li>&nbsp;&nbsp;|&nbsp;&nbsp;</li> 
+     <li><a href="https://developers.smartthings.com/" target="_blank">Developers</a></li> 
+     <li>&nbsp;&nbsp;|&nbsp;&nbsp;</li> 
+     <li><a href="http://support.smartthings.com" target="_blank">Support</a></li> 
+     <li>&nbsp;&nbsp;|&nbsp;&nbsp;</li> 
+     <li><a href="http://www.smartthings.com/terms/" target="_blank">Terms of Use</a></li> 
+     <li>&nbsp;&nbsp;|&nbsp;&nbsp;</li> 
+     <li><a href="http://www.smartthings.com/privacy/" target="_blank">Privacy Policy</a></li> 
+    </ul> 
+   </div> 
+  </div>   
+ </body>
+</html>
+************************************
+Location's list page:
+<!doctype html>
+<!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]-->
+<!--[if IE 7 ]>    <html lang="en" class="no-js ie7"> <![endif]-->
+<!--[if IE 8 ]>    <html lang="en" class="no-js ie8"> <![endif]-->
+<!--[if IE 9 ]>    <html lang="en" class="no-js ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!-->
+<html lang="en" class="no-js">
+ <!--<![endif]-->
+ <head> 
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+  <title>Location List</title> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  <link rel="shortcut icon" type="image/x-icon" href="/assets/components/common/favicon-e139278c1f23d5ca93e5b74b58622e9d.ico"> 
+  <link rel="apple-touch-icon" href="/assets/components/common/apple-touch-icon-b7275dbac7a4078e4f44859751581016.png"> 
+  <link rel="apple-touch-icon" sizes="114x114" href="/assets/components/common/apple-touch-icon-retina-35ea8b3c6aa433fa74ebc97d0b5a2a53.png"> 
+  <link rel="stylesheet" href="/assets/base/bootstrap-framework-449e81f998287c2a7231536d26e3b2b6.css"> 
+  <link rel="stylesheet" href="/assets/base/common-f1637902ac11f16a5c6e994298845cb0.css"> 
+  <script src="/assets/libs/underscore/underscore-6e1f1c149dc88c708f9bfce4a061187f.js" type="text/javascript"></script> 
+  <script src="/assets/apps/main/main-app-5811442e0bc96e2d7374677668e7edc4.js" type="text/javascript"></script> 
+  <script src="/assets/libs/bootstrap/bootstrap-e3bccdc29cf6e1d0f3e7bc54ccf086ef.js" type="text/javascript"></script> 
+  <!--[if lt IE 9]>
+	<script src="/assets/libs/html5shiv/html5shiv-4163e58056c3c7ff50f91c9d141fefaa.js" type="text/javascript" ></script>
+	<![endif]--> 
+  <script type="text/javascript">
+			window.heap=window.heap||[],heap.load=function(t,e){window.heap.appid=t,window.heap.config=e;var a=document.createElement("script");a.type="text/javascript",a.async=!0,a.src=("https:"===document.location.protocol?"https:":"http:")+"//cdn.heapanalytics.com/js/heap-"+t+".js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(a,n);for(var o=function(t){return function(){heap.push([t].concat(Array.prototype.slice.call(arguments,0)))}},p=["clearEventProperties","identify","setEventProperties","track","unsetEventProperty"],c=0;c<p.length;c++)heap[p[c]]=o(p[c])};
+			heap.load("2894297474");
+		</script> 
+  <meta name="layout" content="bootstrap-fixed"> 
+  <link rel="stylesheet" href="/assets/apps/location/location-list-27416428f6dbfd2e0f4336a67c41aac3.css"> 
+  <script src="/assets/libs/bootbox/bootbox-f121c132065a395da46166eb555a8bcc.js" type="text/javascript"></script> 
+ </head> 
+ <body class="production-env"> 
+  <!-- Google Tag Manager --> 
+  <noscript>
+   <iframe src="//www.googletagmanager.com/ns.html?id=GTM-M4C995" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+  </noscript> 
+  <script type="application/javascript">
+(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-M4C995');
+</script> 
+  <!-- End Google Tag Manager --> 
+  <header class="header-main minimized"> 
+   <div class="login-tab"> 
+    <div class="login-tab-welcome"> 
+     <div class="st-arrow-container"> 
+      <div class="st-arrow-dropdown"></div> 
+     </div> Welcome back, 
+     <strong class="username"><a href="/user/show">tnguy208@ucr.edu</a></strong> 
+    </div> 
+    <ul> 
+     <li><a href="/logout/index">Logout</a></li> 
+    </ul> 
+   </div> 
+   <div> 
+    <div class="gradient-top-bar"></div> 
+    <div class="clearfix"> 
+     <div id="topNavigation" style="display:none;"> 
+      <div class="mobile-menu-brand">
+       <img src="/assets/components/common/smartthings-logo.png" alt="logo">
+      </div> 
+      <div class="mobile-menu-icon">
+       <div>
+        <div></div>
+       </div>
+      </div> 
+     </div> 
+    </div> 
+   </div> 
+  </header> 
+  <div class="mobile-menu"> 
+   <ul class="ul-reset"> 
+    <li><a href="/user/show">Logged in as: tnguy208@ucr.edu</a></li> 
+    <li><a href="/logout/index">Logout</a></li> 
+    <li><a href="https://shop.smartthings.com">Shop</a></li> 
+    <li><a href="http://smartthings.com">Learn More</a></li> 
+    <li><a href="http://smartthings.com/build">Build</a></li> 
+    <li><a href="http://support.smartthings.com">Support</a></li> 
+    <ul class="logged-in-menu ul-reset"> 
+     <li class="menu-title">Developer Tools:</li> 
+     <li class="active"><a href="/location/list"><span class="hidden-sm hidden-xs">My </span>Locations</a></li> 
+     <li class=""><a href="/hub/list"><span class="hidden-sm hidden-xs">My </span>Hubs</a></li> 
+     <li class=""><a href="/device/list"><span class="hidden-sm hidden-xs">My </span>Devices</a></li> 
+     <li class=""><a href="/ide/apps"><span class="hidden-sm hidden-xs">My </span>SmartApps</a></li> 
+     <li class=""><a href="/ide/devices"><span class="hidden-sm hidden-xs">My </span>Device Handlers</a></li> 
+     <li class=""><a href="/ide/submissions"><span class="hidden-sm hidden-xs">My </span>Publication Requests</a></li> 
+     <li class=""><a href="/ide/logs">Logs</a></li> 
+     <li class=""><a href="http://docs.smartthings.com/" target="_newWindow">Documentation</a></li> 
+    </ul> 
+   </ul> 
+  </div> 
+  <div class="dev-nav-wrap"> 
+   <div class="navbar navbar-default main"> 
+    <div class="container-fluid"> 
+     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1"> 
+      <ul class="nav navbar-nav main"> 
+       <li class="active"><a href="/location/list"><span class="hidden-sm hidden-xs">My </span>Locations</a></li> 
+       <li class=""><a href="/hub/list"><span class="hidden-sm hidden-xs">My </span>Hubs</a></li> 
+       <li class=""><a href="/device/list"><span class="hidden-sm hidden-xs">My </span>Devices</a></li> 
+       <li class=""><a href="/ide/apps"><span class="hidden-sm hidden-xs">My </span>SmartApps</a></li> 
+       <li class=""><a href="/ide/devices"><span class="hidden-sm hidden-xs">My </span>Device Handlers</a></li> 
+       <li class=""><a href="/ide/submissions"><span class="hidden-sm hidden-xs">My </span>Publication Requests</a></li> 
+       <li class=""><a href="/ide/logs">Live Logging</a></li> 
+       <li class=""><a href="http://docs.smartthings.com/" target="_newWindow">Documentation</a></li> 
+      </ul> 
+     </div> 
+    </div> 
+   </div> 
+  </div> 
+  <script id="success-template" type="text/x-handlebars-template">
+	<div class="inner-wrap">
+		<div class="alert alert-success alert-dismissible flash">
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+			{{message}}
+		</div>
+	</div>
+</script> 
+  <script type="application/javascript">
+	function _resize_window_delayed() {
+		setTimeout(function() {
+			window.dispatchEvent(new Event('resize'));
+		}, 50)
+	}
+</script> 
+  <div id="flash-message-container" class="row"> 
+  </div> 
+  <main class="location-list-page content"> 
+   <div id="list-location"> 
+    <a href="/location/create" class="create btn btn-small btn-success pull-right"><i class="icon-plus icon-white"></i> New Location</a> 
+    <h1>Locations</h1> 
+    <div class="table-wrap"> 
+     <table class="table table-bordered table-condensed table-striped"> 
+      <thead> 
+       <tr> 
+        <th>Name</th> 
+        <th>Events</th> 
+        <th>Notifications</th> 
+        <th>Devices</th> 
+        <th>Installed SmartApps</th> 
+       </tr> 
+      </thead> 
+      <tbody> 
+       <tr class="even"> 
+        <td> <a href="https://graph-na02-useast1.api.smartthings.com:443/location/show/6be87d7c-688c-4b7e-93ce-617fa05ef8ea"> Networking Lab </a> </td> 
+        <td> <a href="https://graph-na02-useast1.api.smartthings.com:443/location/6be87d7c-688c-4b7e-93ce-617fa05ef8ea/events"> events </a> </td> 
+        <td> <a href="https://graph-na02-useast1.api.smartthings.com:443/location/notifications/6be87d7c-688c-4b7e-93ce-617fa05ef8ea?type=location"> notifications </a> </td> 
+        <td> <a href="https://graph-na02-useast1.api.smartthings.com:443/location/devices/6be87d7c-688c-4b7e-93ce-617fa05ef8ea"> devices </a> </td> 
+        <td> <a href="https://graph-na02-useast1.api.smartthings.com:443/location/installedSmartApps/6be87d7c-688c-4b7e-93ce-617fa05ef8ea"> smartapps </a> </td> 
+       </tr> 
+      </tbody> 
+     </table> 
+    </div> 
+    <div class="pagination"> 
+    </div> 
+   </div> 
+  </main> 
+  <div class="inner-wrap clearfix"></div> 
+  <div class="footer main" role="contentinfo"> 
+   <div class="inner-wrap clearfix"> 
+    <div class="pull-left">
+      © 2018 SmartThings, Inc. All rights reserved. 
+    </div> 
+    <ul class="pull-right footer-links"> 
+     <li><a href="http://www.smartthings.com/benefits/" target="_blank">Benefits</a></li> 
+     <li>&nbsp;&nbsp;|&nbsp;&nbsp;</li> 
+     <li><a href="https://shop.smartthings.com" target="_blank">Shop</a></li> 
+     <li>&nbsp;&nbsp;|&nbsp;&nbsp;</li> 
+     <li><a href="http://blog.smartthings.com/" target="_blank">Blog</a></li> 
+     <li>&nbsp;&nbsp;|&nbsp;&nbsp;</li> 
+     <li><a href="https://developers.smartthings.com/" target="_blank">Developers</a></li> 
+     <li>&nbsp;&nbsp;|&nbsp;&nbsp;</li> 
+     <li><a href="http://support.smartthings.com" target="_blank">Support</a></li> 
+     <li>&nbsp;&nbsp;|&nbsp;&nbsp;</li> 
+     <li><a href="http://www.smartthings.com/terms/" target="_blank">Terms of Use</a></li> 
+     <li>&nbsp;&nbsp;|&nbsp;&nbsp;</li> 
+     <li><a href="http://www.smartthings.com/privacy/" target="_blank">Privacy Policy</a></li> 
+    </ul> 
+   </div> 
+  </div>   
+ </body>
+</html>
+************************************
+smart apps' page of Networking Lab:
+<!doctype html>
+<!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]-->
+<!--[if IE 7 ]>    <html lang="en" class="no-js ie7"> <![endif]-->
+<!--[if IE 8 ]>    <html lang="en" class="no-js ie8"> <![endif]-->
+<!--[if IE 9 ]>    <html lang="en" class="no-js ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!-->
+<html lang="en" class="no-js">
+ <!--<![endif]-->
+ <head> 
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+  <title>Installed Smart Apps</title> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  <link rel="shortcut icon" type="image/x-icon" href="/assets/components/common/favicon-e139278c1f23d5ca93e5b74b58622e9d.ico"> 
+  <link rel="apple-touch-icon" href="/assets/components/common/apple-touch-icon-b7275dbac7a4078e4f44859751581016.png"> 
+  <link rel="apple-touch-icon" sizes="114x114" href="/assets/components/common/apple-touch-icon-retina-35ea8b3c6aa433fa74ebc97d0b5a2a53.png"> 
+  <link rel="stylesheet" href="/assets/base/bootstrap-framework-449e81f998287c2a7231536d26e3b2b6.css"> 
+  <link rel="stylesheet" href="/assets/base/common-f1637902ac11f16a5c6e994298845cb0.css"> 
+  <script src="/assets/libs/underscore/underscore-6e1f1c149dc88c708f9bfce4a061187f.js" type="text/javascript"></script> 
+  <script src="/assets/apps/main/main-app-5811442e0bc96e2d7374677668e7edc4.js" type="text/javascript"></script> 
+  <script src="/assets/libs/bootstrap/bootstrap-e3bccdc29cf6e1d0f3e7bc54ccf086ef.js" type="text/javascript"></script> 
+  <!--[if lt IE 9]>
+	<script src="/assets/libs/html5shiv/html5shiv-4163e58056c3c7ff50f91c9d141fefaa.js" type="text/javascript" ></script>
+	<![endif]--> 
+  <script type="text/javascript">
+			window.heap=window.heap||[],heap.load=function(t,e){window.heap.appid=t,window.heap.config=e;var a=document.createElement("script");a.type="text/javascript",a.async=!0,a.src=("https:"===document.location.protocol?"https:":"http:")+"//cdn.heapanalytics.com/js/heap-"+t+".js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(a,n);for(var o=function(t){return function(){heap.push([t].concat(Array.prototype.slice.call(arguments,0)))}},p=["clearEventProperties","identify","setEventProperties","track","unsetEventProperty"],c=0;c<p.length;c++)heap[p[c]]=o(p[c])};
+			heap.load("2894297474");
+		</script> 
+  <meta name="layout" content="bootstrap-fixed"> 
+  <script src="/assets/libs/handlebars/handlebars-4a16beaf83d134addd8c5ae99da53f9d.js" type="text/javascript"></script> 
+ </head> 
+ <body class="production-env"> 
+  <!-- Google Tag Manager --> 
+  <noscript>
+   <iframe src="//www.googletagmanager.com/ns.html?id=GTM-M4C995" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+  </noscript> 
+  <script type="application/javascript">
+(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-M4C995');
+</script> 
+  <!-- End Google Tag Manager --> 
+  <header class="header-main minimized"> 
+   <div class="login-tab"> 
+    <div class="login-tab-welcome"> 
+     <div class="st-arrow-container"> 
+      <div class="st-arrow-dropdown"></div> 
+     </div> Welcome back, 
+     <strong class="username"><a href="/user/show">tnguy208@ucr.edu</a></strong> 
+    </div> 
+    <ul> 
+     <li><a href="/logout/index">Logout</a></li> 
+    </ul> 
+   </div> 
+   <div> 
+    <div class="gradient-top-bar"></div> 
+    <div class="clearfix"> 
+     <div id="topNavigation" style="display:none;"> 
+      <div class="mobile-menu-brand">
+       <img src="/assets/components/common/smartthings-logo.png" alt="logo">
+      </div> 
+      <div class="mobile-menu-icon">
+       <div>
+        <div></div>
+       </div>
+      </div> 
+     </div> 
+    </div> 
+   </div> 
+  </header> 
+  <div class="mobile-menu"> 
+   <ul class="ul-reset"> 
+    <li><a href="/user/show">Logged in as: tnguy208@ucr.edu</a></li> 
+    <li><a href="/logout/index">Logout</a></li> 
+    <li><a href="https://shop.smartthings.com">Shop</a></li> 
+    <li><a href="http://smartthings.com">Learn More</a></li> 
+    <li><a href="http://smartthings.com/build">Build</a></li> 
+    <li><a href="http://support.smartthings.com">Support</a></li> 
+    <ul class="logged-in-menu ul-reset"> 
+     <li class="menu-title">Developer Tools:</li> 
+     <li class=""><a href="/location/list"><span class="hidden-sm hidden-xs">My </span>Locations</a></li> 
+     <li class=""><a href="/hub/list"><span class="hidden-sm hidden-xs">My </span>Hubs</a></li> 
+     <li class=""><a href="/device/list"><span class="hidden-sm hidden-xs">My </span>Devices</a></li> 
+     <li class=""><a href="/ide/apps"><span class="hidden-sm hidden-xs">My </span>SmartApps</a></li> 
+     <li class=""><a href="/ide/devices"><span class="hidden-sm hidden-xs">My </span>Device Handlers</a></li> 
+     <li class=""><a href="/ide/submissions"><span class="hidden-sm hidden-xs">My </span>Publication Requests</a></li> 
+     <li class=""><a href="/ide/logs">Logs</a></li> 
+     <li class=""><a href="http://docs.smartthings.com/" target="_newWindow">Documentation</a></li> 
+    </ul> 
+   </ul> 
+  </div> 
+  <div class="dev-nav-wrap"> 
+   <div class="navbar navbar-default main"> 
+    <div class="container-fluid"> 
+     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1"> 
+      <ul class="nav navbar-nav main"> 
+       <li class=""><a href="/location/list"><span class="hidden-sm hidden-xs">My </span>Locations</a></li> 
+       <li class=""><a href="/hub/list"><span class="hidden-sm hidden-xs">My </span>Hubs</a></li> 
+       <li class=""><a href="/device/list"><span class="hidden-sm hidden-xs">My </span>Devices</a></li> 
+       <li class=""><a href="/ide/apps"><span class="hidden-sm hidden-xs">My </span>SmartApps</a></li> 
+       <li class=""><a href="/ide/devices"><span class="hidden-sm hidden-xs">My </span>Device Handlers</a></li> 
+       <li class=""><a href="/ide/submissions"><span class="hidden-sm hidden-xs">My </span>Publication Requests</a></li> 
+       <li class=""><a href="/ide/logs">Live Logging</a></li> 
+       <li class=""><a href="http://docs.smartthings.com/" target="_newWindow">Documentation</a></li> 
+      </ul> 
+     </div> 
+    </div> 
+   </div> 
+  </div> 
+  <script id="success-template" type="text/x-handlebars-template">
+	<div class="inner-wrap">
+		<div class="alert alert-success alert-dismissible flash">
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+			{{message}}
+		</div>
+	</div>
+</script> 
+  <script type="application/javascript">
+	function _resize_window_delayed() {
+		setTimeout(function() {
+			window.dispatchEvent(new Event('resize'));
+		}, 50)
+	}
+</script> 
+  <div id="flash-message-container" class="row"> 
+  </div> 
+  <script id="error-template" type="text/x-handlebars-template">
+	<div class="alert alert-danger alert-dismissible">
+		<div class="inner-wrap">
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+			{{error}}
+		</div>
+	</div>
+</script> 
+  <script id="message-template" type="text/x-handlebars-template">
+	<div class="inner-wrap">
+		<div class="alert alert-info alert-dismissible">
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+			{{message}}
+		</div>
+	</div>
+</script> 
+  <div class="nav content" role="navigation"> 
+   <ul class="nav nav-pills"> 
+    <li><a href="/location/show/6be87d7c-688c-4b7e-93ce-617fa05ef8ea">« Networking Lab Location</a></li> 
+   </ul> 
+  </div> 
+  <div id="show-location" class="content scaffold-show" role="main"> 
+   <div class="table-wrap" style="width: 720px; background-color: #999999;"> 
+    <table class="property-list location table" style="width: 720px; position: relative; float: right; margin: 0;"> 
+     <tbody>
+      <tr class="fieldcontain"> 
+       <td class="property-value" style="background: url(https://smartthings-location-images.s3.amazonaws.com/standard/standard51.jpg) no-repeat; background-size: 100% auto; height: 100px; box-sizing: content-box;" colspan="2" aria-labelledby="name-label"> 
+        <div class="location-name-large" style="color: #fff; font-size: 50px; position: absolute; right: 50px; top: 30px; text-shadow: 0 1px 1px rgba(0, 0, 0, 0.6);">
+         Networking Lab
+        </div> </td> 
+      </tr> 
+     </tbody>
+    </table> 
+   </div> 
+   <h1 style="width: 720px;"> Installed SmartApps <a href="#" id="app-edit-link" style="float: right;" onclick="enableEdit()">Edit</a> <a href="#" id="app-edit-done-link" style="float: right; display: none;" onclick="disableEdit()">Done</a> </h1> 
+   <h2>Hello Home</h2> 
+   <ul class="installedSmartApps"> 
+    <li class="property-value active" aria-labelledby="solutions-label" id="cd25661a-3b9f-4212-b6a8-cae59d15b3fb"> 
+     <div class="app-item" data-path="/installedSmartApp/overlay/cd25661a-3b9f-4212-b6a8-cae59d15b3fb" data-title="Hello Home"> 
+      <a href="/installedSmartApp/showModal/cd25661a-3b9f-4212-b6a8-cae59d15b3fb" class="app-edit" data-path="/installedSmartApp/overlay/cd25661a-3b9f-4212-b6a8-cae59d15b3fb" data-title="Hello Home">Hello Home</a> 
+      <a href="/installedSmartApp/executeUpdate/cd25661a-3b9f-4212-b6a8-cae59d15b3fb" class="executeUpdate">Update</a> 
+      <span class="exec-location"> <i>cloud</i> </span> 
+      <a href="/installedSmartApp/uninstall/cd25661a-3b9f-4212-b6a8-cae59d15b3fb" class="install uninstall" style="display: none">Uninstall</a> 
+      <div class="spinner"></div> 
+     </div> 
+     <ul class="installedSmartApps"> 
+      <li class="property-value active" aria-labelledby="solutions-label" id="3d0a9f52-b013-408f-b4c0-4b95321f5819"> 
+       <div class="app-item" data-path="/installedSmartApp/overlay/3d0a9f52-b013-408f-b4c0-4b95321f5819" data-title="Good Morning! (Phrase)"> 
+        <a href="/installedSmartApp/showModal/3d0a9f52-b013-408f-b4c0-4b95321f5819" class="app-edit" data-path="/installedSmartApp/overlay/3d0a9f52-b013-408f-b4c0-4b95321f5819" data-title="Good Morning! (Phrase)">Good Morning!</a> 
+        <a href="/installedSmartApp/executeUpdate/3d0a9f52-b013-408f-b4c0-4b95321f5819" class="executeUpdate">Update</a> 
+        <span class="exec-location"> <i>cloud</i> </span> 
+        <a href="/installedSmartApp/uninstall/3d0a9f52-b013-408f-b4c0-4b95321f5819" class="install uninstall" style="display: none">Uninstall</a> 
+        <div class="spinner"></div> 
+       </div> </li> 
+      <li class="property-value active" aria-labelledby="solutions-label" id="4d0c51ae-7e29-4b0c-a0a2-ef538ffcc75c"> 
+       <div class="app-item" data-path="/installedSmartApp/overlay/4d0c51ae-7e29-4b0c-a0a2-ef538ffcc75c" data-title="Good Night! (Phrase)"> 
+        <a href="/installedSmartApp/showModal/4d0c51ae-7e29-4b0c-a0a2-ef538ffcc75c" class="app-edit" data-path="/installedSmartApp/overlay/4d0c51ae-7e29-4b0c-a0a2-ef538ffcc75c" data-title="Good Night! (Phrase)">Good Night!</a> 
+        <a href="/installedSmartApp/executeUpdate/4d0c51ae-7e29-4b0c-a0a2-ef538ffcc75c" class="executeUpdate">Update</a> 
+        <span class="exec-location"> <i>cloud</i> </span> 
+        <a href="/installedSmartApp/uninstall/4d0c51ae-7e29-4b0c-a0a2-ef538ffcc75c" class="install uninstall" style="display: none">Uninstall</a> 
+        <div class="spinner"></div> 
+       </div> </li> 
+      <li class="property-value active" aria-labelledby="solutions-label" id="57411b22-5ed5-4deb-87ac-bd009f881606"> 
+       <div class="app-item" data-path="/installedSmartApp/overlay/57411b22-5ed5-4deb-87ac-bd009f881606" data-title="Goodbye! (Phrase)"> 
+        <a href="/installedSmartApp/showModal/57411b22-5ed5-4deb-87ac-bd009f881606" class="app-edit" data-path="/installedSmartApp/overlay/57411b22-5ed5-4deb-87ac-bd009f881606" data-title="Goodbye! (Phrase)">Goodbye!</a> 
+        <a href="/installedSmartApp/executeUpdate/57411b22-5ed5-4deb-87ac-bd009f881606" class="executeUpdate">Update</a> 
+        <span class="exec-location"> <i>cloud</i> </span> 
+        <a href="/installedSmartApp/uninstall/57411b22-5ed5-4deb-87ac-bd009f881606" class="install uninstall" style="display: none">Uninstall</a> 
+        <div class="spinner"></div> 
+       </div> 
+       <ul class="installedSmartApps"> 
+        <li class="property-value active" aria-labelledby="solutions-label" id="540afc27-8d57-4f16-8e8e-39ef393486d6"> 
+         <div class="app-item" data-path="/installedSmartApp/overlay/540afc27-8d57-4f16-8e8e-39ef393486d6" data-title="Things Start Happening"> 
+          <a href="/installedSmartApp/showModal/540afc27-8d57-4f16-8e8e-39ef393486d6" class="app-edit" data-path="/installedSmartApp/overlay/540afc27-8d57-4f16-8e8e-39ef393486d6" data-title="Things Start Happening">Things Start Happening</a> 
+          <a href="/installedSmartApp/executeUpdate/540afc27-8d57-4f16-8e8e-39ef393486d6" class="executeUpdate">Update</a> 
+          <span class="exec-location"> <i>cloud</i> </span> 
+          <a href="/installedSmartApp/uninstall/540afc27-8d57-4f16-8e8e-39ef393486d6" class="install uninstall" style="display: none">Uninstall</a> 
+          <div class="spinner"></div> 
+         </div> </li> 
+       </ul> </li> 
+      <li class="property-value active" aria-labelledby="solutions-label" id="8cd2772f-1614-4a6b-82cc-fbdc95de80ac"> 
+       <div class="app-item" data-path="/installedSmartApp/overlay/8cd2772f-1614-4a6b-82cc-fbdc95de80ac" data-title="Hub Offline Notification"> 
+        <a href="/installedSmartApp/showModal/8cd2772f-1614-4a6b-82cc-fbdc95de80ac" class="app-edit" data-path="/installedSmartApp/overlay/8cd2772f-1614-4a6b-82cc-fbdc95de80ac" data-title="Hub Offline Notification">Hub Offline Notification</a> 
+        <a href="/installedSmartApp/executeUpdate/8cd2772f-1614-4a6b-82cc-fbdc95de80ac" class="executeUpdate">Update</a> 
+        <span class="exec-location"> <i>cloud</i> </span> 
+        <a href="/installedSmartApp/uninstall/8cd2772f-1614-4a6b-82cc-fbdc95de80ac" class="install uninstall" style="display: none">Uninstall</a> 
+        <div class="spinner"></div> 
+       </div> </li> 
+      <li class="property-value active" aria-labelledby="solutions-label" id="a09a34e9-00ff-46b6-9f69-58f3d6431f25"> 
+       <div class="app-item" data-path="/installedSmartApp/overlay/a09a34e9-00ff-46b6-9f69-58f3d6431f25" data-title="I'm Back! (Phrase)"> 
+        <a href="/installedSmartApp/showModal/a09a34e9-00ff-46b6-9f69-58f3d6431f25" class="app-edit" data-path="/installedSmartApp/overlay/a09a34e9-00ff-46b6-9f69-58f3d6431f25" data-title="I'm Back! (Phrase)">I'm Back!</a> 
+        <a href="/installedSmartApp/executeUpdate/a09a34e9-00ff-46b6-9f69-58f3d6431f25" class="executeUpdate">Update</a> 
+        <span class="exec-location"> <i>cloud</i> </span> 
+        <a href="/installedSmartApp/uninstall/a09a34e9-00ff-46b6-9f69-58f3d6431f25" class="install uninstall" style="display: none">Uninstall</a> 
+        <div class="spinner"></div> 
+       </div> 
+       <ul class="installedSmartApps"> 
+        <li class="property-value active" aria-labelledby="solutions-label" id="fa624b2f-fcba-46ac-8df9-7c5c908435fd"> 
+         <div class="app-item" data-path="/installedSmartApp/overlay/fa624b2f-fcba-46ac-8df9-7c5c908435fd" data-title="At a Certain Time"> 
+          <a href="/installedSmartApp/showModal/fa624b2f-fcba-46ac-8df9-7c5c908435fd" class="app-edit" data-path="/installedSmartApp/overlay/fa624b2f-fcba-46ac-8df9-7c5c908435fd" data-title="At a Certain Time">At a Certain Time</a> 
+          <a href="/installedSmartApp/executeUpdate/fa624b2f-fcba-46ac-8df9-7c5c908435fd" class="executeUpdate">Update</a> 
+          <span class="exec-location"> <i>cloud</i> </span> 
+          <a href="/installedSmartApp/uninstall/fa624b2f-fcba-46ac-8df9-7c5c908435fd" class="install uninstall" style="display: none">Uninstall</a> 
+          <div class="spinner"></div> 
+         </div> </li> 
+        <li class="property-value active" aria-labelledby="solutions-label" id="3e154156-b115-4f89-9a2c-c292bdf327fe"> 
+         <div class="app-item" data-path="/installedSmartApp/overlay/3e154156-b115-4f89-9a2c-c292bdf327fe" data-title="Things Start Happening"> 
+          <a href="/installedSmartApp/showModal/3e154156-b115-4f89-9a2c-c292bdf327fe" class="app-edit" data-path="/installedSmartApp/overlay/3e154156-b115-4f89-9a2c-c292bdf327fe" data-title="Things Start Happening">Things Start Happening</a> 
+          <a href="/installedSmartApp/executeUpdate/3e154156-b115-4f89-9a2c-c292bdf327fe" class="executeUpdate">Update</a> 
+          <span class="exec-location"> <i>cloud</i> </span> 
+          <a href="/installedSmartApp/uninstall/3e154156-b115-4f89-9a2c-c292bdf327fe" class="install uninstall" style="display: none">Uninstall</a> 
+          <div class="spinner"></div> 
+         </div> </li> 
+       </ul> </li> 
+      <li class="property-value active" aria-labelledby="solutions-label" id="a003cad1-c858-4bd7-b3d5-0de49e21ff17"> 
+       <div class="app-item" data-path="/installedSmartApp/overlay/a003cad1-c858-4bd7-b3d5-0de49e21ff17" data-title="Weather Station"> 
+        <a href="/installedSmartApp/showModal/a003cad1-c858-4bd7-b3d5-0de49e21ff17" class="app-edit" data-path="/installedSmartApp/overlay/a003cad1-c858-4bd7-b3d5-0de49e21ff17" data-title="Weather Station">Weather Station</a> 
+        <a href="/installedSmartApp/executeUpdate/a003cad1-c858-4bd7-b3d5-0de49e21ff17" class="executeUpdate">Update</a> 
+        <span class="exec-location"> <i>cloud</i> </span> 
+        <a href="/installedSmartApp/uninstall/a003cad1-c858-4bd7-b3d5-0de49e21ff17" class="install uninstall" style="display: none">Uninstall</a> 
+        <div class="spinner"></div> 
+       </div> </li> 
+     </ul> </li> 
+   </ul> 
+   <h2>Solutions</h2> 
+   <ul class="installedSmartApps"> 
+    <li class="property-value active" aria-labelledby="solutions-label" id="0fa2ef33-3440-4d33-87a6-01e317388b4c"> 
+     <div class="app-item" data-path="/installedSmartApp/overlay/0fa2ef33-3440-4d33-87a6-01e317388b4c" data-title="Smart Home Monitor"> 
+      <a href="/installedSmartApp/showModal/0fa2ef33-3440-4d33-87a6-01e317388b4c" class="app-edit" data-path="/installedSmartApp/overlay/0fa2ef33-3440-4d33-87a6-01e317388b4c" data-title="Smart Home Monitor">Smart Home Monitor</a> 
+      <a href="/installedSmartApp/executeUpdate/0fa2ef33-3440-4d33-87a6-01e317388b4c" class="executeUpdate">Update</a> 
+      <span class="exec-location"> <i>cloud</i> </span> 
+      <a href="/installedSmartApp/uninstall/0fa2ef33-3440-4d33-87a6-01e317388b4c" class="install uninstall" style="display: none">Uninstall</a> 
+      <div class="spinner"></div> 
+     </div> 
+     <ul class="installedSmartApps"> 
+      <li class="property-value active" aria-labelledby="solutions-label" id="270e2299-33ca-4d08-9f0e-1cef6c00afca"> 
+       <div class="app-item" data-path="/installedSmartApp/overlay/270e2299-33ca-4d08-9f0e-1cef6c00afca" data-title="Smoke"> 
+        <a href="/installedSmartApp/showModal/270e2299-33ca-4d08-9f0e-1cef6c00afca" class="app-edit" data-path="/installedSmartApp/overlay/270e2299-33ca-4d08-9f0e-1cef6c00afca" data-title="Smoke">Smoke</a> 
+        <a href="/installedSmartApp/executeUpdate/270e2299-33ca-4d08-9f0e-1cef6c00afca" class="executeUpdate">Update</a> 
+        <span class="exec-location"> <i>cloud</i> </span> 
+        <a href="/installedSmartApp/uninstall/270e2299-33ca-4d08-9f0e-1cef6c00afca" class="install uninstall" style="display: none">Uninstall</a> 
+        <div class="spinner"></div> 
+       </div> 
+       <ul class="installedSmartApps"> 
+        <li class="property-value active" aria-labelledby="solutions-label" id="9e74b563-ce06-4970-b2cd-4d42c5f94452"> 
+         <div class="app-item" data-path="/installedSmartApp/overlay/9e74b563-ce06-4970-b2cd-4d42c5f94452" data-title="Smoke/Alert with Lights (Alert with Lights)"> 
+          <a href="/installedSmartApp/showModal/9e74b563-ce06-4970-b2cd-4d42c5f94452" class="app-edit" data-path="/installedSmartApp/overlay/9e74b563-ce06-4970-b2cd-4d42c5f94452" data-title="Smoke/Alert with Lights (Alert with Lights)">Smoke/Alert with Lights</a> 
+          <a href="/installedSmartApp/executeUpdate/9e74b563-ce06-4970-b2cd-4d42c5f94452" class="executeUpdate">Update</a> 
+          <span class="exec-location"> <i>local</i> </span> 
+          <a href="/installedSmartApp/uninstall/9e74b563-ce06-4970-b2cd-4d42c5f94452" class="install uninstall" style="display: none">Uninstall</a> 
+          <div class="spinner"></div> 
+         </div> </li> 
+        <li class="property-value active" aria-labelledby="solutions-label" id="bdf41439-9264-481c-976c-607829396693"> 
+         <div class="app-item" data-path="/installedSmartApp/overlay/bdf41439-9264-481c-976c-607829396693" data-title="Smoke/Unlock Doors (Unlock Doors)"> 
+          <a href="/installedSmartApp/showModal/bdf41439-9264-481c-976c-607829396693" class="app-edit" data-path="/installedSmartApp/overlay/bdf41439-9264-481c-976c-607829396693" data-title="Smoke/Unlock Doors (Unlock Doors)">Smoke/Unlock Doors</a> 
+          <a href="/installedSmartApp/executeUpdate/bdf41439-9264-481c-976c-607829396693" class="executeUpdate">Update</a> 
+          <span class="exec-location"> <i>local</i> </span> 
+          <a href="/installedSmartApp/uninstall/bdf41439-9264-481c-976c-607829396693" class="install uninstall" style="display: none">Uninstall</a> 
+          <div class="spinner"></div> 
+         </div> </li> 
+       </ul> </li> 
+     </ul> </li> 
+   </ul> 
+   <h2>Other</h2> 
+   <ul class="installedSmartApps"> 
+    <li class="property-value active" aria-labelledby="solutions-label" id="3675ad0d-23cf-4f51-b63c-fd41ad953464"> 
+     <div class="app-item" data-path="/installedSmartApp/overlay/3675ad0d-23cf-4f51-b63c-fd41ad953464" data-title="Elder Care: Slip &amp; Fall"> 
+      <a href="/installedSmartApp/showModal/3675ad0d-23cf-4f51-b63c-fd41ad953464" class="app-edit" data-path="/installedSmartApp/overlay/3675ad0d-23cf-4f51-b63c-fd41ad953464" data-title="Elder Care: Slip &amp; Fall">Elder Care: Slip &amp; Fall</a> (
+      <span title="Installed from IDE">ide</span>/
+      <span title="Local app installation enabled">dev</span>) 
+      <a href="/installedSmartApp/executeUpdate/3675ad0d-23cf-4f51-b63c-fd41ad953464" class="executeUpdate">Update</a> 
+      <span class="exec-location"> <i>cloud</i> </span> 
+      <a href="/installedSmartApp/uninstall/3675ad0d-23cf-4f51-b63c-fd41ad953464" class="install uninstall" style="display: none">Uninstall</a> 
+      <div class="spinner"></div> 
+     </div> </li> 
+    <li class="property-value active" aria-labelledby="solutions-label" id="cccf8494-156f-4329-810a-dfb13421f74d"> 
+     <div class="app-item" data-path="/installedSmartApp/overlay/cccf8494-156f-4329-810a-dfb13421f74d" data-title="Enhanced Auto Lock Door"> 
+      <a href="/installedSmartApp/showModal/cccf8494-156f-4329-810a-dfb13421f74d" class="app-edit" data-path="/installedSmartApp/overlay/cccf8494-156f-4329-810a-dfb13421f74d" data-title="Enhanced Auto Lock Door">Enhanced Auto Lock Door</a> 
+      <a href="/installedSmartApp/executeUpdate/cccf8494-156f-4329-810a-dfb13421f74d" class="executeUpdate">Update</a> 
+      <span class="exec-location"> <i>cloud</i> </span> 
+      <a href="/installedSmartApp/uninstall/cccf8494-156f-4329-810a-dfb13421f74d" class="install uninstall" style="display: none">Uninstall</a> 
+      <div class="spinner"></div> 
+     </div> </li> 
+    <li class="property-value active" aria-labelledby="solutions-label" id="069faf70-79c9-409a-802f-92c1ab7cdc38"> 
+     <div class="app-item" data-path="/installedSmartApp/overlay/069faf70-79c9-409a-802f-92c1ab7cdc38" data-title="It's Too Cold"> 
+      <a href="/installedSmartApp/showModal/069faf70-79c9-409a-802f-92c1ab7cdc38" class="app-edit" data-path="/installedSmartApp/overlay/069faf70-79c9-409a-802f-92c1ab7cdc38" data-title="It's Too Cold">It's Too Cold</a> (
+      <span title="Installed from IDE">ide</span>/
+      <span title="Local app installation enabled">dev</span>) 
+      <a href="/installedSmartApp/executeUpdate/069faf70-79c9-409a-802f-92c1ab7cdc38" class="executeUpdate">Update</a> 
+      <span class="exec-location"> <i>cloud</i> </span> 
+      <a href="/installedSmartApp/uninstall/069faf70-79c9-409a-802f-92c1ab7cdc38" class="install uninstall" style="display: none">Uninstall</a> 
+      <div class="spinner"></div> 
+     </div> </li> 
+    <li class="property-value active" aria-labelledby="solutions-label" id="9c5c6830-b507-4c2e-b6fe-a7a217a00e4e"> 
+     <div class="app-item" data-path="/installedSmartApp/overlay/9c5c6830-b507-4c2e-b6fe-a7a217a00e4e" data-title="Make It So"> 
+      <a href="/installedSmartApp/showModal/9c5c6830-b507-4c2e-b6fe-a7a217a00e4e" class="app-edit" data-path="/installedSmartApp/overlay/9c5c6830-b507-4c2e-b6fe-a7a217a00e4e" data-title="Make It So">Make It So</a> (
+      <span title="Installed from IDE">ide</span>/
+      <span title="Local app installation enabled">dev</span>) 
+      <a href="/installedSmartApp/executeUpdate/9c5c6830-b507-4c2e-b6fe-a7a217a00e4e" class="executeUpdate">Update</a> 
+      <span class="exec-location"> <i>cloud</i> </span> 
+      <a href="/installedSmartApp/uninstall/9c5c6830-b507-4c2e-b6fe-a7a217a00e4e" class="install uninstall" style="display: none">Uninstall</a> 
+      <div class="spinner"></div> 
+     </div> </li> 
+    <li class="property-value active" aria-labelledby="solutions-label" id="09a87820-7215-418a-8455-3b13351ff9a1"> 
+     <div class="app-item" data-path="/installedSmartApp/overlay/09a87820-7215-418a-8455-3b13351ff9a1" data-title="Notify Me When"> 
+      <a href="/installedSmartApp/showModal/09a87820-7215-418a-8455-3b13351ff9a1" class="app-edit" data-path="/installedSmartApp/overlay/09a87820-7215-418a-8455-3b13351ff9a1" data-title="Notify Me When">Notify Me When</a> 
+      <a href="/installedSmartApp/executeUpdate/09a87820-7215-418a-8455-3b13351ff9a1" class="executeUpdate">Update</a> 
+      <span class="exec-location"> <i>cloud</i> </span> 
+      <a href="/installedSmartApp/uninstall/09a87820-7215-418a-8455-3b13351ff9a1" class="install uninstall" style="display: none">Uninstall</a> 
+      <div class="spinner"></div> 
+     </div> </li> 
+    <li class="property-value active" aria-labelledby="solutions-label" id="321c4efc-9a36-402d-b503-9b69ca4f9925"> 
+     <div class="app-item" data-path="/installedSmartApp/overlay/321c4efc-9a36-402d-b503-9b69ca4f9925" data-title="Smart Alarm"> 
+      <a href="/installedSmartApp/showModal/321c4efc-9a36-402d-b503-9b69ca4f9925" class="app-edit" data-path="/installedSmartApp/overlay/321c4efc-9a36-402d-b503-9b69ca4f9925" data-title="Smart Alarm">Smart Alarm</a> 
+      <a href="/installedSmartApp/executeUpdate/321c4efc-9a36-402d-b503-9b69ca4f9925" class="executeUpdate">Update</a> 
+      <span class="exec-location"> <i>cloud</i> </span> 
+      <a href="/installedSmartApp/uninstall/321c4efc-9a36-402d-b503-9b69ca4f9925" class="install uninstall" style="display: none">Uninstall</a> 
+      <div class="spinner"></div> 
+     </div> </li> 
+    <li class="property-value active" aria-labelledby="solutions-label" id="4d540031-24b3-4d3a-be41-d67e461deb75"> 
+     <div class="app-item" data-path="/installedSmartApp/overlay/4d540031-24b3-4d3a-be41-d67e461deb75" data-title="Smart Lighting"> 
+      <a href="/installedSmartApp/showModal/4d540031-24b3-4d3a-be41-d67e461deb75" class="app-edit" data-path="/installedSmartApp/overlay/4d540031-24b3-4d3a-be41-d67e461deb75" data-title="Smart Lighting">Smart Lighting</a> 
+      <a href="/installedSmartApp/executeUpdate/4d540031-24b3-4d3a-be41-d67e461deb75" class="executeUpdate">Update</a> 
+      <span class="exec-location"> <i>cloud</i> </span> 
+      <a href="/installedSmartApp/uninstall/4d540031-24b3-4d3a-be41-d67e461deb75" class="install uninstall" style="display: none">Uninstall</a> 
+      <div class="spinner"></div> 
+     </div> 
+     <ul class="installedSmartApps"> 
+      <li class="property-value active" aria-labelledby="solutions-label" id="ba83d281-03ea-47cb-aafc-2447fd3dc6f8"> 
+       <div class="app-item" data-path="/installedSmartApp/overlay/ba83d281-03ea-47cb-aafc-2447fd3dc6f8" data-title="Turn on Outlet For Bulb when motion starts (Lighting Automation)"> 
+        <a href="/installedSmartApp/showModal/ba83d281-03ea-47cb-aafc-2447fd3dc6f8" class="app-edit" data-path="/installedSmartApp/overlay/ba83d281-03ea-47cb-aafc-2447fd3dc6f8" data-title="Turn on Outlet For Bulb when motion starts (Lighting Automation)">Turn on Outlet For Bulb when motion starts</a> 
+        <a href="/installedSmartApp/executeUpdate/ba83d281-03ea-47cb-aafc-2447fd3dc6f8" class="executeUpdate">Update</a> 
+        <span class="exec-location"> <i>local</i> </span> 
+        <a href="/installedSmartApp/uninstall/ba83d281-03ea-47cb-aafc-2447fd3dc6f8" class="install uninstall" style="display: none">Uninstall</a> 
+        <div class="spinner"></div> 
+       </div> </li> 
+     </ul> </li> 
+    <li class="property-value active" aria-labelledby="solutions-label" id="899540fe-d27b-48bf-b66e-986101e92550"> 
+     <div class="app-item" data-path="/installedSmartApp/overlay/899540fe-d27b-48bf-b66e-986101e92550" data-title="Turn off a light after detecting a motion"> 
+      <a href="/installedSmartApp/showModal/899540fe-d27b-48bf-b66e-986101e92550" class="app-edit" data-path="/installedSmartApp/overlay/899540fe-d27b-48bf-b66e-986101e92550" data-title="Turn off a light after detecting a motion">Turn off a light after detecting a motion</a> (
+      <span title="Installed from IDE">ide</span>/
+      <span title="Local app installation enabled">dev</span>) 
+      <a href="/installedSmartApp/executeUpdate/899540fe-d27b-48bf-b66e-986101e92550" class="executeUpdate">Update</a> 
+      <span class="exec-location"> <i>cloud</i> </span> 
+      <a href="/installedSmartApp/uninstall/899540fe-d27b-48bf-b66e-986101e92550" class="install uninstall" style="display: none">Uninstall</a> 
+      <div class="spinner"></div> 
+     </div> </li> 
+    <li class="property-value active" aria-labelledby="solutions-label" id="644258d2-94dd-4776-926d-086d3ef03a2e"> 
+     <div class="app-item" data-path="/installedSmartApp/overlay/644258d2-94dd-4776-926d-086d3ef03a2e" data-title="Unlock It When I Arrive"> 
+      <a href="/installedSmartApp/showModal/644258d2-94dd-4776-926d-086d3ef03a2e" class="app-edit" data-path="/installedSmartApp/overlay/644258d2-94dd-4776-926d-086d3ef03a2e" data-title="Unlock It When I Arrive">Unlock It When I Arrive</a> (
+      <span title="Installed from IDE">ide</span>/
+      <span title="Local app installation enabled">dev</span>) 
+      <a href="/installedSmartApp/executeUpdate/644258d2-94dd-4776-926d-086d3ef03a2e" class="executeUpdate">Update</a> 
+      <span class="exec-location"> <i>cloud</i> </span> 
+      <a href="/installedSmartApp/uninstall/644258d2-94dd-4776-926d-086d3ef03a2e" class="install uninstall" style="display: none">Uninstall</a> 
+      <div class="spinner"></div> 
+     </div> </li> 
+    <li class="property-value active" aria-labelledby="solutions-label" id="e0b9ad6d-b0cb-461b-bb4f-07e59c780d61"> 
+     <div class="app-item" data-path="/installedSmartApp/overlay/e0b9ad6d-b0cb-461b-bb4f-07e59c780d61" data-title="Virtual Thermostat"> 
+      <a href="/installedSmartApp/showModal/e0b9ad6d-b0cb-461b-bb4f-07e59c780d61" class="app-edit" data-path="/installedSmartApp/overlay/e0b9ad6d-b0cb-461b-bb4f-07e59c780d61" data-title="Virtual Thermostat">Virtual Thermostat</a> 
+      <a href="/installedSmartApp/executeUpdate/e0b9ad6d-b0cb-461b-bb4f-07e59c780d61" class="executeUpdate">Update</a> 
+      <span class="exec-location"> <i>cloud</i> </span> 
+      <a href="/installedSmartApp/uninstall/e0b9ad6d-b0cb-461b-bb4f-07e59c780d61" class="install uninstall" style="display: none">Uninstall&lt;/a&gt; 
+       <div class="spinner"></div> </a>
+     </div><a href="/installedSmartApp/uninstall/e0b9ad6d-b0cb-461b-bb4f-07e59c780d61" class="install uninstall" style="display: none"> </a></li>
+    <a href="/installedSmartApp/uninstall/e0b9ad6d-b0cb-461b-bb4f-07e59c780d61" class="install uninstall" style="display: none"> </a>
+   </ul>
+   <a href="/installedSmartApp/uninstall/e0b9ad6d-b0cb-461b-bb4f-07e59c780d61" class="install uninstall" style="display: none"> </a>
+  </div>
+  <a href="/installedSmartApp/uninstall/e0b9ad6d-b0cb-461b-bb4f-07e59c780d61" class="install uninstall" style="display: none"> 
+   <div id="installedSmartAppModal" class="modal fade"> 
+    <div class="modal-dialog"> 
+     <div class="modal-content"> 
+     </div> 
+    </div> 
+   </div> 
+   <div class="inner-wrap clearfix"></div> </a>
+  <div class="footer main" role="contentinfo">
+   <a href="/installedSmartApp/uninstall/e0b9ad6d-b0cb-461b-bb4f-07e59c780d61" class="install uninstall" style="display: none"> 
+    <div class="inner-wrap clearfix"> 
+     <div class="pull-left">
+       © 2018 SmartThings, Inc. All rights reserved. 
+     </div> 
+     <ul class="pull-right footer-links"> 
+      <li><a href="http://www.smartthings.com/benefits/" target="_blank">Benefits</a></li> 
+      <li>&nbsp;&nbsp;|&nbsp;&nbsp;</li> 
+      <li><a href="https://shop.smartthings.com" target="_blank">Shop</a></li> 
+      <li>&nbsp;&nbsp;|&nbsp;&nbsp;</li> 
+      <li><a href="http://blog.smartthings.com/" target="_blank">Blog</a></li> 
+      <li>&nbsp;&nbsp;|&nbsp;&nbsp;</li> 
+      <li><a href="https://developers.smartthings.com/" target="_blank">Developers</a></li> 
+      <li>&nbsp;&nbsp;|&nbsp;&nbsp;</li> 
+      <li><a href="http://support.smartthings.com" target="_blank">Support</a></li> 
+      <li>&nbsp;&nbsp;|&nbsp;&nbsp;</li> 
+      <li><a href="http://www.smartthings.com/terms/" target="_blank">Terms of Use</a></li> 
+      <li>&nbsp;&nbsp;|&nbsp;&nbsp;</li> 
+      <li><a href="http://www.smartthings.com/privacy/" target="_blank">Privacy Policy</a></li> 
+     </ul> 
+    </div></a> 
+  </div> 
+  <script>
+		function sizeModal(){
+			var $header = $(".modal-header");
+			var $body = $(".modal-body");
+
+			var bodyHeight = $(window).height() - ($header.outerHeight());
+			$body.outerHeight(bodyHeight);
+		}
+
+		function enableEdit() {
+			$("#app-edit-link").hide();
+			$("#app-edit-done-link").show();
+			$(".app-item a.install").show();
+			$(".app-item a.executeUpdate").hide();
+		}
+
+		function disableEdit() {
+			$("#app-edit-link").show();
+			$("#app-edit-done-link").hide();
+			$(".app-item a.install").hide();
+			$(".app-item a.executeUpdate").show();
+		}
+
+		function refreshModal(link) {
+			var uri = $(link).attr("href");
+			$.get(uri, function(data) {
+				var el = $("#installedSmartAppModal");
+				el.find('.modal-content').html(data);
+				el.modal({show: true});
+				sizeModal();
+			});
+			return false;
+		}
+
+		function updateDevelopmentApp(checkbox) {
+			var ctrl = $(checkbox);
+			var isaId = ctrl.data("isa");
+			var value = ctrl.prop("checked");
+			var uri = "/installedSmartApp/updateDevelopmentApp/" + isaId + "?value=" + value;
+			console.log(uri);
+			$.get(uri, function(data) {
+
+			});
+			return true;
+		}
+
+		function updatePlayResume(elToHide, elToShow) {
+			if (!elToHide.attr('class').split(' ').includes('disabled')) {
+				var path = elToHide.attr('href');
+				var spinner = elToHide.parents('.app-item').find('.spinner');
+				spinner.show();
+				$.get(path, {})
+				.done(function(data) {
+					var tempSource = $("#message-template").html();
+					var template = Handlebars.compile(tempSource);
+					$("#flash-message-container").html(
+						template(
+							{
+								message: 'The pause/play buttons do not affect currently affect local execution.'
+							}));
+					elToHide.hide();
+					elToShow.show();
+					spinner.hide();
+					return false;
+				}).fail(function(){
+					el.show();
+					var tempSource = $("#error-template").html();
+					var template = Handlebars.compile(tempSource);
+					$("#flash-message-container").html(
+						template(
+							{
+								error:'There was an error, please try again'
+							}));
+				});
+			} else {
+				var tempSource = $("#message-template").html();
+				var template = Handlebars.compile(tempSource);
+				$("#flash-message-container").html(
+					template(
+						{
+							message: 'Your SmartApp has been Quarantine, please contact support@smartthings.com'
+						}));
+				return false;
+			}
+		}
+
+		$( document ).ready(function() {
+			var links = $("a.app-edit");
+			var items = $("div.app-item");
+			var installLinks =  $("a.install");
+			var updateLinks = $("a.executeUpdate");
+			var pauseLinks = $("a.pause");
+			var resumeLinks = $("a.resume");
+
+			pauseLinks.click(function() {
+				var pause = $(this);
+				var resume = pause.parent().find('.resume');
+				updatePlayResume(pause, resume);
+				return false;
+			});
+
+			resumeLinks.click(function() {
+				var resume = $(this);
+				var pause = resume.parent().find('.pause');
+				updatePlayResume(resume, pause);
+				return false;
+			});
+
+			updateLinks.click(function() {
+				var el=$(this);
+				var path = el.attr('href');
+				el.parent('.app-item').find('.spinner').show();
+				$.get(path, {})
+				.done(function(data) {
+					var tempSource = $("#message-template").html();
+					var template = Handlebars.compile(tempSource);
+					el.parent('.app-item').find('.spinner').hide();
+				}).
+				fail(function(){
+					var tempSource = $("#error-template").html();
+					var template = Handlebars.compile(tempSource);
+					$("#flash-message-container").html(
+						template(
+							{
+								error:'There was an error updating your SmartApp.'
+							}));
+				});
+				return false;
+			});
+
+			installLinks.click(function() {
+				var el=$(this);
+				var path = el.attr('href');
+				el.parent('.app-item').find('.spinner').show();
+				$.get(path, {})
+				.done(function(data) {
+					el.parents("li").first().remove();
+				}).
+				fail(function(){
+					var tempSource = $("#error-template").html();
+					var template = Handlebars.compile(tempSource);
+					el.parent('.app-item').find('.spinner').hide();
+					$("#flash-message-container").html(
+						template(
+							{
+								error:'There was an error uninstalling your SmartApp.'
+							}));
+				});
+				return false;
+			});
+
+			links.click(function () {
+				var path = $(this).attr('href');
+				$.get(path, function(data) {
+					var el = $("#installedSmartAppModal");
+					el.find('.modal-content').html(data);
+					el.modal({show: true});
+					sizeModal();
+					$("#developmentAppHelp").popover();
+				});
+				return false;
+			});
+
+			items.mouseenter(function() {
+				var el=$(this);
+				el.unbind('hover');
+				el.attr('data-status','show');
+				el.addClass('app-item-active');
+				$.ajax({
+					url: el.attr('data-path'),
+					success: function(d){
+						el.popover({ title: el.attr('data-title'), content: d, html:true, trigger:'hover', placement: 'right' }).popover(el.attr('data-status'));
+					}
+				});
+				return false;
+			});
+
+			items.mouseleave(function(e) {
+				var el=$(this);
+				el.attr('data-status','hide')
+				el.removeClass('app-item-active');
+				return false;
+			});
+
+			if (location.hash) {
+				var path = $(location.hash).find('a.app-edit').attr('href');
+				$.get(path, function(data) {
+					var el = $("#installedSmartAppModal");
+					el.find('.modal-content').html(data);
+					el.modal({show: true});
+					sizeModal();
+				});
+			}
+		});
+
+	</script>   
+ </body>
+</html>
+************************************
+app' page of Hello Home:
+<html>
+ <head></head>
+ <body>
+  <div class="modal-header"> 
+   <button type="button" class="close" data-dismiss="modal">×</button> 
+   <a href="/installedSmartApp/showModal/cd25661a-3b9f-4212-b6a8-cae59d15b3fb?max=10" onclick="return refreshModal(this)" class="pull-right" style="display: inline-block; margin: 3px 20px 0;">Refresh</a> 
+   <h3> Hello Home </h3> 
+   <div> 
+    <b>SmartApp:</b> Hello Home 
+    <b>Owner:</b> System 
+   </div> 
+  </div> 
+  <div class="modal-body"> 
+   <h4 class="first"> Settings <a href="/installedsmartapp/cd25661a-3b9f-4212-b6a8-cae59d15b3fb/events?source=true" style="float: right; font-size: 14px; font-weight: normal">List Events</a> </h4> 
+   <table class="table table-bordered table-condensed" style="margin-bottom: 5px;"> 
+    <thead> 
+     <tr> 
+      <th>Name</th> 
+      <th>Type</th> 
+      <th>Value</th> 
+     </tr> 
+    </thead> 
+    <tbody> 
+    </tbody> 
+   </table> 
+   <h4>Event Subscriptions</h4> 
+   <table class="table table-bordered table-condensed" style="margin-bottom: 5px;"> 
+    <thead> 
+     <tr> 
+      <th>Name</th> 
+      <th>Handler</th> 
+      <th>Filter</th> 
+      <th>Source</th> 
+     </tr> 
+    </thead> 
+    <tbody> 
+     <tr> 
+      <td>pictureMode</td> 
+      <td>hubActiveHandler</td> 
+      <td>true</td> 
+      <td> <a href="/location/show/6be87d7c-688c-4b7e-93ce-617fa05ef8ea">Networking Lab (Location)</a> </td> 
+     </tr> 
+    </tbody> 
+   </table> 
+   <h4>Application State</h4> 
+   <table class="table table-bordered table-condensed" style="margin-bottom: 5px;"> 
+    <thead> 
+     <tr> 
+      <th>Name</th> 
+      <th>Value</th> 
+     </tr> 
+    </thead> 
+    <tbody> 
+     <tr> 
+      <td>tvs</td> 
+      <td>[]</td> 
+     </tr> 
+     <tr> 
+      <td>welcomeIssued</td> 
+      <td>true</td> 
+     </tr> 
+    </tbody> 
+   </table> 
+   <h4>Scheduled Jobs</h4> 
+   <p>None</p> 
+   <h4>Developer Options</h4> 
+   <div> 
+    <span>Execution Location:</span> Cloud 
+   </div> 
+   <div> 
+    <span>Enable local child app discovery:</span> 
+    <input type="hidden" name="_developmentApp">
+    <input type="checkbox" name="developmentApp" id="developmentApp" data-isa="cd25661a-3b9f-4212-b6a8-cae59d15b3fb" onclick="return updateDevelopmentApp(this)"> 
+    <a id="developmentAppHelp" href="#" data-toggle="popover" title="Enable local child app discovery" data-content="When checked the system will consider your local SmartApps as well as published system SmartApps when searching for children from this app. You local version, if present, will take precedence over the system version. " data-placement="top" data-trigger="hover" class="small">What's this?</a> 
+   </div> 
+   <div style="font-size: 11px; color: #999999; padding: 0; margin: 0">
+     cd25661a-3b9f-4212-b6a8-cae59d15b3fb 
+   </div> 
+  </div> 
+ </body>
+</html>
+************************************
+app' page of Good Morning!:
+<html>
+ <head></head>
+ <body>
+  <div class="modal-header"> 
+   <button type="button" class="close" data-dismiss="modal">×</button> 
+   <a href="/installedSmartApp/showModal/3d0a9f52-b013-408f-b4c0-4b95321f5819?max=10" onclick="return refreshModal(this)" class="pull-right" style="display: inline-block; margin: 3px 20px 0;">Refresh</a> 
+   <h3> Good Morning! </h3> 
+   <div> 
+    <b>SmartApp:</b> Phrase 
+    <b>Owner:</b> System 
+   </div> 
+  </div> 
+  <div class="modal-body"> 
+   <h4 class="first"> Settings <a href="/installedsmartapp/3d0a9f52-b013-408f-b4c0-4b95321f5819/events?source=true" style="float: right; font-size: 14px; font-weight: normal">List Events</a> </h4> 
+   <table class="table table-bordered table-condensed" style="margin-bottom: 5px;"> 
+    <thead> 
+     <tr> 
+      <th>Name</th> 
+      <th>Type</th> 
+      <th>Value</th> 
+     </tr> 
+    </thead> 
+    <tbody> 
+     <tr> 
+      <td>disabledAutomationApps</td> 
+      <td></td> 
+      <td>Someone Arrives, Everyone Leaves, Things Quiet Down</td> 
+     </tr> 
+     <tr> 
+      <td>disabledModes</td> 
+      <td></td> 
+      <td>Away</td> 
+     </tr> 
+     <tr> 
+      <td>lockDoors</td> 
+      <td>capability.lock</td> 
+      <td>[]</td> 
+     </tr> 
+     <tr> 
+      <td>newMode</td> 
+      <td>mode</td> 
+      <td>Home</td> 
+     </tr> 
+     <tr> 
+      <td>offSwitches</td> 
+      <td>capability.switch</td> 
+      <td><a href="/device/show/16ee6912-2d16-42ca-8267-bf4c05d03d9d">Outlet For Bulb</a></td> 
+     </tr> 
+     <tr> 
+      <td>onSwitches</td> 
+      <td>capability.switch</td> 
+      <td>[]</td> 
+     </tr> 
+     <tr> 
+      <td>salutation</td> 
+      <td></td> 
+      <td>Good Morning.</td> 
+     </tr> 
+     <tr> 
+      <td>securitySystem</td> 
+      <td>enum</td> 
+      <td>""</td> 
+     </tr> 
+     <tr> 
+      <td>unlockDoors</td> 
+      <td>capability.lock</td> 
+      <td><a href="/device/show/916228df-433c-4118-9a30-de02f04e82a5">Z-Wave Lock</a></td> 
+     </tr> 
+    </tbody> 
+   </table> 
+   <h4>Event Subscriptions</h4> 
+   <p>None</p> 
+   <h4>Application State</h4> 
+   <table class="table table-bordered table-condensed" style="margin-bottom: 5px;"> 
+    <thead> 
+     <tr> 
+      <th>Name</th> 
+      <th>Value</th> 
+     </tr> 
+    </thead> 
+    <tbody> 
+     <tr> 
+      <td>newlogic</td> 
+      <td>true</td> 
+     </tr> 
+    </tbody> 
+   </table> 
+   <h4>Scheduled Jobs</h4> 
+   <p>None</p> 
+   <h4>Developer Options</h4> 
+   <div> 
+    <span>Execution Location:</span> Cloud 
+   </div> 
+   <div> 
+    <span>Enable local child app discovery:</span> 
+    <input type="hidden" name="_developmentApp">
+    <input type="checkbox" name="developmentApp" id="developmentApp" data-isa="3d0a9f52-b013-408f-b4c0-4b95321f5819" onclick="return updateDevelopmentApp(this)"> 
+    <a id="developmentAppHelp" href="#" data-toggle="popover" title="Enable local child app discovery" data-content="When checked the system will consider your local SmartApps as well as published system SmartApps when searching for children from this app. You local version, if present, will take precedence over the system version. " data-placement="top" data-trigger="hover" class="small">What's this?</a> 
+   </div> 
+   <div style="font-size: 11px; color: #999999; padding: 0; margin: 0">
+     3d0a9f52-b013-408f-b4c0-4b95321f5819 
+   </div> 
+  </div> 
+ </body>
+</html>
+************************************
+app' page of Good Night!:
+<html>
+ <head></head>
+ <body>
+  <div class="modal-header"> 
+   <button type="button" class="close" data-dismiss="modal">×</button> 
+   <a href="/installedSmartApp/showModal/4d0c51ae-7e29-4b0c-a0a2-ef538ffcc75c?max=10" onclick="return refreshModal(this)" class="pull-right" style="display: inline-block; margin: 3px 20px 0;">Refresh</a> 
+   <h3> Good Night! </h3> 
+   <div> 
+    <b>SmartApp:</b> Phrase 
+    <b>Owner:</b> System 
+   </div> 
+  </div> 
+  <div class="modal-body"> 
+   <h4 class="first"> Settings <a href="/installedsmartapp/4d0c51ae-7e29-4b0c-a0a2-ef538ffcc75c/events?source=true" style="float: right; font-size: 14px; font-weight: normal">List Events</a> </h4> 
+   <table class="table table-bordered table-condensed" style="margin-bottom: 5px;"> 
+    <thead> 
+     <tr> 
+      <th>Name</th> 
+      <th>Type</th> 
+      <th>Value</th> 
+     </tr> 
+    </thead> 
+    <tbody> 
+     <tr> 
+      <td>disabledAutomationApps</td> 
+      <td></td> 
+      <td>Someone Arrives, Everyone Leaves, Things Start Happening</td> 
+     </tr> 
+     <tr> 
+      <td>disabledModes</td> 
+      <td></td> 
+      <td>Away</td> 
+     </tr> 
+     <tr> 
+      <td>lockDoors</td> 
+      <td>capability.lock</td> 
+      <td><a href="/device/show/916228df-433c-4118-9a30-de02f04e82a5">Z-Wave Lock</a></td> 
+     </tr> 
+     <tr> 
+      <td>newMode</td> 
+      <td>mode</td> 
+      <td>Night</td> 
+     </tr> 
+     <tr> 
+      <td>offSwitches</td> 
+      <td>capability.switch</td> 
+      <td>[]</td> 
+     </tr> 
+     <tr> 
+      <td>onSwitches</td> 
+      <td>capability.switch</td> 
+      <td><a href="/device/show/16ee6912-2d16-42ca-8267-bf4c05d03d9d">Outlet For Bulb</a></td> 
+     </tr> 
+     <tr> 
+      <td>salutation</td> 
+      <td></td> 
+      <td>Good Night.</td> 
+     </tr> 
+     <tr> 
+      <td>securitySystem</td> 
+      <td>enum</td> 
+      <td>""</td> 
+     </tr> 
+     <tr> 
+      <td>unlockDoors</td> 
+      <td>capability.lock</td> 
+      <td>[]</td> 
+     </tr> 
+    </tbody> 
+   </table> 
+   <h4>Event Subscriptions</h4> 
+   <p>None</p> 
+   <h4>Application State</h4> 
+   <table class="table table-bordered table-condensed" style="margin-bottom: 5px;"> 
+    <thead> 
+     <tr> 
+      <th>Name</th> 
+      <th>Value</th> 
+     </tr> 
+    </thead> 
+    <tbody> 
+     <tr> 
+      <td>newlogic</td> 
+      <td>true</td> 
+     </tr> 
+    </tbody> 
+   </table> 
+   <h4>Scheduled Jobs</h4> 
+   <p>None</p> 
+   <h4>Developer Options</h4> 
+   <div> 
+    <span>Execution Location:</span> Cloud 
+   </div> 
+   <div> 
+    <span>Enable local child app discovery:</span> 
+    <input type="hidden" name="_developmentApp">
+    <input type="checkbox" name="developmentApp" id="developmentApp" data-isa="4d0c51ae-7e29-4b0c-a0a2-ef538ffcc75c" onclick="return updateDevelopmentApp(this)"> 
+    <a id="developmentAppHelp" href="#" data-toggle="popover" title="Enable local child app discovery" data-content="When checked the system will consider your local SmartApps as well as published system SmartApps when searching for children from this app. You local version, if present, will take precedence over the system version. " data-placement="top" data-trigger="hover" class="small">What's this?</a> 
+   </div> 
+   <div style="font-size: 11px; color: #999999; padding: 0; margin: 0">
+     4d0c51ae-7e29-4b0c-a0a2-ef538ffcc75c 
+   </div> 
+  </div> 
+ </body>
+</html>
+************************************
+app' page of Goodbye!:
+<html>
+ <head></head>
+ <body>
+  <div class="modal-header"> 
+   <button type="button" class="close" data-dismiss="modal">×</button> 
+   <a href="/installedSmartApp/showModal/57411b22-5ed5-4deb-87ac-bd009f881606?max=10" onclick="return refreshModal(this)" class="pull-right" style="display: inline-block; margin: 3px 20px 0;">Refresh</a> 
+   <h3> Goodbye! </h3> 
+   <div> 
+    <b>SmartApp:</b> Phrase 
+    <b>Owner:</b> System 
+   </div> 
+  </div> 
+  <div class="modal-body"> 
+   <h4 class="first"> Settings <a href="/installedsmartapp/57411b22-5ed5-4deb-87ac-bd009f881606/events?source=true" style="float: right; font-size: 14px; font-weight: normal">List Events</a> </h4> 
+   <table class="table table-bordered table-condensed" style="margin-bottom: 5px;"> 
+    <thead> 
+     <tr> 
+      <th>Name</th> 
+      <th>Type</th> 
+      <th>Value</th> 
+     </tr> 
+    </thead> 
+    <tbody> 
+     <tr> 
+      <td>disabledAutomationApps</td> 
+      <td></td> 
+      <td>Someone Arrives, At Sunrise or Sunset, Things Start Happening, Things Quiet Down</td> 
+     </tr> 
+     <tr> 
+      <td>disabledModes</td> 
+      <td>mode</td> 
+      <td>Away</td> 
+     </tr> 
+     <tr> 
+      <td>lockDoors</td> 
+      <td>capability.lock</td> 
+      <td><a href="/device/show/916228df-433c-4118-9a30-de02f04e82a5">Z-Wave Lock</a></td> 
+     </tr> 
+     <tr> 
+      <td>newMode</td> 
+      <td>mode</td> 
+      <td>Home</td> 
+     </tr> 
+     <tr> 
+      <td>offSwitches</td> 
+      <td>capability.switch</td> 
+      <td><a href="/device/show/16ee6912-2d16-42ca-8267-bf4c05d03d9d">Outlet For Bulb</a></td> 
+     </tr> 
+     <tr> 
+      <td>onSwitches</td> 
+      <td>capability.switch</td> 
+      <td>[]</td> 
+     </tr> 
+     <tr> 
+      <td>oncePerDay</td> 
+      <td>bool</td> 
+      <td>false</td> 
+     </tr> 
+     <tr> 
+      <td>phone</td> 
+      <td>phone</td> 
+      <td>""</td> 
+     </tr> 
+     <tr> 
+      <td>pushNotification</td> 
+      <td>bool</td> 
+      <td>false</td> 
+     </tr> 
+     <tr> 
+      <td>salutation</td> 
+      <td></td> 
+      <td>Goodbye.</td> 
+     </tr> 
+     <tr> 
+      <td>securitySystem</td> 
+      <td>enum</td> 
+      <td>""</td> 
+     </tr> 
+     <tr> 
+      <td>unlockDoors</td> 
+      <td>capability.lock</td> 
+      <td>[]</td> 
+     </tr> 
+    </tbody> 
+   </table> 
+   <h4>Event Subscriptions</h4> 
+   <p>None</p> 
+   <h4>Application State</h4> 
+   <table class="table table-bordered table-condensed" style="margin-bottom: 5px;"> 
+    <thead> 
+     <tr> 
+      <th>Name</th> 
+      <th>Value</th> 
+     </tr> 
+    </thead> 
+    <tbody> 
+     <tr> 
+      <td>lastTime</td> 
+      <td>2016-12-21</td> 
+     </tr> 
+     <tr> 
+      <td>newlogic</td> 
+      <td>true</td> 
+     </tr> 
+    </tbody> 
+   </table> 
+   <h4>Scheduled Jobs</h4> 
+   <p>None</p> 
+   <h4>Developer Options</h4> 
+   <div> 
+    <span>Execution Location:</span> Cloud 
+   </div> 
+   <div> 
+    <span>Enable local child app discovery:</span> 
+    <input type="hidden" name="_developmentApp">
+    <input type="checkbox" name="developmentApp" id="developmentApp" data-isa="57411b22-5ed5-4deb-87ac-bd009f881606" onclick="return updateDevelopmentApp(this)"> 
+    <a id="developmentAppHelp" href="#" data-toggle="popover" title="Enable local child app discovery" data-content="When checked the system will consider your local SmartApps as well as published system SmartApps when searching for children from this app. You local version, if present, will take precedence over the system version. " data-placement="top" data-trigger="hover" class="small">What's this?</a> 
+   </div> 
+   <div style="font-size: 11px; color: #999999; padding: 0; margin: 0">
+     57411b22-5ed5-4deb-87ac-bd009f881606 
+   </div> 
+  </div> 
+ </body>
+</html>
+************************************
+app' page of Things Start Happening:
+<html>
+ <head></head>
+ <body>
+  <div class="modal-header"> 
+   <button type="button" class="close" data-dismiss="modal">×</button> 
+   <a href="/installedSmartApp/showModal/540afc27-8d57-4f16-8e8e-39ef393486d6?max=10" onclick="return refreshModal(this)" class="pull-right" style="display: inline-block; margin: 3px 20px 0;">Refresh</a> 
+   <h3> Things Start Happening </h3> 
+   <div> 
+    <b>SmartApp:</b> Things Start Happening 
+    <b>Owner:</b> System 
+   </div> 
+  </div> 
+  <div class="modal-body"> 
+   <h4 class="first"> Settings <a href="/installedsmartapp/540afc27-8d57-4f16-8e8e-39ef393486d6/events?source=true" style="float: right; font-size: 14px; font-weight: normal">List Events</a> </h4> 
+   <table class="table table-bordered table-condensed" style="margin-bottom: 5px;"> 
+    <thead> 
+     <tr> 
+      <th>Name</th> 
+      <th>Type</th> 
+      <th>Value</th> 
+     </tr> 
+    </thead> 
+    <tbody> 
+     <tr> 
+      <td>days</td> 
+      <td>enum</td> 
+      <td>[]</td> 
+     </tr> 
+     <tr> 
+      <td>endTime</td> 
+      <td>time</td> 
+      <td>12:00 PM PST</td> 
+     </tr> 
+     <tr> 
+      <td>motionSensors</td> 
+      <td>capability.motionSensor</td> 
+      <td><a href="/device/show/be09502f-6f41-4551-93ee-99f423334d9f">Motion Sensor Living Room</a></td> 
+     </tr> 
+     <tr> 
+      <td>timeOfDay</td> 
+      <td>time</td> 
+      <td>6:00 AM PST</td> 
+     </tr> 
+    </tbody> 
+   </table> 
+   <h4>Event Subscriptions</h4> 
+   <table class="table table-bordered table-condensed" style="margin-bottom: 5px;"> 
+    <thead> 
+     <tr> 
+      <th>Name</th> 
+      <th>Handler</th> 
+      <th>Filter</th> 
+      <th>Source</th> 
+     </tr> 
+    </thead> 
+    <tbody> 
+     <tr> 
+      <td>motion.active</td> 
+      <td>motionActiveHandler</td> 
+      <td>true</td> 
+      <td> <a href="/device/show/be09502f-6f41-4551-93ee-99f423334d9f">Motion Sensor Living Room</a> </td> 
+     </tr> 
+    </tbody> 
+   </table> 
+   <h4>Application State</h4> 
+   <p>None</p> 
+   <h4>Scheduled Jobs</h4> 
+   <p>None</p> 
+   <h4>Developer Options</h4> 
+   <div> 
+    <span>Execution Location:</span> Cloud 
+   </div> 
+   <div> 
+    <span>Enable local child app discovery:</span> 
+    <input type="hidden" name="_developmentApp">
+    <input type="checkbox" name="developmentApp" id="developmentApp" data-isa="540afc27-8d57-4f16-8e8e-39ef393486d6" onclick="return updateDevelopmentApp(this)"> 
+    <a id="developmentAppHelp" href="#" data-toggle="popover" title="Enable local child app discovery" data-content="When checked the system will consider your local SmartApps as well as published system SmartApps when searching for children from this app. You local version, if present, will take precedence over the system version. " data-placement="top" data-trigger="hover" class="small">What's this?</a> 
+   </div> 
+   <div style="font-size: 11px; color: #999999; padding: 0; margin: 0">
+     540afc27-8d57-4f16-8e8e-39ef393486d6 
+   </div> 
+  </div> 
+ </body>
+</html>
+************************************
+app' page of Hub Offline Notification:
+<html>
+ <head></head>
+ <body>
+  <div class="modal-header"> 
+   <button type="button" class="close" data-dismiss="modal">×</button> 
+   <a href="/installedSmartApp/showModal/8cd2772f-1614-4a6b-82cc-fbdc95de80ac?max=10" onclick="return refreshModal(this)" class="pull-right" style="display: inline-block; margin: 3px 20px 0;">Refresh</a> 
+   <h3> Hub Offline Notification </h3> 
+   <div> 
+    <b>SmartApp:</b> Hub Offline Notification 
+    <b>Owner:</b> System 
+   </div> 
+  </div> 
+  <div class="modal-body"> 
+   <h4 class="first"> Settings <a href="/installedsmartapp/8cd2772f-1614-4a6b-82cc-fbdc95de80ac/events?source=true" style="float: right; font-size: 14px; font-weight: normal">List Events</a> </h4> 
+   <table class="table table-bordered table-condensed" style="margin-bottom: 5px;"> 
+    <thead> 
+     <tr> 
+      <th>Name</th> 
+      <th>Type</th> 
+      <th>Value</th> 
+     </tr> 
+    </thead> 
+    <tbody> 
+     <tr> 
+      <td>notificationsEnabled</td> 
+      <td></td> 
+      <td>true</td> 
+     </tr> 
+     <tr> 
+      <td>onlineNotification</td> 
+      <td></td> 
+      <td>true</td> 
+     </tr> 
+     <tr> 
+      <td>pushNotification</td> 
+      <td></td> 
+      <td>true</td> 
+     </tr> 
+    </tbody> 
+   </table> 
+   <h4>Event Subscriptions</h4> 
+   <table class="table table-bordered table-condensed" style="margin-bottom: 5px;"> 
+    <thead> 
+     <tr> 
+      <th>Name</th> 
+      <th>Handler</th> 
+      <th>Filter</th> 
+      <th>Source</th> 
+     </tr> 
+    </thead> 
+    <tbody> 
+     <tr> 
+      <td>hubStatus</td> 
+      <td>hubActivityHandler</td> 
+      <td>true</td> 
+      <td> <a href="/location/show/6be87d7c-688c-4b7e-93ce-617fa05ef8ea">Networking Lab (Location)</a> </td> 
+     </tr> 
+    </tbody> 
+   </table> 
+   <h4>Application State</h4> 
+   <table class="table table-bordered table-condensed" style="margin-bottom: 5px;"> 
+    <thead> 
+     <tr> 
+      <th>Name</th> 
+      <th>Value</th> 
+     </tr> 
+    </thead> 
+    <tbody> 
+     <tr> 
+      <td>latestOfflineMessage</td> 
+      <td>Your SmartThings Hub at {{ location.name }} is disconnected. Check your internet connection.</td> 
+     </tr> 
+     <tr> 
+      <td>offline</td> 
+      <td>true</td> 
+     </tr> 
+     <tr> 
+      <td>offlineMessageSent</td> 
+      <td>true</td> 
+     </tr> 
+    </tbody> 
+   </table> 
+   <h4>Scheduled Jobs</h4> 
+   <p>None</p> 
+   <h4>Developer Options</h4> 
+   <div> 
+    <span>Execution Location:</span> Cloud 
+   </div> 
+   <div> 
+    <span>Enable local child app discovery:</span> 
+    <input type="hidden" name="_developmentApp">
+    <input type="checkbox" name="developmentApp" id="developmentApp" data-isa="8cd2772f-1614-4a6b-82cc-fbdc95de80ac" onclick="return updateDevelopmentApp(this)"> 
+    <a id="developmentAppHelp" href="#" data-toggle="popover" title="Enable local child app discovery" data-content="When checked the system will consider your local SmartApps as well as published system SmartApps when searching for children from this app. You local version, if present, will take precedence over the system version. " data-placement="top" data-trigger="hover" class="small">What's this?</a> 
+   </div> 
+   <div style="font-size: 11px; color: #999999; padding: 0; margin: 0">
+     8cd2772f-1614-4a6b-82cc-fbdc95de80ac 
+   </div> 
+  </div> 
+ </body>
+</html>
+************************************
+app' page of I'm Back!:
+<html>
+ <head></head>
+ <body>
+  <div class="modal-header"> 
+   <button type="button" class="close" data-dismiss="modal">×</button> 
+   <a href="/installedSmartApp/showModal/a09a34e9-00ff-46b6-9f69-58f3d6431f25?max=10" onclick="return refreshModal(this)" class="pull-right" style="display: inline-block; margin: 3px 20px 0;">Refresh</a> 
+   <h3> I'm Back! </h3> 
+   <div> 
+    <b>SmartApp:</b> Phrase 
+    <b>Owner:</b> System 
+   </div> 
+  </div> 
+  <div class="modal-body"> 
+   <h4 class="first"> Settings <a href="/installedsmartapp/a09a34e9-00ff-46b6-9f69-58f3d6431f25/events?source=true" style="float: right; font-size: 14px; font-weight: normal">List Events</a> </h4> 
+   <table class="table table-bordered table-condensed" style="margin-bottom: 5px;"> 
+    <thead> 
+     <tr> 
+      <th>Name</th> 
+      <th>Type</th> 
+      <th>Value</th> 
+     </tr> 
+    </thead> 
+    <tbody> 
+     <tr> 
+      <td>disabledAutomationApps</td> 
+      <td></td> 
+      <td>Everyone Leaves, At Sunrise or Sunset, Things Start Happening, Things Quiet Down</td> 
+     </tr> 
+     <tr> 
+      <td>disabledModes</td> 
+      <td>mode</td> 
+      <td>[]</td> 
+     </tr> 
+     <tr> 
+      <td>lockDoors</td> 
+      <td>capability.lock</td> 
+      <td>[]</td> 
+     </tr> 
+     <tr> 
+      <td>newMode</td> 
+      <td>mode</td> 
+      <td>Home</td> 
+     </tr> 
+     <tr> 
+      <td>offSwitches</td> 
+      <td>capability.switch</td> 
+      <td>[]</td> 
+     </tr> 
+     <tr> 
+      <td>onSwitches</td> 
+      <td>capability.switch</td> 
+      <td><a href="/device/show/16ee6912-2d16-42ca-8267-bf4c05d03d9d">Outlet For Bulb</a></td> 
+     </tr> 
+     <tr> 
+      <td>oncePerDay</td> 
+      <td>bool</td> 
+      <td>false</td> 
+     </tr> 
+     <tr> 
+      <td>phone</td> 
+      <td>phone</td> 
+      <td>""</td> 
+     </tr> 
+     <tr> 
+      <td>pushNotification</td> 
+      <td>bool</td> 
+      <td>false</td> 
+     </tr> 
+     <tr> 
+      <td>salutation</td> 
+      <td></td> 
+      <td>Welcome Home!</td> 
+     </tr> 
+     <tr> 
+      <td>securitySystem</td> 
+      <td>enum</td> 
+      <td>""</td> 
+     </tr> 
+     <tr> 
+      <td>unlockDoors</td> 
+      <td>capability.lock</td> 
+      <td><a href="/device/show/916228df-433c-4118-9a30-de02f04e82a5">Z-Wave Lock</a></td> 
+     </tr> 
+    </tbody> 
+   </table> 
+   <h4>Event Subscriptions</h4> 
+   <p>None</p> 
+   <h4>Application State</h4> 
+   <table class="table table-bordered table-condensed" style="margin-bottom: 5px;"> 
+    <thead> 
+     <tr> 
+      <th>Name</th> 
+      <th>Value</th> 
+     </tr> 
+    </thead> 
+    <tbody> 
+     <tr> 
+      <td>lastTime</td> 
+      <td>2018-01-15</td> 
+     </tr> 
+     <tr> 
+      <td>newlogic</td> 
+      <td>true</td> 
+     </tr> 
+    </tbody> 
+   </table> 
+   <h4>Scheduled Jobs</h4> 
+   <p>None</p> 
+   <h4>Developer Options</h4> 
+   <div> 
+    <span>Execution Location:</span> Cloud 
+   </div> 
+   <div> 
+    <span>Enable local child app discovery:</span> 
+    <input type="hidden" name="_developmentApp">
+    <input type="checkbox" name="developmentApp" id="developmentApp" data-isa="a09a34e9-00ff-46b6-9f69-58f3d6431f25" onclick="return updateDevelopmentApp(this)"> 
+    <a id="developmentAppHelp" href="#" data-toggle="popover" title="Enable local child app discovery" data-content="When checked the system will consider your local SmartApps as well as published system SmartApps when searching for children from this app. You local version, if present, will take precedence over the system version. " data-placement="top" data-trigger="hover" class="small">What's this?</a> 
+   </div> 
+   <div style="font-size: 11px; color: #999999; padding: 0; margin: 0">
+     a09a34e9-00ff-46b6-9f69-58f3d6431f25 
+   </div> 
+  </div> 
+ </body>
+</html>
+************************************
+app' page of At a Certain Time:
+<html>
+ <head></head>
+ <body>
+  <div class="modal-header"> 
+   <button type="button" class="close" data-dismiss="modal">×</button> 
+   <a href="/installedSmartApp/showModal/fa624b2f-fcba-46ac-8df9-7c5c908435fd?max=10" onclick="return refreshModal(this)" class="pull-right" style="display: inline-block; margin: 3px 20px 0;">Refresh</a> 
+   <h3> At a Certain Time </h3> 
+   <div> 
+    <b>SmartApp:</b> At a Certain Time 
+    <b>Owner:</b> System 
+   </div> 
+  </div> 
+  <div class="modal-body"> 
+   <h4 class="first"> Settings <a href="/installedsmartapp/fa624b2f-fcba-46ac-8df9-7c5c908435fd/events?source=true" style="float: right; font-size: 14px; font-weight: normal">List Events</a> </h4> 
+   <table class="table table-bordered table-condensed" style="margin-bottom: 5px;"> 
+    <thead> 
+     <tr> 
+      <th>Name</th> 
+      <th>Type</th> 
+      <th>Value</th> 
+     </tr> 
+    </thead> 
+    <tbody> 
+     <tr> 
+      <td>days</td> 
+      <td>enum</td> 
+      <td>[]</td> 
+     </tr> 
+     <tr> 
+      <td>timeOfDay</td> 
+      <td>time</td> 
+      <td>11:04 AM PST</td> 
+     </tr> 
+    </tbody> 
+   </table> 
+   <h4>Event Subscriptions</h4> 
+   <p>None</p> 
+   <h4>Application State</h4> 
+   <p>None</p> 
+   <h4>Scheduled Jobs</h4> 
+   <table class="table table-bordered table-condensed" style="margin-bottom: 5px;"> 
+    <thead> 
+     <tr> 
+      <th>Handler</th> 
+      <th>Next Run Time</th> 
+      <th>Prev Run Time</th> 
+      <th>Status</th> 
+      <th>Schedule</th> 
+     </tr> 
+    </thead> 
+    <tbody> 
+     <tr> 
+      <td>takeAction</td> 
+      <td>2018-01-16 11:04:00 AM PST</td> 
+      <td></td> 
+      <td>PENDING</td> 
+      <td> 0 4 11 * * ? * America/Los_Angeles </td> 
+     </tr> 
+    </tbody> 
+   </table> 
+   <h4>Developer Options</h4> 
+   <div> 
+    <span>Execution Location:</span> Cloud 
+   </div> 
+   <div> 
+    <span>Enable local child app discovery:</span> 
+    <input type="hidden" name="_developmentApp">
+    <input type="checkbox" name="developmentApp" id="developmentApp" data-isa="fa624b2f-fcba-46ac-8df9-7c5c908435fd" onclick="return updateDevelopmentApp(this)"> 
+    <a id="developmentAppHelp" href="#" data-toggle="popover" title="Enable local child app discovery" data-content="When checked the system will consider your local SmartApps as well as published system SmartApps when searching for children from this app. You local version, if present, will take precedence over the system version. " data-placement="top" data-trigger="hover" class="small">What's this?</a> 
+   </div> 
+   <h4>Job History</h4> 
+   <div id="scheduled-job-history"> 
+    <table class="table table-bordered table-condensed" style="margin-bottom: 5px;"> 
+     <thead> 
+      <tr> 
+       <th>Handler</th> 
+       <th>Scheduled Time</th> 
+       <th>Actual Time</th> 
+       <th>Delay (msec)</th> 
+       <th>Execution (msec)</th> 
+      </tr> 
+     </thead> 
+     <tbody> 
+      <tr> 
+       <td>takeAction</td> 
+       <td>2018-01-15 11:04:00 AM PST</td> 
+       <td>2018-01-15 11:04:01.215 AM PST</td> 
+       <td class="right">1215</td> 
+       <td class="right">207</td> 
+      </tr> 
+      <tr> 
+       <td>takeAction</td> 
+       <td>2018-01-14 11:04:00 AM PST</td> 
+       <td>2018-01-14 11:04:00.519 AM PST</td> 
+       <td class="right">519</td> 
+       <td class="right">191</td> 
+      </tr> 
+      <tr> 
+       <td>takeAction</td> 
+       <td>2018-01-13 11:04:00 AM PST</td> 
+       <td>2018-01-13 11:04:00.451 AM PST</td> 
+       <td class="right">451</td> 
+       <td class="right">249</td> 
+      </tr> 
+      <tr> 
+       <td>takeAction</td> 
+       <td>2018-01-12 11:04:00 AM PST</td> 
+       <td>2018-01-12 11:04:00.455 AM PST</td> 
+       <td class="right">455</td> 
+       <td class="right">276</td> 
+      </tr> 
+      <tr> 
+       <td>takeAction</td> 
+       <td>2018-01-11 11:04:00 AM PST</td> 
+       <td>2018-01-11 11:04:00.546 AM PST</td> 
+       <td class="right">546</td> 
+       <td class="right">465</td> 
+      </tr> 
+      <tr> 
+       <td>takeAction</td> 
+       <td>2018-01-10 11:04:00 AM PST</td> 
+       <td>2018-01-10 11:04:00.773 AM PST</td> 
+       <td class="right">773</td> 
+       <td class="right">261</td> 
+      </tr> 
+      <tr> 
+       <td>takeAction</td> 
+       <td>2018-01-09 11:04:00 AM PST</td> 
+       <td>2018-01-09 11:04:00.532 AM PST</td> 
+       <td class="right">532</td> 
+       <td class="right">294</td> 
+      </tr> 
+      <tr> 
+       <td>takeAction</td> 
+       <td>2018-01-08 11:04:00 AM PST</td> 
+       <td>2018-01-08 11:04:00.580 AM PST</td> 
+       <td class="right">580</td> 
+       <td class="right">313</td> 
+      </tr> 
+      <tr> 
+       <td>takeAction</td> 
+       <td>2018-01-07 11:04:00 AM PST</td> 
+       <td>2018-01-07 11:04:00.886 AM PST</td> 
+       <td class="right">886</td> 
+       <td class="right">221</td> 
+      </tr> 
+      <tr> 
+       <td>takeAction</td> 
+       <td>2018-01-06 11:04:00 AM PST</td> 
+       <td>2018-01-06 11:04:00.560 AM PST</td> 
+       <td class="right">560</td> 
+       <td class="right">204</td> 
+      </tr> 
+     </tbody> 
+    </table> ... 
+    <a href="/installedSmartApp/showModal/fa624b2f-fcba-46ac-8df9-7c5c908435fd?max=20" onclick="return refreshModal(this)">more</a> 
+   </div> 
+   <div style="font-size: 11px; color: #999999; padding: 0; margin: 0">
+     fa624b2f-fcba-46ac-8df9-7c5c908435fd 
+   </div> 
+  </div> 
+ </body>
+</html>
+************************************
+app' page of Things Start Happening:
+<html>
+ <head></head>
+ <body>
+  <div class="modal-header"> 
+   <button type="button" class="close" data-dismiss="modal">×</button> 
+   <a href="/installedSmartApp/showModal/3e154156-b115-4f89-9a2c-c292bdf327fe?max=10" onclick="return refreshModal(this)" class="pull-right" style="display: inline-block; margin: 3px 20px 0;">Refresh</a> 
+   <h3> Things Start Happening </h3> 
+   <div> 
+    <b>SmartApp:</b> Things Start Happening 
+    <b>Owner:</b> System 
+   </div> 
+  </div> 
+  <div class="modal-body"> 
+   <h4 class="first"> Settings <a href="/installedsmartapp/3e154156-b115-4f89-9a2c-c292bdf327fe/events?source=true" style="float: right; font-size: 14px; font-weight: normal">List Events</a> </h4> 
+   <table class="table table-bordered table-condensed" style="margin-bottom: 5px;"> 
+    <thead> 
+     <tr> 
+      <th>Name</th> 
+      <th>Type</th> 
+      <th>Value</th> 
+     </tr> 
+    </thead> 
+    <tbody> 
+     <tr> 
+      <td>days</td> 
+      <td>enum</td> 
+      <td>[]</td> 
+     </tr> 
+     <tr> 
+      <td>endTime</td> 
+      <td>time</td> 
+      <td>12:00 PM PST</td> 
+     </tr> 
+     <tr> 
+      <td>motionSensors</td> 
+      <td>capability.motionSensor</td> 
+      <td><a href="/device/show/be09502f-6f41-4551-93ee-99f423334d9f">Motion Sensor Living Room</a></td> 
+     </tr> 
+     <tr> 
+      <td>timeOfDay</td> 
+      <td>time</td> 
+      <td>6:00 AM PST</td> 
+     </tr> 
+    </tbody> 
+   </table> 
+   <h4>Event Subscriptions</h4> 
+   <table class="table table-bordered table-condensed" style="margin-bottom: 5px;"> 
+    <thead> 
+     <tr> 
+      <th>Name</th> 
+      <th>Handler</th> 
+      <th>Filter</th> 
+      <th>Source</th> 
+     </tr> 
+    </thead> 
+    <tbody> 
+     <tr> 
+      <td>motion.active</td> 
+      <td>motionActiveHandler</td> 
+      <td>true</td> 
+      <td> <a href="/device/show/be09502f-6f41-4551-93ee-99f423334d9f">Motion Sensor Living Room</a> </td> 
+     </tr> 
+    </tbody> 
+   </table> 
+   <h4>Application State</h4> 
+   <p>None</p> 
+   <h4>Scheduled Jobs</h4> 
+   <p>None</p> 
+   <h4>Developer Options</h4> 
+   <div> 
+    <span>Execution Location:</span> Cloud 
+   </div> 
+   <div> 
+    <span>Enable local child app discovery:</span> 
+    <input type="hidden" name="_developmentApp">
+    <input type="checkbox" name="developmentApp" id="developmentApp" data-isa="3e154156-b115-4f89-9a2c-c292bdf327fe" onclick="return updateDevelopmentApp(this)"> 
+    <a id="developmentAppHelp" href="#" data-toggle="popover" title="Enable local child app discovery" data-content="When checked the system will consider your local SmartApps as well as published system SmartApps when searching for children from this app. You local version, if present, will take precedence over the system version. " data-placement="top" data-trigger="hover" class="small">What's this?</a> 
+   </div> 
+   <div style="font-size: 11px; color: #999999; padding: 0; margin: 0">
+     3e154156-b115-4f89-9a2c-c292bdf327fe 
+   </div> 
+  </div> 
+ </body>
+</html>
+************************************
+app' page of Weather Station:
+<html>
+ <head></head>
+ <body>
+  <div class="modal-header"> 
+   <button type="button" class="close" data-dismiss="modal">×</button> 
+   <a href="/installedSmartApp/showModal/a003cad1-c858-4bd7-b3d5-0de49e21ff17?max=10" onclick="return refreshModal(this)" class="pull-right" style="display: inline-block; margin: 3px 20px 0;">Refresh</a> 
+   <h3> Weather Station </h3> 
+   <div> 
+    <b>SmartApp:</b> Weather Station 
+    <b>Owner:</b> System 
+   </div> 
+  </div> 
+  <div class="modal-body"> 
+   <h4 class="first"> Settings <a href="/installedsmartapp/a003cad1-c858-4bd7-b3d5-0de49e21ff17/events?source=true" style="float: right; font-size: 14px; font-weight: normal">List Events</a> </h4> 
+   <table class="table table-bordered table-condensed" style="margin-bottom: 5px;"> 
+    <thead> 
+     <tr> 
+      <th>Name</th> 
+      <th>Type</th> 
+      <th>Value</th> 
+     </tr> 
+    </thead> 
+    <tbody> 
+    </tbody> 
+   </table> 
+   <h4>Event Subscriptions</h4> 
+   <table class="table table-bordered table-condensed" style="margin-bottom: 5px;"> 
+    <thead> 
+     <tr> 
+      <th>Name</th> 
+      <th>Handler</th> 
+      <th>Filter</th> 
+      <th>Source</th> 
+     </tr> 
+    </thead> 
+    <tbody> 
+     <tr> 
+      <td>position</td> 
+      <td>locationChange</td> 
+      <td>true</td> 
+      <td> <a href="/location/show/6be87d7c-688c-4b7e-93ce-617fa05ef8ea">Networking Lab (Location)</a> </td> 
+     </tr> 
+    </tbody> 
+   </table> 
+   <h4>Application State</h4> 
+   <table class="table table-bordered table-condensed" style="margin-bottom: 5px;"> 
+    <thead> 
+     <tr> 
+      <th>Name</th> 
+      <th>Value</th> 
+     </tr> 
+    </thead> 
+    <tbody> 
+     <tr> 
+      <td>lastReschedule</td> 
+      <td>1476566817035</td> 
+     </tr> 
+     <tr> 
+      <td>riseLastRun</td> 
+      <td>1516028100840</td> 
+     </tr> 
+     <tr> 
+      <td>riseScheduleTime</td> 
+      <td>2018-01-16T14:54:00+0000</td> 
+     </tr> 
+     <tr> 
+      <td>riseTime</td> 
+      <td>1516114440000</td> 
+     </tr> 
+     <tr> 
+      <td>setLastRun</td> 
+      <td>1516064580685</td> 
+     </tr> 
+     <tr> 
+      <td>setScheduleTime</td> 
+      <td>2018-01-17T01:04:00+0000</td> 
+     </tr> 
+     <tr> 
+      <td>setTime</td> 
+      <td>1516151040000</td> 
+     </tr> 
+    </tbody> 
+   </table> 
+   <h4>Scheduled Jobs</h4> 
+   <table class="table table-bordered table-condensed" style="margin-bottom: 5px;"> 
+    <thead> 
+     <tr> 
+      <th>Handler</th> 
+      <th>Next Run Time</th> 
+      <th>Prev Run Time</th> 
+      <th>Status</th> 
+      <th>Schedule</th> 
+     </tr> 
+    </thead> 
+    <tbody> 
+     <tr> 
+      <td>sunriseHandler</td> 
+      <td>2018-01-16 6:54:00 AM PST</td> 
+      <td></td> 
+      <td>PENDING</td> 
+      <td> Once </td> 
+     </tr> 
+     <tr> 
+      <td>sunsetHandler</td> 
+      <td>2018-01-16 5:04:00 PM PST</td> 
+      <td></td> 
+      <td>PENDING</td> 
+      <td> Once </td> 
+     </tr> 
+    </tbody> 
+   </table> 
+   <h4>Developer Options</h4> 
+   <div> 
+    <span>Execution Location:</span> Cloud 
+   </div> 
+   <div> 
+    <span>Enable local child app discovery:</span> 
+    <input type="hidden" name="_developmentApp">
+    <input type="checkbox" name="developmentApp" id="developmentApp" data-isa="a003cad1-c858-4bd7-b3d5-0de49e21ff17" onclick="return updateDevelopmentApp(this)"> 
+    <a id="developmentAppHelp" href="#" data-toggle="popover" title="Enable local child app discovery" data-content="When checked the system will consider your local SmartApps as well as published system SmartApps when searching for children from this app. You local version, if present, will take precedence over the system version. " data-placement="top" data-trigger="hover" class="small">What's this?</a> 
+   </div> 
+   <h4>Job History</h4> 
+   <div id="scheduled-job-history"> 
+    <table class="table table-bordered table-condensed" style="margin-bottom: 5px;"> 
+     <thead> 
+      <tr> 
+       <th>Handler</th> 
+       <th>Scheduled Time</th> 
+       <th>Actual Time</th> 
+       <th>Delay (msec)</th> 
+       <th>Execution (msec)</th> 
+      </tr> 
+     </thead> 
+     <tbody> 
+      <tr> 
+       <td>sunsetHandler</td> 
+       <td>2018-01-15 5:03:00 PM PST</td> 
+       <td>2018-01-15 5:03:00.508 PM PST</td> 
+       <td class="right">508</td> 
+       <td class="right">201</td> 
+      </tr> 
+      <tr> 
+       <td>sunriseHandler</td> 
+       <td>2018-01-15 6:55:00 AM PST</td> 
+       <td>2018-01-15 6:55:00.739 AM PST</td> 
+       <td class="right">739</td> 
+       <td class="right">132</td> 
+      </tr> 
+      <tr> 
+       <td>sunsetHandler</td> 
+       <td>2018-01-14 5:02:00 PM PST</td> 
+       <td>2018-01-14 5:02:00.503 PM PST</td> 
+       <td class="right">503</td> 
+       <td class="right">370</td> 
+      </tr> 
+      <tr> 
+       <td>sunriseHandler</td> 
+       <td>2018-01-14 6:55:00 AM PST</td> 
+       <td>2018-01-14 6:55:00.719 AM PST</td> 
+       <td class="right">719</td> 
+       <td class="right">81</td> 
+      </tr> 
+      <tr> 
+       <td>sunsetHandler</td> 
+       <td>2018-01-13 5:01:00 PM PST</td> 
+       <td>2018-01-13 5:01:00.452 PM PST</td> 
+       <td class="right">452</td> 
+       <td class="right">187</td> 
+      </tr> 
+      <tr> 
+       <td>sunriseHandler</td> 
+       <td>2018-01-13 6:55:00 AM PST</td> 
+       <td>2018-01-13 6:55:00.739 AM PST</td> 
+       <td class="right">739</td> 
+       <td class="right">198</td> 
+      </tr> 
+      <tr> 
+       <td>sunsetHandler</td> 
+       <td>2018-01-12 5:01:00 PM PST</td> 
+       <td>2018-01-12 5:01:00.587 PM PST</td> 
+       <td class="right">587</td> 
+       <td class="right">261</td> 
+      </tr> 
+      <tr> 
+       <td>sunriseHandler</td> 
+       <td>2018-01-12 6:55:00 AM PST</td> 
+       <td>2018-01-12 6:55:00.658 AM PST</td> 
+       <td class="right">658</td> 
+       <td class="right">152</td> 
+      </tr> 
+      <tr> 
+       <td>sunsetHandler</td> 
+       <td>2018-01-11 5:00:00 PM PST</td> 
+       <td>2018-01-11 5:00:01.530 PM PST</td> 
+       <td class="right">1530</td> 
+       <td class="right">334</td> 
+      </tr> 
+      <tr> 
+       <td>sunriseHandler</td> 
+       <td>2018-01-11 6:55:00 AM PST</td> 
+       <td>2018-01-11 6:55:00.714 AM PST</td> 
+       <td class="right">714</td> 
+       <td class="right">56</td> 
+      </tr> 
+     </tbody> 
+    </table> ... 
+    <a href="/installedSmartApp/showModal/a003cad1-c858-4bd7-b3d5-0de49e21ff17?max=20" onclick="return refreshModal(this)">more</a> 
+   </div> 
+   <div style="font-size: 11px; color: #999999; padding: 0; margin: 0">
+     a003cad1-c858-4bd7-b3d5-0de49e21ff17 
+   </div> 
+  </div> 
+ </body>
+</html>
+************************************
+app' page of Smart Home Monitor:
+<html>
+ <head></head>
+ <body>
+  <div class="modal-header"> 
+   <button type="button" class="close" data-dismiss="modal">×</button> 
+   <a href="/installedSmartApp/showModal/0fa2ef33-3440-4d33-87a6-01e317388b4c?max=10" onclick="return refreshModal(this)" class="pull-right" style="display: inline-block; margin: 3px 20px 0;">Refresh</a> 
+   <h3> Smart Home Monitor </h3> 
+   <div> 
+    <b>SmartApp:</b> Smart Home Monitor 
+    <b>Owner:</b> System 
+   </div> 
+  </div> 
+  <div class="modal-body"> 
+   <h4 class="first"> Settings <a href="/installedsmartapp/0fa2ef33-3440-4d33-87a6-01e317388b4c/events?source=true" style="float: right; font-size: 14px; font-weight: normal">List Events</a> </h4> 
+   <table class="table table-bordered table-condensed" style="margin-bottom: 5px;"> 
+    <thead> 
+     <tr> 
+      <th>Name</th> 
+      <th>Type</th> 
+      <th>Value</th> 
+     </tr> 
+    </thead> 
+    <tbody> 
+    </tbody> 
+   </table> 
+   <h4>Event Subscriptions</h4> 
+   <table class="table table-bordered table-condensed" style="margin-bottom: 5px;"> 
+    <thead> 
+     <tr> 
+      <th>Name</th> 
+      <th>Handler</th> 
+      <th>Filter</th> 
+      <th>Source</th> 
+     </tr> 
+    </thead> 
+    <tbody> 
+     <tr> 
+      <td>activity</td> 
+      <td>hubActivityHandler</td> 
+      <td>true</td> 
+      <td> <a href="/location/show/6be87d7c-688c-4b7e-93ce-617fa05ef8ea">Networking Lab (Location)</a> </td> 
+     </tr> 
+     <tr> 
+      <td>clip</td> 
+      <td>clipHandler</td> 
+      <td>true</td> 
+      <td> <a href="/location/show/6be87d7c-688c-4b7e-93ce-617fa05ef8ea">Networking Lab (Location)</a> </td> 
+     </tr> 
+     <tr> 
+      <td>stream</td> 
+      <td>streamHandler</td> 
+      <td>true</td> 
+      <td> <a href="/location/show/6be87d7c-688c-4b7e-93ce-617fa05ef8ea">Networking Lab (Location)</a> </td> 
+     </tr> 
+    </tbody> 
+   </table> 
+   <h4>Application State</h4> 
+   <table class="table table-bordered table-condensed" style="margin-bottom: 5px;"> 
+    <thead> 
+     <tr> 
+      <th>Name</th> 
+      <th>Value</th> 
+     </tr> 
+    </thead> 
+    <tbody> 
+     <tr> 
+      <td>accessToken</td> 
+      <td>6dbca904-a6b0-447c-865c-6a38ee721f05</td> 
+     </tr> 
+     <tr> 
+      <td>hubonline</td> 
+      <td>false</td> 
+     </tr> 
+     <tr> 
+      <td>summaryData</td> 
+      <td>[{icon=indicator-dot-green, value=Armed (Stay), iconColor=#79b821}, {icon=indicator-dot-green, value=Everything OK, iconColor=#79b821}]</td> 
+     </tr> 
+    </tbody> 
+   </table> 
+   <h4>Scheduled Jobs</h4> 
+   <p>None</p> 
+   <h4>Developer Options</h4> 
+   <div> 
+    <span>Execution Location:</span> Cloud 
+   </div> 
+   <div> 
+    <span>Enable local child app discovery:</span> 
+    <input type="hidden" name="_developmentApp">
+    <input type="checkbox" name="developmentApp" id="developmentApp" data-isa="0fa2ef33-3440-4d33-87a6-01e317388b4c" onclick="return updateDevelopmentApp(this)"> 
+    <a id="developmentAppHelp" href="#" data-toggle="popover" title="Enable local child app discovery" data-content="When checked the system will consider your local SmartApps as well as published system SmartApps when searching for children from this app. You local version, if present, will take precedence over the system version. " data-placement="top" data-trigger="hover" class="small">What's this?</a> 
+   </div> 
+   <div style="font-size: 11px; color: #999999; padding: 0; margin: 0">
+     0fa2ef33-3440-4d33-87a6-01e317388b4c 
+   </div> 
+  </div> 
+ </body>
+</html>
+************************************
+app' page of Smoke:
+<html>
+ <head></head>
+ <body>
+  <div class="modal-header"> 
+   <button type="button" class="close" data-dismiss="modal">×</button> 
+   <a href="/installedSmartApp/showModal/270e2299-33ca-4d08-9f0e-1cef6c00afca?max=10" onclick="return refreshModal(this)" class="pull-right" style="display: inline-block; margin: 3px 20px 0;">Refresh</a> 
+   <h3> Smoke </h3> 
+   <div> 
+    <b>SmartApp:</b> Smoke 
+    <b>Owner:</b> System 
+   </div> 
+  </div> 
+  <div class="modal-body"> 
+   <h4 class="first"> Settings <a href="/installedsmartapp/270e2299-33ca-4d08-9f0e-1cef6c00afca/events?source=true" style="float: right; font-size: 14px; font-weight: normal">List Events</a> </h4> 
+   <table class="table table-bordered table-condensed" style="margin-bottom: 5px;"> 
+    <thead> 
+     <tr> 
+      <th>Name</th> 
+      <th>Type</th> 
+      <th>Value</th> 
+     </tr> 
+    </thead> 
+    <tbody> 
+     <tr> 
+      <td>clipLength</td> 
+      <td></td> 
+      <td>60000</td> 
+     </tr> 
+     <tr> 
+      <td>toggle1</td> 
+      <td>bool</td> 
+      <td>true</td> 
+     </tr> 
+    </tbody> 
+   </table> 
+   <h4>Event Subscriptions</h4> 
+   <table class="table table-bordered table-condensed" style="margin-bottom: 5px;"> 
+    <thead> 
+     <tr> 
+      <th>Name</th> 
+      <th>Handler</th> 
+      <th>Filter</th> 
+      <th>Source</th> 
+     </tr> 
+    </thead> 
+    <tbody> 
+     <tr> 
+      <td>carbonMonoxide.clear</td> 
+      <td>clearAction</td> 
+      <td>true</td> 
+      <td> <a href="/location/show/6be87d7c-688c-4b7e-93ce-617fa05ef8ea">Networking Lab (Location)</a> </td> 
+     </tr> 
+     <tr> 
+      <td>carbonMonoxide.detected</td> 
+      <td>takeAction</td> 
+      <td>true</td> 
+      <td> <a href="/location/show/6be87d7c-688c-4b7e-93ce-617fa05ef8ea">Networking Lab (Location)</a> </td> 
+     </tr> 
+     <tr> 
+      <td>smoke.clear</td> 
+      <td>clearAction</td> 
+      <td>true</td> 
+      <td> <a href="/location/show/6be87d7c-688c-4b7e-93ce-617fa05ef8ea">Networking Lab (Location)</a> </td> 
+     </tr> 
+     <tr> 
+      <td>smoke.detected</td> 
+      <td>takeAction</td> 
+      <td>true</td> 
+      <td> <a href="/location/show/6be87d7c-688c-4b7e-93ce-617fa05ef8ea">Networking Lab (Location)</a> </td> 
+     </tr> 
+    </tbody> 
+   </table> 
+   <h4>Application State</h4> 
+   <table class="table table-bordered table-condensed" style="margin-bottom: 5px;"> 
+    <thead> 
+     <tr> 
+      <th>Name</th> 
+      <th>Value</th> 
+     </tr> 
+    </thead> 
+    <tbody> 
+     <tr> 
+      <td>behaviorEnabled</td> 
+      <td>{Alert with Lights=true, Unlock Doors=true}</td> 
+     </tr> 
+     <tr> 
+      <td>smokeSensor</td> 
+      <td>smoke</td> 
+     </tr> 
+    </tbody> 
+   </table> 
+   <h4>Scheduled Jobs</h4> 
+   <p>None</p> 
+   <h4>Developer Options</h4> 
+   <div> 
+    <span>Execution Location:</span> Cloud 
+   </div> 
+   <div> 
+    <span>Enable local child app discovery:</span> 
+    <input type="hidden" name="_developmentApp">
+    <input type="checkbox" name="developmentApp" id="developmentApp" data-isa="270e2299-33ca-4d08-9f0e-1cef6c00afca" onclick="return updateDevelopmentApp(this)"> 
+    <a id="developmentAppHelp" href="#" data-toggle="popover" title="Enable local child app discovery" data-content="When checked the system will consider your local SmartApps as well as published system SmartApps when searching for children from this app. You local version, if present, will take precedence over the system version. " data-placement="top" data-trigger="hover" class="small">What's this?</a> 
+   </div> 
+   <div style="font-size: 11px; color: #999999; padding: 0; margin: 0">
+     270e2299-33ca-4d08-9f0e-1cef6c00afca 
+   </div> 
+  </div> 
+ </body>
+</html>
+************************************
+app' page of Smoke/Alert with Lights:
+<html>
+ <head></head>
+ <body>
+  <div class="modal-header"> 
+   <button type="button" class="close" data-dismiss="modal">×</button> 
+   <a href="/installedSmartApp/showModal/9e74b563-ce06-4970-b2cd-4d42c5f94452?max=10" onclick="return refreshModal(this)" class="pull-right" style="display: inline-block; margin: 3px 20px 0;">Refresh</a> 
+   <h3> Smoke/Alert with Lights </h3> 
+   <div> 
+    <b>SmartApp:</b> Alert with Lights 
+    <b>Owner:</b> System 
+   </div> 
+  </div> 
+  <div class="modal-body"> 
+   <h4 class="first"> Settings <a href="/installedsmartapp/9e74b563-ce06-4970-b2cd-4d42c5f94452/events?source=true" style="float: right; font-size: 14px; font-weight: normal">List Events</a> </h4> 
+   <table class="table table-bordered table-condensed" style="margin-bottom: 5px;"> 
+    <thead> 
+     <tr> 
+      <th>Name</th> 
+      <th>Type</th> 
+      <th>Value</th> 
+     </tr> 
+    </thead> 
+    <tbody> 
+     <tr> 
+      <td>lightDevices</td> 
+      <td>capability.switch</td> 
+      <td><a href="/device/show/16ee6912-2d16-42ca-8267-bf4c05d03d9d">Outlet For Bulb</a></td> 
+     </tr> 
+     <tr> 
+      <td>smokeSensors</td> 
+      <td>capability.smokeDetector</td> 
+      <td><a href="/device/show/069c3e0f-2db7-4097-9fec-a911fe9b5e16">Z-Wave Smoke Alarm</a></td> 
+     </tr> 
+     <tr> 
+      <td>triggerResetTime</td> 
+      <td></td> 
+      <td>1482079303813</td> 
+     </tr> 
+    </tbody> 
+   </table> 
+   <h4>Event Subscriptions</h4> 
+   <table class="table table-bordered table-condensed" style="margin-bottom: 5px;"> 
+    <thead> 
+     <tr> 
+      <th>Name</th> 
+      <th>Handler</th> 
+      <th>Filter</th> 
+      <th>Source</th> 
+     </tr> 
+    </thead> 
+    <tbody> 
+     <tr> 
+      <td>carbonMonoxide.detected</td> 
+      <td>primaryActionHandler</td> 
+      <td>true</td> 
+      <td> <a href="/device/show/069c3e0f-2db7-4097-9fec-a911fe9b5e16">Z-Wave Smoke Alarm</a> </td> 
+     </tr> 
+     <tr> 
+      <td>mode</td> 
+      <td>dummyHandler</td> 
+      <td>true</td> 
+      <td> <a href="/location/show/6be87d7c-688c-4b7e-93ce-617fa05ef8ea">Networking Lab (Location)</a> </td> 
+     </tr> 
+     <tr> 
+      <td>smoke.detected</td> 
+      <td>primaryActionHandler</td> 
+      <td>true</td> 
+      <td> <a href="/device/show/069c3e0f-2db7-4097-9fec-a911fe9b5e16">Z-Wave Smoke Alarm</a> </td> 
+     </tr> 
+    </tbody> 
+   </table> 
+   <h4>Application State</h4> 
+   <p>None</p> 
+   <h4>Scheduled Jobs</h4> 
+   <p>None</p> 
+   <h4>Developer Options</h4> 
+   <div> 
+    <span>Execution Location:</span> Local 
+   </div> 
+   <div> 
+    <span>Enable local child app discovery:</span> 
+    <input type="hidden" name="_developmentApp">
+    <input type="checkbox" name="developmentApp" id="developmentApp" data-isa="9e74b563-ce06-4970-b2cd-4d42c5f94452" onclick="return updateDevelopmentApp(this)"> 
+    <a id="developmentAppHelp" href="#" data-toggle="popover" title="Enable local child app discovery" data-content="When checked the system will consider your local SmartApps as well as published system SmartApps when searching for children from this app. You local version, if present, will take precedence over the system version. " data-placement="top" data-trigger="hover" class="small">What's this?</a> 
+   </div> 
+   <div style="font-size: 11px; color: #999999; padding: 0; margin: 0">
+     9e74b563-ce06-4970-b2cd-4d42c5f94452 
+   </div> 
+  </div> 
+ </body>
+</html>
+************************************
+app' page of Smoke/Unlock Doors:
+<html>
+ <head></head>
+ <body>
+  <div class="modal-header"> 
+   <button type="button" class="close" data-dismiss="modal">×</button> 
+   <a href="/installedSmartApp/showModal/bdf41439-9264-481c-976c-607829396693?max=10" onclick="return refreshModal(this)" class="pull-right" style="display: inline-block; margin: 3px 20px 0;">Refresh</a> 
+   <h3> Smoke/Unlock Doors </h3> 
+   <div> 
+    <b>SmartApp:</b> Unlock Doors 
+    <b>Owner:</b> System 
+   </div> 
+  </div> 
+  <div class="modal-body"> 
+   <h4 class="first"> Settings <a href="/installedsmartapp/bdf41439-9264-481c-976c-607829396693/events?source=true" style="float: right; font-size: 14px; font-weight: normal">List Events</a> </h4> 
+   <table class="table table-bordered table-condensed" style="margin-bottom: 5px;"> 
+    <thead> 
+     <tr> 
+      <th>Name</th> 
+      <th>Type</th> 
+      <th>Value</th> 
+     </tr> 
+    </thead> 
+    <tbody> 
+     <tr> 
+      <td>lockDevices</td> 
+      <td>capability.lock</td> 
+      <td><a href="/device/show/916228df-433c-4118-9a30-de02f04e82a5">Z-Wave Lock</a></td> 
+     </tr> 
+     <tr> 
+      <td>smokeSensors</td> 
+      <td>capability.smokeDetector</td> 
+      <td><a href="/device/show/069c3e0f-2db7-4097-9fec-a911fe9b5e16">Z-Wave Smoke Alarm</a></td> 
+     </tr> 
+     <tr> 
+      <td>triggerResetTime</td> 
+      <td></td> 
+      <td>1482079304152</td> 
+     </tr> 
+    </tbody> 
+   </table> 
+   <h4>Event Subscriptions</h4> 
+   <table class="table table-bordered table-condensed" style="margin-bottom: 5px;"> 
+    <thead> 
+     <tr> 
+      <th>Name</th> 
+      <th>Handler</th> 
+      <th>Filter</th> 
+      <th>Source</th> 
+     </tr> 
+    </thead> 
+    <tbody> 
+     <tr> 
+      <td>carbonMonoxide.detected</td> 
+      <td>primaryActionHandler</td> 
+      <td>true</td> 
+      <td> <a href="/device/show/069c3e0f-2db7-4097-9fec-a911fe9b5e16">Z-Wave Smoke Alarm</a> </td> 
+     </tr> 
+     <tr> 
+      <td>mode</td> 
+      <td>dummyHandler</td> 
+      <td>true</td> 
+      <td> <a href="/location/show/6be87d7c-688c-4b7e-93ce-617fa05ef8ea">Networking Lab (Location)</a> </td> 
+     </tr> 
+     <tr> 
+      <td>smoke.detected</td> 
+      <td>primaryActionHandler</td> 
+      <td>true</td> 
+      <td> <a href="/device/show/069c3e0f-2db7-4097-9fec-a911fe9b5e16">Z-Wave Smoke Alarm</a> </td> 
+     </tr> 
+    </tbody> 
+   </table> 
+   <h4>Application State</h4> 
+   <p>None</p> 
+   <h4>Scheduled Jobs</h4> 
+   <p>None</p> 
+   <h4>Developer Options</h4> 
+   <div> 
+    <span>Execution Location:</span> Local 
+   </div> 
+   <div> 
+    <span>Enable local child app discovery:</span> 
+    <input type="hidden" name="_developmentApp">
+    <input type="checkbox" name="developmentApp" id="developmentApp" data-isa="bdf41439-9264-481c-976c-607829396693" onclick="return updateDevelopmentApp(this)"> 
+    <a id="developmentAppHelp" href="#" data-toggle="popover" title="Enable local child app discovery" data-content="When checked the system will consider your local SmartApps as well as published system SmartApps when searching for children from this app. You local version, if present, will take precedence over the system version. " data-placement="top" data-trigger="hover" class="small">What's this?</a> 
+   </div> 
+   <div style="font-size: 11px; color: #999999; padding: 0; margin: 0">
+     bdf41439-9264-481c-976c-607829396693 
+   </div> 
+  </div> 
+ </body>
+</html>
+************************************
+app' page of Elder Care: Slip & Fall:
+<html>
+ <head></head>
+ <body>
+  <div class="modal-header"> 
+   <button type="button" class="close" data-dismiss="modal">×</button> 
+   <a href="/installedSmartApp/showModal/3675ad0d-23cf-4f51-b63c-fd41ad953464?max=10" onclick="return refreshModal(this)" class="pull-right" style="display: inline-block; margin: 3px 20px 0;">Refresh</a> 
+   <h3> Elder Care: Slip &amp; Fall </h3> 
+   <div> 
+    <b>SmartApp:</b> Elder Care: Slip &amp; Fall 
+    <b>Owner:</b> tnguy208@ucr.edu 
+   </div> 
+  </div> 
+  <div class="modal-body"> 
+   <h4 class="first"> Settings <a href="/installedsmartapp/3675ad0d-23cf-4f51-b63c-fd41ad953464/events?source=true" style="float: right; font-size: 14px; font-weight: normal">List Events</a> </h4> 
+   <table class="table table-bordered table-condensed" style="margin-bottom: 5px;"> 
+    <thead> 
+     <tr> 
+      <th>Name</th> 
+      <th>Type</th> 
+      <th>Value</th> 
+     </tr> 
+    </thead> 
+    <tbody> 
+    </tbody> 
+   </table> 
+   <h4>Event Subscriptions</h4> 
+   <p>None</p> 
+   <h4>Application State</h4> 
+   <p>None</p> 
+   <h4>Scheduled Jobs</h4> 
+   <p>None</p> 
+   <h4>Developer Options</h4> 
+   <div> 
+    <span>Execution Location:</span> Cloud 
+   </div> 
+   <div> 
+    <span>Enable local child app discovery:</span> 
+    <input type="hidden" name="_developmentApp">
+    <input type="checkbox" name="developmentApp" checked id="developmentApp" data-isa="3675ad0d-23cf-4f51-b63c-fd41ad953464" onclick="return updateDevelopmentApp(this)"> 
+    <a id="developmentAppHelp" href="#" data-toggle="popover" title="Enable local child app discovery" data-content="When checked the system will consider your local SmartApps as well as published system SmartApps when searching for children from this app. You local version, if present, will take precedence over the system version. " data-placement="top" data-trigger="hover" class="small">What's this?</a> 
+   </div> 
+   <div style="font-size: 11px; color: #999999; padding: 0; margin: 0">
+     3675ad0d-23cf-4f51-b63c-fd41ad953464 
+   </div> 
+  </div> 
+ </body>
+</html>
+************************************
+app' page of Enhanced Auto Lock Door:
+<html>
+ <head></head>
+ <body>
+  <div class="modal-header"> 
+   <button type="button" class="close" data-dismiss="modal">×</button> 
+   <a href="/installedSmartApp/showModal/cccf8494-156f-4329-810a-dfb13421f74d?max=10" onclick="return refreshModal(this)" class="pull-right" style="display: inline-block; margin: 3px 20px 0;">Refresh</a> 
+   <h3> Enhanced Auto Lock Door </h3> 
+   <div> 
+    <b>SmartApp:</b> Enhanced Auto Lock Door 
+    <b>Owner:</b> System 
+   </div> 
+  </div> 
+  <div class="modal-body"> 
+   <h4 class="first"> Settings <a href="/installedsmartapp/cccf8494-156f-4329-810a-dfb13421f74d/events?source=true" style="float: right; font-size: 14px; font-weight: normal">List Events</a> </h4> 
+   <table class="table table-bordered table-condensed" style="margin-bottom: 5px;"> 
+    <thead> 
+     <tr> 
+      <th>Name</th> 
+      <th>Type</th> 
+      <th>Value</th> 
+     </tr> 
+    </thead> 
+    <tbody> 
+     <tr> 
+      <td>contact</td> 
+      <td>capability.contactSensor</td> 
+      <td><a href="/device/show/3c33452f-4e61-4f8b-81da-675b7ae54902">Multipurpose Sensor 2</a></td> 
+     </tr> 
+     <tr> 
+      <td>lock1</td> 
+      <td>capability.lock</td> 
+      <td><a href="/device/show/916228df-433c-4118-9a30-de02f04e82a5">Z-Wave Lock</a></td> 
+     </tr> 
+     <tr> 
+      <td>minutesLater</td> 
+      <td>number</td> 
+      <td>1</td> 
+     </tr> 
+     <tr> 
+      <td>phoneNumber</td> 
+      <td>phone</td> 
+      <td>""</td> 
+     </tr> 
+     <tr> 
+      <td>secondsLater</td> 
+      <td>number</td> 
+      <td>5</td> 
+     </tr> 
+    </tbody> 
+   </table> 
+   <h4>Event Subscriptions</h4> 
+   <table class="table table-bordered table-condensed" style="margin-bottom: 5px;"> 
+    <thead> 
+     <tr> 
+      <th>Name</th> 
+      <th>Handler</th> 
+      <th>Filter</th> 
+      <th>Source</th> 
+     </tr> 
+    </thead> 
+    <tbody> 
+     <tr> 
+      <td>contact.closed</td> 
+      <td>doorHandler</td> 
+      <td>true</td> 
+      <td> <a href="/device/show/3c33452f-4e61-4f8b-81da-675b7ae54902">Multipurpose Sensor 2</a> </td> 
+     </tr> 
+     <tr> 
+      <td>contact.open</td> 
+      <td>doorHandler</td> 
+      <td>true</td> 
+      <td> <a href="/device/show/3c33452f-4e61-4f8b-81da-675b7ae54902">Multipurpose Sensor 2</a> </td> 
+     </tr> 
+     <tr> 
+      <td>lock</td> 
+      <td>doorHandler</td> 
+      <td>false</td> 
+      <td> <a href="/device/show/916228df-433c-4118-9a30-de02f04e82a5">Z-Wave Lock</a> </td> 
+     </tr> 
+     <tr> 
+      <td>unlock</td> 
+      <td>doorHandler</td> 
+      <td>false</td> 
+      <td> <a href="/device/show/916228df-433c-4118-9a30-de02f04e82a5">Z-Wave Lock</a> </td> 
+     </tr> 
+    </tbody> 
+   </table> 
+   <h4>Application State</h4> 
+   <p>None</p> 
+   <h4>Scheduled Jobs</h4> 
+   <p>None</p> 
+   <h4>Developer Options</h4> 
+   <div> 
+    <span>Execution Location:</span> Cloud 
+   </div> 
+   <div> 
+    <span>Enable local child app discovery:</span> 
+    <input type="hidden" name="_developmentApp">
+    <input type="checkbox" name="developmentApp" id="developmentApp" data-isa="cccf8494-156f-4329-810a-dfb13421f74d" onclick="return updateDevelopmentApp(this)"> 
+    <a id="developmentAppHelp" href="#" data-toggle="popover" title="Enable local child app discovery" data-content="When checked the system will consider your local SmartApps as well as published system SmartApps when searching for children from this app. You local version, if present, will take precedence over the system version. " data-placement="top" data-trigger="hover" class="small">What's this?</a> 
+   </div> 
+   <div style="font-size: 11px; color: #999999; padding: 0; margin: 0">
+     cccf8494-156f-4329-810a-dfb13421f74d 
+   </div> 
+  </div> 
+ </body>
+</html>
+************************************
+app' page of It's Too Cold:
+<html>
+ <head></head>
+ <body>
+  <div class="modal-header"> 
+   <button type="button" class="close" data-dismiss="modal">×</button> 
+   <a href="/installedSmartApp/showModal/069faf70-79c9-409a-802f-92c1ab7cdc38?max=10" onclick="return refreshModal(this)" class="pull-right" style="display: inline-block; margin: 3px 20px 0;">Refresh</a> 
+   <h3> It's Too Cold </h3> 
+   <div> 
+    <b>SmartApp:</b> It's Too Cold 
+    <b>Owner:</b> tnguy208@ucr.edu 
+   </div> 
+  </div> 
+  <div class="modal-body"> 
+   <h4 class="first"> Settings <a href="/installedsmartapp/069faf70-79c9-409a-802f-92c1ab7cdc38/events?source=true" style="float: right; font-size: 14px; font-weight: normal">List Events</a> </h4> 
+   <table class="table table-bordered table-condensed" style="margin-bottom: 5px;"> 
+    <thead> 
+     <tr> 
+      <th>Name</th> 
+      <th>Type</th> 
+      <th>Value</th> 
+     </tr> 
+    </thead> 
+    <tbody> 
+     <tr> 
+      <td>phone1</td> 
+      <td>phone</td> 
+      <td>""</td> 
+     </tr> 
+     <tr> 
+      <td>sendPushMessage</td> 
+      <td>enum</td> 
+      <td>""</td> 
+     </tr> 
+     <tr> 
+      <td>switch1</td> 
+      <td>capability.switch</td> 
+      <td><a href="/device/show/1b55b7c3-a7cf-4d8e-b967-42c1fa3a200b">switch1</a></td> 
+     </tr> 
+     <tr> 
+      <td>temperature1</td> 
+      <td>number</td> 
+      <td>70</td> 
+     </tr> 
+     <tr> 
+      <td>temperatureSensor1</td> 
+      <td>capability.temperatureMeasurement</td> 
+      <td><a href="/device/show/f79dfdaa-1c05-4fe4-b688-871d800defe2">temperatureSensor1</a></td> 
+     </tr> 
+    </tbody> 
+   </table> 
+   <h4>Event Subscriptions</h4> 
+   <table class="table table-bordered table-condensed" style="margin-bottom: 5px;"> 
+    <thead> 
+     <tr> 
+      <th>Name</th> 
+      <th>Handler</th> 
+      <th>Filter</th> 
+      <th>Source</th> 
+     </tr> 
+    </thead> 
+    <tbody> 
+     <tr> 
+      <td>temperature</td> 
+      <td>temperatureHandler</td> 
+      <td>true</td> 
+      <td> <a href="/device/show/f79dfdaa-1c05-4fe4-b688-871d800defe2">temperatureSensor1</a> </td> 
+     </tr> 
+    </tbody> 
+   </table> 
+   <h4>Application State</h4> 
+   <p>None</p> 
+   <h4>Scheduled Jobs</h4> 
+   <p>None</p> 
+   <h4>Developer Options</h4> 
+   <div> 
+    <span>Execution Location:</span> Cloud 
+   </div> 
+   <div> 
+    <span>Enable local child app discovery:</span> 
+    <input type="hidden" name="_developmentApp">
+    <input type="checkbox" name="developmentApp" checked id="developmentApp" data-isa="069faf70-79c9-409a-802f-92c1ab7cdc38" onclick="return updateDevelopmentApp(this)"> 
+    <a id="developmentAppHelp" href="#" data-toggle="popover" title="Enable local child app discovery" data-content="When checked the system will consider your local SmartApps as well as published system SmartApps when searching for children from this app. You local version, if present, will take precedence over the system version. " data-placement="top" data-trigger="hover" class="small">What's this?</a> 
+   </div> 
+   <div style="font-size: 11px; color: #999999; padding: 0; margin: 0">
+     069faf70-79c9-409a-802f-92c1ab7cdc38 
+   </div> 
+  </div> 
+ </body>
+</html>
+************************************
+app' page of Make It So:
+<html>
+ <head></head>
+ <body>
+  <div class="modal-header"> 
+   <button type="button" class="close" data-dismiss="modal">×</button> 
+   <a href="/installedSmartApp/showModal/9c5c6830-b507-4c2e-b6fe-a7a217a00e4e?max=10" onclick="return refreshModal(this)" class="pull-right" style="display: inline-block; margin: 3px 20px 0;">Refresh</a> 
+   <h3> Make It So </h3> 
+   <div> 
+    <b>SmartApp:</b> Make It So 
+    <b>Owner:</b> tnguy208@ucr.edu 
+   </div> 
+  </div> 
+  <div class="modal-body"> 
+   <h4 class="first"> Settings <a href="/installedsmartapp/9c5c6830-b507-4c2e-b6fe-a7a217a00e4e/events?source=true" style="float: right; font-size: 14px; font-weight: normal">List Events</a> </h4> 
+   <table class="table table-bordered table-condensed" style="margin-bottom: 5px;"> 
+    <thead> 
+     <tr> 
+      <th>Name</th> 
+      <th>Type</th> 
+      <th>Value</th> 
+     </tr> 
+    </thead> 
+    <tbody> 
+     <tr> 
+      <td>locks</td> 
+      <td>capability.lock</td> 
+      <td><a href="/device/show/9e974c8d-bd2f-4518-97ce-25984b506128">locks[0]</a>, <a href="/device/show/12cdd85a-4b1b-4916-8494-2c06da448f71">locks[1]</a></td> 
+     </tr> 
+     <tr> 
+      <td>switches</td> 
+      <td>capability.switch</td> 
+      <td><a href="/device/show/913aa8f6-0836-444c-bced-69ea69712087">switches[0]</a>, <a href="/device/show/58402816-163a-4be2-9450-ef22f769e22d">switches[1]</a></td> 
+     </tr> 
+     <tr> 
+      <td>thermostats</td> 
+      <td>capability.thermostat</td> 
+      <td><a href="/device/show/9d9cfbd0-025c-418c-8471-69e4c91fc5c5">thermostats[0]</a>, <a href="/device/show/daf2ca9d-b3c1-48c9-a650-685e5cafa20d">thermostats[1]</a></td> 
+     </tr> 
+    </tbody> 
+   </table> 
+   <h4>Event Subscriptions</h4> 
+   <table class="table table-bordered table-condensed" style="margin-bottom: 5px;"> 
+    <thead> 
+     <tr> 
+      <th>Name</th> 
+      <th>Handler</th> 
+      <th>Filter</th> 
+      <th>Source</th> 
+     </tr> 
+    </thead> 
+    <tbody> 
+     <tr> 
+      <td></td> 
+      <td>appTouch</td> 
+      <td>true</td> 
+      <td> App </td> 
+     </tr> 
+     <tr> 
+      <td>mode</td> 
+      <td>changedLocationMode</td> 
+      <td>true</td> 
+      <td> <a href="/location/show/6be87d7c-688c-4b7e-93ce-617fa05ef8ea">Networking Lab (Location)</a> </td> 
+     </tr> 
+    </tbody> 
+   </table> 
+   <h4>Application State</h4> 
+   <table class="table table-bordered table-condensed" style="margin-bottom: 5px;"> 
+    <thead> 
+     <tr> 
+      <th>Name</th> 
+      <th>Value</th> 
+     </tr> 
+    </thead> 
+    <tbody> 
+     <tr> 
+      <td>Home</td> 
+      <td>{58402816-163a-4be2-9450-ef22f769e22d={level=null, switch=null}, daf2ca9d-b3c1-48c9-a650-685e5cafa20d={heatingSetpoint=null, coolingSetpoint=null}, 9e974c8d-bd2f-4518-97ce-25984b506128={locked=false}, 913aa8f6-0836-444c-bced-69ea69712087={level=null, switch=null}, 9d9cfbd0-025c-418c-8471-69e4c91fc5c5={heatingSetpoint=null, coolingSetpoint=null}, 12cdd85a-4b1b-4916-8494-2c06da448f71={locked=false}}</td> 
+     </tr> 
+    </tbody> 
+   </table> 
+   <h4>Scheduled Jobs</h4> 
+   <p>None</p> 
+   <h4>Developer Options</h4> 
+   <div> 
+    <span>Execution Location:</span> Cloud 
+   </div> 
+   <div> 
+    <span>Enable local child app discovery:</span> 
+    <input type="hidden" name="_developmentApp">
+    <input type="checkbox" name="developmentApp" checked id="developmentApp" data-isa="9c5c6830-b507-4c2e-b6fe-a7a217a00e4e" onclick="return updateDevelopmentApp(this)"> 
+    <a id="developmentAppHelp" href="#" data-toggle="popover" title="Enable local child app discovery" data-content="When checked the system will consider your local SmartApps as well as published system SmartApps when searching for children from this app. You local version, if present, will take precedence over the system version. " data-placement="top" data-trigger="hover" class="small">What's this?</a> 
+   </div> 
+   <div style="font-size: 11px; color: #999999; padding: 0; margin: 0">
+     9c5c6830-b507-4c2e-b6fe-a7a217a00e4e 
+   </div> 
+  </div> 
+ </body>
+</html>
+************************************
+app' page of Notify Me When:
+<html>
+ <head></head>
+ <body>
+  <div class="modal-header"> 
+   <button type="button" class="close" data-dismiss="modal">×</button> 
+   <a href="/installedSmartApp/showModal/09a87820-7215-418a-8455-3b13351ff9a1?max=10" onclick="return refreshModal(this)" class="pull-right" style="display: inline-block; margin: 3px 20px 0;">Refresh</a> 
+   <h3> Notify Me When </h3> 
+   <div> 
+    <b>SmartApp:</b> Notify Me When 
+    <b>Owner:</b> System 
+   </div> 
+  </div> 
+  <div class="modal-body"> 
+   <h4 class="first"> Settings <a href="/installedsmartapp/09a87820-7215-418a-8455-3b13351ff9a1/events?source=true" style="float: right; font-size: 14px; font-weight: normal">List Events</a> </h4> 
+   <table class="table table-bordered table-condensed" style="margin-bottom: 5px;"> 
+    <thead> 
+     <tr> 
+      <th>Name</th> 
+      <th>Type</th> 
+      <th>Value</th> 
+     </tr> 
+    </thead> 
+    <tbody> 
+     <tr> 
+      <td>acceleration</td> 
+      <td>capability.accelerationSensor</td> 
+      <td>[]</td> 
+     </tr> 
+     <tr> 
+      <td>arrivalPresence</td> 
+      <td>capability.presenceSensor</td> 
+      <td><a href="/device/show/2a0c10c1-e215-48b7-8414-40777abf10ae">Arrival Sensor Son</a></td> 
+     </tr> 
+     <tr> 
+      <td>button</td> 
+      <td>capability.button</td> 
+      <td>[]</td> 
+     </tr> 
+     <tr> 
+      <td>contact</td> 
+      <td>capability.contactSensor</td> 
+      <td>[]</td> 
+     </tr> 
+     <tr> 
+      <td>contactClosed</td> 
+      <td>capability.contactSensor</td> 
+      <td>[]</td> 
+     </tr> 
+     <tr> 
+      <td>departurePresence</td> 
+      <td>capability.presenceSensor</td> 
+      <td><a href="/device/show/2a0c10c1-e215-48b7-8414-40777abf10ae">Arrival Sensor Son</a></td> 
+     </tr> 
+     <tr> 
+      <td>frequency</td> 
+      <td>decimal</td> 
+      <td>""</td> 
+     </tr> 
+     <tr> 
+      <td>messageText</td> 
+      <td>text</td> 
+      <td>""</td> 
+     </tr> 
+     <tr> 
+      <td>motion</td> 
+      <td>capability.motionSensor</td> 
+      <td>[]</td> 
+     </tr> 
+     <tr> 
+      <td>mySwitch</td> 
+      <td>capability.switch</td> 
+      <td>[]</td> 
+     </tr> 
+     <tr> 
+      <td>mySwitchOff</td> 
+      <td>capability.switch</td> 
+      <td>[]</td> 
+     </tr> 
+     <tr> 
+      <td>phone</td> 
+      <td>phone</td> 
+      <td>""</td> 
+     </tr> 
+     <tr> 
+      <td>pushAndPhone</td> 
+      <td>enum</td> 
+      <td>Yes</td> 
+     </tr> 
+     <tr> 
+      <td>smoke</td> 
+      <td>capability.smokeDetector</td> 
+      <td><a href="/device/show/069c3e0f-2db7-4097-9fec-a911fe9b5e16">Z-Wave Smoke Alarm</a></td> 
+     </tr> 
+     <tr> 
+      <td>water</td> 
+      <td>capability.waterSensor</td> 
+      <td><a href="/device/show/5db2e98f-b82b-443c-b0b7-1b8e8edf18f8">Water Leak Sensor Kitchen</a></td> 
+     </tr> 
+    </tbody> 
+   </table> 
+   <h4>Event Subscriptions</h4> 
+   <table class="table table-bordered table-condensed" style="margin-bottom: 5px;"> 
+    <thead> 
+     <tr> 
+      <th>Name</th> 
+      <th>Handler</th> 
+      <th>Filter</th> 
+      <th>Source</th> 
+     </tr> 
+    </thead> 
+    <tbody> 
+     <tr> 
+      <td>carbonMonoxide.detected</td> 
+      <td>eventHandler</td> 
+      <td>true</td> 
+      <td> <a href="/device/show/069c3e0f-2db7-4097-9fec-a911fe9b5e16">Z-Wave Smoke Alarm</a> </td> 
+     </tr> 
+     <tr> 
+      <td>presence.not present</td> 
+      <td>eventHandler</td> 
+      <td>true</td> 
+      <td> <a href="/device/show/2a0c10c1-e215-48b7-8414-40777abf10ae">Arrival Sensor Son</a> </td> 
+     </tr> 
+     <tr> 
+      <td>presence.present</td> 
+      <td>eventHandler</td> 
+      <td>true</td> 
+      <td> <a href="/device/show/2a0c10c1-e215-48b7-8414-40777abf10ae">Arrival Sensor Son</a> </td> 
+     </tr> 
+     <tr> 
+      <td>smoke.detected</td> 
+      <td>eventHandler</td> 
+      <td>true</td> 
+      <td> <a href="/device/show/069c3e0f-2db7-4097-9fec-a911fe9b5e16">Z-Wave Smoke Alarm</a> </td> 
+     </tr> 
+     <tr> 
+      <td>smoke.tested</td> 
+      <td>eventHandler</td> 
+      <td>true</td> 
+      <td> <a href="/device/show/069c3e0f-2db7-4097-9fec-a911fe9b5e16">Z-Wave Smoke Alarm</a> </td> 
+     </tr> 
+     <tr> 
+      <td>water.wet</td> 
+      <td>eventHandler</td> 
+      <td>true</td> 
+      <td> <a href="/device/show/5db2e98f-b82b-443c-b0b7-1b8e8edf18f8">Water Leak Sensor Kitchen</a> </td> 
+     </tr> 
+    </tbody> 
+   </table> 
+   <h4>Application State</h4> 
+   <p>None</p> 
+   <h4>Scheduled Jobs</h4> 
+   <p>None</p> 
+   <h4>Developer Options</h4> 
+   <div> 
+    <span>Execution Location:</span> Cloud 
+   </div> 
+   <div> 
+    <span>Enable local child app discovery:</span> 
+    <input type="hidden" name="_developmentApp">
+    <input type="checkbox" name="developmentApp" id="developmentApp" data-isa="09a87820-7215-418a-8455-3b13351ff9a1" onclick="return updateDevelopmentApp(this)"> 
+    <a id="developmentAppHelp" href="#" data-toggle="popover" title="Enable local child app discovery" data-content="When checked the system will consider your local SmartApps as well as published system SmartApps when searching for children from this app. You local version, if present, will take precedence over the system version. " data-placement="top" data-trigger="hover" class="small">What's this?</a> 
+   </div> 
+   <div style="font-size: 11px; color: #999999; padding: 0; margin: 0">
+     09a87820-7215-418a-8455-3b13351ff9a1 
+   </div> 
+  </div> 
+ </body>
+</html>
+************************************
+app' page of Smart Alarm:
+<html>
+ <head></head>
+ <body>
+  <div class="modal-header"> 
+   <button type="button" class="close" data-dismiss="modal">×</button> 
+   <a href="/installedSmartApp/showModal/321c4efc-9a36-402d-b503-9b69ca4f9925?max=10" onclick="return refreshModal(this)" class="pull-right" style="display: inline-block; margin: 3px 20px 0;">Refresh</a> 
+   <h3> Smart Alarm </h3> 
+   <div> 
+    <b>SmartApp:</b> Smart Alarm 
+    <b>Owner:</b> System 
+   </div> 
+  </div> 
+  <div class="modal-body"> 
+   <h4 class="first"> Settings <a href="/installedsmartapp/321c4efc-9a36-402d-b503-9b69ca4f9925/events?source=true" style="float: right; font-size: 14px; font-weight: normal">List Events</a> </h4> 
+   <table class="table table-bordered table-condensed" style="margin-bottom: 5px;"> 
+    <thead> 
+     <tr> 
+      <th>Name</th> 
+      <th>Type</th> 
+      <th>Value</th> 
+     </tr> 
+    </thead> 
+    <tbody> 
+     <tr> 
+      <td>buttonArmAway</td> 
+      <td>number</td> 
+      <td>""</td> 
+     </tr> 
+     <tr> 
+      <td>buttonArmStay</td> 
+      <td>number</td> 
+      <td>""</td> 
+     </tr> 
+     <tr> 
+      <td>buttonDisarm</td> 
+      <td>number</td> 
+      <td>""</td> 
+     </tr> 
+     <tr> 
+      <td>buttonPanic</td> 
+      <td>number</td> 
+      <td>""</td> 
+     </tr> 
+     <tr> 
+      <td>delay_069c3e0f-2db7-4097-9fec-a911fe9b5e16</td> 
+      <td>bool</td> 
+      <td>false</td> 
+     </tr> 
+     <tr> 
+      <td>delay_1e3b18eb-6cff-45db-9585-3c7184414797</td> 
+      <td>bool</td> 
+      <td>false</td> 
+     </tr> 
+     <tr> 
+      <td>delay_3c33452f-4e61-4f8b-81da-675b7ae54902</td> 
+      <td>bool</td> 
+      <td>true</td> 
+     </tr> 
+     <tr> 
+      <td>delay_5db2e98f-b82b-443c-b0b7-1b8e8edf18f8</td> 
+      <td>bool</td> 
+      <td>false</td> 
+     </tr> 
+     <tr> 
+      <td>delay_be09502f-6f41-4551-93ee-99f423334d9f</td> 
+      <td>bool</td> 
+      <td>false</td> 
+     </tr> 
+     <tr> 
+      <td>holdArmAway</td> 
+      <td>bool</td> 
+      <td>false</td> 
+     </tr> 
+     <tr> 
+      <td>holdArmStay</td> 
+      <td>bool</td> 
+      <td>false</td> 
+     </tr> 
+     <tr> 
+      <td>holdDisarm</td> 
+      <td>bool</td> 
+      <td>false</td> 
+     </tr> 
+     <tr> 
+      <td>holdPanic</td> 
+      <td>bool</td> 
+      <td>false</td> 
+     </tr> 
+     <tr> 
+      <td>remotes</td> 
+      <td>capability.button</td> 
+      <td>[]</td> 
+     </tr> 
+     <tr> 
+      <td>type_069c3e0f-2db7-4097-9fec-a911fe9b5e16</td> 
+      <td>enum</td> 
+      <td>alert</td> 
+     </tr> 
+     <tr> 
+      <td>type_1e3b18eb-6cff-45db-9585-3c7184414797</td> 
+      <td>enum</td> 
+      <td>interior</td> 
+     </tr> 
+     <tr> 
+      <td>type_3c33452f-4e61-4f8b-81da-675b7ae54902</td> 
+      <td>enum</td> 
+      <td>interior</td> 
+     </tr> 
+     <tr> 
+      <td>type_5db2e98f-b82b-443c-b0b7-1b8e8edf18f8</td> 
+      <td>enum</td> 
+      <td>alert</td> 
+     </tr> 
+     <tr> 
+      <td>type_be09502f-6f41-4551-93ee-99f423334d9f</td> 
+      <td>enum</td> 
+      <td>interior</td> 
+     </tr> 
+     <tr> 
+      <td>z_contact</td> 
+      <td>capability.contactSensor</td> 
+      <td><a href="/device/show/3c33452f-4e61-4f8b-81da-675b7ae54902">Multipurpose Sensor 2</a></td> 
+     </tr> 
+     <tr> 
+      <td>z_motion</td> 
+      <td>capability.motionSensor</td> 
+      <td><a href="/device/show/be09502f-6f41-4551-93ee-99f423334d9f">Motion Sensor Living Room</a></td> 
+     </tr> 
+     <tr> 
+      <td>z_movement</td> 
+      <td>capability.accelerationSensor</td> 
+      <td><a href="/device/show/1e3b18eb-6cff-45db-9585-3c7184414797">Multipurpose Sensor 1</a></td> 
+     </tr> 
+     <tr> 
+      <td>z_smoke</td> 
+      <td>capability.smokeDetector</td> 
+      <td><a href="/device/show/069c3e0f-2db7-4097-9fec-a911fe9b5e16">Z-Wave Smoke Alarm</a></td> 
+     </tr> 
+     <tr> 
+      <td>z_water</td> 
+      <td>capability.waterSensor</td> 
+      <td><a href="/device/show/5db2e98f-b82b-443c-b0b7-1b8e8edf18f8">Water Leak Sensor Kitchen</a></td> 
+     </tr> 
+    </tbody> 
+   </table> 
+   <h4>Event Subscriptions</h4> 
+   <table class="table table-bordered table-condensed" style="margin-bottom: 5px;"> 
+    <thead> 
+     <tr> 
+      <th>Name</th> 
+      <th>Handler</th> 
+      <th>Filter</th> 
+      <th>Source</th> 
+     </tr> 
+    </thead> 
+    <tbody> 
+     <tr> 
+      <td>acceleration.active</td> 
+      <td>onMovement</td> 
+      <td>true</td> 
+      <td> <a href="/device/show/1e3b18eb-6cff-45db-9585-3c7184414797">Multipurpose Sensor 1</a> </td> 
+     </tr> 
+     <tr> 
+      <td>carbonMonoxide.detected</td> 
+      <td>onSmoke</td> 
+      <td>true</td> 
+      <td> <a href="/device/show/069c3e0f-2db7-4097-9fec-a911fe9b5e16">Z-Wave Smoke Alarm</a> </td> 
+     </tr> 
+     <tr> 
+      <td>carbonMonoxide.tested</td> 
+      <td>onSmoke</td> 
+      <td>true</td> 
+      <td> <a href="/device/show/069c3e0f-2db7-4097-9fec-a911fe9b5e16">Z-Wave Smoke Alarm</a> </td> 
+     </tr> 
+     <tr> 
+      <td>contact.open</td> 
+      <td>onContact</td> 
+      <td>true</td> 
+      <td> <a href="/device/show/3c33452f-4e61-4f8b-81da-675b7ae54902">Multipurpose Sensor 2</a> </td> 
+     </tr> 
+     <tr> 
+      <td>mode</td> 
+      <td>onLocation</td> 
+      <td>true</td> 
+      <td> <a href="/location/show/6be87d7c-688c-4b7e-93ce-617fa05ef8ea">Networking Lab (Location)</a> </td> 
+     </tr> 
+     <tr> 
+      <td>motion.active</td> 
+      <td>onMotion</td> 
+      <td>true</td> 
+      <td> <a href="/device/show/be09502f-6f41-4551-93ee-99f423334d9f">Motion Sensor Living Room</a> </td> 
+     </tr> 
+     <tr> 
+      <td>smoke.detected</td> 
+      <td>onSmoke</td> 
+      <td>true</td> 
+      <td> <a href="/device/show/069c3e0f-2db7-4097-9fec-a911fe9b5e16">Z-Wave Smoke Alarm</a> </td> 
+     </tr> 
+     <tr> 
+      <td>smoke.tested</td> 
+      <td>onSmoke</td> 
+      <td>true</td> 
+      <td> <a href="/device/show/069c3e0f-2db7-4097-9fec-a911fe9b5e16">Z-Wave Smoke Alarm</a> </td> 
+     </tr> 
+     <tr> 
+      <td>water.wet</td> 
+      <td>onWater</td> 
+      <td>true</td> 
+      <td> <a href="/device/show/5db2e98f-b82b-443c-b0b7-1b8e8edf18f8">Water Leak Sensor Kitchen</a> </td> 
+     </tr> 
+    </tbody> 
+   </table> 
+   <h4>Application State</h4> 
+   <table class="table table-bordered table-condensed" style="margin-bottom: 5px;"> 
+    <thead> 
+     <tr> 
+      <th>Name</th> 
+      <th>Value</th> 
+     </tr> 
+    </thead> 
+    <tbody> 
+     <tr> 
+      <td>alarms</td> 
+      <td>[]</td> 
+     </tr> 
+     <tr> 
+      <td>armed</td> 
+      <td>false</td> 
+     </tr> 
+     <tr> 
+      <td>buttonActions</td> 
+      <td>[]</td> 
+     </tr> 
+     <tr> 
+      <td>delay</td> 
+      <td>30</td> 
+     </tr> 
+     <tr> 
+      <td>history</td> 
+      <td>[]</td> 
+     </tr> 
+     <tr> 
+      <td>installed</td> 
+      <td>true</td> 
+     </tr> 
+     <tr> 
+      <td>offSwitches</td> 
+      <td>[]</td> 
+     </tr> 
+     <tr> 
+      <td>stay</td> 
+      <td>false</td> 
+     </tr> 
+     <tr> 
+      <td>url</td> 
+      <td></td> 
+     </tr> 
+     <tr> 
+      <td>version</td> 
+      <td>2.4.3</td> 
+     </tr> 
+     <tr> 
+      <td>zones</td> 
+      <td>[{zoneType=alert, sensorType=panic, delay=false, deviceId=null, armed=true}, {zoneType=interior, sensorType=contact, delay=true, deviceId=3c33452f-4e61-4f8b-81da-675b7ae54902, armed=false}, {zoneType=interior, sensorType=motion, delay=false, deviceId=be09502f-6f41-4551-93ee-99f423334d9f, armed=false}, {zoneType=interior, sensorType=acceleration, delay=false, deviceId=1e3b18eb-6cff-45db-9585-3c7184414797, armed=false}, {zoneType=alert, sensorType=smoke, delay=false, deviceId=069c3e0f-2db7-4097-9fec-a911fe9b5e16, armed=true}, {zoneType=alert, sensorType=water, delay=false, deviceId=5db2e98f-b82b-443c-b0b7-1b8e8edf18f8, armed=true}]</td> 
+     </tr> 
+    </tbody> 
+   </table> 
+   <h4>Scheduled Jobs</h4> 
+   <p>None</p> 
+   <h4>Developer Options</h4> 
+   <div> 
+    <span>Execution Location:</span> Cloud 
+   </div> 
+   <div> 
+    <span>Enable local child app discovery:</span> 
+    <input type="hidden" name="_developmentApp">
+    <input type="checkbox" name="developmentApp" id="developmentApp" data-isa="321c4efc-9a36-402d-b503-9b69ca4f9925" onclick="return updateDevelopmentApp(this)"> 
+    <a id="developmentAppHelp" href="#" data-toggle="popover" title="Enable local child app discovery" data-content="When checked the system will consider your local SmartApps as well as published system SmartApps when searching for children from this app. You local version, if present, will take precedence over the system version. " data-placement="top" data-trigger="hover" class="small">What's this?</a> 
+   </div> 
+   <div style="font-size: 11px; color: #999999; padding: 0; margin: 0">
+     321c4efc-9a36-402d-b503-9b69ca4f9925 
+   </div> 
+  </div> 
+ </body>
+</html>
+************************************
+app' page of Smart Lighting:
+<html>
+ <head></head>
+ <body>
+  <div class="modal-header"> 
+   <button type="button" class="close" data-dismiss="modal">×</button> 
+   <a href="/installedSmartApp/showModal/4d540031-24b3-4d3a-be41-d67e461deb75?max=10" onclick="return refreshModal(this)" class="pull-right" style="display: inline-block; margin: 3px 20px 0;">Refresh</a> 
+   <h3> Smart Lighting </h3> 
+   <div> 
+    <b>SmartApp:</b> Smart Lighting 
+    <b>Owner:</b> System 
+   </div> 
+  </div> 
+  <div class="modal-body"> 
+   <h4 class="first"> Settings <a href="/installedsmartapp/4d540031-24b3-4d3a-be41-d67e461deb75/events?source=true" style="float: right; font-size: 14px; font-weight: normal">List Events</a> </h4> 
+   <table class="table table-bordered table-condensed" style="margin-bottom: 5px;"> 
+    <thead> 
+     <tr> 
+      <th>Name</th> 
+      <th>Type</th> 
+      <th>Value</th> 
+     </tr> 
+    </thead> 
+    <tbody> 
+    </tbody> 
+   </table> 
+   <h4>Event Subscriptions</h4> 
+   <p>None</p> 
+   <h4>Application State</h4> 
+   <p>None</p> 
+   <h4>Scheduled Jobs</h4> 
+   <p>None</p> 
+   <h4>Developer Options</h4> 
+   <div> 
+    <span>Execution Location:</span> Cloud 
+   </div> 
+   <div> 
+    <span>Enable local child app discovery:</span> 
+    <input type="hidden" name="_developmentApp">
+    <input type="checkbox" name="developmentApp" id="developmentApp" data-isa="4d540031-24b3-4d3a-be41-d67e461deb75" onclick="return updateDevelopmentApp(this)"> 
+    <a id="developmentAppHelp" href="#" data-toggle="popover" title="Enable local child app discovery" data-content="When checked the system will consider your local SmartApps as well as published system SmartApps when searching for children from this app. You local version, if present, will take precedence over the system version. " data-placement="top" data-trigger="hover" class="small">What's this?</a> 
+   </div> 
+   <div style="font-size: 11px; color: #999999; padding: 0; margin: 0">
+     4d540031-24b3-4d3a-be41-d67e461deb75 
+   </div> 
+  </div> 
+ </body>
+</html>
+************************************
+app' page of Turn on Outlet For Bulb when motion starts:
+<html>
+ <head></head>
+ <body>
+  <div class="modal-header"> 
+   <button type="button" class="close" data-dismiss="modal">×</button> 
+   <a href="/installedSmartApp/showModal/ba83d281-03ea-47cb-aafc-2447fd3dc6f8?max=10" onclick="return refreshModal(this)" class="pull-right" style="display: inline-block; margin: 3px 20px 0;">Refresh</a> 
+   <h3> Turn on Outlet For Bulb when motion starts </h3> 
+   <div> 
+    <b>SmartApp:</b> Lighting Automation 
+    <b>Owner:</b> System 
+   </div> 
+  </div> 
+  <div class="modal-body"> 
+   <h4 class="first"> Settings <a href="/installedsmartapp/ba83d281-03ea-47cb-aafc-2447fd3dc6f8/events?source=true" style="float: right; font-size: 14px; font-weight: normal">List Events</a> </h4> 
+   <table class="table table-bordered table-condensed" style="margin-bottom: 5px;"> 
+    <thead> 
+     <tr> 
+      <th>Name</th> 
+      <th>Type</th> 
+      <th>Value</th> 
+     </tr> 
+    </thead> 
+    <tbody> 
+     <tr> 
+      <td>action</td> 
+      <td>enum</td> 
+      <td>on</td> 
+     </tr> 
+     <tr> 
+      <td>days</td> 
+      <td>enum</td> 
+      <td>[]</td> 
+     </tr> 
+     <tr> 
+      <td>lights</td> 
+      <td>capability.switch</td> 
+      <td><a href="/device/show/16ee6912-2d16-42ca-8267-bf4c05d03d9d">Outlet For Bulb</a></td> 
+     </tr> 
+     <tr> 
+      <td>modes</td> 
+      <td>mode</td> 
+      <td>[]</td> 
+     </tr> 
+     <tr> 
+      <td>motionSensors</td> 
+      <td>capability.motionSensor</td> 
+      <td><a href="/device/show/be09502f-6f41-4551-93ee-99f423334d9f">Motion Sensor Living Room</a></td> 
+     </tr> 
+     <tr> 
+      <td>motionState</td> 
+      <td>enum</td> 
+      <td>active</td> 
+     </tr> 
+     <tr> 
+      <td>motionStops</td> 
+      <td>bool</td> 
+      <td>false</td> 
+     </tr> 
+     <tr> 
+      <td>overrideLabel</td> 
+      <td>bool</td> 
+      <td>false</td> 
+     </tr> 
+     <tr> 
+      <td>trigger</td> 
+      <td>enum</td> 
+      <td>Motion</td> 
+     </tr> 
+    </tbody> 
+   </table> 
+   <h4>Event Subscriptions</h4> 
+   <table class="table table-bordered table-condensed" style="margin-bottom: 5px;"> 
+    <thead> 
+     <tr> 
+      <th>Name</th> 
+      <th>Handler</th> 
+      <th>Filter</th> 
+      <th>Source</th> 
+     </tr> 
+    </thead> 
+    <tbody> 
+     <tr> 
+      <td>motion.active</td> 
+      <td>triggerHandler</td> 
+      <td>true</td> 
+      <td> <a href="/device/show/be09502f-6f41-4551-93ee-99f423334d9f">Motion Sensor Living Room</a> </td> 
+     </tr> 
+    </tbody> 
+   </table> 
+   <h4>Application State</h4> 
+   <p>None</p> 
+   <h4>Scheduled Jobs</h4> 
+   <p>None</p> 
+   <h4>Developer Options</h4> 
+   <div> 
+    <span>Execution Location:</span> Local 
+   </div> 
+   <div> 
+    <span>Enable local child app discovery:</span> 
+    <input type="hidden" name="_developmentApp">
+    <input type="checkbox" name="developmentApp" id="developmentApp" data-isa="ba83d281-03ea-47cb-aafc-2447fd3dc6f8" onclick="return updateDevelopmentApp(this)"> 
+    <a id="developmentAppHelp" href="#" data-toggle="popover" title="Enable local child app discovery" data-content="When checked the system will consider your local SmartApps as well as published system SmartApps when searching for children from this app. You local version, if present, will take precedence over the system version. " data-placement="top" data-trigger="hover" class="small">What's this?</a> 
+   </div> 
+   <div style="font-size: 11px; color: #999999; padding: 0; margin: 0">
+     ba83d281-03ea-47cb-aafc-2447fd3dc6f8 
+   </div> 
+  </div> 
+ </body>
+</html>
+************************************
+app' page of Turn off a light after detecting a motion:
+<html>
+ <head></head>
+ <body>
+  <div class="modal-header"> 
+   <button type="button" class="close" data-dismiss="modal">×</button> 
+   <a href="/installedSmartApp/showModal/899540fe-d27b-48bf-b66e-986101e92550?max=10" onclick="return refreshModal(this)" class="pull-right" style="display: inline-block; margin: 3px 20px 0;">Refresh</a> 
+   <h3> Turn off a light after detecting a motion </h3> 
+   <div> 
+    <b>SmartApp:</b> Turn off a light after detecting a motion 
+    <b>Owner:</b> tnguy208@ucr.edu 
+   </div> 
+  </div> 
+  <div class="modal-body"> 
+   <h4 class="first"> Settings <a href="/installedsmartapp/899540fe-d27b-48bf-b66e-986101e92550/events?source=true" style="float: right; font-size: 14px; font-weight: normal">List Events</a> </h4> 
+   <table class="table table-bordered table-condensed" style="margin-bottom: 5px;"> 
+    <thead> 
+     <tr> 
+      <th>Name</th> 
+      <th>Type</th> 
+      <th>Value</th> 
+     </tr> 
+    </thead> 
+    <tbody> 
+     <tr> 
+      <td>themotion</td> 
+      <td>capability.motionSensor</td> 
+      <td><a href="/device/show/8655c4fb-93a0-46dc-ba94-eac1247a7159">themotion</a></td> 
+     </tr> 
+     <tr> 
+      <td>theswitch</td> 
+      <td>capability.switch</td> 
+      <td><a href="/device/show/cffb204e-5999-4ff8-a8a0-e88314396da0">theswitch</a></td> 
+     </tr> 
+    </tbody> 
+   </table> 
+   <h4>Event Subscriptions</h4> 
+   <table class="table table-bordered table-condensed" style="margin-bottom: 5px;"> 
+    <thead> 
+     <tr> 
+      <th>Name</th> 
+      <th>Handler</th> 
+      <th>Filter</th> 
+      <th>Source</th> 
+     </tr> 
+    </thead> 
+    <tbody> 
+     <tr> 
+      <td>motion.active</td> 
+      <td>motionDetectedHandler</td> 
+      <td>true</td> 
+      <td> <a href="/device/show/8655c4fb-93a0-46dc-ba94-eac1247a7159">themotion</a> </td> 
+     </tr> 
+    </tbody> 
+   </table> 
+   <h4>Application State</h4> 
+   <p>None</p> 
+   <h4>Scheduled Jobs</h4> 
+   <p>None</p> 
+   <h4>Developer Options</h4> 
+   <div> 
+    <span>Execution Location:</span> Cloud 
+   </div> 
+   <div> 
+    <span>Enable local child app discovery:</span> 
+    <input type="hidden" name="_developmentApp">
+    <input type="checkbox" name="developmentApp" checked id="developmentApp" data-isa="899540fe-d27b-48bf-b66e-986101e92550" onclick="return updateDevelopmentApp(this)"> 
+    <a id="developmentAppHelp" href="#" data-toggle="popover" title="Enable local child app discovery" data-content="When checked the system will consider your local SmartApps as well as published system SmartApps when searching for children from this app. You local version, if present, will take precedence over the system version. " data-placement="top" data-trigger="hover" class="small">What's this?</a> 
+   </div> 
+   <div style="font-size: 11px; color: #999999; padding: 0; margin: 0">
+     899540fe-d27b-48bf-b66e-986101e92550 
+   </div> 
+  </div> 
+ </body>
+</html>
+************************************
+app' page of Unlock It When I Arrive:
+<html>
+ <head></head>
+ <body>
+  <div class="modal-header"> 
+   <button type="button" class="close" data-dismiss="modal">×</button> 
+   <a href="/installedSmartApp/showModal/644258d2-94dd-4776-926d-086d3ef03a2e?max=10" onclick="return refreshModal(this)" class="pull-right" style="display: inline-block; margin: 3px 20px 0;">Refresh</a> 
+   <h3> Unlock It When I Arrive </h3> 
+   <div> 
+    <b>SmartApp:</b> Unlock It When I Arrive 
+    <b>Owner:</b> tnguy208@ucr.edu 
+   </div> 
+  </div> 
+  <div class="modal-body"> 
+   <h4 class="first"> Settings <a href="/installedsmartapp/644258d2-94dd-4776-926d-086d3ef03a2e/events?source=true" style="float: right; font-size: 14px; font-weight: normal">List Events</a> </h4> 
+   <table class="table table-bordered table-condensed" style="margin-bottom: 5px;"> 
+    <thead> 
+     <tr> 
+      <th>Name</th> 
+      <th>Type</th> 
+      <th>Value</th> 
+     </tr> 
+    </thead> 
+    <tbody> 
+     <tr> 
+      <td>lock1</td> 
+      <td>capability.lock</td> 
+      <td><a href="/device/show/9ed39712-cda0-4b87-ab14-7f9c9e22d79b">lock1[0]</a>, <a href="/device/show/be58f344-abbe-4193-ba86-68b2fd25847c">lock1[1]</a></td> 
+     </tr> 
+     <tr> 
+      <td>presence1</td> 
+      <td>capability.presenceSensor</td> 
+      <td><a href="/device/show/28fa59fb-ee1d-4da6-bf5d-c953efcb6377">presence1[1]</a></td> 
+     </tr> 
+    </tbody> 
+   </table> 
+   <h4>Event Subscriptions</h4> 
+   <table class="table table-bordered table-condensed" style="margin-bottom: 5px;"> 
+    <thead> 
+     <tr> 
+      <th>Name</th> 
+      <th>Handler</th> 
+      <th>Filter</th> 
+      <th>Source</th> 
+     </tr> 
+    </thead> 
+    <tbody> 
+     <tr> 
+      <td>presence.present</td> 
+      <td>presence</td> 
+      <td>true</td> 
+      <td> <a href="/device/show/28fa59fb-ee1d-4da6-bf5d-c953efcb6377">presence1[1]</a> </td> 
+     </tr> 
+    </tbody> 
+   </table> 
+   <h4>Application State</h4> 
+   <p>None</p> 
+   <h4>Scheduled Jobs</h4> 
+   <p>None</p> 
+   <h4>Developer Options</h4> 
+   <div> 
+    <span>Execution Location:</span> Cloud 
+   </div> 
+   <div> 
+    <span>Enable local child app discovery:</span> 
+    <input type="hidden" name="_developmentApp">
+    <input type="checkbox" name="developmentApp" checked id="developmentApp" data-isa="644258d2-94dd-4776-926d-086d3ef03a2e" onclick="return updateDevelopmentApp(this)"> 
+    <a id="developmentAppHelp" href="#" data-toggle="popover" title="Enable local child app discovery" data-content="When checked the system will consider your local SmartApps as well as published system SmartApps when searching for children from this app. You local version, if present, will take precedence over the system version. " data-placement="top" data-trigger="hover" class="small">What's this?</a> 
+   </div> 
+   <div style="font-size: 11px; color: #999999; padding: 0; margin: 0">
+     644258d2-94dd-4776-926d-086d3ef03a2e 
+   </div> 
+  </div> 
+ </body>
+</html>
+************************************
+app' page of Virtual Thermostat:
+<html>
+ <head></head>
+ <body>
+  <div class="modal-header"> 
+   <button type="button" class="close" data-dismiss="modal">×</button> 
+   <a href="/installedSmartApp/showModal/e0b9ad6d-b0cb-461b-bb4f-07e59c780d61?max=10" onclick="return refreshModal(this)" class="pull-right" style="display: inline-block; margin: 3px 20px 0;">Refresh</a> 
+   <h3> Virtual Thermostat </h3> 
+   <div> 
+    <b>SmartApp:</b> Virtual Thermostat 
+    <b>Owner:</b> System 
+   </div> 
+  </div> 
+  <div class="modal-body"> 
+   <h4 class="first"> Settings <a href="/installedsmartapp/e0b9ad6d-b0cb-461b-bb4f-07e59c780d61/events?source=true" style="float: right; font-size: 14px; font-weight: normal">List Events</a> </h4> 
+   <table class="table table-bordered table-condensed" style="margin-bottom: 5px;"> 
+    <thead> 
+     <tr> 
+      <th>Name</th> 
+      <th>Type</th> 
+      <th>Value</th> 
+     </tr> 
+    </thead> 
+    <tbody> 
+    </tbody> 
+   </table> 
+   <h4>Event Subscriptions</h4> 
+   <p>None</p> 
+   <h4>Application State</h4> 
+   <p>None</p> 
+   <h4>Scheduled Jobs</h4> 
+   <p>None</p> 
+   <h4>Developer Options</h4> 
+   <div> 
+    <span>Execution Location:</span> Cloud 
+   </div> 
+   <div> 
+    <span>Enable local child app discovery:</span> 
+    <input type="hidden" name="_developmentApp">
+    <input type="checkbox" name="developmentApp" id="developmentApp" data-isa="e0b9ad6d-b0cb-461b-bb4f-07e59c780d61" onclick="return updateDevelopmentApp(this)"> 
+    <a id="developmentAppHelp" href="#" data-toggle="popover" title="Enable local child app discovery" data-content="When checked the system will consider your local SmartApps as well as published system SmartApps when searching for children from this app. You local version, if present, will take precedence over the system version. " data-placement="top" data-trigger="hover" class="small">What's this?</a> 
+   </div> 
+   <div style="font-size: 11px; color: #999999; padding: 0; margin: 0">
+     e0b9ad6d-b0cb-461b-bb4f-07e59c780d61 
+   </div> 
+  </div> 
+ </body>
+</html>
+************************************

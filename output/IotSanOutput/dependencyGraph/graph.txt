@@ -1,0 +1,4 @@
+Total number of event handlers: 8
+Number of trees: 1
+Dependency Forest:
+Tree number 0, size = 7: UnlockDoor.changedLocationModeEvtHandler, GoodNight.motionInactiveEvtHandler, GoodNight.switchOffEvtHandler, GoodNight.modeChangeEvtHandler, AutoModeChange.presenceEvtHandler, LightOffWhenClosed.contactClosedEvtHandler, LightFollowsMe.motionEvtHandler, 

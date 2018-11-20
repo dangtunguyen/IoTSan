@@ -1,4 +1,0 @@
-target = Rand
-
-cg.enumerate_random = true
-report.console.property_violation=error,trace

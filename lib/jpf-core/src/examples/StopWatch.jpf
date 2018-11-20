@@ -1,3 +1,0 @@
-target = StopWatch
-
-listener = .listener.StopWatchFuzzer

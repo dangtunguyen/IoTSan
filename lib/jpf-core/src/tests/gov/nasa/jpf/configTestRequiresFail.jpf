@@ -1,6 +1,0 @@
-# this should fail
-
-@requires = thisDoesNotExist
-
-# just to check if we got loaded
-whoa = boa

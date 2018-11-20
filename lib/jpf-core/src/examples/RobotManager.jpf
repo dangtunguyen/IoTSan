@@ -1,5 +1,0 @@
-target = RobotManager
-
-listener=.listener.TraceStorer
-
-cg.enumerate_random=true

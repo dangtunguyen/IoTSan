@@ -1,9 +1,0 @@
-# test app properties
-
-target = urgh.org.MySystemUnderTest
-
-target.args = a,b,c
-
-#key expansion
-name = mySUT
-${name}.location = ${config_path}

@@ -1,3 +1,0 @@
-target = DiningPhil
-
-search.class = .search.heuristic.BFSHeuristic

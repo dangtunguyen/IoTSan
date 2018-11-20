@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.6.1">
+<title>Version Scheme</title>
+<link rel="stylesheet" href="./assets/css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+<h1>Version Scheme</h1>
+<div class="details">
+<span id="revnumber">version 3.0.0-alpha-3</span>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_the_groovy_version_scheme">1. The Groovy Version Scheme</a>
+<ul class="sectlevel2">
+<li><a href="#_since_groovy_2_0_0">1.1. Since Groovy 2.0.0:</a></li>
+<li><a href="#_before_groovy_2_0_0">1.2. Before Groovy 2.0.0:</a></li>
+<li><a href="#_official_major_version">1.3. Official Major Version:</a></li>
+<li><a href="#_maintenance_release_branch">1.4. Maintenance Release Branch:</a></li>
+<li><a href="#_how_long_is_a_major_version_maintained">1.5. How long is a major version maintained?</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_the_groovy_version_scheme"><a class="anchor" href="#_the_groovy_version_scheme"></a>1. The Groovy Version Scheme</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_since_groovy_2_0_0"><a class="anchor" href="#_since_groovy_2_0_0"></a>1.1. Since Groovy 2.0.0:</h3>
+<div class="paragraph">
+<p>Since Groovy 2.0.0 we follow the scheme as described in <a href="http://semver.org" class="bare">http://semver.org</a>. This means the next minor version after 2.0.0 is 2.1.0, the first bugfix version after 2.0.0 is 2.0.1 and the next major version will be 3.0.0.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_before_groovy_2_0_0"><a class="anchor" href="#_before_groovy_2_0_0"></a>1.2. Before Groovy 2.0.0:</h3>
+<div class="paragraph">
+<p>Before Groovy 2.0.0 we followed a version scheme where we have X.Y.Z, where X.Y is the major version, and Z the minor version. Bugfix versions where not really done, you had to upgrade to the next minor version for that. Since Groovy 1.0 we incremented only the Y for a new major version. The increment of X we wanted to leave for a very big breaking change, like a new MOP. The last major version in these scheme is 1.8(.0), 1.8.1 is the first minor and bugfix version. The major versions in the past using this scheme are: 1.8, 1.7, 1.6, 1.5, 1.0. Each of them having around 10 minor/bugfix versions.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_official_major_version"><a class="anchor" href="#_official_major_version"></a>1.3. Official Major Version:</h3>
+<div class="paragraph">
+<p>The official major version is the current major version that should/can be used by the developers if they are not bound to a specific major version.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_maintenance_release_branch"><a class="anchor" href="#_maintenance_release_branch"></a>1.4. Maintenance Release Branch:</h3>
+<div class="paragraph">
+<p>Here we indicate a former major version&#8217;s bugfix release.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_how_long_is_a_major_version_maintained"><a class="anchor" href="#_how_long_is_a_major_version_maintained"></a>1.5. How long is a major version maintained?</h3>
+<div class="paragraph">
+<p>That depends on the users. Let&#8217;s say we have X in maintenance and Y is the official major version, then if a new major version Z is released, Y goes into maintenance. Usually we make one or two more bugfix releases for X and then we discontinue it, unless there are strong requests to have certain things fixed for users that can absolutely not upgrade.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 3.0.0-alpha-3<br>
+Last updated 2018-06-23 13:44:41 AEST
+</div>
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+<script>prettyPrint()</script>
+</body>
+</html>

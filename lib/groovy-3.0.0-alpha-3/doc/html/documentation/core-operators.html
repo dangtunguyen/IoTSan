@@ -1,0 +1,1897 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.6.1">
+<title>Operators</title>
+<link rel="stylesheet" href="./assets/css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+</head>
+<body id="groovy-operators" class="book toc2 toc-left">
+<div id="header">
+<h1>Operators</h1>
+<div class="details">
+<span id="revnumber">version 3.0.0-alpha-3</span>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_arithmetic_operators">1. Arithmetic operators</a>
+<ul class="sectlevel2">
+<li><a href="#_normal_arithmetic_operators">1.1. Normal arithmetic operators</a></li>
+<li><a href="#_unary_operators">1.2. Unary operators</a></li>
+<li><a href="#_assignment_arithmetic_operators">1.3. Assignment arithmetic operators</a></li>
+</ul>
+</li>
+<li><a href="#_relational_operators">2. Relational operators</a></li>
+<li><a href="#_logical_operators">3. Logical operators</a>
+<ul class="sectlevel2">
+<li><a href="#_precedence">3.1. Precedence</a></li>
+<li><a href="#_short_circuiting">3.2. Short-circuiting</a></li>
+</ul>
+</li>
+<li><a href="#_bitwise_operators">4. Bitwise operators</a></li>
+<li><a href="#_conditional_operators">5. Conditional operators</a>
+<ul class="sectlevel2">
+<li><a href="#_not_operator">5.1. Not operator</a></li>
+<li><a href="#_ternary_operator">5.2. Ternary operator</a></li>
+<li><a href="#_elvis_operator">5.3. Elvis operator</a></li>
+</ul>
+</li>
+<li><a href="#_object_operators">6. Object operators</a>
+<ul class="sectlevel2">
+<li><a href="#_safe_navigation_operator">6.1. Safe navigation operator</a></li>
+<li><a href="#_direct_field_access_operator">6.2. Direct field access operator</a></li>
+<li><a href="#method-pointer-operator">6.3. Method pointer operator</a></li>
+</ul>
+</li>
+<li><a href="#_regular_expression_operators">7. Regular expression operators</a>
+<ul class="sectlevel2">
+<li><a href="#_pattern_operator">7.1. Pattern operator</a></li>
+<li><a href="#_find_operator">7.2. Find operator</a></li>
+<li><a href="#_match_operator">7.3. Match operator</a></li>
+</ul>
+</li>
+<li><a href="#_other_operators">8. Other operators</a>
+<ul class="sectlevel2">
+<li><a href="#_spread_operator">8.1. Spread operator</a>
+<ul class="sectlevel3">
+<li><a href="#_spreading_method_arguments">8.1.1. Spreading method arguments</a></li>
+<li><a href="#_spread_list_elements">8.1.2. Spread list elements</a></li>
+<li><a href="#_spread_map_elements">8.1.3. Spread map elements</a></li>
+</ul>
+</li>
+<li><a href="#_range_operator">8.2. Range operator</a></li>
+<li><a href="#_spaceship_operator">8.3. Spaceship operator</a></li>
+<li><a href="#subscript-operator">8.4. Subscript operator</a></li>
+<li><a href="#_membership_operator">8.5. Membership operator</a></li>
+<li><a href="#_identity_operator">8.6. Identity operator</a></li>
+<li><a href="#_coercion_operator">8.7. Coercion operator</a></li>
+<li><a href="#_diamond_operator">8.8. Diamond operator</a></li>
+<li><a href="#_call_operator">8.9. Call operator</a></li>
+</ul>
+</li>
+<li><a href="#_operator_precedence">9. Operator precedence</a></li>
+<li><a href="#Operator-Overloading">10. Operator overloading</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>This chapter covers the operators of the Groovy programming language.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_arithmetic_operators"><a class="anchor" href="#_arithmetic_operators"></a>1. Arithmetic operators</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Groovy supports the usual familiar arithmetic operators you find in mathematics and in other programming languages like Java.
+All the Java arithmetic operators are supported. Let&#8217;s go through them in the following examples.</p>
+</div>
+<div class="sect2">
+<h3 id="_normal_arithmetic_operators"><a class="anchor" href="#_normal_arithmetic_operators"></a>1.1. Normal arithmetic operators</h3>
+<div class="paragraph">
+<p>The following binary arithmetic operators are available in Groovy:</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Operator</th>
+<th class="tableblock halign-left valign-top">Purpose</th>
+<th class="tableblock halign-left valign-top">Remarks</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>+</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">addition</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">subtraction</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>*</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">multiplication</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>/</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">division</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Use <code>intdiv()</code> for integer division, and see the section about <a href="core-syntax.html#integer_division">integer division</a> for more information on the return type of the division.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">remainder</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>**</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">power</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">See the section about <a href="core-syntax.html#power_operator">the power operation</a> for more information on the return type of the operation.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Here are a few examples of usage of those operators:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">assert  1  + 2 == 3
+assert  4  - 3 == 1
+assert  3  * 5 == 15
+assert  3  / 2 == 1.5
+assert 10  % 3 == 1
+assert  2 ** 3 == 8</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_unary_operators"><a class="anchor" href="#_unary_operators"></a>1.2. Unary operators</h3>
+<div class="paragraph">
+<p>The <code>+</code> and <code>-</code> operators are also available as unary operators:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">assert +3 == 3
+assert -4 == 0 - 4
+
+assert -(-1) == 1  <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Note the usage of parentheses to surround an expression to apply the unary minus to that surrounded expression.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>In terms of unary arithmetics operators, the <code>++</code> (increment) and <code>--</code> (decrement) operators are available,
+both in prefix and postfix notation:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def a = 2
+def b = a++ * 3             <i class="conum" data-value="1"></i><b>(1)</b>
+
+assert a == 3 &amp;&amp; b == 6
+
+def c = 3
+def d = c-- * 2             <i class="conum" data-value="2"></i><b>(2)</b>
+
+assert c == 2 &amp;&amp; d == 6
+
+def e = 1
+def f = ++e + 3             <i class="conum" data-value="3"></i><b>(3)</b>
+
+assert e == 2 &amp;&amp; f == 5
+
+def g = 4
+def h = --g + 1             <i class="conum" data-value="4"></i><b>(4)</b>
+
+assert g == 3 &amp;&amp; h == 4</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The postfix increment will increment <code>a</code> after the expression has been evaluated and assigned into <code>b</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The postfix decrement will decrement <code>c</code> after the expression has been evaluated and assigned into <code>d</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>The prefix increment will increment <code>e</code> before the expression is evaluated and assigned into <code>f</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>The prefix decrement will decrement <code>g</code> before the expression is evaluated and assigned into <code>h</code></td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_assignment_arithmetic_operators"><a class="anchor" href="#_assignment_arithmetic_operators"></a>1.3. Assignment arithmetic operators</h3>
+<div class="paragraph">
+<p>The binary arithmetic operators we have seen above are also available in an assignment form:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>+=</code></p>
+</li>
+<li>
+<p><code>-=</code></p>
+</li>
+<li>
+<p><code>*=</code></p>
+</li>
+<li>
+<p><code>/=</code></p>
+</li>
+<li>
+<p><code>%=</code></p>
+</li>
+<li>
+<p><code>**=</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s see them in action:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def a = 4
+a += 3
+
+assert a == 7
+
+def b = 5
+b -= 3
+
+assert b == 2
+
+def c = 5
+c *= 3
+
+assert c == 15
+
+def d = 10
+d /= 2
+
+assert d == 5
+
+def e = 10
+e %= 3
+
+assert e == 1
+
+def f = 3
+f **= 2
+
+assert f == 9</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_relational_operators"><a class="anchor" href="#_relational_operators"></a>2. Relational operators</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Relational operators allow comparisons between objects, to know if two objects are the same or different,
+or if one is greater than, less than, or equal to the other.</p>
+</div>
+<div class="paragraph">
+<p>The following operators are available:</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Operator</th>
+<th class="tableblock halign-left valign-top">Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>==</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">equal</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>!=</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">different</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>&lt;</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">less than</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>&lt;=</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">less than or equal</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>&gt;</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">greater than</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>&gt;=</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">greater than or equal</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Here are some examples of simple number comparisons using these operators:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">assert 1 + 2 == 3
+assert 3 != 4
+
+assert -2 &lt; 3
+assert 2 &lt;= 2
+assert 3 &lt;= 4
+
+assert 5 &gt; 1
+assert 5 &gt;= -2</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_logical_operators"><a class="anchor" href="#_logical_operators"></a>3. Logical operators</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Groovy offers three logical operators for boolean expressions:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>&amp;&amp;</code>: logical "and"</p>
+</li>
+<li>
+<p><code>||</code>: logical "or"</p>
+</li>
+<li>
+<p><code>!</code>: logical "not"</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s illustrate them with the following examples:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">assert !false           <i class="conum" data-value="1"></i><b>(1)</b>
+assert true &amp;&amp; true     <i class="conum" data-value="2"></i><b>(2)</b>
+assert true || false    <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>"not" false is true</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>true "and" true is true</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>true "or" false is true</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_precedence"><a class="anchor" href="#_precedence"></a>3.1. Precedence</h3>
+<div class="paragraph">
+<p>The logical "not" has a higher priority than the logical "and".</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">assert (!false &amp;&amp; false) == false   <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Here, the assertion is true (as the expression in parentheses is false), because "not" has a higher precedence than "and", so it only applies to the first "false" term; otherwise, it would have applied to the result of the "and", turned it into true, and the assertion would have failed</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The logical "and" has a higher priority than the logical "or".</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">assert true || true &amp;&amp; false        <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Here, the assertion is true, because "and" has a higher precedence than "or", therefore the "or" is executed last and returns true, having one true argument; otherwise, the "and" would have executed last and returned false, having one false argument, and the assertion would have failed</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_short_circuiting"><a class="anchor" href="#_short_circuiting"></a>3.2. Short-circuiting</h3>
+<div class="paragraph">
+<p>The logical <code>||</code> operator supports short-circuiting: if the left operand is true, it knows that the result will be true in any case, so it won&#8217;t evaluate the right operand.
+The right operand will be evaluated only if the left operand is false.</p>
+</div>
+<div class="paragraph">
+<p>Likewise for the logical <code>&amp;&amp;</code> operator: if the left operand is false, it knows that the result will be false in any case, so it won&#8217;t evaluate the right operand.
+The right operand will be evaluated only if the left operand is true.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">boolean checkIfCalled() {   <i class="conum" data-value="1"></i><b>(1)</b>
+    called = true
+}
+
+called = false
+true || checkIfCalled()
+assert !called              <i class="conum" data-value="2"></i><b>(2)</b>
+
+called = false
+false || checkIfCalled()
+assert called               <i class="conum" data-value="3"></i><b>(3)</b>
+
+called = false
+false &amp;&amp; checkIfCalled()
+assert !called              <i class="conum" data-value="4"></i><b>(4)</b>
+
+called = false
+true &amp;&amp; checkIfCalled()
+assert called               <i class="conum" data-value="5"></i><b>(5)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>We create a function that sets the <code>called</code> flag to true whenever it&#8217;s called</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>In the first case, after resetting the called flag, we confirm that if the left operand to <code>||</code> is true, the function is not called, as <code>||</code> short-circuits the evaluation of the right operand</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>In the second case, the left operand is false and so the function is called, as indicated by the fact our flag is now true</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Likewise for <code>&amp;&amp;</code>, we confirm that the function is not called with a false left operand</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>But the function is called with a true left operand</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_bitwise_operators"><a class="anchor" href="#_bitwise_operators"></a>4. Bitwise operators</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Groovy offers 4 bitwise operators:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>&amp;</code>: bitwise "and"</p>
+</li>
+<li>
+<p><code>|</code>: bitwise "or"</p>
+</li>
+<li>
+<p><code>^</code>: bitwise "xor" (exclusive "or")</p>
+</li>
+<li>
+<p><code>~</code>: bitwise negation</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Bitwise operators can be applied on a <code>byte</code> or an <code>int</code> and return an <code>int</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">int a = 0b00101010
+assert a == 42
+int b = 0b00001000
+assert b == 8
+assert (a &amp; a) == a                     <i class="conum" data-value="1"></i><b>(1)</b>
+assert (a &amp; b) == b                     <i class="conum" data-value="2"></i><b>(2)</b>
+assert (a | a) == a                     <i class="conum" data-value="3"></i><b>(3)</b>
+assert (a | b) == a                     <i class="conum" data-value="4"></i><b>(4)</b>
+
+int mask = 0b11111111                   <i class="conum" data-value="5"></i><b>(5)</b>
+assert ((a ^ a) &amp; mask) == 0b00000000   <i class="conum" data-value="6"></i><b>(6)</b>
+assert ((a ^ b) &amp; mask) == 0b00100010   <i class="conum" data-value="7"></i><b>(7)</b>
+assert ((~a) &amp; mask)    == 0b11010101   <i class="conum" data-value="8"></i><b>(8)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>bitwise and</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>bitwise and returns common bits</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>bitwise or</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>bitwise or returns all '1' bits</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>setting a mask to check only the last 8 bits</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>bitwise exclusive or on self returns 0</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td>bitwise exclusive or</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="8"></i><b>8</b></td>
+<td>bitwise negation</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>It&#8217;s worth noting that the internal representation of primitive types follow the <a href="http://docs.oracle.com/javase/specs/jls/se8/html/jls-4.html">Java Language Specification</a>. In particular,
+primitive types are signed, meaning that for a bitwise negation, it is always good to use a mask to retrieve only the necessary bits.</p>
+</div>
+<div class="paragraph">
+<p>In Groovy, bitwise operators have the particularity of being <a href="#Operator-Overloading">overloadable</a>, meaning that you can define the behavior of those operators for any kind of object.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_conditional_operators"><a class="anchor" href="#_conditional_operators"></a>5. Conditional operators</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_not_operator"><a class="anchor" href="#_not_operator"></a>5.1. Not operator</h3>
+<div class="paragraph">
+<p>The "not" operator is represented with an exclamation mark (<code>!</code>) and inverts the result of the underlying boolean expression. In
+particular, it is possible to combine the <code>not</code> operator with the <a href="core-semantics.html#Groovy-Truth">Groovy truth</a>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">assert (!true)    == false                      <i class="conum" data-value="1"></i><b>(1)</b>
+assert (!'foo')   == false                      <i class="conum" data-value="2"></i><b>(2)</b>
+assert (!'')      == true                       <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>the negation of <code>true</code> is <code>false</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>'foo' is a non empty string, evaluating to <code>true</code>, so negation returns <code>false</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>'' is an empty string, evaluating to <code>false</code>, so negation returns <code>true</code></td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_ternary_operator"><a class="anchor" href="#_ternary_operator"></a>5.2. Ternary operator</h3>
+<div class="paragraph">
+<p>The ternary operator is a shortcut expression that is equivalent to an if/else branch assigning some value to a variable.</p>
+</div>
+<div class="paragraph">
+<p>Instead of:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">if (string!=null &amp;&amp; string.length()&gt;0) {
+    result = 'Found'
+} else {
+    result = 'Not found'
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can write:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">result = (string!=null &amp;&amp; string.length()&gt;0) ? 'Found' : 'Not found'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The ternary operator is also compatible with the <a href="core-semantics.html#Groovy-Truth">Groovy truth</a>, so you can make it even simpler:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">result = string ? 'Found' : 'Not found'</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_elvis_operator"><a class="anchor" href="#_elvis_operator"></a>5.3. Elvis operator</h3>
+<div class="paragraph">
+<p>The "Elvis operator" is a shortening of the ternary operator. One instance of where this is handy is for returning
+a 'sensible default' value if an expression resolves to <code>false</code>-ish (as in
+<a href="core-semantics.html#Groovy-Truth">Groovy truth</a>). A simple example might look like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">displayName = user.name ? user.name : 'Anonymous'   <i class="conum" data-value="1"></i><b>(1)</b>
+displayName = user.name ?: 'Anonymous'              <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>with the ternary operator, you have to repeat the value you want to assign</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>with the Elvis operator, the value, which is tested, is used if it is not <code>false</code>-ish</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Usage of the Elvis operator reduces the verbosity of your code and reduces the risks of errors in case of refactorings,
+by removing the need to duplicate the expression which is tested in both the condition and the positive return value.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_object_operators"><a class="anchor" href="#_object_operators"></a>6. Object operators</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_safe_navigation_operator"><a class="anchor" href="#_safe_navigation_operator"></a>6.1. Safe navigation operator</h3>
+<div class="paragraph">
+<p>The Safe Navigation operator is used to avoid a <code>NullPointerException</code>. Typically when you have a reference to an object
+you might need to verify that it is not <code>null</code> before accessing methods or properties of the object. To avoid this, the safe
+navigation operator will simply return <code>null</code> instead of throwing an exception, like so:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def person = Person.find { it.id == 123 }    <i class="conum" data-value="1"></i><b>(1)</b>
+def name = person?.name                      <i class="conum" data-value="2"></i><b>(2)</b>
+assert name == null                          <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>find</code> will return a <code>null</code> instance</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>use of the null-safe operator prevents from a <code>NullPointerException</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>result is <code>null</code></td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_direct_field_access_operator"><a class="anchor" href="#_direct_field_access_operator"></a>6.2. Direct field access operator</h3>
+<div class="paragraph">
+<p>Normally in Groovy, when you write code like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class User {
+    public final String name                 <i class="conum" data-value="1"></i><b>(1)</b>
+    User(String name) { this.name = name}
+    String getName() { "Name: $name" }       <i class="conum" data-value="2"></i><b>(2)</b>
+}
+def user = new User('Bob')
+assert user.name == 'Name: Bob'              <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>public field <code>name</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>a getter for <code>name</code> that returns a custom string</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>calls the getter</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The <code>user.name</code> call triggers a call to the property of the same name, that is to say, here, to the getter for <code>name</code>. If
+you want to retrieve the field instead of calling the getter, you can use the direct field access operator:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">assert user.@name == 'Bob'                   <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>use of <code>.@</code> forces usage of the field instead of the getter</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="method-pointer-operator"><a class="anchor" href="#method-pointer-operator"></a>6.3. Method pointer operator</h3>
+<div class="paragraph">
+<p>The method pointer operator (<code>.&amp;</code>) call be used to store a reference to a method in a variable, in order to call it
+later:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def str = 'example of method reference'            <i class="conum" data-value="1"></i><b>(1)</b>
+def fun = str.&amp;toUpperCase                         <i class="conum" data-value="2"></i><b>(2)</b>
+def upper = fun()                                  <i class="conum" data-value="3"></i><b>(3)</b>
+assert upper == str.toUpperCase()                  <i class="conum" data-value="4"></i><b>(4)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>the <code>str</code> variable contains a <code>String</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>we store a reference to the <code>toUpperCase</code> method on the <code>str</code> instance inside a variable named <code>fun</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td><code>fun</code> can be called like a regular method</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>we can check that the result is the same as if we had called it directly on <code>str</code></td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>There are multiple advantages in using method pointers. First of all, the type of such a method pointer is
+a <code>groovy.lang.Closure</code>, so it can be used in any place a closure would be used. In particular, it is suitable to
+convert an existing method for the needs of the strategy pattern:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def transform(List elements, Closure action) {                    <i class="conum" data-value="1"></i><b>(1)</b>
+    def result = []
+    elements.each {
+        result &lt;&lt; action(it)
+    }
+    result
+}
+String describe(Person p) {                                       <i class="conum" data-value="2"></i><b>(2)</b>
+    "$p.name is $p.age"
+}
+def action = this.&amp;describe                                       <i class="conum" data-value="3"></i><b>(3)</b>
+def list = [
+    new Person(name: 'Bob',   age: 42),
+    new Person(name: 'Julia', age: 35)]                           <i class="conum" data-value="4"></i><b>(4)</b>
+assert transform(list, action) == ['Bob is 42', 'Julia is 35']    <i class="conum" data-value="5"></i><b>(5)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>the <code>transform</code> method takes each element of the list and calls the <code>action</code> closure on them, returning a new list</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>we define a function that takes a <code>Person</code> and returns a <code>String</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>we create a method pointer on that function</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>we create the list of elements we want to collect the descriptors</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>the method pointer can be used where a <code>Closure</code> was expected</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Method pointers are bound by the receiver and a method name. Arguments are resolved at runtime, meaning that if you have
+multiple methods with the same name, the syntax is not different, only resolution of the appropriate method to be called
+will be done at runtime:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def doSomething(String str) { str.toUpperCase() }    <i class="conum" data-value="1"></i><b>(1)</b>
+def doSomething(Integer x) { 2*x }                   <i class="conum" data-value="2"></i><b>(2)</b>
+def reference = this.&amp;doSomething                    <i class="conum" data-value="3"></i><b>(3)</b>
+assert reference('foo') == 'FOO'                     <i class="conum" data-value="4"></i><b>(4)</b>
+assert reference(123)   == 246                       <i class="conum" data-value="5"></i><b>(5)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>define an overloaded <code>doSomething</code> method accepting a <code>String</code> as an argument</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>define an overloaded <code>doSomething</code> method accepting an <code>Integer</code> as an argument</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>create a single method pointer on <code>doSomething</code>, without specifying argument types</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>using the method pointer with a <code>String</code> calls the <code>String</code> version of <code>doSomething</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>using the method pointer with an <code>Integer</code> calls the <code>Integer</code> version of <code>doSomething</code></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_regular_expression_operators"><a class="anchor" href="#_regular_expression_operators"></a>7. Regular expression operators</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_pattern_operator"><a class="anchor" href="#_pattern_operator"></a>7.1. Pattern operator</h3>
+<div class="paragraph">
+<p>The pattern operator (<code>~</code>) provides a simple way to create a <code>java.util.regex.Pattern</code> instance:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def p = ~/foo/
+assert p instanceof Pattern</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>while in general, you find the pattern operator with an expression in a slashy-string, it can be used with any kind of
+<code>String</code> in Groovy:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">p = ~'foo'                                                        <i class="conum" data-value="1"></i><b>(1)</b>
+p = ~"foo"                                                        <i class="conum" data-value="2"></i><b>(2)</b>
+p = ~$/dollar/slashy $ string/$                                   <i class="conum" data-value="3"></i><b>(3)</b>
+p = ~"${pattern}"                                                 <i class="conum" data-value="4"></i><b>(4)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>using single quote strings</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>using double quotes strings</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>the dollar-slashy string lets you use slashes and the dollar sign without having to escape them</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>you can also use a GString!</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_find_operator"><a class="anchor" href="#_find_operator"></a>7.2. Find operator</h3>
+<div class="paragraph">
+<p>Alternatively to building a pattern, you can directly use the find operator <code>=~</code> to build a <code>java.util.regex.Matcher</code>
+instance:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def text = "some text to match"
+def m = text =~ /match/                                           <i class="conum" data-value="1"></i><b>(1)</b>
+assert m instanceof Matcher                                       <i class="conum" data-value="2"></i><b>(2)</b>
+if (!m) {                                                         <i class="conum" data-value="3"></i><b>(3)</b>
+    throw new RuntimeException("Oops, text not found!")
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>=~</code> creates a matcher against the <code>text</code> variable, using the pattern on the right hand side</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>the return type of <code>=~</code> is a <code>Matcher</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>equivalent to calling <code>if (!m.find())</code></td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Since a <code>Matcher</code> coerces to a <code>boolean</code> by calling its <code>find</code> method, the <code>=~</code> operator is consistent with the simple
+use of Perl&#8217;s <code>=~</code> operator, when it appears as a predicate (in <code>if</code>, <code>while</code>, etc.).</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_match_operator"><a class="anchor" href="#_match_operator"></a>7.3. Match operator</h3>
+<div class="paragraph">
+<p>The match operator (<code>==~</code>) is a slight variation of the find operator, that does not return a <code>Matcher</code> but a boolean
+and requires a strict match of the input string:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">m = text ==~ /match/                                              <i class="conum" data-value="1"></i><b>(1)</b>
+assert m instanceof Boolean                                       <i class="conum" data-value="2"></i><b>(2)</b>
+if (m) {                                                          <i class="conum" data-value="3"></i><b>(3)</b>
+    throw new RuntimeException("Should not reach that point!")
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>==~</code> matches the subject with the regular expression, but match must be strict</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>the return type of <code>==~</code> is therefore a <code>boolean</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>equivalent to calling <code>if (text ==~ /match/)</code></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_other_operators"><a class="anchor" href="#_other_operators"></a>8. Other operators</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_spread_operator"><a class="anchor" href="#_spread_operator"></a>8.1. Spread operator</h3>
+<div class="paragraph">
+<p>The Spread Operator (<code>*.</code>) is used to invoke an action on all items of an aggregate object. It is equivalent to calling the action on each item
+and collecting the result into a list:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Car {
+    String make
+    String model
+}
+def cars = [
+       new Car(make: 'Peugeot', model: '508'),
+       new Car(make: 'Renault', model: 'Clio')]       <i class="conum" data-value="1"></i><b>(1)</b>
+def makes = cars*.make                                <i class="conum" data-value="2"></i><b>(2)</b>
+assert makes == ['Peugeot', 'Renault']                <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>build a list of <code>Car</code> items. The list is an aggregate of objects.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>call the spread operator on the list, accessing the <code>make</code> property of each item</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>returns a list of strings corresponding to the collection of <code>make</code> items</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The spread operator is null-safe, meaning that if an element of the collection is null, it will return null instead of throwing a <code>NullPointerException</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">cars = [
+   new Car(make: 'Peugeot', model: '508'),
+   null,                                              <i class="conum" data-value="1"></i><b>(1)</b>
+   new Car(make: 'Renault', model: 'Clio')]
+assert cars*.make == ['Peugeot', null, 'Renault']     <i class="conum" data-value="2"></i><b>(2)</b>
+assert null*.make == null                             <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>build a list for which of of the elements is <code>null</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>using the spread operator will <strong>not</strong> throw a <code>NullPointerException</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>the receiver might also be null, in which case the return value is <code>null</code></td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The spread operator can be used on any class which implements the <code>Iterable</code> interface:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Component {
+    Long id
+    String name
+}
+class CompositeObject implements Iterable&lt;Component&gt; {
+    def components = [
+        new Component(id: 1, name: 'Foo'),
+        new Component(id: 2, name: 'Bar')]
+
+    @Override
+    Iterator&lt;Component&gt; iterator() {
+        components.iterator()
+    }
+}
+def composite = new CompositeObject()
+assert composite*.id == [1,2]
+assert composite*.name == ['Foo','Bar']</code></pre>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_spreading_method_arguments"><a class="anchor" href="#_spreading_method_arguments"></a>8.1.1. Spreading method arguments</h4>
+<div class="paragraph">
+<p>There may be situations when the arguments of a method call can be found in a list that you need to adapt to the method
+arguments. In such situations, you can use the spread operator to call the method. For example, imagine you have the
+following method signature:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">int function(int x, int y, int z) {
+    x*y+z
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>then if you have the following list:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def args = [4,5,6]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>you can call the method without having to define intermediate variables:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">assert function(*args) == 26</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>It is even possible to mix normal arguments with spread ones:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">args = [4]
+assert function(*args,5,6) == 26</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_spread_list_elements"><a class="anchor" href="#_spread_list_elements"></a>8.1.2. Spread list elements</h4>
+<div class="paragraph">
+<p>When used inside a list literal, the spread operator acts as if the spread element contents were inlined into the list:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def items = [4,5]                      <i class="conum" data-value="1"></i><b>(1)</b>
+def list = [1,2,3,*items,6]            <i class="conum" data-value="2"></i><b>(2)</b>
+assert list == [1,2,3,4,5,6]           <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>items</code> is a list</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>we want to insert the contents of the <code>items</code> list directly into <code>list</code> without having to call <code>addAll</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>the contents of <code>items</code> has been inlined into <code>list</code></td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_spread_map_elements"><a class="anchor" href="#_spread_map_elements"></a>8.1.3. Spread map elements</h4>
+<div class="paragraph">
+<p>The spread map operator works in a similar manner as the spread list operator, but for maps. It allows you to inline
+the contents of a map into another map literal, like in the following example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def m1 = [c:3, d:4]                   <i class="conum" data-value="1"></i><b>(1)</b>
+def map = [a:1, b:2, *:m1]            <i class="conum" data-value="2"></i><b>(2)</b>
+assert map == [a:1, b:2, c:3, d:4]    <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>m1</code> is the map that we want to inline</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>we use the <code>*:m1</code> notation to spread the contents of <code>m1</code> into <code>map</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td><code>map</code> contains all the elements of <code>m1</code></td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The position of the spread map operator is relevant, like illustrated in the following example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def m1 = [c:3, d:4]                   <i class="conum" data-value="1"></i><b>(1)</b>
+def map = [a:1, b:2, *:m1, d: 8]      <i class="conum" data-value="2"></i><b>(2)</b>
+assert map == [a:1, b:2, c:3, d:8]    <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>m1</code> is the map that we want to inline</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>we use the <code>*:m1</code> notation to spread the contents of <code>m1</code> into <code>map</code>, but redefine the key <code>d</code> <strong>after</strong> spreading</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td><code>map</code> contains all the expected keys, but <code>d</code> was redefined</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_range_operator"><a class="anchor" href="#_range_operator"></a>8.2. Range operator</h3>
+<div class="paragraph">
+<p>Groovy supports the concept of ranges and provides a notation (<code>..</code>) to create ranges of objects:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def range = 0..5                                    <i class="conum" data-value="1"></i><b>(1)</b>
+assert (0..5).collect() == [0, 1, 2, 3, 4, 5]       <i class="conum" data-value="2"></i><b>(2)</b>
+assert (0..&lt;5).collect() == [0, 1, 2, 3, 4]         <i class="conum" data-value="3"></i><b>(3)</b>
+assert (0..5) instanceof List                       <i class="conum" data-value="4"></i><b>(4)</b>
+assert (0..5).size() == 6                           <i class="conum" data-value="5"></i><b>(5)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>a simple range of integers, stored into a local variable</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>an <code>IntRange</code>, with inclusive bounds</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>an <code>IntRange</code>, with exclusive upper bound</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>a <code>groovy.lang.Range</code> implements the <code>List</code> interface</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>meaning that you can call the <code>size</code> method on it</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Ranges implementation is lightweight, meaning that only the lower and upper bounds are stored. You can create a range
+from any <code>Comparable</code> object that has <code>next()</code> and <code>previous()</code> methods to determine the next / previous item in the range.
+For example, you can create a range of characters this way:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">assert ('a'..'d').collect() == ['a','b','c','d']</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_spaceship_operator"><a class="anchor" href="#_spaceship_operator"></a>8.3. Spaceship operator</h3>
+<div class="paragraph">
+<p>The spaceship operator (<code><=></code>) delegates to the <code>compareTo</code> method:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">assert (1 &lt;=&gt; 1) == 0
+assert (1 &lt;=&gt; 2) == -1
+assert (2 &lt;=&gt; 1) == 1
+assert ('a' &lt;=&gt; 'z') == -1</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="subscript-operator"><a class="anchor" href="#subscript-operator"></a>8.4. Subscript operator</h3>
+<div class="paragraph">
+<p>The subscript operator is a short hand notation for <code>getAt</code> or <code>putAt</code>, depending on whether you find it on
+the left hand side or the right hand side of an assignment:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def list = [0,1,2,3,4]
+assert list[2] == 2                         <i class="conum" data-value="1"></i><b>(1)</b>
+list[2] = 4                                 <i class="conum" data-value="2"></i><b>(2)</b>
+assert list[0..2] == [0,1,4]                <i class="conum" data-value="3"></i><b>(3)</b>
+list[0..2] = [6,6,6]                        <i class="conum" data-value="4"></i><b>(4)</b>
+assert list == [6,6,6,3,4]                  <i class="conum" data-value="5"></i><b>(5)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>[2]</code> can be used instead of <code>getAt(2)</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>if on left hand side of an assignment, will call <code>putAt</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td><code>getAt</code> also supports ranges</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>so does <code>putAt</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>the list is mutated</td>
+</tr>
+</table>
+</div>
+<div id="custom-subscript-operator" class="paragraph">
+<p>The subscript operator, in combination with a custom implementation of <code>getAt</code>/<code>putAt</code> is a convenient way for destructuring
+objects:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class User {
+    Long id
+    String name
+    def getAt(int i) {                                             <i class="conum" data-value="1"></i><b>(1)</b>
+        switch (i) {
+            case 0: return id
+            case 1: return name
+        }
+        throw new IllegalArgumentException("No such element $i")
+    }
+    void putAt(int i, def value) {                                 <i class="conum" data-value="2"></i><b>(2)</b>
+        switch (i) {
+            case 0: id = value; return
+            case 1: name = value; return
+        }
+        throw new IllegalArgumentException("No such element $i")
+    }
+}
+def user = new User(id: 1, name: 'Alex')                           <i class="conum" data-value="3"></i><b>(3)</b>
+assert user[0] == 1                                                <i class="conum" data-value="4"></i><b>(4)</b>
+assert user[1] == 'Alex'                                           <i class="conum" data-value="5"></i><b>(5)</b>
+user[1] = 'Bob'                                                    <i class="conum" data-value="6"></i><b>(6)</b>
+assert user.name == 'Bob'                                          <i class="conum" data-value="7"></i><b>(7)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>the <code>User</code> class defines a custom <code>getAt</code> implementation</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>the <code>User</code> class defines a custom <code>putAt</code> implementation</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>create a sample user</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>using the subscript operator with index 0 allows retrieving the user id</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>using the subscript operator with index 1 allows retrieving the user name</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>we can use the subscript operator to write to a property thanks to the delegation to <code>putAt</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td>and check that it&#8217;s really the property <code>name</code> which was changed</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_membership_operator"><a class="anchor" href="#_membership_operator"></a>8.5. Membership operator</h3>
+<div class="paragraph">
+<p>The membership operator (<code>in</code>) is equivalent to calling the <code>isCase</code> method. In the context of a <code>List</code>, it is equivalent
+to calling <code>contains</code>, like in the following example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def list = ['Grace','Rob','Emmy']
+assert ('Emmy' in list)                     <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>equivalent to calling <code>list.contains('Emmy')</code> or <code>list.isCase('Emmy')</code></td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_identity_operator"><a class="anchor" href="#_identity_operator"></a>8.6. Identity operator</h3>
+<div class="paragraph">
+<p>In Groovy, using <code>==</code> to test equality is different from using the same operator in Java. In Groovy, it is calling <code>equals</code>.
+If you want to compare reference equality, you should use <code>is</code> like in the following example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def list1 = ['Groovy 1.8','Groovy 2.0','Groovy 2.3']        <i class="conum" data-value="1"></i><b>(1)</b>
+def list2 = ['Groovy 1.8','Groovy 2.0','Groovy 2.3']        <i class="conum" data-value="2"></i><b>(2)</b>
+assert list1 == list2                                       <i class="conum" data-value="3"></i><b>(3)</b>
+assert !list1.is(list2)                                     <i class="conum" data-value="4"></i><b>(4)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Create a list of strings</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Create another list of strings containing the same elements</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>using <code>==</code>, we test object equality</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>but using <code>is</code>, we can check that references are distinct</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_coercion_operator"><a class="anchor" href="#_coercion_operator"></a>8.7. Coercion operator</h3>
+<div class="paragraph">
+<p>The coercion operator (<code>as</code>) is a variant of casting. Coercion converts object from one type to another <strong>without</strong> them
+being compatible for assignment. Let&#8217;s take an example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Integer x = 123
+String s = (String) x                                   <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>Integer</code> is not assignable to a <code>String</code>, so it will produce a <code>ClassCastException</code> at runtime</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>This can be fixed by using <em>coercion</em> instead:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Integer x = 123
+String s = x as String                                  <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>Integer</code> is not assignable to a <code>String</code>, but use of <code>as</code> will <em>coerce</em> it to a <code>String</code></td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>When an object is coerced into another, unless the target type is the same as the source type, coercion will return a
+<strong>new</strong> object. The rules of coercion differ depending on the source and target types, and coercion may fail if no conversion
+rules are found. Custom conversion rules may be implemented thanks to the <code>asType</code> method:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Identifiable {
+    String name
+}
+class User {
+    Long id
+    String name
+    def asType(Class target) {                                              <i class="conum" data-value="1"></i><b>(1)</b>
+        if (target == Identifiable) {
+            return new Identifiable(name: name)
+        }
+        throw new ClassCastException("User cannot be coerced into $target")
+    }
+}
+def u = new User(name: 'Xavier')                                            <i class="conum" data-value="2"></i><b>(2)</b>
+def p = u as Identifiable                                                   <i class="conum" data-value="3"></i><b>(3)</b>
+assert p instanceof Identifiable                                            <i class="conum" data-value="4"></i><b>(4)</b>
+assert !(p instanceof User)                                                 <i class="conum" data-value="5"></i><b>(5)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>the <code>User</code> class defines a custom conversion rule from <code>User</code> to <code>Identifiable</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>we create an instance of <code>User</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>we coerce the <code>User</code> instance into an <code>Identifiable</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>the target is an instance of <code>Identifiable</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>the target is not an instance of <code>User</code> anymore</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_diamond_operator"><a class="anchor" href="#_diamond_operator"></a>8.8. Diamond operator</h3>
+<div class="paragraph">
+<p>The diamond operator (<code>&lt;&gt;</code>) is a syntactic sugar only operator added to support compatibility with the operator of the
+same name in Java 7. It is used to indicate that generic types should be inferred from the declaration:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">List&lt;String&gt; strings = new LinkedList&lt;&gt;()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In dynamic Groovy, this is totally unused. In statically type checked Groovy, it is also optional since the Groovy
+type checker performs type inference whether this operator is present or not.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_call_operator"><a class="anchor" href="#_call_operator"></a>8.9. Call operator</h3>
+<div class="paragraph">
+<p>The call operator <code>()</code> is used to call a method named <code>call</code> implicitly. For any object which defines a <code>call</code> method,
+ you can omit the <code>.call</code> part and use the call operator instead:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class MyCallable {
+    int call(int x) {           <i class="conum" data-value="1"></i><b>(1)</b>
+        2*x
+    }
+}
+
+def mc = new MyCallable()
+assert mc.call(2) == 4          <i class="conum" data-value="2"></i><b>(2)</b>
+assert mc(2) == 4               <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>MyCallable</code> defines a method named <code>call</code>. Note that it doesn&#8217;t need to implement <code>java.util.concurrent.Callable</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>we can call the method using the classic method call syntax</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>or we can omit <code>.call</code> thanks to the call operator</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_operator_precedence"><a class="anchor" href="#_operator_precedence"></a>9. Operator precedence</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The table below lists all groovy operators in order of precedence.</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Level</th>
+<th class="tableblock halign-left valign-top">Operator(s)</th>
+<th class="tableblock halign-left valign-top">Name(s)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>new</code> &#160; <code>()</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">object creation, explicit parentheses</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>()</code> &#160; <code>{}</code> &#160; <code>[]</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">method call, closure, literal list/map</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>.</code> &#160; <code>.&amp;</code> &#160; <code>.@</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">member access, method closure, field/attribute access</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>?.</code> &#160; <code>*</code> &#160; <code>*.</code> &#160; <code>*:</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">safe dereferencing, spread, spread-dot, spread-map</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>~</code> &#160; <code>!</code> &#160; <code>(type)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">bitwise negate/pattern, not, typecast</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[]</code> &#160; <code>++</code> &#160; <code>--</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">list/map/array index, post inc/decrement</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>**</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">power</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>++</code> &#160; <code>--</code> &#160; <code>+</code> &#160; <code>-</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">pre inc/decrement, unary plus, unary minus</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">4</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>*</code> &#160; <code>/</code> &#160; <code>%</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">multiply, div, remainder</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>+</code> &#160; <code>-</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">addition, subtraction</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">6</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>&lt;&lt;</code> &#160; <code>&gt;&gt;</code> &#160; <code>&gt;&gt;&gt;</code> &#160; <code>..</code> &#160; <code>..&lt;</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">left/right (unsigned) shift, inclusive/exclusive range</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">7</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>&lt;</code> &#160; <code>&lt;=</code> &#160; <code>&gt;</code> &#160; <code>&gt;=</code> &#160; <code>in</code> &#160; <code>instanceof</code> &#160; <code>as</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">less/greater than/or equal, in, instanceof, type coercion</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">8</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>==</code> &#160; <code>!=</code> &#160; <code><=></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">equals, not equals, compare to</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>=~</code> &#160; <code>==~</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">regex find, regex match</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">9</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>&amp;</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">binary/bitwise and</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">10</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>^</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">binary/bitwise xor</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">11</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>|</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">binary/bitwise or</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">12</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>&amp;&amp;</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">logical and</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">13</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>||</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">logical or</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">14</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>? :</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ternary conditional</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>?:</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">elvis operator</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">15</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>=</code> &#160; <code>**=</code> &#160; <code>*=</code> &#160; <code>/=</code> &#160; <code>%=</code> &#160; <code>+=</code> &#160; <code>-=</code> &#160;<br>
+<code><<=</code> &#160; <code>&gt;&gt;=</code> &#160; <code>&gt;&gt;&gt;=</code> &#160; <code>&amp;=</code> &#160; <code>^=</code> &#160; <code>|=</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">various assignments</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="Operator-Overloading"><a class="anchor" href="#Operator-Overloading"></a>10. Operator overloading</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Groovy allows you to overload the various operators so that they can be used with your own classes. Consider this simple
+class:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Bucket {
+    int size
+
+    Bucket(int size) { this.size = size }
+
+    Bucket plus(Bucket other) {                     <i class="conum" data-value="1"></i><b>(1)</b>
+        return new Bucket(this.size + other.size)
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>Bucket</code> implements a special method called <code>plus()</code></td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Just by implementing the <code>plus()</code> method, the <code>Bucket</code> class can now be used with the <code>+</code> operator like so:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def b1 = new Bucket(4)
+def b2 = new Bucket(11)
+assert (b1 + b2).size == 15                         <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The two <code>Bucket</code> objects can be added together with the <code>+</code> operator</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>All (non-comparator) Groovy operators have a corresponding method that you can implement in your own classes. The only
+requirements are that your method is public, has the correct name, and has the correct number of arguments. The argument
+types depend on what types you want to support on the right hand side of the operator. For example, you could support
+the statement</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">assert (b1 + 11).size == 15</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>by implementing the <code>plus()</code> method with this signature:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Bucket plus(int capacity) {
+    return new Bucket(this.size + capacity)
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here is a complete list of the operators and their corresponding methods:</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Operator</th>
+<th class="tableblock halign-left valign-top">Method</th>
+<th class="tableblock halign-left valign-top">Operator</th>
+<th class="tableblock halign-left valign-top">Method</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>+</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a.plus(b)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>a[b]</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a.getAt(b)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a.minus(b)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>a[b] = c</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a.putAt(b, c)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>*</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a.multiply(b)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>a in b</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">b.isCase(a)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>/</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a.div(b)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>&lt;&lt;</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a.leftShift(b)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>%</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a.mod(b)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>&gt;&gt;</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a.rightShift(b)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>**</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a.power(b)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>&gt;&gt;&gt;</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a.rightShiftUnsigned(b)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>|</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a.or(b)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>++</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a.next()</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>&amp;</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a.and(b)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>--</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a.previous()</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>^</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a.xor(b)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>+a</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a.positive()</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>as</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a.asType(b)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-a</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a.negative()</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>a()</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a.call()</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>~a</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a.bitwiseNegate()</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 3.0.0-alpha-3<br>
+Last updated 2018-06-23 13:44:35 AEST
+</div>
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+<script>prettyPrint()</script>
+</body>
+</html>

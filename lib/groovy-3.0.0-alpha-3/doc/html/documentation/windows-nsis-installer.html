@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.6.1">
+<title>Windows NSIS-Installer</title>
+<link rel="stylesheet" href="./assets/css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+<h1>Windows NSIS-Installer</h1>
+<div class="details">
+<span id="revnumber">version 3.0.0-alpha-3</span>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_a_windows_specific_installation_script">1. A Windows-specific installation script</a>
+<ul class="sectlevel2">
+<li><a href="#_silent_installation">1.1. Silent installation</a></li>
+<li><a href="#_working_with_the_installer_source">1.2. Working with the installer source</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_a_windows_specific_installation_script"><a class="anchor" href="#_a_windows_specific_installation_script"></a>1. A Windows-specific installation script</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>That allows to create installer. You can examine the results on the <a href="#download">download page</a>.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="assets/img/setup.png" alt="setup">
+</div>
+</div>
+<div class="paragraph">
+<p>The installer first copies the groovy files to where the user wants,</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="assets/img/outdir.png" alt="outdir">
+</div>
+</div>
+<div class="paragraph">
+<p>then asks for permission to create a variable <code>GROOVY_HOME</code> and to add the respective bin directory (<code>%GROOVY_HOME%/bin</code> to the path, if no reference to groovy already exists in it.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="assets/img/variables.jpg" alt="variables">
+</div>
+</div>
+<div class="paragraph">
+<p>The user can decide whether to put these into the user or system environment (on Win 95 and Win 98 this information is appended to the autoexec.bat instead) i.e., whether the installation will be for the current user or for all users. Then the installer checks for the existence of <code>JAVA_HOME</code>. If it doesn&#8217;t exist, a message box points out the potential problem.</p>
+</div>
+<div class="paragraph">
+<p>Next the user can decide whether or not to install the native launcher,</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="assets/img/native.jpg" alt="native">
+</div>
+</div>
+<div class="paragraph">
+<p>can decide to install additional packages,</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="assets/img/additionalmodules.png" alt="additionalmodules">
+</div>
+</div>
+<div class="paragraph">
+<p>and finally whether to associate .groovy files with the native launcher, and whether to add the extension .groovy and .gy to PATHEXT. This allows to start Groovy files from the command line directly, without having to call the groovy explicitly.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="assets/img/fileassociation.png" alt="fileassociation">
+</div>
+</div>
+<div class="paragraph">
+<p>As you can see in the screen shots (they are clickable thumbnails), currently english, german, french and spanish are supported as installation languages.</p>
+</div>
+<div class="paragraph">
+<p>Oh, and whatever you do, do not use the command line option -russel.</p>
+</div>
+<div class="paragraph">
+<p>The french translation has been contributed by Xavier Mehaut and Tugduall Grall, the spanish translation by Andres Almiray, and the translation to brazilian portuguese has been provided by Marcos Silva Pereira.</p>
+</div>
+<div class="paragraph">
+<p>Thank you very much for your help.</p>
+</div>
+<div class="sect2">
+<h3 id="_silent_installation"><a class="anchor" href="#_silent_installation"></a>1.1. Silent installation</h3>
+<div class="paragraph">
+<p>The installer supports silent installation with the command line option /S. When using this option you can influence which parts are installed using additional options:</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Option</th>
+<th class="tableblock halign-left valign-top">Function</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">/A</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Install Additional Packages</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">/ALL</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Install All</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">/D</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set Installation Directory (mandatory)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">/F</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Create File Associations</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">/N</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Install Native Launcher</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">/S</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Silent Install</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">/V</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set Variables</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>The option /D is mandatory and points to the installation directory. It is important to note that the /D option <strong>must</strong> be the last parameter on the command line and must not contain any quotes, even if the path contains spaces. Only absolute paths are supported. Use an equal sign to separate the option and the path.</p>
+</div>
+<div class="paragraph">
+<p>Example: groovy-1.5.6-installer-2.exe /S /A /N /D=d:\program files\groovy</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_working_with_the_installer_source"><a class="anchor" href="#_working_with_the_installer_source"></a>1.2. Working with the installer source</h3>
+<div class="paragraph">
+<p>To use the installer source to create your own binary installers, simply check it out into an Eclipse workspace. Additionally you might want to install the <a href="http://nsis.sourceforge.net/EclipseNSIS_-_NSIS_plugin_for_Eclipse">NSIS-Eclipse-Plugin</a>, it helps when developing NSIS stuff.</p>
+</div>
+<div class="paragraph">
+<p>If you have worked with NSIS-scripts already there should be no big problem understanding what is done.</p>
+</div>
+<div class="paragraph">
+<p>The main script is the file setup.nsi, where you can find the installer program. Three additional pages are defined, Variables, NativeLauncher and FileAssociation, and for each you can find the respective .ini file containing the screen placement. Simply open them in the design editor provided by the Eclipse-Plugin, and you can see what they look like.</p>
+</div>
+<div class="paragraph">
+<p>Two bmp-images contain the Groovy logo in different resolutions, one for the welcome page and one as header image for the other pages. The name is the game &#8230;&#8203;</p>
+</div>
+<div class="paragraph">
+<p>Finally you have the launch scripts. These actually start the compiler with different settings for the groovy version, the groovy location (on your hard disk) and the location of the native launcher. The groovy version influences the final name of the installer.</p>
+</div>
+<div class="paragraph">
+<p>The launch scripts are setting the following variables:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>SOURCE_VERSION</strong> defines the version of the release</p>
+</li>
+<li>
+<p><strong>SOURCE_DIR</strong> is the full path to the groovy install directory</p>
+</li>
+<li>
+<p><strong>NATIVE_DIR</strong> is the full path to the native launcher</p>
+</li>
+<li>
+<p><strong>SCRIPTOM_DIR</strong> is the full path to the scriptom module</p>
+</li>
+<li>
+<p><strong>GANT_DIR</strong> is the full path to the gant module</p>
+</li>
+<li>
+<p><strong>GRAPHICS_B</strong> is the full path to the graphicsbuilder module</p>
+</li>
+<li>
+<p><strong>SWINGX_B</strong> is the full path to the swingxbuilder module</p>
+</li>
+<li>
+<p><strong>VERSION_TXT</strong> is the full path to the installed_versions.txt (this file describes the used versions)</p>
+</li>
+<li>
+<p><strong>DOC_DIR</strong> is the full path to the doc directory</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Most probably you only have to set these variables and you are happy to go.</p>
+</div>
+<div class="paragraph">
+<p>Have fun.</p>
+</div>
+<div class="paragraph">
+<p>If there is any problem whatsoever, either ask on the mailing lists or contact the author at</p>
+</div>
+<div class="paragraph">
+<p>joachim.baumann_at_xinaris.de.</p>
+</div>
+<div class="paragraph">
+<p>Excerpt:a Windows-specific installer for Groovy</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 3.0.0-alpha-3<br>
+Last updated 2018-06-23 13:44:50 AEST
+</div>
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+<script>prettyPrint()</script>
+</body>
+</html>

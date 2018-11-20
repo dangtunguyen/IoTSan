@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.6.1">
+<title>Delegation Pattern</title>
+<link rel="stylesheet" href="./assets/css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+<h1>Delegation Pattern</h1>
+<div class="details">
+<span id="revnumber">version 3.0.0-alpha-3</span>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_implement_delegation_pattern_using_expandometaclass">1. Implement Delegation Pattern using ExpandoMetaClass</a></li>
+<li><a href="#_implement_delegation_pattern_using_delegate_annotation">2. Implement Delegation Pattern using @Delegate annotation</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <a href="http://en.wikipedia.org/wiki/Delegation_pattern">Delegation Pattern</a> is a technique where an object&#8217;s behavior (public methods) is implemented by delegating responsibility to one or more associated objects.</p>
+</div>
+<div class="paragraph">
+<p>Groovy allows the traditional style of applying the delegation pattern, e.g. see <a href="#_replace_inheritance_with_delegation">Replace Inheritance with Delegation</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_implement_delegation_pattern_using_expandometaclass"><a class="anchor" href="#_implement_delegation_pattern_using_expandometaclass"></a>1. Implement Delegation Pattern using ExpandoMetaClass</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <a href="http://docs.groovy-lang.org/3.0.0-alpha-3/html/gapi/index.html?groovy/lang/ExpandoMetaClass.html">groovy.lang.ExpandoMetaClass</a> allows usage of this pattern to be encapsulated in a library. This allows Groovy to emulate similar libraries available for the Ruby language.</p>
+</div>
+<div class="paragraph">
+<p>Consider the following library class:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Delegator {
+    private targetClass
+    private delegate
+    Delegator(targetClass, delegate) {
+        this.targetClass = targetClass
+        this.delegate = delegate
+    }
+    def delegate(String methodName) {
+        delegate(methodName, methodName)
+    }
+    def delegate(String methodName, String asMethodName) {
+        targetClass.metaClass."$asMethodName" = delegate.&amp;"$methodName"
+    }
+    def delegateAll(String[] names) {
+        names.each { delegate(it) }
+    }
+    def delegateAll(Map names) {
+        names.each { k, v -&gt; delegate(k, v) }
+    }
+    def delegateAll() {
+        delegate.class.methods*.name.each { delegate(it) }
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>With this in your classpath, you can now apply the delegation pattern dynamically as shown in the following examples. First, consider we have the following classes:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Person {
+    String name
+}
+
+class MortgageLender {
+    def borrowAmount(amount) {
+       "borrow \\$$amount"
+    }
+    def borrowFor(thing) {
+       "buy \\$thing"
+    }
+}
+
+def lender = new MortgageLender()
+
+def delegator = new Delegator(Person, lender)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>We can now use the <em>delegator</em> to automatically borrow methods from the <em>lender</em> object to extend the <em>Person</em> class. We can borrow the methods as is or with a rename:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">delegator.delegate 'borrowFor'
+delegator.delegate 'borrowAmount', 'getMoney'
+
+def p = new Person()
+
+println p.borrowFor('present')   // =&gt; buy present
+println p.getMoney(50)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The first line above, adds the <em>borrowFor</em> method to the <em>Person</em> class by delegating to the <em>lender</em> object. The second line adds a <em>getMoney</em> method to the <em>Person</em> class by delegating to the <em>lender</em> object&#8217;s <em>borrowAmount</em> method.</p>
+</div>
+<div class="paragraph">
+<p>Alternatively, we could borrow multiple methods like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">delegator.delegateAll 'borrowFor', 'borrowAmount'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Which adds these two methods to the <em>Person</em> class.</p>
+</div>
+<div class="paragraph">
+<p>Or if we want all the methods, like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">delegator.delegateAll()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Which will make all the methods in the delegate object available in the <em>Person</em> class.</p>
+</div>
+<div class="paragraph">
+<p>Alternatively, we can use a map notation to rename multiple methods:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">delegator.delegateAll borrowAmount:'getMoney', borrowFor:'getThing'</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_implement_delegation_pattern_using_delegate_annotation"><a class="anchor" href="#_implement_delegation_pattern_using_delegate_annotation"></a>2. Implement Delegation Pattern using @Delegate annotation</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Since version 1.6 you can use the built-in delegation mechanism which is based on AST transformation.</p>
+</div>
+<div class="paragraph">
+<p>This make delegation even easier:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Person {
+    def name
+    @Delegate MortgageLender mortgageLender = new MortgageLender()
+}
+
+class MortgageLender {
+    def borrowAmount(amount) {
+       "borrow \\$$amount"
+    }
+    def borrowFor(thing) {
+       "buy $thing"
+    }
+}
+
+def p = new Person()
+
+assert "buy present" == p.borrowFor('present')
+assert "borrow \\$50" == p.borrowAmount(50)</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 3.0.0-alpha-3<br>
+Last updated 2018-06-23 13:44:46 AEST
+</div>
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+<script>prettyPrint()</script>
+</body>
+</html>

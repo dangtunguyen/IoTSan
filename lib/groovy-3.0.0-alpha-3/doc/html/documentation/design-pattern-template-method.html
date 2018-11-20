@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.6.1">
+<title>Template Method Pattern</title>
+<link rel="stylesheet" href="./assets/css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+<h1>Template Method Pattern</h1>
+<div class="details">
+<span id="revnumber">version 3.0.0-alpha-3</span>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_example">1. Example</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <a href="http://en.wikipedia.org/wiki/Template_method_pattern">Template Method Pattern</a> abstracts away the details of several algorithms. The generic part of an algorithm is contained within a base class. Particular implementation details are captured within base classes. The generic pattern of classes involved looks like this:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="assets/img/TemplateMethodClasses.gif" alt="TemplateMethodClasses">
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_example"><a class="anchor" href="#_example"></a>1. Example</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In this example, <code>Accumulator</code> captures the essence of the accumulation algorithm. The base classes <code>Sum</code> and <code>Product</code> provide particular customised ways to use the generic accumulation algorithm.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">abstract class Accumulator {
+    protected initial
+    abstract doAccumulate(total, v)
+    def accumulate(values) {
+        def total = initial
+        values.each { v -&gt; total = doAccumulate(total, v) }
+        total
+    }
+}
+
+class Sum extends Accumulator {
+    def Sum() { initial = 0 }
+    def doAccumulate(total, v) { total + v }
+}
+
+class Product extends Accumulator {
+    def Product() { initial = 1 }
+    def doAccumulate(total, v) { total * v }
+}
+
+println new Sum().accumulate([1,2,3,4])
+println new Product().accumulate([1,2,3,4])</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The resulting output is:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>10
+24</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In this particular case, you could use Groovy&#8217;s inject method to achieve a similar result using Closures:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Closure addAll = { total, item -&gt; total += item }
+def accumulated = [1, 2, 3, 4].inject(0, addAll)
+println accumulated    // =&gt; 10</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Thanks to duck-typing, this would also work with other objects which support an add (plus() in Groovy) method, e.g.:</p>
+</div>
+<div class="paragraph">
+<p>In this particular case, you could use Groovy&#8217;s inject method to achieve a similar result using Closures:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">accumulated = [ "1", "2", "3", "4" ].inject("", addAll)
+println accumulated    // =&gt; "1234"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>We could also do the multiplication case as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Closure multAll = { total, item -&gt; total *= item }
+accumulated = [1, 2, 3, 4].inject(1, multAll)
+println accumulated    // =&gt; 24</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Using closures this way looks more like the <a href="#_strategy_pattern">Strategy Pattern</a> but if we realise that the built-in inject method is the generic part of the algorithm for our template method, then the Closures become the customised parts of the template method pattern.</p>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 3.0.0-alpha-3<br>
+Last updated 2018-06-23 13:44:46 AEST
+</div>
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+<script>prettyPrint()</script>
+</body>
+</html>

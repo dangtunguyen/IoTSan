@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.6.1">
+<title>SwingBuilder</title>
+<link rel="stylesheet" href="./assets/css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+</head>
+<body id="swingbuilder" class="book">
+<div id="header">
+<h1>SwingBuilder</h1>
+<div class="details">
+<span id="revnumber">version 3.0.0-alpha-3</span>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p><code>SwingBuilder</code> allows you to create full-fledged Swing GUIs in a declarative and concise fashion. It accomplishes this by employing a common idiom in Groovy, builders.
+Builders handle the busywork of creating complex objects for you, such as instantiating children, calling Swing methods, and attaching these children to their parents.
+As a consequence, your code is much more readable and maintainable, while still allowing you access to the full range of Swing components.</p>
+</div>
+<div class="paragraph">
+<p>Here&#8217;s a simple example of using <code>SwingBuilder</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import groovy.swing.SwingBuilder
+import java.awt.BorderLayout as BL
+
+count = 0
+new SwingBuilder().edt {
+  frame(title: 'Frame', size: [300, 300], show: true) {
+    borderLayout()
+    textlabel = label(text: 'Click the button!', constraints: BL.NORTH)
+    button(text:'Click Me',
+         actionPerformed: {count++; textlabel.text = "Clicked ${count} time(s)."; println "clicked"}, constraints:BL.SOUTH)
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here is what it will look like:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="assets/img/SwingBuilder001.gif" alt="SwingBuilder001">
+</div>
+</div>
+<div class="paragraph">
+<p>This hierarchy of components would normally be created through a series of repetitive instantiations, setters, and finally attaching this child to its respective parent.
+Using <code>SwingBuilder</code>, however, allows you to define this hierarchy in its native form, which makes the interface design understandable simply by reading the code.</p>
+</div>
+<div class="paragraph">
+<p>The flexibility shown here is made possible by leveraging the many programming features built-in to Groovy, such as closures, implicit constructor calling, import aliasing, and string interpolation.
+Of course, these do not have to be fully understood in order to use <code>SwingBuilder</code>; as you can see from the code above, their uses are intuitive.</p>
+</div>
+<div class="paragraph">
+<p>Here is a slightly more involved example, with an example of <code>SwingBuilder</code> code re-use via a closure.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import groovy.swing.SwingBuilder
+import javax.swing.*
+import java.awt.*
+
+def swing = new SwingBuilder()
+
+def sharedPanel = {
+     swing.panel() {
+        label("Shared Panel")
+    }
+}
+
+count = 0
+swing.edt {
+    frame(title: 'Frame', defaultCloseOperation: JFrame.EXIT_ON_CLOSE, pack: true, show: true) {
+        vbox {
+            textlabel = label('Click the button!')
+            button(
+                text: 'Click Me',
+                actionPerformed: {
+                    count++
+                    textlabel.text = "Clicked ${count} time(s)."
+                    println "Clicked!"
+                }
+            )
+            widget(sharedPanel())
+            widget(sharedPanel())
+        }
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here&#8217;s another variation that relies on observable beans and binding:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import groovy.swing.SwingBuilder
+import groovy.beans.Bindable
+
+class MyModel {
+   @Bindable int count = 0
+}
+
+def model = new MyModel()
+new SwingBuilder().edt {
+  frame(title: 'Java Frame', size: [100, 100], locationRelativeTo: null, show: true) {
+    gridLayout(cols: 1, rows: 2)
+    label(text: bind(source: model, sourceProperty: 'count', converter: { v -&gt;  v? "Clicked $v times": ''}))
+    button('Click me!', actionPerformed: { model.count++ })
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><a href="core-metaprogramming.html#xform-Bindable">@Bindable</a> is one of the core AST Transformations. It generates all the required boilerplate code to turn a simple bean into an observable one. The <code>bind()</code> node creates appropriate <code>PropertyChangeListeners</code> that will update the interested parties whenever a <code>PropertyChangeEvent</code> is fired.</p>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 3.0.0-alpha-3<br>
+Last updated 2018-06-23 13:44:50 AEST
+</div>
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+<script>prettyPrint()</script>
+</body>
+</html>

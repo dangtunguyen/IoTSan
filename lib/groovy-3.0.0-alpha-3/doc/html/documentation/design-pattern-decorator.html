@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.6.1">
+<title>Decorator Pattern</title>
+<link rel="stylesheet" href="./assets/css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+<h1>Decorator Pattern</h1>
+<div class="details">
+<span id="revnumber">version 3.0.0-alpha-3</span>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_traditional_example">1. Traditional Example</a></li>
+<li><a href="#_a_touch_of_dynamic_behaviour">2. A touch of dynamic behaviour</a></li>
+<li><a href="#_runtime_behaviour_embellishment">3. Runtime behaviour embellishment</a></li>
+<li><a href="#_more_dynamic_decorating">4. More dynamic decorating</a></li>
+<li><a href="#_decorating_with_an_interceptor">5. Decorating with an Interceptor</a></li>
+<li><a href="#_decorating_with_java_lang_reflect_proxy">6. Decorating with java.lang.reflect.Proxy</a></li>
+<li><a href="#_decorating_with_spring">7. Decorating with Spring</a></li>
+<li><a href="#_asynchronous_decorators_using_gpars">8. Asynchronous Decorators using GPars</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <a href="http://en.wikipedia.org/wiki/Decorator_pattern">Decorator Pattern</a> provides a mechanism to embellish the behaviour of an object without changing its essential interface. A decorated object should be able to be substituted wherever the original (non-decorated) object was expected. Decoration typically does not involve modifying the source code of the original object and decorators should be able to be combined in flexible ways to produce objects with several embellishments.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_traditional_example"><a class="anchor" href="#_traditional_example"></a>1. Traditional Example</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Suppose we have the following <code>Logger</code> class.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Logger {
+    def log(String message) {
+        println message
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>There might be times when it is useful to timestamp a log message, or times when we might want to change the case of the message. We could try to build all of this functionality into our <code>Logger</code> class. If we did that, the <code>Logger</code> class would start to be very complex. Also, everyone would obtain all of features even when they might not want a small subset of the features. Finally, feature interaction would become quite difficult to control.</p>
+</div>
+<div class="paragraph">
+<p>To overcome these drawbacks, we instead define two decorator classes. Uses of the <code>Logger</code> class are free to embellish their base logger with zero or more decorator classes in whatever order they desire. The classes look like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class TimeStampingLogger extends Logger {
+    private Logger logger
+    TimeStampingLogger(logger) {
+        this.logger = logger
+    }
+    def log(String message) {
+        def now = Calendar.instance
+        logger.log("$now.time: $message")
+    }
+}
+
+class UpperLogger extends Logger {
+    private Logger logger
+    UpperLogger(logger) {
+        this.logger = logger
+    }
+    def log(String message) {
+        logger.log(message.toUpperCase())
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>We can use the decorators like so:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def logger = new UpperLogger(new TimeStampingLogger(new Logger()))
+logger.log("G'day Mate")
+// =&gt; Tue May 22 07:13:50 EST 2007: G'DAY MATE</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can see that we embellish the logger behaviour with both decorators. Because of the order we chose to apply the decorators, our log message comes out capitalised and the timestamp is in normal case. If we swap the order around, let&#8217;s see what happens:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">logger = new TimeStampingLogger(new UpperLogger(new Logger()))
+logger.log('Hi There')
+// =&gt; TUE MAY 22 07:13:50 EST 2007: HI THERE</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now the timestamp itself has also been changed to be uppercase.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_a_touch_of_dynamic_behaviour"><a class="anchor" href="#_a_touch_of_dynamic_behaviour"></a>2. A touch of dynamic behaviour</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Our previous decorators were specific to <code>Logger</code> objects. We can use Groovy&#8217;s Meta-Object Programming capabilities to create a decorator which is far more general purpose in nature. Consider this class:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class GenericLowerDecorator {
+    private delegate
+    GenericLowerDecorator(delegate) {
+        this.delegate = delegate
+    }
+    def invokeMethod(String name, args) {
+        def newargs = args.collect { arg -&gt;
+            if (arg instanceof String) {
+                return arg.toLowerCase()
+            } else {
+                return arg
+            }
+        }
+        delegate.invokeMethod(name, newargs)
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>It takes any class and decorates it so that any <code>String</code> method parameter will automatically be changed to lower case.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">logger = new GenericLowerDecorator(new TimeStampingLogger(new Logger()))
+logger.log('IMPORTANT Message')
+// =&gt; Tue May 22 07:27:18 EST 2007: important message</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Just be careful with ordering here. The original decorators were restricted to decorating <code>Logger</code> objects. This decorator works with any object type, so we can&#8217;t swap the ordering around, i.e. this won&#8217;t work:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>// Can't mix and match Interface-Oriented and Generic decorators
+// logger = new TimeStampingLogger(new GenericLowerDecorator(new Logger()))</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>We could overcome this limitation be generating an appropriate Proxy type at runtime but we won&#8217;t complicate the example here.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_runtime_behaviour_embellishment"><a class="anchor" href="#_runtime_behaviour_embellishment"></a>3. Runtime behaviour embellishment</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You can also consider using the <code>ExpandoMetaClass</code> from Groovy 1.1 to dynamically embellish a class with behaviour. This isn&#8217;t the normal style of usage of the decorator pattern (it certainly isn&#8217;t nearly as flexible) but may help you to achieve similar results in some cases without creating a new class.</p>
+</div>
+<div class="paragraph">
+<p>Here&#8217;s what the code looks like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// current mechanism to enable ExpandoMetaClass
+GroovySystem.metaClassRegistry.metaClassCreationHandle = new ExpandoMetaClassCreationHandle()
+
+def logger = new Logger()
+logger.metaClass.log = { String m -&gt; println 'message: ' + m.toUpperCase() }
+logger.log('x')
+// =&gt; message: X</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This achieves a similar result to applying a single decorator but we have no way to easily apply and remove embellishments on the fly.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_more_dynamic_decorating"><a class="anchor" href="#_more_dynamic_decorating"></a>4. More dynamic decorating</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Suppose we have a calculator class (Actually any class would do).</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Calc {
+    def add(a, b) { a + b }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>We might be interested in observing usage of the class over time. If it is buried deep within our codebase, it might be hard to determine when it is being called and with what parameters. Also, it might be hard to know if it is performing well. We can easily make a generic tracing decorator that prints out tracing information whenever any method on the <code>Calc</code> class is called and also provide timing information about how long it took to execute. Here is the code for the tracing decorator:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class TracingDecorator {
+    private delegate
+    TracingDecorator(delegate) {
+        this.delegate = delegate
+    }
+    def invokeMethod(String name, args) {
+        println "Calling $name$args"
+        def before = System.currentTimeMillis()
+        def result = delegate.invokeMethod(name, args)
+        println "Got $result in ${System.currentTimeMillis()-before} ms"
+        result
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here is how to use the class in a script:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def tracedCalc = new TracingDecorator(new Calc())
+assert 15 == tracedCalc.add(3, 12)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And here is what you would see after running this script:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Calling add{3, 12}
+Got 15 in 31 ms</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_decorating_with_an_interceptor"><a class="anchor" href="#_decorating_with_an_interceptor"></a>5. Decorating with an Interceptor</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The above timing example hooks into the lifecycle of Groovy objects (via <code>invokeMethod</code>). This is such an important style performing meta-programming that Groovy has special support for this style of decorating using <em>interceptors</em>.</p>
+</div>
+<div class="paragraph">
+<p>Groovy even comes with a built-in <code>TracingInterceptor</code>. We can extend the built-in class like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class TimingInterceptor extends TracingInterceptor {
+    private beforeTime
+    def beforeInvoke(object, String methodName, Object[] arguments) {
+        super.beforeInvoke(object, methodName, arguments)
+        beforeTime = System.currentTimeMillis()
+    }
+    Object afterInvoke(Object object, String methodName, Object[] arguments, Object result) {
+        super.afterInvoke(object, methodName, arguments, result)
+        def duration = System.currentTimeMillis() - beforeTime
+        writer.write("Duration: $duration ms\\n")
+        writer.flush()
+        result
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here is an example of using this new class:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def proxy = ProxyMetaClass.getInstance(Calc)
+proxy.interceptor = new TimingInterceptor()
+proxy.use {
+    assert 7 == new Calc().add(1, 6)
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And here is the output:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>before Calc.ctor()
+after  Calc.ctor()
+Duration: 0 ms
+before Calc.add(java.lang.Integer, java.lang.Integer)
+after  Calc.add(java.lang.Integer, java.lang.Integer)
+Duration: 2 ms</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_decorating_with_java_lang_reflect_proxy"><a class="anchor" href="#_decorating_with_java_lang_reflect_proxy"></a>6. Decorating with java.lang.reflect.Proxy</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>If you are trying to decorate an object (i.e. just a particular instance of the class, not the class generally), then you can use Java&#8217;s <code>java.lang.reflect.Proxy</code>. Groovy makes working with this easier than just Java. Below is a code sample taken out of a grails project that wraps a <code>java.sql.Connection</code> so that it&#8217;s close method is a no-op:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">protected Sql getGroovySql() {
+    final Connection con = session.connection()
+    def invoker = { object, method, args -&gt;
+        if (method.name == "close") {
+            log.debug("ignoring call to Connection.close() for use by groovy.sql.Sql")
+        } else {
+            log.trace("delegating $method")
+            return con.invokeMethod(method.name, args)
+        }
+    } as InvocationHandler;
+    def proxy = Proxy.newProxyInstance( getClass().getClassLoader(), [Connection] as Class[], invoker )
+    return new Sql(proxy)
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If there were many methods to intercept, then this approach could be modified to look up closure in a map by method name and invoke it.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_decorating_with_spring"><a class="anchor" href="#_decorating_with_spring"></a>7. Decorating with Spring</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <a href="http://www.springframework.org">Spring Framework</a> allows decorators to be applied with <em>interceptors</em> (you may have heard the terms <em>advice</em> or <em>aspect</em>). You can leverage this mechanism from Groovy as well.</p>
+</div>
+<div class="paragraph">
+<p>First define a class that you want to decorate (we&#8217;ll also use an interface as is normal Spring practice):</p>
+</div>
+<div class="paragraph">
+<p>Here&#8217;s the interface:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">interface Calc {
+    def add(a, b)
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here&#8217;s the class:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class CalcImpl implements Calc {
+    def add(a, b) { a + b }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now, we define our wiring in a file called <code>beans.xml</code> as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:lang="http://www.springframework.org/schema/lang"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang.xsd"&gt;
+
+    &lt;bean id="performanceInterceptor" autowire="no"
+          class="org.springframework.aop.interceptor.PerformanceMonitorInterceptor"&gt;
+        &lt;property name="loggerName" value="performance"/&gt;
+    &lt;/bean&gt;
+    &lt;bean id="calc" class="util.CalcImpl"/&gt;
+    &lt;bean class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator"&gt;
+        &lt;property name="beanNames" value="calc"/&gt;
+        &lt;property name="interceptorNames" value="performanceInterceptor"/&gt;
+    &lt;/bean&gt;
+&lt;/beans&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now, our script looks like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@Grab('org.springframework:spring-context:3.2.2.RELEASE')
+import org.springframework.context.support.ClassPathXmlApplicationContext
+
+def ctx = new ClassPathXmlApplicationContext('beans.xml')
+def calc = ctx.getBean('calc')
+println calc.add(3, 25)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And when we run it, we see the results:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>21/05/2007 23:02:35 org.springframework.aop.interceptor.PerformanceMonitorInterceptor invokeUnderTrace
+FINEST: StopWatch 'util.Calc.add': running time (millis) = 16</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You may have to adjust your <code>logging.properties</code> file for messages at log level <code>FINEST</code> to be displayed.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_asynchronous_decorators_using_gpars"><a class="anchor" href="#_asynchronous_decorators_using_gpars"></a>8. Asynchronous Decorators using GPars</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Using the example code in <a href="http://www.cs.iastate.edu/~design/projects/panini/docs/starting.shtml">Panini</a> for inspiration. Here is a Groovy version that avoids using an <code>@AddedBehavior</code> annotation at the expense of not having as general an algorithm for selecting the methods to decorate. This isn&#8217;t a limitation of the particular approach chosen but just a simplification for illustrative purposes (but don&#8217;t assume below is an exact equivalent).</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@Grab('org.codehaus.gpars:gpars:0.10')
+import static groovyx.gpars.GParsPool.withPool
+
+interface Document {
+    void print()
+    String getText()
+}
+
+class DocumentImpl implements Document {
+    def document
+    void print() { println document }
+    String getText() { document }
+}
+
+def words(String text) {
+    text.replaceAll('[^a-zA-Z]', ' ').trim().split("\\\\s+")*.toLowerCase()
+}
+
+def avgWordLength = {
+    def words = words(it.text)
+    sprintf "Avg Word Length: %4.2f", words*.size().sum() / words.size()
+}
+def modeWord = {
+    def wordGroups = words(it.text).groupBy {it}.collectEntries { k, v -&gt; [k, v.size()] }
+    def maxSize = wordGroups*.value.max()
+    def maxWords = wordGroups.findAll { it.value == maxSize }
+    "Mode Word(s): ${maxWords*.key.join(', ')} ($maxSize occurrences)"
+}
+def wordCount = { d -&gt; "Word Count: " + words(d.text).size() }
+
+def asyncDecorator(Document d, Closure c) {
+    ProxyGenerator.INSTANCE.instantiateDelegate([print: {
+        withPool {
+            def result = c.callAsync(d)
+            d.print()
+            println result.get()
+        }
+    }], [Document], d)
+}
+
+Document d = asyncDecorator(asyncDecorator(asyncDecorator(
+        new DocumentImpl(document:"This is the file with the words in it\\n\\t\\nDo you see the words?\\n"),
+//        new DocumentImpl(document: new File('AsyncDecorator.groovy').text),
+        wordCount), modeWord), avgWordLength)
+d.print()</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 3.0.0-alpha-3<br>
+Last updated 2018-06-23 13:44:51 AEST
+</div>
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+<script>prettyPrint()</script>
+</body>
+</html>

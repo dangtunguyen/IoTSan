@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.6.1">
+<title>DOMBuilder</title>
+<link rel="stylesheet" href="./assets/css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+</head>
+<body class="book">
+<div id="header">
+<h1>DOMBuilder</h1>
+<div class="details">
+<span id="revnumber">version 3.0.0-alpha-3</span>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>A builder for parsing HTML, XHTML and XML into a <a href="https://en.wikipedia.org/wiki/Document_Object_Model">W3C DOM</a> tree.</p>
+</div>
+<div class="paragraph">
+<p>For example this XML <code>String</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">String recordsXML = '''
+    &lt;records&gt;
+      &lt;car name='HSV Maloo' make='Holden' year='2006'&gt;
+        &lt;country&gt;Australia&lt;/country&gt;
+        &lt;record type='speed'&gt;Production Pickup Truck with speed of 271kph&lt;/record&gt;
+      &lt;/car&gt;
+      &lt;car name='P50' make='Peel' year='1962'&gt;
+        &lt;country&gt;Isle of Man&lt;/country&gt;
+        &lt;record type='size'&gt;Smallest Street-Legal Car at 99cm wide and 59 kg in weight&lt;/record&gt;
+      &lt;/car&gt;
+      &lt;car name='Royale' make='Bugatti' year='1931'&gt;
+        &lt;country&gt;France&lt;/country&gt;
+        &lt;record type='price'&gt;Most Valuable Car at $15 million&lt;/record&gt;
+      &lt;/car&gt;
+    &lt;/records&gt;'''</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Can be parsed into a DOM tree with a <code>DOMBuilder</code> like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def reader = new StringReader(recordsXML)
+def doc = groovy.xml.DOMBuilder.parse(reader)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And then processed further e.g. by using <a href="#_domcategory">DOMCategory</a>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def records = doc.documentElement
+use(groovy.xml.dom.DOMCategory) {
+    assert records.car.size() == 3
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 3.0.0-alpha-3<br>
+Last updated 2018-06-23 13:44:48 AEST
+</div>
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+<script>prettyPrint()</script>
+</body>
+</html>

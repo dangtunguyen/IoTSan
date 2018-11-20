@@ -1,0 +1,2294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.6.1">
+<title>Syntax</title>
+<link rel="stylesheet" href="./assets/css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+<h1>Syntax</h1>
+<div class="details">
+<span id="revnumber">version 3.0.0-alpha-3</span>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_comments">1. Comments</a>
+<ul class="sectlevel2">
+<li><a href="#_single_line_comment">1.1. Single line comment</a></li>
+<li><a href="#_multiline_comment">1.2. Multiline comment</a></li>
+<li><a href="#_groovydoc_comment">1.3. GroovyDoc comment</a></li>
+<li><a href="#_shebang_line">1.4. Shebang line</a></li>
+</ul>
+</li>
+<li><a href="#_keywords">2. Keywords</a></li>
+<li><a href="#_identifiers">3. Identifiers</a>
+<ul class="sectlevel2">
+<li><a href="#_normal_identifiers">3.1. Normal identifiers</a></li>
+<li><a href="#_quoted_identifiers">3.2. Quoted identifiers</a></li>
+</ul>
+</li>
+<li><a href="#all-strings">4. Strings</a>
+<ul class="sectlevel2">
+<li><a href="#_single_quoted_string">4.1. Single quoted string</a></li>
+<li><a href="#_string_concatenation">4.2. String concatenation</a></li>
+<li><a href="#_triple_single_quoted_string">4.3. Triple single quoted string</a>
+<ul class="sectlevel3">
+<li><a href="#_escaping_special_characters">4.3.1. Escaping special characters</a></li>
+<li><a href="#_unicode_escape_sequence">4.3.2. Unicode escape sequence</a></li>
+</ul>
+</li>
+<li><a href="#_double_quoted_string">4.4. Double quoted string</a>
+<ul class="sectlevel3">
+<li><a href="#_string_interpolation">4.4.1. String interpolation</a></li>
+<li><a href="#_special_case_of_interpolating_closure_expressions">4.4.2. Special case of interpolating closure expressions</a></li>
+<li><a href="#_interoperability_with_java">4.4.3. Interoperability with Java</a></li>
+<li><a href="#_gstring_and_string_hashcodes">4.4.4. GString and String hashCodes</a></li>
+</ul>
+</li>
+<li><a href="#_triple_double_quoted_string">4.5. Triple double quoted string</a></li>
+<li><a href="#_slashy_string">4.6. Slashy string</a></li>
+<li><a href="#_dollar_slashy_string">4.7. Dollar slashy string</a></li>
+<li><a href="#_string_summary_table">4.8. String summary table</a></li>
+<li><a href="#_characters">4.9. Characters</a></li>
+</ul>
+</li>
+<li><a href="#_numbers">5. Numbers</a>
+<ul class="sectlevel2">
+<li><a href="#_integral_literals">5.1. Integral literals</a>
+<ul class="sectlevel3">
+<li><a href="#_alternative_non_base_10_representations">5.1.1. Alternative non-base 10 representations</a>
+<ul class="sectlevel4">
+<li><a href="#_binary_literal">Binary literal</a></li>
+<li><a href="#_octal_literal">Octal literal</a></li>
+<li><a href="#_hexadecimal_literal">Hexadecimal literal</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_decimal_literals">5.2. Decimal literals</a></li>
+<li><a href="#_underscore_in_literals">5.3. Underscore in literals</a></li>
+<li><a href="#_number_type_suffixes">5.4. Number type suffixes</a></li>
+<li><a href="#_math_operations">5.5. Math operations</a>
+<ul class="sectlevel3">
+<li><a href="#integer_division">5.5.1. The case of the division operator</a></li>
+<li><a href="#power_operator">5.5.2. The case of the power operator</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_booleans">6. Booleans</a></li>
+<li><a href="#_lists">7. Lists</a></li>
+<li><a href="#_arrays">8. Arrays</a></li>
+<li><a href="#_maps">9. Maps</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>This chapter covers the syntax of the Groovy programming language.
+The grammar of the language derives from the Java grammar,
+but enhances it with specific constructs for Groovy, and allows certain simplifications.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_comments"><a class="anchor" href="#_comments"></a>1. Comments</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_single_line_comment"><a class="anchor" href="#_single_line_comment"></a>1.1. Single line comment</h3>
+<div class="paragraph">
+<p>Single line comments start with <code>//</code> and can be found at any position in the line.
+The characters following <code>//</code>, till the end of the line, are considered part of the comment.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// a standalone single line comment
+println "hello" // a comment till the end of the line</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_multiline_comment"><a class="anchor" href="#_multiline_comment"></a>1.2. Multiline comment</h3>
+<div class="paragraph">
+<p>A multiline comment starts with <code>/*</code> and can be found at any position in the line.
+The characters following <code>/*</code> will be considered part of the comment, including new line characters,
+up to the first <code>*/</code> closing the comment.
+Multiline comments can thus be put at the end of a statement, or even inside a statement.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">/* a standalone multiline comment
+   spanning two lines */
+println "hello" /* a multiline comment starting
+                   at the end of a statement */
+println 1 /* one */ + 2 /* two */</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_groovydoc_comment"><a class="anchor" href="#_groovydoc_comment"></a>1.3. GroovyDoc comment</h3>
+<div class="paragraph">
+<p>Similarly to multiline comments, GroovyDoc comments are multiline, but start with <code>/**</code> and end with <code>*/</code>.
+Lines following the first GroovyDoc comment line can optionally start with a star <code>*</code>.
+Those comments are associated with:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>type definitions (classes, interfaces, enums, annotations),</p>
+</li>
+<li>
+<p>fields and properties definitions</p>
+</li>
+<li>
+<p>methods definitions</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Although the compiler will not complain about GroovyDoc comments not being associated with the above language elements,
+you should prepend those constructs with the comment right before it.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">/**
+ * A Class description
+ */
+class Person {
+    /** the name of the person */
+    String name
+
+    /**
+     * Creates a greeting method for a certain person.
+     *
+     * @param otherPerson the person to greet
+     * @return a greeting message
+     */
+    String greet(String otherPerson) {
+       "Hello ${otherPerson}"
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>GroovyDoc follows the same conventions as Java&#8217;s own JavaDoc.
+So you&#8217;ll be able to use the same tags as with JavaDoc.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_shebang_line"><a class="anchor" href="#_shebang_line"></a>1.4. Shebang line</h3>
+<div class="paragraph">
+<p>Beside the single line comment, there is a special line comment, often called the <em>shebang</em> line understood by UNIX systems
+which allows scripts to be run directly from the command-line, provided you have installed the Groovy distribution
+and the <code>groovy</code> command is available on the <code>PATH</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">#!/usr/bin/env groovy
+println "Hello from the shebang line"</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The <code>#</code> character must be the first character of the file. Any indentation would yield a compilation error.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_keywords"><a class="anchor" href="#_keywords"></a>2. Keywords</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The following list represents all the keywords of the Groovy language:</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<caption class="title">Table 1. Keywords</caption>
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">as</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">assert</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">break</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">case</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">catch</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">class</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">const</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">continue</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">def</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">default</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">do</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">else</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">enum</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">extends</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">finally</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">for</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">goto</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">if</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">implements</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">import</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">in</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">instanceof</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">interface</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">new</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">null</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">package</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">return</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">super</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">switch</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">this</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">throw</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">throws</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">trait</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">try</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">while</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_identifiers"><a class="anchor" href="#_identifiers"></a>3. Identifiers</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_normal_identifiers"><a class="anchor" href="#_normal_identifiers"></a>3.1. Normal identifiers</h3>
+<div class="paragraph">
+<p>Identifiers start with a letter, a dollar or an underscore.
+They cannot start with a number.</p>
+</div>
+<div class="paragraph">
+<p>A letter can be in the following ranges:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>'a' to 'z' (lowercase ascii letter)</p>
+</li>
+<li>
+<p>'A' to 'Z' (uppercase ascii letter)</p>
+</li>
+<li>
+<p>'\u00C0' to '\u00D6'</p>
+</li>
+<li>
+<p>'\u00D8' to '\u00F6'</p>
+</li>
+<li>
+<p>'\u00F8' to '\u00FF'</p>
+</li>
+<li>
+<p>'\u0100' to '\uFFFE'</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Then following characters can contain letters and numbers.</p>
+</div>
+<div class="paragraph">
+<p>Here are a few examples of valid identifiers (here, variable names):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def name
+def item3
+def with_underscore
+def $dollarStart</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>But the following ones are invalid identifiers:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def 3tier
+def a+b
+def a#b</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>All keywords are also valid identifiers when following a dot:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">foo.as
+foo.assert
+foo.break
+foo.case
+foo.catch</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_quoted_identifiers"><a class="anchor" href="#_quoted_identifiers"></a>3.2. Quoted identifiers</h3>
+<div class="paragraph">
+<p>Quoted identifiers appear after the dot of a dotted expression.
+For instance, the <code>name</code> part of the <code>person.name</code> expression can be quoted with <code>person."name"</code> or <code>person.'name'</code>.
+This is particularly interesting when certain identifiers contain illegal characters that are forbidden by the Java Language Specification,
+but which are allowed by Groovy when quoted. For example, characters like a dash, a space, an exclamation mark, etc.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def map = [:]
+
+map."an identifier with a space and double quotes" = "ALLOWED"
+map.'with-dash-signs-and-single-quotes' = "ALLOWED"
+
+assert map."an identifier with a space and double quotes" == "ALLOWED"
+assert map.'with-dash-signs-and-single-quotes' == "ALLOWED"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As we shall see in the <a href="#all-strings">following section on strings</a>, Groovy provides different string literals.
+All kind of strings are actually allowed after the dot:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">map.'single quote'
+map."double quote"
+map.'''triple single quote'''
+map."""triple double quote"""
+map./slashy string/
+map.$/dollar slashy string/$</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>There&#8217;s a difference between plain character strings and Groovy&#8217;s GStrings (interpolated strings),
+as in that the latter case, the interpolated values are inserted in the final string for evaluating the whole identifier:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def firstname = "Homer"
+map."Simpson-${firstname}" = "Homer Simpson"
+
+assert map.'Simpson-Homer' == "Homer Simpson"</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="all-strings"><a class="anchor" href="#all-strings"></a>4. Strings</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Text literals are represented in the form of chain of characters called strings.
+Groovy lets you instantiate <code>java.lang.String</code> objects, as well as GStrings (<code>groovy.lang.GString</code>)
+which are also called <em>interpolated strings</em> in other programming languages.</p>
+</div>
+<div class="sect2">
+<h3 id="_single_quoted_string"><a class="anchor" href="#_single_quoted_string"></a>4.1. Single quoted string</h3>
+<div class="paragraph">
+<p>Single quoted strings are a series of characters surrounded by single quotes:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">'a single quoted string'</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Single quoted strings are plain <code>java.lang.String</code> and don&#8217;t support interpolation.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_string_concatenation"><a class="anchor" href="#_string_concatenation"></a>4.2. String concatenation</h3>
+<div class="paragraph">
+<p>All the Groovy strings can be concatenated with the <code>+</code> operator:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">assert 'ab' == 'a' + 'b'</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_triple_single_quoted_string"><a class="anchor" href="#_triple_single_quoted_string"></a>4.3. Triple single quoted string</h3>
+<div class="paragraph">
+<p>Triple single quoted strings are a series of characters surrounded by triplets of single quotes:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">'''a triple single quoted string'''</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Triple single quoted strings are plain <code>java.lang.String</code> and don&#8217;t support interpolation.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Triple single quoted strings are multiline.
+You can span the content of the string across line boundaries without the need to split the string in several pieces, without contatenation or newline escape characters:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def aMultilineString = '''line one
+line two
+line three'''</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If your code is indented, for example in the body of the method of a class, your string will contain the whitespace of the indentation.
+The Groovy Development Kit contains methods for stripping out the indentation with the <code>String#stripIndent()</code> method,
+and with the <code>String#stripMargin()</code> method that takes a delimiter character to identify the text to remove from the beginning of a string.</p>
+</div>
+<div class="paragraph">
+<p>When creating a string as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def startingAndEndingWithANewline = '''
+line one
+line two
+line three
+'''</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You will notice that the resulting string contains a newline character as first character.
+It is possible to strip that character by escaping the newline with a backslash:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def strippedFirstNewline = '''\
+line one
+line two
+line three
+'''
+
+assert !strippedFirstNewline.startsWith('\n')</code></pre>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_escaping_special_characters"><a class="anchor" href="#_escaping_special_characters"></a>4.3.1. Escaping special characters</h4>
+<div class="paragraph">
+<p>You can escape single quotes with the the backslash character to avoid terminating the string literal:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">'an escaped single quote: \' needs a backslash'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And you can escape the escape character itself with a double backslash:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">'an escaped escape character: \\ needs a double backslash'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Some special characters also use the backslash as escape character:</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Escape sequence</th>
+<th class="tableblock halign-left valign-top">Character</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">'\t'</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">tabulation</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">'\b'</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">backspace</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">'\n'</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">newline</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">'\r'</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">carriage return</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">'\f'</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">formfeed</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">'\\'</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">backslash</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">'\''</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">single quote (for single quoted and triple single quoted strings)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">'\"'</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">double quote (for double quoted and triple double quoted strings)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_unicode_escape_sequence"><a class="anchor" href="#_unicode_escape_sequence"></a>4.3.2. Unicode escape sequence</h4>
+<div class="paragraph">
+<p>For characters that are not present on your keyboard, you can use unicode escape sequences:
+a backslash, followed by 'u', then 4 hexadecimal digits.</p>
+</div>
+<div class="paragraph">
+<p>For example, the Euro currency symbol can be represented with:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">'The Euro currency symbol: \u20AC'</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_double_quoted_string"><a class="anchor" href="#_double_quoted_string"></a>4.4. Double quoted string</h3>
+<div class="paragraph">
+<p>Double quoted strings are a series of characters surrounded by double quotes:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">"a double quoted string"</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Double quoted strings are plain <code>java.lang.String</code> if there&#8217;s no interpolated expression,
+but are <code>groovy.lang.GString</code> instances if interpolation is present.
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+To escape a double quote, you can use the backslash character: "A double quote: \"".
+</td>
+</tr>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_string_interpolation"><a class="anchor" href="#_string_interpolation"></a>4.4.1. String interpolation</h4>
+<div class="paragraph">
+<p>Any Groovy expression can be interpolated in all string literals, apart from single and triple single quoted strings.
+Interpolation is the act of replacing a placeholder in the string with its value upon evaluation of the string.
+The placeholder expressions are surrounded by <code>${}</code> or prefixed with <code>$</code> for dotted expressions.
+The expression value inside the placeholder is evaluated to its string representation when the GString is passed to a method taking a String as argument by calling <code>toString()</code> on that expression.</p>
+</div>
+<div class="paragraph">
+<p>Here, we have a string with a placeholder referencing a local variable:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def name = 'Guillaume' // a plain string
+def greeting = "Hello ${name}"
+
+assert greeting.toString() == 'Hello Guillaume'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>But any Groovy expression is valid, as we can see in this example with an arithmetic expression:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def sum = "The sum of 2 and 3 equals ${2 + 3}"
+assert sum.toString() == 'The sum of 2 and 3 equals 5'</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Not only are expressions allowed in between the <code>${}</code> placeholder, but so are statements. However, a statement&#8217;s value is just <code>null</code>.
+So if several statements are inserted in that placeholder, the last one should somehow return a meaningful value to be inserted.
+For instance, "The sum of 1 and 2 is equal to ${def a = 1; def b = 2; a + b}" is supported and works as expected but a good practice is usually to stick to simple expressions inside GString placeholders.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>In addition to <code>${}</code> placeholders, we can also use a lone <code>$</code> sign prefixing a dotted expression:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def person = [name: 'Guillaume', age: 36]
+assert "$person.name is $person.age years old" == 'Guillaume is 36 years old'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>But only dotted expressions of the form <code>a.b</code>, <code>a.b.c</code>, etc, are valid, but expressions that would contain parentheses like method calls, curly braces for closures, or arithmetic operators would be invalid.
+Given the following variable definition of a number:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def number = 3.14</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The following statement will throw a <code>groovy.lang.MissingPropertyException</code> because Groovy believes you&#8217;re trying to access the <code>toString</code> property of that number, which doesn&#8217;t exist:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">shouldFail(MissingPropertyException) {
+    println "$number.toString()"
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+You can think of <code>"$number.toString()"</code> as being interpreted by the parser as <code>"${number.toString}()"</code>.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>If you need to escape the <code>$</code> or <code>${}</code> placeholders in a GString so they appear as is without interpolation,
+you just need to use a <code>\</code> backslash character to escape the dollar sign:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">assert '${name}' == "\${name}"</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_special_case_of_interpolating_closure_expressions"><a class="anchor" href="#_special_case_of_interpolating_closure_expressions"></a>4.4.2. Special case of interpolating closure expressions</h4>
+<div class="paragraph">
+<p>So far, we&#8217;ve seen we could interpolate arbitrary expressions inside the <code>${}</code> placeholder, but there is a special case and notation for closure expressions. When the placeholder contains an arrow, <code>${&#8594;}</code>, the expression is actually a closure expression&#8201;&#8212;&#8201;you can think of it as a closure with a dollar prepended in front of it:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def sParameterLessClosure = "1 + 2 == ${-&gt; 3}" <i class="conum" data-value="1"></i><b>(1)</b>
+assert sParameterLessClosure == '1 + 2 == 3'
+
+def sOneParamClosure = "1 + 2 == ${ w -&gt; w &lt;&lt; 3}" <i class="conum" data-value="2"></i><b>(2)</b>
+assert sOneParamClosure == '1 + 2 == 3'</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The closure is a parameterless closure which doesn&#8217;t take arguments.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Here, the closure takes a single <code>java.io.StringWriter</code> argument, to which you can append content  with the <code>&lt;&lt;</code> leftShift operator.
+In either case, both placeholders are embedded closures.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>In appearance, it looks like a more verbose way of defining expressions to be interpolated,
+but closures have an interesting advantage over mere expressions: lazy evaluation.</p>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s consider the following sample:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def number = 1 <i class="conum" data-value="1"></i><b>(1)</b>
+def eagerGString = "value == ${number}"
+def lazyGString = "value == ${ -&gt; number }"
+
+assert eagerGString == "value == 1" <i class="conum" data-value="2"></i><b>(2)</b>
+assert lazyGString ==  "value == 1" <i class="conum" data-value="3"></i><b>(3)</b>
+
+number = 2 <i class="conum" data-value="4"></i><b>(4)</b>
+assert eagerGString == "value == 1" <i class="conum" data-value="5"></i><b>(5)</b>
+assert lazyGString ==  "value == 2" <i class="conum" data-value="6"></i><b>(6)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>We define a <code>number</code> variable containing <code>1</code> that we then interpolate within two GStrings,
+as an expression in <code>eagerGString</code> and as a closure in <code>lazyGString</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>We expect the resulting string to contain the same string value of 1 for <code>eagerGString</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Similarly for <code>lazyGString</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Then we change the value of the variable to a new number</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>With a plain interpolated expression, the value was actually bound at the time of creation of the GString.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>But with a closure expression, the closure is called upon each coercion of the GString into String,
+resulting in an updated string containing the new number value.</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+An embedded closure expression taking more than one parameter will generate an exception at runtime.
+Only closures with zero or one parameters are allowed.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_interoperability_with_java"><a class="anchor" href="#_interoperability_with_java"></a>4.4.3. Interoperability with Java</h4>
+<div class="paragraph">
+<p>When a method (whether implemented in Java or Groovy) expects a <code>java.lang.String</code>,
+but we pass a <code>groovy.lang.GString</code> instance,
+the <code>toString()</code> method of the GString is automatically and transparently called.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">String takeString(String message) {         <i class="conum" data-value="4"></i><b>(4)</b>
+    assert message instanceof String        <i class="conum" data-value="5"></i><b>(5)</b>
+    return message
+}
+
+def message = "The message is ${'hello'}"   <i class="conum" data-value="1"></i><b>(1)</b>
+assert message instanceof GString           <i class="conum" data-value="2"></i><b>(2)</b>
+
+def result = takeString(message)            <i class="conum" data-value="3"></i><b>(3)</b>
+assert result instanceof String
+assert result == 'The message is hello'</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>We create a GString variable</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>We double check it&#8217;s an instance of the GString</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>We then pass that GString to a method taking a String as parameter</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>The signature of the <code>takeString()</code> method explicitly says its sole parameter is a String</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>We also verify that the parameter is indeed a String and not a GString.</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_gstring_and_string_hashcodes"><a class="anchor" href="#_gstring_and_string_hashcodes"></a>4.4.4. GString and String hashCodes</h4>
+<div class="paragraph">
+<p>Although interpolated strings can be used in lieu of plain Java strings,
+they differ with strings in a particular way: their hashCodes are different.
+Plain Java strings are immutable, whereas the resulting String representation of a GString can vary,
+depending on its interpolated values.
+Even for the same resulting string, GStrings and Strings don&#8217;t have the same hashCode.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">assert "one: ${1}".hashCode() != "one: 1".hashCode()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>GString and Strings having different hashCode values, using GString as Map keys should be avoided,
+especially if we try to retrieve an associated value with a String instead of a GString.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def key = "a"
+def m = ["${key}": "letter ${key}"]     <i class="conum" data-value="1"></i><b>(1)</b>
+
+assert m["a"] == null                   <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The map is created with an initial pair whose key is a GString</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>When we try to fetch the value with a String key, we will not find it, as Strings and GString have different hashCode values</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_triple_double_quoted_string"><a class="anchor" href="#_triple_double_quoted_string"></a>4.5. Triple double quoted string</h3>
+<div class="paragraph">
+<p>Triple double quoted strings behave like double quoted strings, with the addition that they are multiline, like the triple single quoted strings.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def name = 'Groovy'
+def template = """
+    Dear Mr ${name},
+
+    You're the winner of the lottery!
+
+    Yours sincerly,
+
+    Dave
+"""
+
+assert template.toString().contains('Groovy')</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Neither double quotes nor single quotes need be escaped in triple double quoted strings.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_slashy_string"><a class="anchor" href="#_slashy_string"></a>4.6. Slashy string</h3>
+<div class="paragraph">
+<p>Beyond the usual quoted strings, Groovy offers slashy strings, which use <code>/</code> as delimiters.
+Slashy strings are particularly useful for defining regular expressions and patterns,
+as there is no need to escape backslashes.</p>
+</div>
+<div class="paragraph">
+<p>Example of a slashy string:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def fooPattern = /.*foo.*/
+assert fooPattern == '.*foo.*'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Only forward slashes need to be escaped with a backslash:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def escapeSlash = /The character \/ is a forward slash/
+assert escapeSlash == 'The character / is a forward slash'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Slashy strings are multiline:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def multilineSlashy = /one
+    two
+    three/
+
+assert multilineSlashy.contains('\n')</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Slashy strings can also be interpolated (ie. a GString):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def color = 'blue'
+def interpolatedSlashy = /a ${color} car/
+
+assert interpolatedSlashy == 'a blue car'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>There are a few gotchas to be aware of.</p>
+</div>
+<div class="paragraph">
+<p>An empty slashy string cannot be represented with a double forward slash, as it&#8217;s understood by the Groovy parser as a line comment.
+That&#8217;s why the following assert would actually not compile as it would look like a non-terminated statement:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">assert '' == //</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+As slashy strings were mostly designed to make regexp easier so a few things that are errors in GStrings like <code>$()</code> will work with slashy strings.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_dollar_slashy_string"><a class="anchor" href="#_dollar_slashy_string"></a>4.7. Dollar slashy string</h3>
+<div class="paragraph">
+<p>Dollar slashy strings are multiline GStrings delimited with an opening <code>$/</code> and and a closing <code>/$</code>.
+The escaping character is the dollar sign, and it can escape another dollar, or a forward slash.
+But both dollar and forward slashes don&#8217;t need to be escaped, except to escape the dollar of a string subsequence that would start like a GString placeholder sequence, or if you need to escape a sequence that would start like a closing dollar slashy string delimiter.</p>
+</div>
+<div class="paragraph">
+<p>Here&#8217;s an example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def name = "Guillaume"
+def date = "April, 1st"
+
+def dollarSlashy = $/
+    Hello $name,
+    today we're ${date}.
+
+    $ dollar sign
+    $$ escaped dollar sign
+    \ backslash
+    / forward slash
+    $/ escaped forward slash
+    $$$/ escaped opening dollar slashy
+    $/$$ escaped closing dollar slashy
+/$
+
+assert [
+    'Guillaume',
+    'April, 1st',
+    '$ dollar sign',
+    '$ escaped dollar sign',
+    '\\ backslash',
+    '/ forward slash',
+    '/ escaped forward slash',
+    '$/ escaped opening dollar slashy',
+    '/$ escaped closing dollar slashy'
+].every { dollarSlashy.contains(it) }</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_string_summary_table"><a class="anchor" href="#_string_summary_table"></a>4.8. String summary table</h3>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String name</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String syntax</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Interpolated</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Multiline</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Escape character</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Single quoted</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>'&#8230;&#8203;'</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="icon"><i class="fa fa-check-empty"></i></span></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="icon"><i class="fa fa-check-empty"></i></span></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>\</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Triple single quoted</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>'''&#8230;&#8203;'''</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="icon"><i class="fa fa-check-empty"></i></span></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="icon"><i class="fa fa-check"></i></span></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>\</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Double quoted</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>"&#8230;&#8203;"</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="icon"><i class="fa fa-check"></i></span></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="icon"><i class="fa fa-check-empty"></i></span></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>\</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Triple double quoted</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>"""&#8230;&#8203;"""</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="icon"><i class="fa fa-check"></i></span></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="icon"><i class="fa fa-check"></i></span></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>\</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Slashy</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>/&#8230;&#8203;/</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="icon"><i class="fa fa-check"></i></span></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="icon"><i class="fa fa-check"></i></span></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>\</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Dollar slashy</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>$/&#8230;&#8203;/$</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="icon"><i class="fa fa-check"></i></span></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="icon"><i class="fa fa-check"></i></span></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>$</code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_characters"><a class="anchor" href="#_characters"></a>4.9. Characters</h3>
+<div class="paragraph">
+<p>Unlike Java, Groovy doesn&#8217;t have an explicit character literal.
+However, you can be explicit about making a Groovy string an actual character, by three different means:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">char c1 = 'A' <i class="conum" data-value="1"></i><b>(1)</b>
+assert c1 instanceof Character
+
+def c2 = 'B' as char <i class="conum" data-value="2"></i><b>(2)</b>
+assert c2 instanceof Character
+
+def c3 = (char)'C' <i class="conum" data-value="3"></i><b>(3)</b>
+assert c3 instanceof Character</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>by being explicit when declaring a variable holding the character by specifying the <code>char</code> type</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>by using type coercion with the <code>as</code> operator</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>by using a cast to char operation</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The first option <em class="conum">1</em> is interesting when the character is held in a variable,
+while the other two (<em class="conum">2</em> and <em class="conum">3</em>) are more interesting when a char value must be passed as argument of a method call.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_numbers"><a class="anchor" href="#_numbers"></a>5. Numbers</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Groovy supports different kinds of integral literals and decimal literals, backed by the usual <code>Number</code> types of Java.</p>
+</div>
+<div class="sect2">
+<h3 id="_integral_literals"><a class="anchor" href="#_integral_literals"></a>5.1. Integral literals</h3>
+<div class="paragraph">
+<p>The integral literal types are the same as in Java:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>byte</code></p>
+</li>
+<li>
+<p><code>char</code></p>
+</li>
+<li>
+<p><code>short</code></p>
+</li>
+<li>
+<p><code>int</code></p>
+</li>
+<li>
+<p><code>long</code></p>
+</li>
+<li>
+<p><code>java.lang.BigInteger</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>You can create integral numbers of those types with the following declarations:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// primitive types
+byte  b = 1
+char  c = 2
+short s = 3
+int   i = 4
+long  l = 5
+
+// infinite precision
+BigInteger bi =  6</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you use optional typing by using the <code>def</code> keyword, the type of the integral number will vary:
+it&#8217;ll adapt to the capacity of the type that can hold that number.</p>
+</div>
+<div class="paragraph">
+<p>For positive numbers:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def a = 1
+assert a instanceof Integer
+
+// Integer.MAX_VALUE
+def b = 2147483647
+assert b instanceof Integer
+
+// Integer.MAX_VALUE + 1
+def c = 2147483648
+assert c instanceof Long
+
+// Long.MAX_VALUE
+def d = 9223372036854775807
+assert d instanceof Long
+
+// Long.MAX_VALUE + 1
+def e = 9223372036854775808
+assert e instanceof BigInteger</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As well as for negative numbers:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def na = -1
+assert na instanceof Integer
+
+// Integer.MIN_VALUE
+def nb = -2147483648
+assert nb instanceof Integer
+
+// Integer.MIN_VALUE - 1
+def nc = -2147483649
+assert nc instanceof Long
+
+// Long.MIN_VALUE
+def nd = -9223372036854775808
+assert nd instanceof Long
+
+// Long.MIN_VALUE - 1
+def ne = -9223372036854775809
+assert ne instanceof BigInteger</code></pre>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_alternative_non_base_10_representations"><a class="anchor" href="#_alternative_non_base_10_representations"></a>5.1.1. Alternative non-base 10 representations</h4>
+<div class="paragraph">
+<p>Numbers can also be represented in binary, octal, hexadecimal and decimal bases.</p>
+</div>
+<div class="sect4">
+<h5 id="_binary_literal"><a class="anchor" href="#_binary_literal"></a>Binary literal</h5>
+<div class="paragraph">
+<p>Binary numbers start with a <code>0b</code> prefix:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">int xInt = 0b10101111
+assert xInt == 175
+
+short xShort = 0b11001001
+assert xShort == 201 as short
+
+byte xByte = 0b11
+assert xByte == 3 as byte
+
+long xLong = 0b101101101101
+assert xLong == 2925l
+
+BigInteger xBigInteger = 0b111100100001
+assert xBigInteger == 3873g
+
+int xNegativeInt = -0b10101111
+assert xNegativeInt == -175</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_octal_literal"><a class="anchor" href="#_octal_literal"></a>Octal literal</h5>
+<div class="paragraph">
+<p>Octal numbers are specified in the typical format of <code>0</code> followed by octal digits.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">int xInt = 077
+assert xInt == 63
+
+short xShort = 011
+assert xShort == 9 as short
+
+byte xByte = 032
+assert xByte == 26 as byte
+
+long xLong = 0246
+assert xLong == 166l
+
+BigInteger xBigInteger = 01111
+assert xBigInteger == 585g
+
+int xNegativeInt = -077
+assert xNegativeInt == -63</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_hexadecimal_literal"><a class="anchor" href="#_hexadecimal_literal"></a>Hexadecimal literal</h5>
+<div class="paragraph">
+<p>Hexadecimal numbers are specified in the typical format of <code>0x</code> followed by hex digits.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">int xInt = 0x77
+assert xInt == 119
+
+short xShort = 0xaa
+assert xShort == 170 as short
+
+byte xByte = 0x3a
+assert xByte == 58 as byte
+
+long xLong = 0xffff
+assert xLong == 65535l
+
+BigInteger xBigInteger = 0xaaaa
+assert xBigInteger == 43690g
+
+Double xDouble = new Double('0x1.0p0')
+assert xDouble == 1.0d
+
+int xNegativeInt = -0x77
+assert xNegativeInt == -119</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_decimal_literals"><a class="anchor" href="#_decimal_literals"></a>5.2. Decimal literals</h3>
+<div class="paragraph">
+<p>The decimal literal types are the same as in Java:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>float</code></p>
+</li>
+<li>
+<p><code>double</code></p>
+</li>
+<li>
+<p><code>java.lang.BigDecimal</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>You can create decimal numbers of those types with the following declarations:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// primitive types
+float  f = 1.234
+double d = 2.345
+
+// infinite precision
+BigDecimal bd =  3.456</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Decimals can use exponents, with the <code>e</code> or <code>E</code> exponent letter, followed by an optional sign,
+and a integral number representing the exponent:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">assert 1e3  ==  1_000.0
+assert 2E4  == 20_000.0
+assert 3e+1 ==     30.0
+assert 4E-2 ==      0.04
+assert 5e-1 ==      0.5</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Conveniently for exact decimal number calculations, Groovy choses <code>java.lang.BigDecimal</code> as its decimal number type.
+In addition, both <code>float</code> and <code>double</code> are supported, but require an explicit type declaration, type coercion or suffix.
+Even if <code>BigDecimal</code> is the default for decimal numbers, such literals are accepted in methods or closures taking <code>float</code> or <code>double</code> as parameter types.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Decimal numbers can&#8217;t be represented using a binary, octal or hexadecimal representation.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_underscore_in_literals"><a class="anchor" href="#_underscore_in_literals"></a>5.3. Underscore in literals</h3>
+<div class="paragraph">
+<p>When writing long literal numbers, it’s harder on the eye to figure out how some numbers are grouped together, for example with groups of thousands, of words, etc. By allowing you to place underscore in number literals, it’s easier to spot those groups:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">long creditCardNumber = 1234_5678_9012_3456L
+long socialSecurityNumbers = 999_99_9999L
+double monetaryAmount = 12_345_132.12
+long hexBytes = 0xFF_EC_DE_5E
+long hexWords = 0xFFEC_DE5E
+long maxLong = 0x7fff_ffff_ffff_ffffL
+long alsoMaxLong = 9_223_372_036_854_775_807L
+long bytes = 0b11010010_01101001_10010100_10010010</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_number_type_suffixes"><a class="anchor" href="#_number_type_suffixes"></a>5.4. Number type suffixes</h3>
+<div class="paragraph">
+<p>We can force a number (including binary, octals and hexadecimals) to have a specific type by giving a suffix (see table below), either uppercase or lowercase.</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Suffix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">BigInteger</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>G</code> or <code>g</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Long</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>L</code> or <code>l</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>I</code> or <code>i</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">BigDecimal</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>G</code> or <code>g</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Double</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>D</code> or <code>d</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Float</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>F</code> or <code>f</code></p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Examples:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">assert 42I == new Integer('42')
+assert 42i == new Integer('42') // lowercase i more readable
+assert 123L == new Long("123") // uppercase L more readable
+assert 2147483648 == new Long('2147483648') // Long type used, value too large for an Integer
+assert 456G == new BigInteger('456')
+assert 456g == new BigInteger('456')
+assert 123.45 == new BigDecimal('123.45') // default BigDecimal type used
+assert 1.200065D == new Double('1.200065')
+assert 1.234F == new Float('1.234')
+assert 1.23E23D == new Double('1.23E23')
+assert 0b1111L.class == Long // binary
+assert 0xFFi.class == Integer // hexadecimal
+assert 034G.class == BigInteger // octal</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_math_operations"><a class="anchor" href="#_math_operations"></a>5.5. Math operations</h3>
+<div class="paragraph">
+<p>Although <a href="#_operators">operators</a> are covered later on, it&#8217;s important to discuss the behavior of math operations
+and what their resulting types are.</p>
+</div>
+<div class="paragraph">
+<p>Division and power binary operations aside (covered below),</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>binary operations between <code>byte</code>, <code>char</code>, <code>short</code> and <code>int</code> result in <code>int</code></p>
+</li>
+<li>
+<p>binary operations involving <code>long</code> with <code>byte</code>, <code>char</code>, <code>short</code> and <code>int</code> result in <code>long</code></p>
+</li>
+<li>
+<p>binary operations involving <code>BigInteger</code> and any other integral type result in <code>BigInteger</code></p>
+</li>
+<li>
+<p>binary operations involving <code>BigDecimal</code> with <code>byte</code>, <code>char</code>, <code>short</code>, <code>int</code> and <code>BigInteger</code> result in <code>BigDecimal</code></p>
+</li>
+<li>
+<p>binary operations between <code>float</code>, <code>double</code> and <code>BigDecimal</code> result in <code>double</code></p>
+</li>
+<li>
+<p>binary operations between two <code>BigDecimal</code> result in <code>BigDecimal</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The following table summarizes those rules:</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 10%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top"></th>
+<th class="tableblock halign-left valign-top">byte</th>
+<th class="tableblock halign-left valign-top">char</th>
+<th class="tableblock halign-left valign-top">short</th>
+<th class="tableblock halign-left valign-top">int</th>
+<th class="tableblock halign-left valign-top">long</th>
+<th class="tableblock halign-left valign-top">BigInteger</th>
+<th class="tableblock halign-left valign-top">float</th>
+<th class="tableblock halign-left valign-top">double</th>
+<th class="tableblock halign-left valign-top">BigDecimal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>byte</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">long</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">BigInteger</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">double</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">double</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">BigDecimal</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>char</strong></p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">long</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">BigInteger</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">double</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">double</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">BigDecimal</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>short</strong></p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">long</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">BigInteger</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">double</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">double</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">BigDecimal</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>int</strong></p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">long</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">BigInteger</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">double</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">double</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">BigDecimal</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>long</strong></p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">long</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">BigInteger</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">double</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">double</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">BigDecimal</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>BigInteger</strong></p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">BigInteger</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">double</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">double</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">BigDecimal</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>float</strong></p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">double</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">double</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">double</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>double</strong></p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">double</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">double</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>BigDecimal</strong></p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">BigDecimal</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Thanks to Groovy&#8217;s operator overloading, the usual arithmetic operators work as well with <code>BigInteger</code> and <code>BigDecimal</code>,
+unlike in Java where you have to use explicit methods for operating on those numbers.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect3">
+<h4 id="integer_division"><a class="anchor" href="#integer_division"></a>5.5.1. The case of the division operator</h4>
+<div class="paragraph">
+<p>The division operators <code>/</code> (and <code>/=</code> for division and assignment) produce a <code>double</code> result
+if either operand is a <code>float</code> or <code>double</code>, and a <code>BigDecimal</code> result otherwise
+(when both operands are any combination of an integral type <code>short</code>, <code>char</code>, <code>byte</code>, <code>int</code>, <code>long</code>,
+<code>BigInteger</code> or <code>BigDecimal</code>).</p>
+</div>
+<div class="paragraph">
+<p><code>BigDecimal</code> division is performed with the <code>divide()</code> method if the division is exact
+(i.e. yielding a result that can be represented within the bounds of the same precision and scale),
+or using a <code>MathContext</code> with a <a href="http://docs.oracle.com/javase/7/docs/api/java/math/BigDecimal.html#precision()">precision</a>
+of the maximum of the two operands' precision plus an extra precision of 10,
+and a <a href="http://docs.oracle.com/javase/7/docs/api/java/math/BigDecimal.html#scale()">scale</a>
+of the maximum of 10 and the maximum of the operands' scale.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+For integer division like in Java, you should use the <code>intdiv()</code> method,
+as Groovy doesn&#8217;t provide a dedicated integer division operator symbol.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="power_operator"><a class="anchor" href="#power_operator"></a>5.5.2. The case of the power operator</h4>
+<div class="paragraph">
+<p>The power operation is represented by the <code>**</code> operator, with two parameters: the base and the exponent.
+The result of the power operation depends on its operands, and the result of the operation
+(in particular if the result can be represented as an integral value).</p>
+</div>
+<div class="paragraph">
+<p>The following rules are used by Groovy&#8217;s power operation to determine the resulting type:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>If the exponent is a decimal value</p>
+<div class="ulist">
+<ul>
+<li>
+<p>if the result can be represented as an <code>Integer</code>, then return an <code>Integer</code></p>
+</li>
+<li>
+<p>else if the result can be represented as a <code>Long</code>, then return a <code>Long</code></p>
+</li>
+<li>
+<p>otherwise return a <code>Double</code></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>If the exponent is an integral value</p>
+<div class="ulist">
+<ul>
+<li>
+<p>if the exponent is strictly negative, then return an <code>Integer</code>, <code>Long</code> or <code>Double</code> if the result value fits in that type</p>
+</li>
+<li>
+<p>if the exponent is positive or zero</p>
+<div class="ulist">
+<ul>
+<li>
+<p>if the base is a <code>BigDecimal</code>, then return a <code>BigDecimal</code> result value</p>
+</li>
+<li>
+<p>if the base is a <code>BigInteger</code>, then return a <code>BigInteger</code> result value</p>
+</li>
+<li>
+<p>if the base is an <code>Integer</code>, then return an <code>Integer</code> if the result value fits in it, otherwise a <code>BigInteger</code></p>
+</li>
+<li>
+<p>if the base is a <code>Long</code>, then return a <code>Long</code> if the result value fits in it, otherwise a <code>BigInteger</code></p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>We can illustrate those rules with a few examples:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// base and exponent are ints and the result can be represented by an Integer
+assert    2    **   3    instanceof Integer    //  8
+assert   10    **   9    instanceof Integer    //  1_000_000_000
+
+// the base is a long, so fit the result in a Long
+// (although it could have fit in an Integer)
+assert    5L   **   2    instanceof Long       //  25
+
+// the result can't be represented as an Integer or Long, so return a BigInteger
+assert  100    **  10    instanceof BigInteger //  10e20
+assert 1234    ** 123    instanceof BigInteger //  170515806212727042875...
+
+// the base is a BigDecimal and the exponent a negative int
+// but the result can be represented as an Integer
+assert    0.5  **  -2    instanceof Integer    //  4
+
+// the base is an int, and the exponent a negative float
+// but again, the result can be represented as an Integer
+assert    1    **  -0.3f instanceof Integer    //  1
+
+// the base is an int, and the exponent a negative int
+// but the result will be calculated as a Double
+// (both base and exponent are actually converted to doubles)
+assert   10    **  -1    instanceof Double     //  0.1
+
+// the base is a BigDecimal, and the exponent is an int, so return a BigDecimal
+assert    1.2  **  10    instanceof BigDecimal //  6.1917364224
+
+// the base is a float or double, and the exponent is an int
+// but the result can only be represented as a Double value
+assert    3.4f **   5    instanceof Double     //  454.35430372146965
+assert    5.6d **   2    instanceof Double     //  31.359999999999996
+
+// the exponent is a decimal value
+// and the result can only be represented as a Double value
+assert    7.8  **   1.9  instanceof Double     //  49.542708423868476
+assert    2    **   0.1f instanceof Double     //  1.0717734636432956</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_booleans"><a class="anchor" href="#_booleans"></a>6. Booleans</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Boolean is a special data type that is used to represent truth values: <code>true</code> and <code>false</code>.
+Use this data type for simple flags that track true/false <a href="#_conditional_operators">conditions</a>.</p>
+</div>
+<div class="paragraph">
+<p>Boolean values can be stored in variables, assigned into fields, just like any other data type:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def myBooleanVariable = true
+boolean untypedBooleanVar = false
+booleanField = true</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>true</code> and <code>false</code> are the only two primitive boolean values.
+But more complex boolean expressions can be represented using <a href="#_bitwise_and_logical_operators">logical operators</a>.</p>
+</div>
+<div class="paragraph">
+<p>In addition, Groovy has <a href="core-semantics.html#Groovy-Truth">special rules</a> (often referred to as <em>Groovy Truth</em>)
+for coercing non-boolean objects to a boolean value.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_lists"><a class="anchor" href="#_lists"></a>7. Lists</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Groovy uses a comma-separated list of values, surrounded by square brackets, to denote lists.
+Groovy lists are plain JDK <code>java.util.List</code>, as Groovy doesn&#8217;t define its own collection classes.
+The concrete list implementation used when defining list literals are <code>java.util.ArrayList</code> by default,
+unless you decide to specify otherwise, as we shall see later on.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def numbers = [1, 2, 3]         <i class="conum" data-value="1"></i><b>(1)</b>
+
+assert numbers instanceof List  <i class="conum" data-value="2"></i><b>(2)</b>
+assert numbers.size() == 3      <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>We define a list numbers delimited by commas and surrounded by square brackets, and we assign that list into a variable</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The list is an instance of Java&#8217;s <code>java.util.List</code> interface</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>The size of the list can be queried with the <code>size()</code> method, and shows our list contains 3 elements</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>In the above example, we used a homogeneous list, but you can also create lists containing values of heterogeneous types:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def heterogeneous = [1, "a", true]  <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Our list here contains a number, a string and a boolean value</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>We mentioned that by default, list literals are actually instances of <code>java.util.ArrayList</code>,
+but it is possible to use a different backing type for our lists,
+thanks to using type coercion with the <code>as</code> operator, or with explicit type declaration for your variables:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def arrayList = [1, 2, 3]
+assert arrayList instanceof java.util.ArrayList
+
+def linkedList = [2, 3, 4] as LinkedList    <i class="conum" data-value="1"></i><b>(1)</b>
+assert linkedList instanceof java.util.LinkedList
+
+LinkedList otherLinked = [3, 4, 5]          <i class="conum" data-value="2"></i><b>(2)</b>
+assert otherLinked instanceof java.util.LinkedList</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>We use coercion with the <code>as</code> operator to explicitly request a <code>java.util.LinkedList</code> implementation</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>We can say that the variable holding the list literal is of type <code>java.util.LinkedList</code></td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>You can access elements of the list with the <code>[]</code> subscript operator (both for reading and setting values)
+with positive indices or negative indices to access elements from the end of the list, as well as with ranges,
+and use the <code>&lt;&lt;</code> leftShift operator to append elements to a list:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def letters = ['a', 'b', 'c', 'd']
+
+assert letters[0] == 'a'     <i class="conum" data-value="1"></i><b>(1)</b>
+assert letters[1] == 'b'
+
+assert letters[-1] == 'd'    <i class="conum" data-value="2"></i><b>(2)</b>
+assert letters[-2] == 'c'
+
+letters[2] = 'C'             <i class="conum" data-value="3"></i><b>(3)</b>
+assert letters[2] == 'C'
+
+letters &lt;&lt; 'e'               <i class="conum" data-value="4"></i><b>(4)</b>
+assert letters[ 4] == 'e'
+assert letters[-1] == 'e'
+
+assert letters[1, 3] == ['b', 'd']         <i class="conum" data-value="5"></i><b>(5)</b>
+assert letters[2..4] == ['C', 'd', 'e']    <i class="conum" data-value="6"></i><b>(6)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Access the first element of the list (zero-based counting)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Access the last element of the list with a negative index: -1 is the first element from the end of the list</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Use an assignment to set a new value for the third element of the list</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Use the <code>&lt;&lt;</code> leftShift operator to append an element at the end of the list</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>Access two elements at once, returning a new list containing those two elements</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>Use a range to access a range of values from the list, from a start to an end element position</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>As lists can be heterogeneous in nature, lists can also contain other lists to create multi-dimensional lists:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def multi = [[0, 1], [2, 3]]     <i class="conum" data-value="1"></i><b>(1)</b>
+assert multi[1][0] == 2          <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Define a list of list of numbers</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Access the second element of the top-most list, and the first element of the inner list</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_arrays"><a class="anchor" href="#_arrays"></a>8. Arrays</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Groovy reuses the list notation for arrays, but to make such literals arrays,
+you need to explicitely define the type of the array through coercion or type declaration.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">String[] arrStr = ['Ananas', 'Banana', 'Kiwi']  <i class="conum" data-value="1"></i><b>(1)</b>
+
+assert arrStr instanceof String[]    <i class="conum" data-value="2"></i><b>(2)</b>
+assert !(arrStr instanceof List)
+
+def numArr = [1, 2, 3] as int[]      <i class="conum" data-value="3"></i><b>(3)</b>
+
+assert numArr instanceof int[]       <i class="conum" data-value="4"></i><b>(4)</b>
+assert numArr.size() == 3</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Define an array of strings using explicit variable type declaration</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Assert that we created an array of strings</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Create an array of ints with the <code>as</code> operator</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Assert that we created an array of primitive ints</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>You can also create multi-dimensional arrays:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def matrix3 = new Integer[3][3]         <i class="conum" data-value="1"></i><b>(1)</b>
+assert matrix3.size() == 3
+
+Integer[][] matrix2                     <i class="conum" data-value="2"></i><b>(2)</b>
+matrix2 = [[1, 2], [3, 4]]
+assert matrix2 instanceof Integer[][]</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>You can define the bounds of a new array</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Or declare an array without specifying its bounds</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Access to elements of an array follows the same notation as for lists:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">String[] names = ['Cédric', 'Guillaume', 'Jochen', 'Paul']
+assert names[0] == 'Cédric'     <i class="conum" data-value="1"></i><b>(1)</b>
+
+names[2] = 'Blackdrag'          <i class="conum" data-value="2"></i><b>(2)</b>
+assert names[2] == 'Blackdrag'</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Retrieve the first element of the array</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Set the value of the third element of the array to a new value</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Java&#8217;s array initializer notation is not supported by Groovy,
+as the curly braces can be misinterpreted with the notation of Groovy closures.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_maps"><a class="anchor" href="#_maps"></a>9. Maps</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Sometimes called dictionaries or associative arrays in other languages, Groovy features maps.
+Maps associate keys to values, separating keys and values with colons, and each key/value pairs with commas,
+and the whole keys and values surrounded by square brackets.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def colors = [red: '#FF0000', green: '#00FF00', blue: '#0000FF']   <i class="conum" data-value="1"></i><b>(1)</b>
+
+assert colors['red'] == '#FF0000'    <i class="conum" data-value="2"></i><b>(2)</b>
+assert colors.green  == '#00FF00'    <i class="conum" data-value="3"></i><b>(3)</b>
+
+colors['pink'] = '#FF00FF'           <i class="conum" data-value="4"></i><b>(4)</b>
+colors.yellow  = '#FFFF00'           <i class="conum" data-value="5"></i><b>(5)</b>
+
+assert colors.pink == '#FF00FF'
+assert colors['yellow'] == '#FFFF00'
+
+assert colors instanceof java.util.LinkedHashMap</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>We define a map of string color names, associated with their hexadecimal-coded html colors</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>We use the subscript notation to check the content associated with the <code>red</code> key</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>We can also use the property notation to assert the color green&#8217;s hexadecimal representation</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Similarly, we can use the subscript notation to add a new key/value pair</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>Or the property notation, to add the <code>yellow</code> color</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+When using names for the keys, we actually define string keys in the map.
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Groovy creates maps that are actually instances of <code>java.util.LinkedHashMap</code>.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>If you try to access a key which is not present in the map:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">assert colors.unknown == null</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You will retrieve a <code>null</code> result.</p>
+</div>
+<div class="paragraph">
+<p>In the examples above, we used string keys, but you can also use values of other types as keys:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def numbers = [1: 'one', 2: 'two']
+
+assert numbers[1] == 'one'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here, we used numbers as keys, as numbers can unambiguously be recognized as numbers,
+so Groovy will not create a string key like in our previous examples.
+But consider the case you want to pass a variable in lieu of the key, to have the value of that variable become the key:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def key = 'name'
+def person = [key: 'Guillaume']      <i class="conum" data-value="1"></i><b>(1)</b>
+
+assert !person.containsKey('name')   <i class="conum" data-value="2"></i><b>(2)</b>
+assert person.containsKey('key')     <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The <code>key</code> associated with the <code>'Guillaume'</code> name will actually be the <code>"key"</code> string, not the value associated with the <code>key</code> variable</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The map doesn&#8217;t contain the <code>'name'</code> key</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Instead, the map contains a <code>'key'</code> key</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+You can also pass quoted strings as well as keys: ["name": "Guillaume"].
+This is mandatory if your key string isn&#8217;t a valid identifier,
+for example if you wanted to create a string key containing a hash like in: ["street-name": "Main street"].
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>When you need to pass variable values as keys in your map definitions, you must surround the variable or expression with parentheses:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">person = [(key): 'Guillaume']        <i class="conum" data-value="1"></i><b>(1)</b>
+
+assert person.containsKey('name')    <i class="conum" data-value="2"></i><b>(2)</b>
+assert !person.containsKey('key')    <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>This time, we surround the <code>key</code> variable with parentheses, to instruct the parser we are passing a variable rather than defining a string key</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The map does contain the <code>name</code> key</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>But the map doesn&#8217;t contain the <code>key</code> key as before</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 3.0.0-alpha-3<br>
+Last updated 2018-06-23 13:44:36 AEST
+</div>
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+<script>prettyPrint()</script>
+</body>
+</html>

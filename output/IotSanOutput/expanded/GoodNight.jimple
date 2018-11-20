@@ -305,7 +305,7 @@ public class GoodNight extends java.lang.Object
     {
         STState sensor, it$0, findResult1;
         GoodNight JJJCTEMP$0;
-        int JJJCTEMP$9, JJJCTEMP$13, elapsed, JJJCTEMP$3, _static_GoodNight_minutes, $ret, index6, threshold, index5;
+        int JJJCTEMP$9, JJJCTEMP$13, elapsed, JJJCTEMP$3, _static_GoodNight_minutes, $ret, threshold, index4, index3;
         STMotionSensor it;
         STState[] states, collectResult1;
         STMotionSensor[] _static_GoodNight_motionSensors;
@@ -314,38 +314,38 @@ public class GoodNight extends java.lang.Object
         JJJCTEMP$3 = 1000 * 60;
         JJJCTEMP$3 = JJJCTEMP$3 * _static_GoodNight_minutes;
         threshold = JJJCTEMP$3 - 1000;
-        index5 = 0;
+        index3 = 0;
         goto label1;
 
      label0:
-        it = _static_GoodNight_motionSensors[index5];
+        it = _static_GoodNight_motionSensors[index3];
         it$0 = virtualinvoke it.[STMotionSensor.currentState(int):STState](11);
-        collectResult1[index5] = it$0;
-        index5 = index5 + 1;
+        collectResult1[index3] = it$0;
+        index3 = index3 + 1;
 
      label1:
         JJJCTEMP$9 = lengthof _static_GoodNight_motionSensors;
-        if index5 < JJJCTEMP$9 goto label0;
+        if index3 < JJJCTEMP$9 goto label0;
 
         states = collectResult1;
         if states == 0 goto label7;
 
-        index6 = 0;
+        index4 = 0;
         goto label4;
 
      label2:
-        it$0 = states[index6];
+        it$0 = states[index4];
         JJJCTEMP$13 = it$0.[STState.value:int];
         if JJJCTEMP$13 != 12 goto label3;
 
         findResult1 = it$0;
 
      label3:
-        index6 = index6 + 1;
+        index4 = index4 + 1;
 
      label4:
         JJJCTEMP$13 = lengthof states;
-        if index6 < JJJCTEMP$13 goto label2;
+        if index4 < JJJCTEMP$13 goto label2;
 
         if findResult1 == 0 goto label5;
 
@@ -376,7 +376,7 @@ public class GoodNight extends java.lang.Object
     private boolean switchesOk()
     {
         GoodNight JJJCTEMP$0;
-        int $ret, index4, result;
+        int $ret, index2, result;
         STSwitch[] _static_GoodNight_switches;
         STSwitch it;
 
@@ -385,11 +385,11 @@ public class GoodNight extends java.lang.Object
 
      label0:
         result = 1;
-        index4 = 0;
+        index2 = 0;
         goto label3;
 
      label1:
-        it = _static_GoodNight_switches[index4];
+        it = _static_GoodNight_switches[index2];
         $ret = it.[STSwitch.currentSwitch:int];
         if $ret != 15 goto label2;
 
@@ -397,11 +397,11 @@ public class GoodNight extends java.lang.Object
         goto label4;
 
      label2:
-        index4 = index4 + 1;
+        index2 = index2 + 1;
 
      label3:
         $ret = lengthof _static_GoodNight_switches;
-        if index4 < $ret goto label1;
+        if index2 < $ret goto label1;
 
      label4:
         $ret = result;
@@ -420,11 +420,11 @@ public class GoodNight extends java.lang.Object
 
     public void installedEvtHandler()
     {
-        GoodNight m14_8_JJJCTEMP$0, JJJCTEMP$0;
+        GoodNight JJJCTEMP$0, m15_7_JJJCTEMP$0;
         int _static_GoodNight_modeStartTime;
 
         JJJCTEMP$0 := @this;
-        m14_8_JJJCTEMP$0 = JJJCTEMP$0;
+        m15_7_JJJCTEMP$0 = JJJCTEMP$0;
         if _static_GoodNight_modeStartTime != 0 goto label0;
 
         [GoodNight.GoodNight_modeStartTime:int] = 0;
@@ -461,199 +461,199 @@ public class GoodNight extends java.lang.Object
 
     public void switchOffEvtHandler()
     {
-        STState[] m4_collectResult1, m4_states;
+        STState[] m10_collectResult1, m10_states;
         STLocation _static_location;
         STSwitch[] _static_GoodNight_switches;
         STMotionSensor[] _static_GoodNight_motionSensors;
-        STMotionSensor m4_it, m4_m5_0_JJJCTEMP$0;
-        int m4_index5, m4_$ret, m4_m5_0_attributeName, _static_GoodNight_minutes, m4_elapsed, m1_m3_timeZone, m6_result, m1_m3_startTime, m4_m2_$ret, m1_m2_$ret, m1_m3_timeVal, m4_JJJCTEMP$9, _static_location.mode, m6_index4, m1_m3_$ret, m0_$ret, m1_modeStartTime, m1_t0, m1_startTime, _static_STCurrentSystemTime, _static_GoodNight_timeOfDay, m1_$ret, m7_m8_mode, m6_$ret, m4_threshold, _static_GoodNight_newMode, _static_location.timeZone, m4_index6;
-        GoodNight m4_JJJCTEMP$0, m7_JJJCTEMP$0, JJJCTEMP$0, m0_JJJCTEMP$0, m6_JJJCTEMP$0, m1_JJJCTEMP$0;
-        STState m4_sensor, m4_findResult1, m4_it$0, m4_m5_0_$ret;
-        STSwitch m6_it;
+        STMotionSensor m10_m4_8_JJJCTEMP$0, m10_it;
+        int m11_result, m8_modeStartTime, m8_m9_timeVal, m8_$ret, m10_elapsed, _static_GoodNight_minutes, m10_index4, m10_index3, m10_m4_8_attributeName, m10_$ret, m8_m9_timeZone, m8_startTime, m8_m9_startTime, m11_$ret, _static_location.mode, m11_JJJCTEMP$5, m8_m9_$ret, m8_t0, _static_STCurrentSystemTime, m10_m5_$ret, m8_m5_$ret, _static_GoodNight_timeOfDay, m12_m13_mode, m11_index2, _static_GoodNight_newMode, _static_location.timeZone, m10_threshold, m7_$ret;
+        GoodNight m7_JJJCTEMP$0, m10_JJJCTEMP$0, JJJCTEMP$0, m8_JJJCTEMP$0, m11_JJJCTEMP$0, m12_JJJCTEMP$0;
+        STState m10_it$0, m10_m4_8_$ret, m10_findResult1, m10_sensor;
+        STSwitch m11_it;
 
         JJJCTEMP$0 := @this;
-        m0_JJJCTEMP$0 = JJJCTEMP$0;
+        m7_JJJCTEMP$0 = JJJCTEMP$0;
         if _static_location.mode == _static_GoodNight_newMode goto label0;
 
-        m0_$ret = 1;
-        m4_threshold = m0_$ret;
+        m7_$ret = 1;
+        m8_startTime = m7_$ret;
         goto label1;
 
      label0:
-        m0_$ret = 0;
-        m4_threshold = m0_$ret;
+        m7_$ret = 0;
+        m8_startTime = m7_$ret;
         goto label1;
 
      label1:
         nop;
-        if m4_threshold == 0 goto label29;
+        if m8_startTime == 0 goto label29;
 
-        m1_JJJCTEMP$0 = JJJCTEMP$0;
-        m1_m2_$ret = _static_STCurrentSystemTime * 3600000;
-        m1_t0 = m1_m2_$ret;
+        m8_JJJCTEMP$0 = JJJCTEMP$0;
+        m8_m5_$ret = _static_STCurrentSystemTime * 3600000;
+        m8_t0 = m8_m5_$ret;
         goto label2;
 
      label2:
         nop;
-        m1_m2_$ret = _static_STCurrentSystemTime * 3600000;
-        m1_modeStartTime = m1_m2_$ret;
+        m8_m5_$ret = _static_STCurrentSystemTime * 3600000;
+        m8_modeStartTime = m8_m5_$ret;
         goto label3;
 
      label3:
         nop;
-        m1_m3_startTime = m1_modeStartTime;
-        m1_m3_timeVal = _static_GoodNight_timeOfDay;
-        m1_m3_timeZone = _static_location.timeZone;
-        m1_m3_$ret = m1_m3_timeVal * 3600000;
-        m1_startTime = m1_m3_$ret;
+        m8_m9_startTime = m8_modeStartTime;
+        m8_m9_timeVal = _static_GoodNight_timeOfDay;
+        m8_m9_timeZone = _static_location.timeZone;
+        m8_m9_$ret = m8_m9_timeVal * 3600000;
+        m8_startTime = m8_m9_$ret;
         goto label4;
 
      label4:
         nop;
-        if m1_t0 < m1_startTime goto label5;
+        if m8_t0 < m8_startTime goto label5;
 
-        m1_$ret = 1;
-        m4_threshold = m1_$ret;
+        m8_$ret = 1;
+        m8_startTime = m8_$ret;
         goto label6;
 
      label5:
-        m1_$ret = 0;
-        m4_threshold = m1_$ret;
+        m8_$ret = 0;
+        m8_startTime = m8_$ret;
         goto label6;
 
      label6:
         nop;
-        if m4_threshold == 0 goto label29;
+        if m8_startTime == 0 goto label29;
 
-        m4_JJJCTEMP$0 = JJJCTEMP$0;
-        m4_threshold = 1000 * 60;
-        m4_threshold = m4_threshold * _static_GoodNight_minutes;
-        m4_threshold = m4_threshold - 1000;
-        m4_index5 = 0;
+        m10_JJJCTEMP$0 = JJJCTEMP$0;
+        m10_threshold = 1000 * 60;
+        m10_threshold = m10_threshold * _static_GoodNight_minutes;
+        m10_threshold = m10_threshold - 1000;
+        m10_index3 = 0;
         goto label9;
 
      label7:
-        m4_it = _static_GoodNight_motionSensors[m4_index5];
-        m4_m5_0_JJJCTEMP$0 = m4_it;
-        m4_m5_0_attributeName = 11;
-        m4_m5_0_$ret = m4_m5_0_JJJCTEMP$0.[STMotionSensor.motionState:STState];
-        m4_m5_0_$ret = m4_m5_0_$ret;
+        m10_it = _static_GoodNight_motionSensors[m10_index3];
+        m10_m4_8_JJJCTEMP$0 = m10_it;
+        m10_m4_8_attributeName = 11;
+        m10_m4_8_$ret = m10_m4_8_JJJCTEMP$0.[STMotionSensor.motionState:STState];
+        m10_m4_8_$ret = m10_m4_8_$ret;
         goto label8;
 
      label8:
         nop;
-        m4_collectResult1[m4_index5] = m4_m5_0_$ret;
-        m4_index5 = m4_index5 + 1;
+        m10_collectResult1[m10_index3] = m10_m4_8_$ret;
+        m10_index3 = m10_index3 + 1;
 
      label9:
-        m4_JJJCTEMP$9 = lengthof _static_GoodNight_motionSensors;
-        if m4_index5 < m4_JJJCTEMP$9 goto label7;
+        m8_startTime = lengthof _static_GoodNight_motionSensors;
+        if m10_index3 < m8_startTime goto label7;
 
-        m4_states = m4_collectResult1;
-        if m4_states == 0 goto label16;
+        m10_states = m10_collectResult1;
+        if m10_states == 0 goto label16;
 
-        m4_index6 = 0;
+        m10_index4 = 0;
         goto label12;
 
      label10:
-        m4_it$0 = m4_states[m4_index6];
-        m4_JJJCTEMP$9 = m4_it$0.[STState.value:int];
-        if m4_JJJCTEMP$9 != 12 goto label11;
+        m10_it$0 = m10_states[m10_index4];
+        m11_JJJCTEMP$5 = m10_it$0.[STState.value:int];
+        if m11_JJJCTEMP$5 != 12 goto label11;
 
-        m4_findResult1 = m4_it$0;
+        m10_findResult1 = m10_it$0;
 
      label11:
-        m4_index6 = m4_index6 + 1;
+        m10_index4 = m10_index4 + 1;
 
      label12:
-        m4_JJJCTEMP$9 = lengthof m4_states;
-        if m4_index6 < m4_JJJCTEMP$9 goto label10;
+        m11_JJJCTEMP$5 = lengthof m10_states;
+        if m10_index4 < m11_JJJCTEMP$5 goto label10;
 
-        if m4_findResult1 == 0 goto label13;
+        if m10_findResult1 == 0 goto label13;
 
-        m4_$ret = 0;
-        m4_threshold = m4_$ret;
+        m10_$ret = 0;
+        m8_startTime = m10_$ret;
         goto label17;
 
      label13:
-        m4_sensor = m4_states[0];
-        m4_m2_$ret = _static_STCurrentSystemTime * 3600000;
-        m4_JJJCTEMP$9 = m4_m2_$ret;
+        m10_sensor = m10_states[0];
+        m10_m5_$ret = _static_STCurrentSystemTime * 3600000;
+        m11_JJJCTEMP$5 = m10_m5_$ret;
         goto label14;
 
      label14:
         nop;
-        m1_m3_timeVal = m4_sensor.[STState.date:int];
-        m4_elapsed = m4_JJJCTEMP$9 - m1_m3_timeVal;
-        if m4_elapsed < m4_threshold goto label15;
+        m8_startTime = m10_sensor.[STState.date:int];
+        m10_elapsed = m11_JJJCTEMP$5 - m8_startTime;
+        if m10_elapsed < m10_threshold goto label15;
 
-        m4_$ret = 1;
-        m4_threshold = m4_$ret;
+        m10_$ret = 1;
+        m8_startTime = m10_$ret;
         goto label17;
 
      label15:
-        m4_$ret = 0;
-        m4_threshold = m4_$ret;
+        m10_$ret = 0;
+        m8_startTime = m10_$ret;
         goto label17;
 
      label16:
-        m4_$ret = 1;
-        m4_threshold = m4_$ret;
+        m10_$ret = 1;
+        m8_startTime = m10_$ret;
         goto label17;
 
         goto label17;
 
      label17:
         nop;
-        if m4_threshold == 0 goto label29;
+        if m8_startTime == 0 goto label29;
 
-        m6_JJJCTEMP$0 = JJJCTEMP$0;
+        m11_JJJCTEMP$0 = JJJCTEMP$0;
         goto label18;
 
      label18:
-        m6_result = 1;
-        m6_index4 = 0;
+        m11_result = 1;
+        m11_index2 = 0;
         goto label21;
 
      label19:
-        m6_it = _static_GoodNight_switches[m6_index4];
-        m4_JJJCTEMP$9 = m6_it.[STSwitch.currentSwitch:int];
-        if m4_JJJCTEMP$9 != 15 goto label20;
+        m11_it = _static_GoodNight_switches[m11_index2];
+        m11_JJJCTEMP$5 = m11_it.[STSwitch.currentSwitch:int];
+        if m11_JJJCTEMP$5 != 15 goto label20;
 
-        m6_result = 0;
+        m11_result = 0;
         goto label22;
 
      label20:
-        m6_index4 = m6_index4 + 1;
+        m11_index2 = m11_index2 + 1;
 
      label21:
-        m4_JJJCTEMP$9 = lengthof _static_GoodNight_switches;
-        if m6_index4 < m4_JJJCTEMP$9 goto label19;
+        m11_JJJCTEMP$5 = lengthof _static_GoodNight_switches;
+        if m11_index2 < m11_JJJCTEMP$5 goto label19;
 
      label22:
-        m6_$ret = m6_result;
-        m4_threshold = m6_$ret;
+        m11_$ret = m11_result;
+        m8_startTime = m11_$ret;
         goto label23;
 
      label23:
         nop;
-        if m4_threshold == 0 goto label29;
+        if m8_startTime == 0 goto label29;
 
-        m7_JJJCTEMP$0 = JJJCTEMP$0;
-        m7_m8_mode = _static_GoodNight_newMode;
-        if m7_m8_mode != 1400 goto label24;
+        m12_JJJCTEMP$0 = JJJCTEMP$0;
+        m12_m13_mode = _static_GoodNight_newMode;
+        if m12_m13_mode != 1400 goto label24;
 
         _static_location.[STLocation.STCommand_Location_Home:boolean] = 1;
         goto label26;
 
      label24:
-        if m7_m8_mode != 1401 goto label25;
+        if m12_m13_mode != 1401 goto label25;
 
         _static_location.[STLocation.STCommand_Location_Away:boolean] = 1;
         goto label26;
 
      label25:
-        if m7_m8_mode != 1402 goto label26;
+        if m12_m13_mode != 1402 goto label26;
 
         _static_location.[STLocation.STCommand_Location_Night:boolean] = 1;
 
@@ -673,15 +673,15 @@ public class GoodNight extends java.lang.Object
 
     public void motionInactiveEvtHandler()
     {
-        STState[] m10_1_m4_collectResult1, m10_1_m4_states;
+        STState[] m3_5_m10_collectResult1, m3_5_m10_states;
         STLocation _static_location;
         STSwitch[] _static_GoodNight_switches;
         STMotionSensor[] _static_GoodNight_motionSensors;
-        STMotionSensor m10_1_m4_m5_1_JJJCTEMP$0, m10_1_m4_it;
-        int m1_m3_timeZone, m10_1_m4_index6, m10_1_m4_index5, m1_m3_startTime, _static_GoodNight_minutes, m10_1_m4_m2_$ret, m10_1_m1_startTime, _static_location.timeZone, m1_m3_$ret, m1_t0, m1_$ret, _static_GoodNight_newMode, m1_startTime, m10_1_m6_index4, m9_JJJCTEMP$0, m9_h, m10_1_m1_m3_timeZone, m10_1_m7_m8_mode, m10_1_m4_threshold, m10_1_m1_m3_$ret, m10_1_m1_modeStartTime, m10_1_m1_m3_timeVal, m10_1_m0_$ret, m9_amount, _static_location.mode, m10_1_m4_$ret, m1_modeStartTime, m10_1_m6_$ret, _static_GoodNight_timeOfDay, _static_STCurrentSystemTime, m1_m2_$ret, m0_$ret, m1_m3_timeVal, _static_GoodNight_modeStartTime, m10_1_m4_m5_1_attributeName, m10_1_m4_elapsed, m10_1_m1_m3_startTime, m10_1_m1_m2_$ret, m10_1_m6_result, m10_1_m1_t0, m10_1_m1_$ret;
-        GoodNight m10_1_m0_JJJCTEMP$0, m0_JJJCTEMP$0, JJJCTEMP$0, m10_1_m7_JJJCTEMP$0, m10_1_m6_JJJCTEMP$0, m10_1_JJJCTEMP$0, m10_1_m4_JJJCTEMP$0, m10_1_m1_JJJCTEMP$0, m1_JJJCTEMP$0;
-        STState m10_1_m4_sensor, m10_1_m4_it$0, m10_1_m4_m5_1_$ret, m10_1_m4_findResult1;
-        STSwitch m10_1_m6_it;
+        STMotionSensor m3_5_m10_m4_5_JJJCTEMP$0, m3_5_m10_it;
+        int m3_5_m8_t0, m8_m9_timeVal, m3_5_m7_$ret, m8_t0, m3_5_m11_index2, m3_5_m8_modeStartTime, _static_GoodNight_minutes, m2_h, _static_location.timeZone, m8_m5_$ret, m8_m9_timeZone, _static_GoodNight_newMode, m8_startTime, m8_m9_$ret, m7_$ret, m3_5_m8_m9_timeZone, m3_5_m11_$ret, m2_JJJCTEMP$0, m3_5_m10_m5_$ret, _static_location.mode, m3_5_m8_$ret, m3_5_m8_startTime, m3_5_m10_elapsed, _static_GoodNight_timeOfDay, _static_STCurrentSystemTime, m3_5_m12_m13_mode, m3_5_m8_m5_$ret, m3_5_m10_m4_5_attributeName, m3_5_m11_result, m3_5_m10_threshold, _static_GoodNight_modeStartTime, m3_5_m8_m9_$ret, m3_5_m8_m9_startTime, m8_m9_startTime, m3_5_m10_JJJCTEMP$13, m8_$ret, m8_modeStartTime, m3_5_m10_$ret, m2_amount, m3_5_m8_m9_timeVal, m3_5_m10_index4, m3_5_m10_index3;
+        GoodNight m8_JJJCTEMP$0, m3_5_m12_JJJCTEMP$0, JJJCTEMP$0, m7_JJJCTEMP$0, m3_5_m11_JJJCTEMP$0, m3_5_m10_JJJCTEMP$0, m3_5_m8_JJJCTEMP$0, m3_5_JJJCTEMP$0, m3_5_m7_JJJCTEMP$0;
+        STState m3_5_m10_it$0, m3_5_m10_findResult1, m3_5_m10_sensor, m3_5_m10_m4_5_$ret;
+        STSwitch m3_5_m11_it;
 
         JJJCTEMP$0 := @this;
         if _static_GoodNight_modeStartTime != 0 goto label0;
@@ -689,253 +689,253 @@ public class GoodNight extends java.lang.Object
         [GoodNight.GoodNight_modeStartTime:int] = 0;
 
      label0:
-        m0_JJJCTEMP$0 = JJJCTEMP$0;
+        m7_JJJCTEMP$0 = JJJCTEMP$0;
         if _static_location.mode == _static_GoodNight_newMode goto label1;
 
-        m0_$ret = 1;
-        m9_h = m0_$ret;
+        m7_$ret = 1;
+        m3_5_m8_m9_startTime = m7_$ret;
         goto label2;
 
      label1:
-        m0_$ret = 0;
-        m9_h = m0_$ret;
+        m7_$ret = 0;
+        m3_5_m8_m9_startTime = m7_$ret;
         goto label2;
 
      label2:
         nop;
-        if m9_h == 0 goto label40;
+        if m3_5_m8_m9_startTime == 0 goto label40;
 
-        m1_JJJCTEMP$0 = JJJCTEMP$0;
-        m1_m2_$ret = _static_STCurrentSystemTime * 3600000;
-        m1_t0 = m1_m2_$ret;
+        m8_JJJCTEMP$0 = JJJCTEMP$0;
+        m8_m5_$ret = _static_STCurrentSystemTime * 3600000;
+        m8_t0 = m8_m5_$ret;
         goto label3;
 
      label3:
         nop;
-        m1_m2_$ret = _static_STCurrentSystemTime * 3600000;
-        m1_modeStartTime = m1_m2_$ret;
+        m8_m5_$ret = _static_STCurrentSystemTime * 3600000;
+        m8_modeStartTime = m8_m5_$ret;
         goto label4;
 
      label4:
         nop;
-        m1_m3_startTime = m1_modeStartTime;
-        m1_m3_timeVal = _static_GoodNight_timeOfDay;
-        m1_m3_timeZone = _static_location.timeZone;
-        m1_m3_$ret = m1_m3_timeVal * 3600000;
-        m1_startTime = m1_m3_$ret;
+        m8_m9_startTime = m8_modeStartTime;
+        m8_m9_timeVal = _static_GoodNight_timeOfDay;
+        m8_m9_timeZone = _static_location.timeZone;
+        m8_m9_$ret = m8_m9_timeVal * 3600000;
+        m8_startTime = m8_m9_$ret;
         goto label5;
 
      label5:
         nop;
-        if m1_t0 < m1_startTime goto label6;
+        if m8_t0 < m8_startTime goto label6;
 
-        m1_$ret = 1;
-        m9_h = m1_$ret;
+        m8_$ret = 1;
+        m3_5_m8_m9_startTime = m8_$ret;
         goto label7;
 
      label6:
-        m1_$ret = 0;
-        m9_h = m1_$ret;
+        m8_$ret = 0;
+        m3_5_m8_m9_startTime = m8_$ret;
         goto label7;
 
      label7:
         nop;
-        if m9_h == 0 goto label40;
+        if m3_5_m8_m9_startTime == 0 goto label40;
 
-        m9_h = _static_GoodNight_minutes * 60;
-        m9_amount = m9_h;
-        m9_JJJCTEMP$0 = m9_amount / 3600;
-        m9_h = m9_JJJCTEMP$0 + 1;
-        m1_startTime = [GoodNight.STCurrentSystemTime:int];
-        m1_startTime = m1_startTime + m9_h;
-        [GoodNight.STCurrentSystemTime:int] = m1_startTime;
+        m3_5_m8_m9_startTime = _static_GoodNight_minutes * 60;
+        m2_amount = m3_5_m8_m9_startTime;
+        m2_JJJCTEMP$0 = m2_amount / 3600;
+        m2_h = m2_JJJCTEMP$0 + 1;
+        m3_5_m8_m9_startTime = [GoodNight.STCurrentSystemTime:int];
+        m3_5_m8_m9_startTime = m3_5_m8_m9_startTime + m2_h;
+        [GoodNight.STCurrentSystemTime:int] = m3_5_m8_m9_startTime;
         goto label8;
 
      label8:
         nop;
-        m10_1_JJJCTEMP$0 = JJJCTEMP$0;
-        m10_1_m0_JJJCTEMP$0 = m10_1_JJJCTEMP$0;
+        m3_5_JJJCTEMP$0 = JJJCTEMP$0;
+        m3_5_m7_JJJCTEMP$0 = m3_5_JJJCTEMP$0;
         if _static_location.mode == _static_GoodNight_newMode goto label9;
 
-        m10_1_m0_$ret = 1;
-        m9_h = m10_1_m0_$ret;
+        m3_5_m7_$ret = 1;
+        m3_5_m12_m13_mode = m3_5_m7_$ret;
         goto label10;
 
      label9:
-        m10_1_m0_$ret = 0;
-        m9_h = m10_1_m0_$ret;
+        m3_5_m7_$ret = 0;
+        m3_5_m12_m13_mode = m3_5_m7_$ret;
         goto label10;
 
      label10:
         nop;
-        if m9_h == 0 goto label38;
+        if m3_5_m12_m13_mode == 0 goto label38;
 
-        m10_1_m1_JJJCTEMP$0 = m10_1_JJJCTEMP$0;
-        m10_1_m1_m2_$ret = _static_STCurrentSystemTime * 3600000;
-        m10_1_m1_t0 = m10_1_m1_m2_$ret;
+        m3_5_m8_JJJCTEMP$0 = m3_5_JJJCTEMP$0;
+        m3_5_m8_m5_$ret = _static_STCurrentSystemTime * 3600000;
+        m3_5_m8_t0 = m3_5_m8_m5_$ret;
         goto label11;
 
      label11:
         nop;
-        m10_1_m1_m2_$ret = _static_STCurrentSystemTime * 3600000;
-        m10_1_m1_modeStartTime = m10_1_m1_m2_$ret;
+        m3_5_m8_m5_$ret = _static_STCurrentSystemTime * 3600000;
+        m3_5_m8_modeStartTime = m3_5_m8_m5_$ret;
         goto label12;
 
      label12:
         nop;
-        m10_1_m1_m3_startTime = m10_1_m1_modeStartTime;
-        m10_1_m1_m3_timeVal = _static_GoodNight_timeOfDay;
-        m10_1_m1_m3_timeZone = _static_location.timeZone;
-        m10_1_m1_m3_$ret = m10_1_m1_m3_timeVal * 3600000;
-        m10_1_m1_startTime = m10_1_m1_m3_$ret;
+        m3_5_m8_m9_startTime = m3_5_m8_modeStartTime;
+        m3_5_m8_m9_timeVal = _static_GoodNight_timeOfDay;
+        m3_5_m8_m9_timeZone = _static_location.timeZone;
+        m3_5_m8_m9_$ret = m3_5_m8_m9_timeVal * 3600000;
+        m3_5_m8_startTime = m3_5_m8_m9_$ret;
         goto label13;
 
      label13:
         nop;
-        if m10_1_m1_t0 < m10_1_m1_startTime goto label14;
+        if m3_5_m8_t0 < m3_5_m8_startTime goto label14;
 
-        m10_1_m1_$ret = 1;
-        m9_h = m10_1_m1_$ret;
+        m3_5_m8_$ret = 1;
+        m3_5_m10_JJJCTEMP$13 = m3_5_m8_$ret;
         goto label15;
 
      label14:
-        m10_1_m1_$ret = 0;
-        m9_h = m10_1_m1_$ret;
+        m3_5_m8_$ret = 0;
+        m3_5_m10_JJJCTEMP$13 = m3_5_m8_$ret;
         goto label15;
 
      label15:
         nop;
-        if m9_h == 0 goto label38;
+        if m3_5_m10_JJJCTEMP$13 == 0 goto label38;
 
-        m10_1_m4_JJJCTEMP$0 = m10_1_JJJCTEMP$0;
-        m9_h = 1000 * 60;
-        m9_h = m9_h * _static_GoodNight_minutes;
-        m10_1_m4_threshold = m9_h - 1000;
-        m10_1_m4_index5 = 0;
+        m3_5_m10_JJJCTEMP$0 = m3_5_JJJCTEMP$0;
+        m3_5_m12_m13_mode = 1000 * 60;
+        m3_5_m12_m13_mode = m3_5_m12_m13_mode * _static_GoodNight_minutes;
+        m3_5_m10_threshold = m3_5_m12_m13_mode - 1000;
+        m3_5_m10_index3 = 0;
         goto label18;
 
      label16:
-        m10_1_m4_it = _static_GoodNight_motionSensors[m10_1_m4_index5];
-        m10_1_m4_m5_1_JJJCTEMP$0 = m10_1_m4_it;
-        m10_1_m4_m5_1_attributeName = 11;
-        m10_1_m4_m5_1_$ret = m10_1_m4_m5_1_JJJCTEMP$0.[STMotionSensor.motionState:STState];
-        m10_1_m4_m5_1_$ret = m10_1_m4_m5_1_$ret;
+        m3_5_m10_it = _static_GoodNight_motionSensors[m3_5_m10_index3];
+        m3_5_m10_m4_5_JJJCTEMP$0 = m3_5_m10_it;
+        m3_5_m10_m4_5_attributeName = 11;
+        m3_5_m10_m4_5_$ret = m3_5_m10_m4_5_JJJCTEMP$0.[STMotionSensor.motionState:STState];
+        m3_5_m10_it$0 = m3_5_m10_m4_5_$ret;
         goto label17;
 
      label17:
         nop;
-        m10_1_m4_collectResult1[m10_1_m4_index5] = m10_1_m4_m5_1_$ret;
-        m10_1_m4_index5 = m10_1_m4_index5 + 1;
+        m3_5_m10_collectResult1[m3_5_m10_index3] = m3_5_m10_it$0;
+        m3_5_m10_index3 = m3_5_m10_index3 + 1;
 
      label18:
-        m9_h = lengthof _static_GoodNight_motionSensors;
-        if m10_1_m4_index5 < m9_h goto label16;
+        m3_5_m12_m13_mode = lengthof _static_GoodNight_motionSensors;
+        if m3_5_m10_index3 < m3_5_m12_m13_mode goto label16;
 
-        m10_1_m4_states = m10_1_m4_collectResult1;
-        if m10_1_m4_states == 0 goto label25;
+        m3_5_m10_states = m3_5_m10_collectResult1;
+        if m3_5_m10_states == 0 goto label25;
 
-        m10_1_m4_index6 = 0;
+        m3_5_m10_index4 = 0;
         goto label21;
 
      label19:
-        m10_1_m4_it$0 = m10_1_m4_states[m10_1_m4_index6];
-        m9_h = m10_1_m4_it$0.[STState.value:int];
-        if m9_h != 12 goto label20;
+        m3_5_m10_it$0 = m3_5_m10_states[m3_5_m10_index4];
+        m3_5_m12_m13_mode = m3_5_m10_it$0.[STState.value:int];
+        if m3_5_m12_m13_mode != 12 goto label20;
 
-        m10_1_m4_findResult1 = m10_1_m4_it$0;
+        m3_5_m10_findResult1 = m3_5_m10_it$0;
 
      label20:
-        m10_1_m4_index6 = m10_1_m4_index6 + 1;
+        m3_5_m10_index4 = m3_5_m10_index4 + 1;
 
      label21:
-        m9_h = lengthof m10_1_m4_states;
-        if m10_1_m4_index6 < m9_h goto label19;
+        m3_5_m12_m13_mode = lengthof m3_5_m10_states;
+        if m3_5_m10_index4 < m3_5_m12_m13_mode goto label19;
 
-        if m10_1_m4_findResult1 == 0 goto label22;
+        if m3_5_m10_findResult1 == 0 goto label22;
 
-        m10_1_m4_$ret = 0;
-        m9_h = m10_1_m4_$ret;
+        m3_5_m10_$ret = 0;
+        m3_5_m10_JJJCTEMP$13 = m3_5_m10_$ret;
         goto label26;
 
      label22:
-        m10_1_m4_sensor = m10_1_m4_states[0];
-        m10_1_m4_m2_$ret = _static_STCurrentSystemTime * 3600000;
-        m10_1_m1_$ret = m10_1_m4_m2_$ret;
+        m3_5_m10_sensor = m3_5_m10_states[0];
+        m3_5_m10_m5_$ret = _static_STCurrentSystemTime * 3600000;
+        m3_5_m10_JJJCTEMP$13 = m3_5_m10_m5_$ret;
         goto label23;
 
      label23:
         nop;
-        m9_h = m10_1_m4_sensor.[STState.date:int];
-        m10_1_m4_elapsed = m10_1_m1_$ret - m9_h;
-        if m10_1_m4_elapsed < m10_1_m4_threshold goto label24;
+        m3_5_m12_m13_mode = m3_5_m10_sensor.[STState.date:int];
+        m3_5_m10_elapsed = m3_5_m10_JJJCTEMP$13 - m3_5_m12_m13_mode;
+        if m3_5_m10_elapsed < m3_5_m10_threshold goto label24;
 
-        m10_1_m4_$ret = 1;
-        m9_h = m10_1_m4_$ret;
+        m3_5_m10_$ret = 1;
+        m3_5_m10_JJJCTEMP$13 = m3_5_m10_$ret;
         goto label26;
 
      label24:
-        m10_1_m4_$ret = 0;
-        m9_h = m10_1_m4_$ret;
+        m3_5_m10_$ret = 0;
+        m3_5_m10_JJJCTEMP$13 = m3_5_m10_$ret;
         goto label26;
 
      label25:
-        m10_1_m4_$ret = 1;
-        m9_h = m10_1_m4_$ret;
+        m3_5_m10_$ret = 1;
+        m3_5_m10_JJJCTEMP$13 = m3_5_m10_$ret;
         goto label26;
 
         goto label26;
 
      label26:
         nop;
-        if m9_h == 0 goto label38;
+        if m3_5_m10_JJJCTEMP$13 == 0 goto label38;
 
-        m10_1_m6_JJJCTEMP$0 = m10_1_JJJCTEMP$0;
+        m3_5_m11_JJJCTEMP$0 = m3_5_JJJCTEMP$0;
         goto label27;
 
      label27:
-        m10_1_m6_result = 1;
-        m10_1_m6_index4 = 0;
+        m3_5_m11_result = 1;
+        m3_5_m11_index2 = 0;
         goto label30;
 
      label28:
-        m10_1_m6_it = _static_GoodNight_switches[m10_1_m6_index4];
-        m10_1_m1_$ret = m10_1_m6_it.[STSwitch.currentSwitch:int];
-        if m10_1_m1_$ret != 15 goto label29;
+        m3_5_m11_it = _static_GoodNight_switches[m3_5_m11_index2];
+        m3_5_m8_m9_startTime = m3_5_m11_it.[STSwitch.currentSwitch:int];
+        if m3_5_m8_m9_startTime != 15 goto label29;
 
-        m10_1_m6_result = 0;
+        m3_5_m11_result = 0;
         goto label31;
 
      label29:
-        m10_1_m6_index4 = m10_1_m6_index4 + 1;
+        m3_5_m11_index2 = m3_5_m11_index2 + 1;
 
      label30:
-        m10_1_m1_$ret = lengthof _static_GoodNight_switches;
-        if m10_1_m6_index4 < m10_1_m1_$ret goto label28;
+        m3_5_m8_m9_startTime = lengthof _static_GoodNight_switches;
+        if m3_5_m11_index2 < m3_5_m8_m9_startTime goto label28;
 
      label31:
-        m10_1_m6_$ret = m10_1_m6_result;
-        m9_h = m10_1_m6_$ret;
+        m3_5_m11_$ret = m3_5_m11_result;
+        m3_5_m10_JJJCTEMP$13 = m3_5_m11_$ret;
         goto label32;
 
      label32:
         nop;
-        if m9_h == 0 goto label38;
+        if m3_5_m10_JJJCTEMP$13 == 0 goto label38;
 
-        m10_1_m7_JJJCTEMP$0 = m10_1_JJJCTEMP$0;
-        m10_1_m7_m8_mode = _static_GoodNight_newMode;
-        if m10_1_m7_m8_mode != 1400 goto label33;
+        m3_5_m12_JJJCTEMP$0 = m3_5_JJJCTEMP$0;
+        m3_5_m12_m13_mode = _static_GoodNight_newMode;
+        if m3_5_m12_m13_mode != 1400 goto label33;
 
         _static_location.[STLocation.STCommand_Location_Home:boolean] = 1;
         goto label35;
 
      label33:
-        if m10_1_m7_m8_mode != 1401 goto label34;
+        if m3_5_m12_m13_mode != 1401 goto label34;
 
         _static_location.[STLocation.STCommand_Location_Away:boolean] = 1;
         goto label35;
 
      label34:
-        if m10_1_m7_m8_mode != 1402 goto label35;
+        if m3_5_m12_m13_mode != 1402 goto label35;
 
         _static_location.[STLocation.STCommand_Location_Night:boolean] = 1;
 
@@ -962,16 +962,16 @@ public class GoodNight extends java.lang.Object
     public void modeChangeEvtHandler()
     {
         GoodNight JJJCTEMP$0;
-        int _static_STCurrentSystemTime, JJJCTEMP$1, m2_$ret;
+        int _static_STCurrentSystemTime, m5_$ret;
 
         JJJCTEMP$0 := @this;
-        m2_$ret = _static_STCurrentSystemTime * 3600000;
-        JJJCTEMP$1 = m2_$ret;
+        m5_$ret = _static_STCurrentSystemTime * 3600000;
+        m5_$ret = m5_$ret;
         goto label0;
 
      label0:
         nop;
-        [GoodNight.GoodNight_modeStartTime:int] = JJJCTEMP$1;
+        [GoodNight.GoodNight_modeStartTime:int] = m5_$ret;
         return;
     }
 

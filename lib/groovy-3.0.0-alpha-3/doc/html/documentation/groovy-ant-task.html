@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.6.1">
+<title>The &lt;groovy&gt; Ant Task</title>
+<link rel="stylesheet" href="./assets/css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+<h1>The &lt;groovy&gt; Ant Task</h1>
+<div class="details">
+<span id="revnumber">version 3.0.0-alpha-3</span>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_required_taskdef">1. Required taskdef</a></li>
+<li><a href="#_groovy_attributes">2. &lt;groovy&gt; attributes</a></li>
+<li><a href="#_parameters_specified_as_nested_elements">3. Parameters specified as nested elements</a>
+<ul class="sectlevel2">
+<li><a href="#_classpath">3.1. &lt;classpath&gt;</a></li>
+<li><a href="#_arg">3.2. &lt;arg&gt;</a></li>
+</ul>
+</li>
+<li><a href="#_available_bindings">4. Available bindings</a></li>
+<li><a href="#_examples">5. Examples</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Executes a series of Groovy statements from <a href="http://ant.apache.org/">Apache Ant</a>.
+Statements can either be read in from a text file using the <code>src</code> attribute or from between the enclosing Groovy tags.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_required_taskdef"><a class="anchor" href="#_required_taskdef"></a>1. Required taskdef</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Assuming <code>groovy-all-VERSION.jar</code> is in <code>my.classpath</code> you will need to declare this task in the <code>build.xml</code> prior to using it:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;taskdef name="groovy"
+         classname="org.codehaus.groovy.ant.Groovy"
+         classpathref="my.classpath"/&gt;
+&lt;groovy&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_groovy_attributes"><a class="anchor" href="#_groovy_attributes"></a>2. &lt;groovy&gt; attributes</h2>
+<div class="sectionbody">
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 50%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Attribute</th>
+<th class="tableblock halign-left valign-top">Description</th>
+<th class="tableblock halign-left valign-top">Required</th>
+</tr>
+</thead>
+<tfoot>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">parameters</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Generates metadata for reflection on method parameter names on JDK 8 and above. Defaults to false.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+</tr>
+</tfoot>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">src</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">File containing Groovy statements. The directory containing the file is added to the classpath.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes, unless statements enclosed within tags</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">classpath</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The classpath to use.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">classpathref</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The classpath to use, given as reference to a PATH defined elsewhere.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">output</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the output file; defaults to the Ant log.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">fork</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If enabled the script will be executed in another JVM (disabled by default).</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">scriptBaseClass</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The name of the base class for scripts.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">indy</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If enabled the script will be executed with <code>invokedynamic</code> (disabled by default).</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_parameters_specified_as_nested_elements"><a class="anchor" href="#_parameters_specified_as_nested_elements"></a>3. Parameters specified as nested elements</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_classpath"><a class="anchor" href="#_classpath"></a>3.1. &lt;classpath&gt;</h3>
+<div class="paragraph">
+<p>Groovy&#8217;s classpath attribute is a PATH like structure and can also be set via a nested classpath element.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_arg"><a class="anchor" href="#_arg"></a>3.2. &lt;arg&gt;</h3>
+<div class="paragraph">
+<p>Arguments can be set via one or more nested &lt;arg&gt; elements using the standard Ant <a href="http://ant.apache.org/manual/using.html#arg">command line conventions</a>.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_available_bindings"><a class="anchor" href="#_available_bindings"></a>4. Available bindings</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>A number of bindings are in scope for use within your Groovy statements.</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 16.6666%;">
+<col style="width: 83.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tfoot>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">args</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">command line arguments, if any</p></td>
+</tr>
+</tfoot>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ant</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">an instance of <code>AntBuilder</code> that knows about the current ant project</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">project</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">the current ant project</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">properties</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a <code>Map</code> of ant properties</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">target</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">the owning target that invoked this groovy script</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">task</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">the wrapping task, can access anything needed in <code>org.apache.tools.ant.Task</code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_examples"><a class="anchor" href="#_examples"></a>5. Examples</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Hello world, version 1:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;groovy&gt;
+println "Hello World"
+&lt;/groovy&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Hello world, version 2:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;groovy&gt;
+ant.echo "Hello World"
+&lt;/groovy&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>List all xml files in the current directory:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;groovy&gt;
+xmlfiles = new File(".").listFiles().findAll{ it =~ "\.xml$" }
+xmlfiles.sort().each { println it.toString() }
+&lt;/groovy&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>List all xml files within a jar:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;zipfileset id="found" src="foobar.jar"
+            includes="**/*.xml"/&gt;
+&lt;groovy&gt;
+    project.references.found.each {
+        println it.name
+    }
+&lt;/groovy&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Run a script:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;groovy src="/some/directory/some/file.groovy"&gt;
+  &lt;classpath&gt;
+    &lt;pathelement location="/my/groovy/classes/directory"/&gt;
+  &lt;/classpath&gt;
+&lt;/groovy&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Find all <code>Builder</code> classes having an <code>org.*</code> package within a directory of jars:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;property name="local.target" value="C:/Projects/GroovyExamples"/&gt;
+&lt;groovy&gt;
+import java.util.jar.JarFile
+def classes = []
+def resourceNamePattern = /org\/.*\/.*Builder.class/
+def jarNamePattern = /.*(beta|commons).*jar$/
+
+def libdir = new File("${properties['local.target']}/lib")
+libdir.listFiles().grep(~jarNamePattern).each { candidate -&gt;
+    new JarFile(candidate).entries().each { entry -&gt;
+        if (entry.name ==~ resourceNamePattern) classes += entry.name
+    }
+}
+properties["builder-classes"] = classes.join(' ')
+&lt;/groovy&gt;
+&lt;echo message='${builder-classes}'/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Which might result in something like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code>org/apache/commons/cli/PatternOptionBuilder.class org/apache/commons/cli/OptionBuilder.class org/codehaus/groovy/tools/groovydoc/GroovyRootDocBuilder.class org/custommonkey/xmlunit/HTMLDocumentBuilder.class org/custommonkey/xmlunit/TolerantSaxDocumentBuilder.class</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>FileScanner version of above (with a slight variation on collecting the names):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;groovy&gt;
+import java.util.jar.JarFile
+def resourceNamePattern = /org\/.*\/.*Builder.class/
+def candidates = ant.fileScanner {
+    fileset(dir: '${local.target}/lib') {
+        include(name: '*beta*.jar')
+        include(name: '*commons*.jar')
+    }
+}
+def classes = candidates.collect {
+    new JarFile(it).entries().collect { it.name }.findAll {
+        it ==~ resourceNamePattern
+    }
+}.flatten()
+properties["builder-classes"] = classes.join(' ')
+&lt;/groovy&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Calling out to a web service from your Ant script:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;project name="SOAP example" default="main" basedir="."&gt;
+    &lt;property environment="env"/&gt;
+    &lt;property name="celsius" value="0"/&gt;
+    &lt;target name="main"&gt;
+        &lt;taskdef name="groovy" classname="org.codehaus.groovy.ant.Groovy"&gt;
+            &lt;classpath&gt;
+                &lt;fileset dir="${env.GROOVY_HOME}" includes="embeddable/groovy-all-*.jar,lib/ivy*.jar"/&gt;
+            &lt;/classpath&gt;
+        &lt;/taskdef&gt;
+        &lt;groovy&gt;
+            @Grab('org.codehaus.groovy.modules:groovyws:0.5.1')
+            import groovyx.net.ws.WSClient
+            def url = 'http://www.w3schools.com/webservices/tempconvert.asmx?WSDL'
+            def proxy = new WSClient(url, this.class.classLoader)
+            proxy.initialize()
+            ant.echo "I'm freezing at ${properties.celsius} degrees Celsius"
+            properties.result = proxy.CelsiusToFahrenheit(properties.celsius)
+        &lt;/groovy&gt;
+        &lt;antcall target="results"/&gt;
+    &lt;/target&gt;
+    &lt;target name="results"&gt;
+        &lt;echo message="I'm freezing at ${result} degrees Fahrenheit"/&gt;
+    &lt;/target&gt;
+&lt;/project&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Which will output the following (along with some informational messages):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code>main:
+     ...
+     [echo] I'm freezing at 0 degrees Celsius
+results:
+     [echo] I'm freezing at 32 degrees Fahrenheit
+
+BUILD SUCCESSFUL</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Setting arguments:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;target name="run"&gt;
+    &lt;groovy&gt;
+        &lt;arg line="1 2 3"/&gt;
+        &lt;arg value="4 5"/&gt;
+        println args.size()
+        println args[2]
+        args.each{ ant.echo(message:it) }
+    &lt;/groovy&gt;
+&lt;/target&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Output:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code>Buildfile: build.xml
+
+run:
+   [groovy] 4
+   [groovy] 3
+     [echo] 1
+     [echo] 2
+     [echo] 3
+     [echo] 4 5
+
+BUILD SUCCESSFUL</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 3.0.0-alpha-3<br>
+Last updated 2018-06-23 13:44:44 AEST
+</div>
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+<script>prettyPrint()</script>
+</body>
+</html>

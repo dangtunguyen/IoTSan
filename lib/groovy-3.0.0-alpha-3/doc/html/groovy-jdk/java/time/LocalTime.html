@@ -1,0 +1,749 @@
+<!--
+
+     Licensed to the Apache Software Foundation (ASF) under one
+     or more contributor license agreements.  See the NOTICE file
+     distributed with this work for additional information
+     regarding copyright ownership.  The ASF licenses this file
+     to you under the Apache License, Version 2.0 (the
+     "License"); you may not use this file except in compliance
+     with the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing,
+     software distributed under the License is distributed on an
+     "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+     specific language governing permissions and limitations
+     under the License.
+
+-->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>LocalTime (Groovy JDK enhancements)</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../stylesheet.css" title="Style">
+    <script type="text/javascript">
+        function windowTitle() {
+            parent.document.title = document.title;
+        }
+    </script>
+</head>
+
+<body class="center" onload="windowTitle();">
+
+    <!-- ========== START OF NAVBAR ========== -->
+    <a name="navbar_top"><!-- --></a>
+
+    <div class="topNav">
+        <ul class="navList" title="Navigation">
+            <li><a href="../../overview-summary.html">Overview</a></li>
+            <li><a href="package-summary.html">Package</a></li>
+            <li class="navBarCell1Rev">Class</li>
+            <li><a href="../../index-all.html">Index</a></li>
+        </ul>
+    </div>
+
+    <!-- =========== END OF NAVBAR =========== -->
+
+    <!-- ======== START OF class DATA ======== -->
+
+    <div class="header">
+        <div class="subTitle">Package: <strong>java.time</strong></div>
+        <h2>Class LocalTime</h2>
+    </div>
+
+    <div class="contentContainer">
+
+    <!-- ========== METHOD SUMMARY =========== -->
+
+        <a name="method_summary"><!-- --></a>
+
+        <div class="summary">
+            <ul class="blockList">
+                <li class="blockList">
+                    <ul class="blockList">
+                        <li class="blockList">
+                            <h3>Methods Summary</h3>
+                            <table border="0" cellpadding="3" cellspacing="0" class="overviewSummary">
+                               <caption><span>Methods</span><span class="tabEnd">&nbsp;</span></caption>
+                                <tbody>
+                                    <tr>
+                                        <th>Return type</th>
+                                        <th>Name and parameters</th>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="Class in java.lang">String</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#format(java.lang.String)">format</a></strong>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="Class in java.lang">String</a> pattern)</code>
+                                            <br>
+                                            Formats this time with the provided <a href="http://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html" title="Class in java.time.format">DateTimeFormatter</a> pattern.
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="rawColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="Class in java.lang">String</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#format(java.time.format.FormatStyle)">format</a></strong>(<a href="http://docs.oracle.com/javase/8/docs/api/java/time/format/FormatStyle.html" title="Class in java.time.format">FormatStyle</a> timeStyle)</code>
+                                            <br>
+                                            Formats this time in the provided, localized <a href="http://docs.oracle.com/javase/8/docs/api/java/time/format/FormatStyle.html" title="Class in java.time.format">FormatStyle</a>.
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="Class in java.lang">String</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#getTimeString()">getTimeString</a></strong>()</code>
+                                            <br>
+                                            Formats this time with the <a href="http://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html#ISO_LOCAL_TIME" title="Class in java.time.format">DateTimeFormatter#ISO_LOCAL_TIME</a> formatter.
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="rawColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/time/LocalDateTime.html" title="Class in java.time">LocalDateTime</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#leftShift(java.time.LocalDate)">leftShift</a></strong>(<a href="http://docs.oracle.com/javase/8/docs/api/java/time/LocalDate.html" title="Class in java.time">LocalDate</a> date)</code>
+                                            <br>
+                                            Returns a <a href="http://docs.oracle.com/javase/8/docs/api/java/time/LocalDateTime.html" title="Class in java.time">LocalDateTime</a> of this time and the provided <a href="http://docs.oracle.com/javase/8/docs/api/java/time/LocalDate.html" title="Class in java.time">LocalDate</a>.
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/time/OffsetTime.html" title="Class in java.time">OffsetTime</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#leftShift(java.time.ZoneOffset)">leftShift</a></strong>(<a href="http://docs.oracle.com/javase/8/docs/api/java/time/ZoneOffset.html" title="Class in java.time">ZoneOffset</a> offset)</code>
+                                            <br>
+                                            Returns an <a href="http://docs.oracle.com/javase/8/docs/api/java/time/OffsetTime.html" title="Class in java.time">OffsetTime</a> of this time and the provided <a href="http://docs.oracle.com/javase/8/docs/api/java/time/ZoneOffset.html" title="Class in java.time">ZoneOffset</a>.
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="rawColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/time/LocalTime.html" title="Class in java.time">LocalTime</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#minus(long)">minus</a></strong>(long seconds)</code>
+                                            <br>
+                                            Returns a <a href="http://docs.oracle.com/javase/8/docs/api/java/time/LocalTime.html" title="Class in java.time">LocalTime</a> that is <code>seconds</code> seconds before this time.
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/time/LocalTime.html" title="Class in java.time">LocalTime</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#next()">next</a></strong>()</code>
+                                            <br>
+                                            Returns a <a href="http://docs.oracle.com/javase/8/docs/api/java/time/LocalTime.html" title="Class in java.time">LocalTime</a> that is one second after this time.
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="rawColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/time/LocalTime.html" title="Class in java.time">LocalTime</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#parse(java.lang.CharSequence, java.lang.String)">parse</a></strong>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html" title="Class in java.lang">CharSequence</a> text, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="Class in java.lang">String</a> pattern)</code>
+                                            <br>
+                                            Parse text into a <a href="http://docs.oracle.com/javase/8/docs/api/java/time/LocalTime.html" title="Class in java.time">LocalTime</a> using the provided pattern.
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/time/LocalTime.html" title="Class in java.time">LocalTime</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#plus(long)">plus</a></strong>(long seconds)</code>
+                                            <br>
+                                            Returns a <a href="http://docs.oracle.com/javase/8/docs/api/java/time/LocalTime.html" title="Class in java.time">LocalTime</a> that is <code>seconds</code> seconds after this time.
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="rawColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/time/LocalTime.html" title="Class in java.time">LocalTime</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#previous()">previous</a></strong>()</code>
+                                            <br>
+                                            Returns a <a href="http://docs.oracle.com/javase/8/docs/api/java/time/LocalTime.html" title="Class in java.time">LocalTime</a> that is one second before this time.
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Calendar.html" title="Class in java.util">Calendar</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#toCalendar()">toCalendar</a></strong>()</code>
+                                            <br>
+                                            Returns a generally equivalent instance of <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Calendar.html" title="Class in java.util">Calendar</a>. 
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="rawColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Date.html" title="Class in java.util">Date</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#toDate()">toDate</a></strong>()</code>
+                                            <br>
+                                            Returns a generally equivalent instance of <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Date.html" title="Class in java.util">Date</a>. 
+                                        </td>
+                                    </tr>
+                                    
+                                </tbody>
+                            </table>
+                        </li>
+                        
+                        <ul class="blockList">
+                            <li class="blockList">
+                            <h4>Methods inherited from class java.lang.<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="Class in java.lang">Object</a></h4>
+                                <p>
+                                    <code><strong><a href="../../java/lang/Object.html#addShutdownHook(groovy.lang.Closure)">addShutdownHook</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#any()">any</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#any(groovy.lang.Closure)">any</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#asBoolean()">asBoolean</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#asType(java.lang.Class)">asType</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#collect()">collect</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#collect(groovy.lang.Closure)">collect</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#collect(java.util.Collection, groovy.lang.Closure)">collect</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#contains(java.lang.Object)">contains</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#count(java.lang.Object)">count</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#dump()">dump</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#each(groovy.lang.Closure)">each</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#eachWithIndex(groovy.lang.Closure)">eachWithIndex</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#equals(java.util.List)">equals</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#every()">every</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#every(groovy.lang.Closure)">every</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#find()">find</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#find(groovy.lang.Closure)">find</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#findAll()">findAll</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#findAll(groovy.lang.Closure)">findAll</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#findIndexOf(groovy.lang.Closure)">findIndexOf</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#findIndexOf(int, groovy.lang.Closure)">findIndexOf</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#findIndexValues(groovy.lang.Closure)">findIndexValues</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#findIndexValues(java.lang.Number, groovy.lang.Closure)">findIndexValues</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#findLastIndexOf(groovy.lang.Closure)">findLastIndexOf</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#findLastIndexOf(int, groovy.lang.Closure)">findLastIndexOf</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#findResult(groovy.lang.Closure)">findResult</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#findResult(java.lang.Object, groovy.lang.Closure)">findResult</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#flatten()">flatten</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#getAt(java.lang.String)">getAt</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#getMetaClass()">getMetaClass</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#getMetaPropertyValues()">getMetaPropertyValues</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#getProperties()">getProperties</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#grep()">grep</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#grep(java.lang.Object)">grep</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#groupBy(java.lang.Object)">groupBy</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#groupBy(java.util.List)">groupBy</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#hasProperty(java.lang.String)">hasProperty</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#identity(groovy.lang.Closure)">identity</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#inject(groovy.lang.Closure)">inject</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#inject(java.lang.Object, groovy.lang.Closure)">inject</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#inspect()">inspect</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#invokeMethod(java.lang.String, java.lang.Object)">invokeMethod</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#is(java.lang.Object)">is</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#isCase(java.lang.Object)">isCase</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#iterator()">iterator</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#join(java.lang.String)">join</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#metaClass(groovy.lang.Closure)">metaClass</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#print(java.io.PrintWriter)">print</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#print(java.lang.Object)">print</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#printf(java.lang.String, java.lang.Object)">printf</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#printf(java.lang.String, java.lang.Object[])">printf</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#println()">println</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#println(java.io.PrintWriter)">println</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#println(java.lang.Object)">println</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#putAt(java.lang.String, java.lang.Object)">putAt</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#respondsTo(java.lang.String)">respondsTo</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#respondsTo(java.lang.String, java.lang.Object[])">respondsTo</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#setMetaClass(groovy.lang.MetaClass)">setMetaClass</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#size()">size</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#split(groovy.lang.Closure)">split</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#sprintf(java.lang.String, java.lang.Object)">sprintf</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#sprintf(java.lang.String, java.lang.Object[])">sprintf</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#sum()">sum</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#sum(java.lang.Object)">sum</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#tap(groovy.lang.Closure)">tap</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#toArrayString()">toArrayString</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#toSpreadMap()">toSpreadMap</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#toString()">toString</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#use(java.lang.Class, groovy.lang.Closure)">use</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#use(java.lang.Object[])">use</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#use(java.util.List, groovy.lang.Closure)">use</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#with(boolean, groovy.lang.Closure)">with</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#with(groovy.lang.Closure)">with</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#withTraits(java.lang.Class)">withTraits</a></strong></code>
+                                </p>
+                            </li>
+                        </ul>
+                        
+                        <ul class="blockList">
+                            <li class="blockList">
+                            <h4>Methods inherited from interface java.lang.<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Comparable.html" title="Class in java.lang">Comparable</a></h4>
+                                <p>
+                                    <code><strong><a href="../../java/lang/Comparable.html#numberAwareCompareTo(java.lang.Comparable)">numberAwareCompareTo</a></strong></code>
+                                </p>
+                            </li>
+                        </ul>
+                        
+                        <ul class="blockList">
+                            <li class="blockList">
+                            <h4>Methods inherited from interface java.time.temporal.<a href="http://docs.oracle.com/javase/8/docs/api/java/time/temporal/Temporal.html" title="Class in java.time.temporal">Temporal</a></h4>
+                                <p>
+                                    <code><strong><a href="../../java/time/temporal/Temporal.html#downto(java.time.temporal.Temporal, groovy.lang.Closure)">downto</a></strong></code>, <code><strong><a href="../../java/time/temporal/Temporal.html#downto(java.time.temporal.Temporal, java.time.temporal.TemporalUnit, groovy.lang.Closure)">downto</a></strong></code>, <code><strong><a href="../../java/time/temporal/Temporal.html#rightShift(java.time.temporal.Temporal)">rightShift</a></strong></code>, <code><strong><a href="../../java/time/temporal/Temporal.html#upto(java.time.temporal.Temporal, groovy.lang.Closure)">upto</a></strong></code>, <code><strong><a href="../../java/time/temporal/Temporal.html#upto(java.time.temporal.Temporal, java.time.temporal.TemporalUnit, groovy.lang.Closure)">upto</a></strong></code>
+                                </p>
+                            </li>
+                        </ul>
+                        
+                        <ul class="blockList">
+                            <li class="blockList">
+                            <h4>Methods inherited from interface java.time.temporal.<a href="http://docs.oracle.com/javase/8/docs/api/java/time/temporal/TemporalAccessor.html" title="Class in java.time.temporal">TemporalAccessor</a></h4>
+                                <p>
+                                    <code><strong><a href="../../java/time/temporal/TemporalAccessor.html#getAt(java.time.temporal.TemporalField)">getAt</a></strong></code>
+                                </p>
+                            </li>
+                        </ul>
+                        
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+    <!-- ============ METHOD DETAIL ========== -->
+
+    <a name="method_detail"><!-- --></a>
+
+
+        <div class="details">
+            <ul class="blockList">
+                <li class="blockList">
+                    <ul class="blockList">
+                        <li class="blockList">
+                            <h3>Methods Detail</h3>
+
+                            
+                            <a name="format(java.lang.String)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="Class in java.lang">String</a> <b>format</b>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="Class in java.lang">String</a> pattern)</h4>
+
+                                    <p>Formats this time with the provided <a href="http://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html" title="Class in java.time.format">DateTimeFormatter</a> pattern.</p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>pattern</code> -  the formatting pattern</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>a formatted String</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>2.5.0</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>See Also:</b></dt>
+                                        
+                                        <dd><a href="http://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html" title="Class in java.time.format">DateTimeFormatter</a></dd>
+                                        
+                                    </dl>
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="format(java.time.format.FormatStyle)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="Class in java.lang">String</a> <b>format</b>(<a href="http://docs.oracle.com/javase/8/docs/api/java/time/format/FormatStyle.html" title="Class in java.time.format">FormatStyle</a> timeStyle)</h4>
+
+                                    <p>Formats this time in the provided, localized <a href="http://docs.oracle.com/javase/8/docs/api/java/time/format/FormatStyle.html" title="Class in java.time.format">FormatStyle</a>.</p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>timeStyle</code> -  the FormatStyle</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>a formatted String</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>2.5.0</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>See Also:</b></dt>
+                                        
+                                        <dd><a href="http://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html" title="Class in java.time.format">DateTimeFormatter</a></dd>
+                                        
+                                    </dl>
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="getTimeString()"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="Class in java.lang">String</a> <b>getTimeString</b>()</h4>
+
+                                    <p>Formats this time with the <a href="http://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html#ISO_LOCAL_TIME" title="Class in java.time.format">DateTimeFormatter#ISO_LOCAL_TIME</a> formatter.</p>
+
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>a formatted String</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>2.5.0</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>See Also:</b></dt>
+                                        
+                                        <dd><a href="http://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html" title="Class in java.time.format">DateTimeFormatter</a></dd>
+                                        
+                                    </dl>
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="leftShift(java.time.LocalDate)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/time/LocalDateTime.html" title="Class in java.time">LocalDateTime</a> <b>leftShift</b>(<a href="http://docs.oracle.com/javase/8/docs/api/java/time/LocalDate.html" title="Class in java.time">LocalDate</a> date)</h4>
+
+                                    <p>Returns a <a href="http://docs.oracle.com/javase/8/docs/api/java/time/LocalDateTime.html" title="Class in java.time">LocalDateTime</a> of this time and the provided <a href="http://docs.oracle.com/javase/8/docs/api/java/time/LocalDate.html" title="Class in java.time">LocalDate</a>.</p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>date</code> -  a LocalDate</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>a LocalDateTime</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>2.5.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="leftShift(java.time.ZoneOffset)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/time/OffsetTime.html" title="Class in java.time">OffsetTime</a> <b>leftShift</b>(<a href="http://docs.oracle.com/javase/8/docs/api/java/time/ZoneOffset.html" title="Class in java.time">ZoneOffset</a> offset)</h4>
+
+                                    <p>Returns an <a href="http://docs.oracle.com/javase/8/docs/api/java/time/OffsetTime.html" title="Class in java.time">OffsetTime</a> of this time and the provided <a href="http://docs.oracle.com/javase/8/docs/api/java/time/ZoneOffset.html" title="Class in java.time">ZoneOffset</a>.</p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>offset</code> -  a ZoneOffset</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>an OffsetTime</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>2.5.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="minus(long)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/time/LocalTime.html" title="Class in java.time">LocalTime</a> <b>minus</b>(long seconds)</h4>
+
+                                    <p>Returns a <a href="http://docs.oracle.com/javase/8/docs/api/java/time/LocalTime.html" title="Class in java.time">LocalTime</a> that is <code>seconds</code> seconds before this time.</p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>seconds</code> -  the number of seconds to subtract</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>a LocalTime</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>2.5.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="next()"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/time/LocalTime.html" title="Class in java.time">LocalTime</a> <b>next</b>()</h4>
+
+                                    <p>Returns a <a href="http://docs.oracle.com/javase/8/docs/api/java/time/LocalTime.html" title="Class in java.time">LocalTime</a> that is one second after this time.</p>
+
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>a LocalTime</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>2.5.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="parse(java.lang.CharSequence, java.lang.String)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/time/LocalTime.html" title="Class in java.time">LocalTime</a> <b>parse</b>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html" title="Class in java.lang">CharSequence</a> text, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="Class in java.lang">String</a> pattern)</h4>
+
+                                    <p>Parse text into a <a href="http://docs.oracle.com/javase/8/docs/api/java/time/LocalTime.html" title="Class in java.time">LocalTime</a> using the provided pattern.</p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>text</code> -     String to be parsed to create the date instance</dd>
+                                        
+                                        <dd><code>pattern</code> -  pattern used to parse the text</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>a LocalTime representing the parsed text</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>2.5.0</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>See Also:</b></dt>
+                                        
+                                        <dd><a href="http://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html" title="Class in java.time.format">DateTimeFormatter</a></dd>
+                                        
+                                        <dd><a href="http://docs.oracle.com/javase/8/docs/api/java/time/LocalTime.html#parse(java.lang.CharSequence, java.time.format.DateTimeFormatter)" title="Class in java.time">LocalTime#parse(java.lang.CharSequence, java.time.format.DateTimeFormatter)</a></dd>
+                                        
+                                    </dl>
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="plus(long)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/time/LocalTime.html" title="Class in java.time">LocalTime</a> <b>plus</b>(long seconds)</h4>
+
+                                    <p>Returns a <a href="http://docs.oracle.com/javase/8/docs/api/java/time/LocalTime.html" title="Class in java.time">LocalTime</a> that is <code>seconds</code> seconds after this time.</p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>seconds</code> -  the number of seconds to add</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>a LocalTime</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>2.5.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="previous()"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/time/LocalTime.html" title="Class in java.time">LocalTime</a> <b>previous</b>()</h4>
+
+                                    <p>Returns a <a href="http://docs.oracle.com/javase/8/docs/api/java/time/LocalTime.html" title="Class in java.time">LocalTime</a> that is one second before this time.</p>
+
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>a LocalTime</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>2.5.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="toCalendar()"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Calendar.html" title="Class in java.util">Calendar</a> <b>toCalendar</b>()</h4>
+
+                                    <p>Returns a generally equivalent instance of <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Calendar.html" title="Class in java.util">Calendar</a>. The day-month-year value of the
+returned calendar is today, the time is truncated to milliseconds, and the time zone is the current
+system default.</p>
+
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>a java.util.Calendar</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>2.5.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="toDate()"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Date.html" title="Class in java.util">Date</a> <b>toDate</b>()</h4>
+
+                                    <p>Returns a generally equivalent instance of <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Date.html" title="Class in java.util">Date</a>. The day-month-year value of the
+returned date is today and the time is truncated to milliseconds.</p>
+
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>a java.util.Date</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>2.5.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+
+    <!-- ========= END OF class DATA ========= -->
+
+    <!-- ======= START OF BOTTOM NAVBAR ====== -->
+    <a name="navbar_bottom"><!-- --></a>
+    <a href="#skip-navbar_bottom" title="Skip navigation links"></a>
+
+    <div class="topNav">
+        <ul class="navList" title="Navigation">
+            <li><a href="../../overview-summary.html">Overview</a></li>
+            <li><a href="package-summary.html">Package</a></li>
+            <li class="navBarCell1Rev">Class</li>
+            <li><a href="../../index-all.html">Index</a></li>
+        </ul>
+    </div>
+    <!-- =========== END OF NAVBAR =========== -->
+
+</body>
+</html>

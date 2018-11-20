@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.6.1">
+<title>Adapter Pattern</title>
+<link rel="stylesheet" href="./assets/css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+<h1>Adapter Pattern</h1>
+<div class="details">
+<span id="revnumber">version 3.0.0-alpha-3</span>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_delegation_example">1. Delegation Example</a></li>
+<li><a href="#_inheritance_example">2. Inheritance Example</a></li>
+<li><a href="#_adapting_using_closures">3. Adapting using Closures</a></li>
+<li><a href="#_adapting_using_the_expandometaclass">4. Adapting using the ExpandoMetaClass</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <a href="http://en.wikipedia.org/wiki/Adapter_pattern">Adapter Pattern</a> (sometimes called the wrapper pattern) allows objects satisfying one interface to be used where another type of interface is expected. There are two typical flavours of the pattern: the <em>delegation</em> flavour and the <em>inheritance</em> flavour.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_delegation_example"><a class="anchor" href="#_delegation_example"></a>1. Delegation Example</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Suppose we have the following classes:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class SquarePeg {
+    def width
+}
+
+class RoundPeg {
+    def radius
+}
+
+class RoundHole {
+    def radius
+    def pegFits(peg) {
+        peg.radius &lt;= radius
+    }
+    String toString() { "RoundHole with radius $radius" }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>We can ask the <code>RoundHole</code> class if a <code>RoundPeg</code> fits in it, but if we ask the same question for a <code>SquarePeg</code>, then it will fail because the <code>SquarePeg</code> class doesn&#8217;t have a <code>radius</code> property (i.e. doesn&#8217;t satisfy the required interface).</p>
+</div>
+<div class="paragraph">
+<p>To get around this problem, we can create an adapter to make it appear to have the correct interface. It would look like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class SquarePegAdapter {
+    def peg
+    def getRadius() {
+        Math.sqrt(((peg.width / 2) ** 2) * 2)
+    }
+    String toString() {
+        "SquarePegAdapter with peg width $peg.width (and notional radius $radius)"
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>We can use the adapter like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def hole = new RoundHole(radius: 4.0)
+(4..7).each { w -&gt;
+    def peg = new SquarePegAdapter(peg: new SquarePeg(width: w))
+    if (hole.pegFits(peg)) {
+        println "peg $peg fits in hole $hole"
+    } else {
+        println "peg $peg does not fit in hole $hole"
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Which results in the following output:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>peg SquarePegAdapter with peg width 4 (and notional radius 2.8284271247461903) fits in hole RoundHole with radius 4.0
+peg SquarePegAdapter with peg width 5 (and notional radius 3.5355339059327378) fits in hole RoundHole with radius 4.0
+peg SquarePegAdapter with peg width 6 (and notional radius 4.242640687119285) does not fit in hole RoundHole with radius 4.0
+peg SquarePegAdapter with peg width 7 (and notional radius 4.949747468305833) does not fit in hole RoundHole with radius 4.0</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_inheritance_example"><a class="anchor" href="#_inheritance_example"></a>2. Inheritance Example</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Let&#8217;s consider the same example again using inheritance. First, here are the original classes (unchanged):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class SquarePeg {
+    def width
+}
+
+class RoundPeg {
+    def radius
+}
+
+class RoundHole {
+    def radius
+    def pegFits(peg) {
+        peg.radius &lt;= radius
+    }
+    String toString() { "RoundHole with radius $radius" }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>An adapter using inheritance:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class SquarePegAdapter extends SquarePeg {
+    def getRadius() {
+        Math.sqrt(((width / 2) ** 2) * 2)
+    }
+    String toString() {
+        "SquarePegAdapter with width $width (and notional radius $radius)"
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Using the adapter:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def hole = new RoundHole(radius: 4.0)
+(4..7).each { w -&gt;
+    def peg = new SquarePegAdapter(width: w)
+    if (hole.pegFits(peg)) {
+        println "peg $peg fits in hole $hole"
+    } else {
+        println "peg $peg does not fit in hole $hole"
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The output:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>peg SquarePegAdapter with width 4 (and notional radius 2.8284271247461903) fits in hole RoundHole with radius 4.0
+peg SquarePegAdapter with width 5 (and notional radius 3.5355339059327378) fits in hole RoundHole with radius 4.0
+peg SquarePegAdapter with width 6 (and notional radius 4.242640687119285) does not fit in hole RoundHole with radius 4.0
+peg SquarePegAdapter with width 7 (and notional radius 4.949747468305833) does not fit in hole RoundHole with radius 4.0</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_adapting_using_closures"><a class="anchor" href="#_adapting_using_closures"></a>3. Adapting using Closures</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>As a variation of the previous examples, we could instead define the following interface:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">interface RoundThing {
+    def getRadius()
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>We can then define an adapter as a closure as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def adapter = {
+    p -&gt; [getRadius: { Math.sqrt(((p.width / 2) ** 2) * 2) }] as RoundThing
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And use it like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def peg = new SquarePeg(width: 4)
+if (hole.pegFits(adapter(peg))) {
+    // ... as before
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_adapting_using_the_expandometaclass"><a class="anchor" href="#_adapting_using_the_expandometaclass"></a>4. Adapting using the ExpandoMetaClass</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>As of Groovy 1.1, there is a built-in MetaClass which can automatically add properties and methods dynamically.</p>
+</div>
+<div class="paragraph">
+<p>Here is how the example would work using that feature:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def peg = new SquarePeg(width: 4)
+peg.metaClass.radius = Math.sqrt(((peg.width / 2) ** 2) * 2)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After you create a peg object, you can simply add a property to it on the fly. No need to change the original class and no need for an adapter class.</p>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 3.0.0-alpha-3<br>
+Last updated 2018-06-23 13:44:44 AEST
+</div>
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+<script>prettyPrint()</script>
+</body>
+</html>

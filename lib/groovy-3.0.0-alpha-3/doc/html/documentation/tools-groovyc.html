@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.6.1">
+<title>Compiling Groovy</title>
+<link rel="stylesheet" href="./assets/css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+<h1>Compiling Groovy</h1>
+<div class="details">
+<span id="revnumber">version 3.0.0-alpha-3</span>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#section-groovyc-compiler">1. groovyc, the Groovy compiler</a></li>
+<li><a href="#_ant_task">2. Ant task</a>
+<ul class="sectlevel2">
+<li><a href="#ThegroovycAntTask-groovyc">2.1. <code>&lt;groovyc&gt;</code></a>
+<ul class="sectlevel3">
+<li><a href="#ThegroovycAntTask-Description">2.1.1. Description</a></li>
+<li><a href="#ThegroovycAntTask-Requiredtaskdef">2.1.2. Required taskdef</a></li>
+<li><a href="#ThegroovycAntTask-groovycAttributes">2.1.3. &lt;groovyc&gt; Attributes</a></li>
+<li><a href="#ThegroovycAntTask-groovycNestedElements">2.1.4. &lt;groovyc&gt; Nested Elements</a></li>
+<li><a href="#ThegroovycAntTask-JointCompilation">2.1.5. Joint Compilation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#Gant">3. Gant</a></li>
+<li><a href="#Gradle">4. Gradle</a></li>
+<li><a href="#_maven_integration">5. Maven integration</a>
+<ul class="sectlevel2">
+<li><a href="#_gmaven_and_gmavenplus">5.1. GMaven and GMavenPlus</a>
+<ul class="sectlevel3">
+<li><a href="#section-gmaven">5.1.1. GMaven</a></li>
+<li><a href="#section-gmavenplus">5.1.2. GMavenPlus</a></li>
+<li><a href="#section-gmaven2">5.1.3. GMaven 2</a></li>
+</ul>
+</li>
+<li><a href="#section-groovyeclipse">5.2. The Groovy Eclipse Maven plugin</a></li>
+</ul>
+</li>
+<li><a href="#section-jointcompilation">6. Joint compilation</a></li>
+<li><a href="#section-android">7. Android support</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="section-groovyc-compiler"><a class="anchor" href="#section-groovyc-compiler"></a>1. groovyc, the Groovy compiler</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><code>groovyc</code> is the Groovy compiler command line tool. It allows you to compile Groovy sources into bytecode. It plays
+the same role as <code>javac</code> in the Java world. The easiest way to compile a Groovy script or class is to run the following command:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>groovyc MyClass.groovy</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This will produce a <code>MyClass.class</code> file (as well as other .class files depending on the contents of the source). <code>groovyc</code> supports
+a number of command line switches:</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Short version</th>
+<th class="tableblock halign-left valign-top">Long version</th>
+<th class="tableblock halign-left valign-top">Description</th>
+<th class="tableblock halign-left valign-top">Example</th>
+</tr>
+</thead>
+<tfoot>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">@argfile</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Read options and source files from specified file.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">groovyc @conf/args</p></td>
+</tr>
+</tfoot>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-cp</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-classpath, --classpath</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Specify the compilation classpath. Must be the first argument.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">groovyc -cp lib/dep.jar MyClass.groovy</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--sourcepath</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Directory where to find source files. Not used anymore. Specifying this parameter will have no effect.</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--temp</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Temporary directory for the compiler</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--encoding</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Encoding of the source files</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">groovyc --encoding utf-8 script.groovy</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--help</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Displays help for the command line groovyc tool</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">groovyc --help</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-d</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Specify where to place generated class files.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">groovyc -d target Person.groovy</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-v</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--version</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Displays the compiler version</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">groovyc -v</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-e</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--exception</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Displays the stack trace in case of compilation error</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">groovyc -e script.groovy</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-j</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--jointCompilation*</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enables joint compilation</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">groovyc -j A.groovy B.java</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-b</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--basescript</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Base class name for scripts (must derive from Script)</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-indy</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--indy</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enables invokedynamic support. Requires Java 7+</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">groovyc --indy Person.groovy</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--configscript</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Advanced compiler configuration script</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">groovyc --configscript config/config.groovy src/Person.groovy</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-Jproperty=value</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Properties to be passed to <code>javac</code> if joint compilation is enabled</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">groovyc -j -Jtarget=1.6 -Jsource=1.6 A.groovy B.java</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-Fflag</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Flags to be passed to <code>javac</code> if joint compilation is enabled</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">groovyc -j -Fnowarn A.groovy B.java</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-pa</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--parameters</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Generates metadata for reflection on method parameter names. Requires Java 8+.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">groovyc --parameters Person.groovy</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p><strong>Notes:</strong>
+* for a full description of joint compilation, see <a href="#section-jointcompilation">the joint compilation section</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_ant_task"><a class="anchor" href="#_ant_task"></a>2. Ant task</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="ThegroovycAntTask-groovyc"><a class="anchor" href="#ThegroovycAntTask-groovyc"></a>2.1. <code>&lt;groovyc&gt;</code></h3>
+<div class="sect3">
+<h4 id="ThegroovycAntTask-Description"><a class="anchor" href="#ThegroovycAntTask-Description"></a>2.1.1. Description</h4>
+<div class="paragraph">
+<p>Compiles Groovy source files and, if joint compilation option is used, Java source files.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="ThegroovycAntTask-Requiredtaskdef"><a class="anchor" href="#ThegroovycAntTask-Requiredtaskdef"></a>2.1.2. Required taskdef</h4>
+<div class="paragraph">
+<p>Assuming <code>groovy-all-VERSION.jar</code> is in <em>my.classpath</em> you will need to
+declare this task at some point in the <code>build.xml</code> prior to the <code>groovyc</code>
+task being invoked.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;taskdef name="groovyc"
+         classname="org.codehaus.groovy.ant.Groovyc"
+         classpathref="my.classpath"/&gt;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="ThegroovycAntTask-groovycAttributes"><a class="anchor" href="#ThegroovycAntTask-groovycAttributes"></a>2.1.3. &lt;groovyc&gt; Attributes</h4>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Attribute</th>
+<th class="tableblock halign-left valign-top">Description</th>
+<th class="tableblock halign-left valign-top">Required</th>
+</tr>
+</thead>
+<tfoot>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">parameters</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Generates metadata for reflection on method parameter names on JDK 8 and above. Defaults to false.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+</tr>
+</tfoot>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">srcdir</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Location of the Groovy (and possibly Java) source files.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">destdir</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Location to store the class files.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">classpath</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The classpath to use.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">classpathref</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The classpath to use given as a path references.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">sourcepath</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The sourcepath to use.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">sourcepathref</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The sourcepath to use given as a path reference.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">encoding</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Encoding of source files.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">verbose</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Asks the compiler for verbose output; defaults to no.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">includeAntRuntime</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Whether to include the Ant run-time libraries in the
+classpath; defaults to yes.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">includeJavaRuntime</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Whether to include the default run-time libraries
+from the executing VM in the classpath; defaults to no.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">fork</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Whether to execute groovyc using a spawned instance of the JVM;
+defaults to no.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">memoryInitialSize</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The initial size of the memory for the underlying
+VM, if using fork mode; ignored otherwise. Defaults to the standard VM
+memory setting. (Examples: 83886080, 81920k, or 80m)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">memoryMaximumSize</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The maximum size of the memory for the underlying
+VM, if using fork mode; ignored otherwise. Defaults to the standard VM
+memory setting. (Examples: 83886080, 81920k, or 80m)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">failonerror</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Indicates whether compilation errors will fail the build;
+defaults to true.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">listfiles</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Indicates whether the source files to be compiled will be
+listed; defaults to no.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">stacktrace</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">if true each compile error message will contain a
+stacktrace</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">indy</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enable compilation with the ``invoke dynamic'' support when using
+Groovy 2.0 and beyond and running on JDK 7</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">scriptBaseClass</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sets the base class for Groovy scripts</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">stubdir</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the stub directory into which the Java source stub files should be generated.
+The directory need not exist and will not be deleted automatically - though its contents
+will be cleared unless 'keepStubs' is true. Ignored when forked.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">keepStubs</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the keepStubs flag. Defaults to false. Set to true for debugging.
+Ignored when forked.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">forceLookupUnnamedFiles</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The Groovyc Ant task is frequently used in the context of a build system
+that knows the complete list of source files to be compiled. In such a
+context, it is wasteful for the Groovy compiler to go searching the
+classpath when looking for source files and hence by default the
+Groovyc Ant task calls the compiler in a special mode with such searching
+turned off. If you wish the compiler to search for source files then
+you need to set this flag to true. Defaults to false.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">configscript</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set the configuration file used to customize the compilation configuration.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p><strong>Example:</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;groovyc srcdir="src" destdir="target/classes"&gt;
+&lt;/groovyc&gt;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="ThegroovycAntTask-groovycNestedElements"><a class="anchor" href="#ThegroovycAntTask-groovycNestedElements"></a>2.1.4. &lt;groovyc&gt; Nested Elements</h4>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">element</th>
+<th class="tableblock halign-left valign-top">kind</th>
+<th class="tableblock halign-left valign-top">Required</th>
+<th class="tableblock halign-left valign-top">Replaces Attribute</th>
+</tr>
+</thead>
+<tfoot>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">javac</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">javac task</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">jointCompilationOptions</p></td>
+</tr>
+</tfoot>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">src</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a path structure</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes (unless srcdir is used)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">srcdir</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">classpath</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a path structure</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">classpath</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p><strong>Notes:</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>For path structures see for example
+<a href="http://ant.apache.org/manual/using.html#path" class="bare">http://ant.apache.org/manual/using.html#path</a></p>
+</li>
+<li>
+<p>For usages of the javac task see
+<a href="https://ant.apache.org/manual/Tasks/javac.html" class="bare">https://ant.apache.org/manual/Tasks/javac.html</a></p>
+</li>
+<li>
+<p>The nested javac task behaves more or less as documented for the
+top-level <code>javac</code> task. <code>srcdir</code>, <code>destdir</code>, <code>classpath</code>, <code>encoding</code> for the
+nested <code>javac</code> task are taken from the enclosing <code>groovyc</code> task. If these
+attributes are specified then they are added, they do not replace. In
+fact, you should not attempt to overwrite the destination. Other
+attributes and nested elements are unaffected, for example <code>fork</code>,
+<code>memoryMaximumSize</code>, etc. may be used freely.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="ThegroovycAntTask-JointCompilation"><a class="anchor" href="#ThegroovycAntTask-JointCompilation"></a>2.1.5. Joint Compilation</h4>
+<div class="paragraph">
+<p>Joint compilation is enabled by using an embedded <code>javac</code> element, as shown in
+the following example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;groovyc srcdir="${testSourceDirectory}" destdir="${testClassesDirectory}"&gt;
+  &lt;classpath&gt;
+    &lt;pathelement path="${mainClassesDirectory}"/&gt;
+    &lt;pathelement path="${testClassesDirectory}"/&gt;
+    &lt;path refid="testPath"/&gt;
+  &lt;/classpath&gt;
+  &lt;javac source="1.7" target="1.7" debug="on" /&gt;
+&lt;/groovyc&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>It is rare to specify <code>srcdir</code> and <code>destdir</code>, the nested <code>javac</code> task is provided with the <code>srcdir</code>
+and <code>destdir</code> values from the enclosing <code>groovyc</code> task, and it is invariable
+the right thing to do just to leave this as is.
+To restate: the <code>javac</code> task gets the <code>srcdir</code>, <code>destdir</code> and <code>classpath</code> from
+the enclosing <code>groovyc</code> task.</p>
+</div>
+<div class="paragraph">
+<p>More details about joint compilation can be found in the <a href="#section-jointcompilation">joint compilation</a> section.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="Gant"><a class="anchor" href="#Gant"></a>3. Gant</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><a href="https://github.com/Gant/Gant">Gant</a> is a tool for scripting Ant tasks using Groovy
+instead of XML to specify the logic. As such, it has exactly the same features
+as the Groovyc Ant task.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="Gradle"><a class="anchor" href="#Gradle"></a>4. Gradle</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><a href="http://www.gradle.org/">Gradle</a> is a build tool that allows you to leverage the
+flexibility of <a href="http://ant.apache.org/">Ant</a>, while keeping the simplicity of
+convention over configuration that tools like <a href="http://maven.apache.org/">Maven</a>
+offer. Builds are specified using a Groovy DSL, which offers great flexibility
+and succinctness.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_maven_integration"><a class="anchor" href="#_maven_integration"></a>5. Maven integration</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>There are several approaches to compiling Groovy code in your Maven
+projects. <a href="#section-gmavenplus">GMavenPlus</a> is the
+most flexible and feature rich, but like most Groovy compiler tools, it can
+have difficulties with joint Java-Groovy projects (for the same reason
+<a href="#section-gmaven">GMaven</a> and <a href="#Gradle">Gradle</a> can have issues).
+The <a href="#section-groovyeclipse">Groovy-Eclipse compiler plugin for Maven</a>
+sidesteps the joint compilation issues. Read
+<a href="https://github.com/groovy/groovy-eclipse/wiki/Groovy-Eclipse-Maven-plugin#why-another-groovy-compiler-for-maven-what-about-gmaven">this</a>
+for a deeper discussion of the benefits and disadvantages of the two
+approaches.</p>
+</div>
+<div class="paragraph">
+<p>A third approach is to use Maven’s Ant plugin to compile a groovy
+project. Note that the Ant plugin is bound to the compile and
+test-compile phases of the build in the example below. It will be
+invoked during these phases and the contained tasks will be carried out
+which runs the Groovy compiler over the source and test directories. The
+resulting Java classes will coexist with and be treated like any
+standard Java classes compiled from Java source and will appear no
+different to the JRE, or the JUnit runtime.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"&gt;
+    &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+    &lt;groupId&gt;com.mycomp.MyGroovy&lt;/groupId&gt;
+    &lt;artifactId&gt;MyGroovy&lt;/artifactId&gt;
+    &lt;packaging&gt;jar&lt;/packaging&gt;
+    &lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;
+    &lt;name&gt;Maven Example building a Groovy project&lt;/name&gt;
+    &lt;dependencies&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;junit&lt;/groupId&gt;
+            &lt;artifactId&gt;junit&lt;/artifactId&gt;
+            &lt;version&gt;3.8.1&lt;/version&gt;
+            &lt;scope&gt;test&lt;/scope&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.codehaus.groovy&lt;/groupId&gt;
+            &lt;artifactId&gt;groovy-all&lt;/artifactId&gt;
+            &lt;version&gt;2.5.0&lt;/version&gt;
+            &lt;type&gt;pom&lt;/type&gt; &lt;!-- required JUST since Groovy 2.5.0 --&gt;
+        &lt;/dependency&gt;
+    &lt;/dependencies&gt;
+    &lt;build&gt;
+        &lt;plugins&gt;
+            &lt;plugin&gt;
+                &lt;artifactId&gt;maven-antrun-plugin&lt;/artifactId&gt;
+                &lt;executions&gt;
+                    &lt;execution&gt;
+                        &lt;id&gt;compile&lt;/id&gt;
+                        &lt;phase&gt;compile&lt;/phase&gt;
+                        &lt;configuration&gt;
+                            &lt;tasks&gt;
+                                &lt;mkdir dir="${basedir}/src/main/groovy"/&gt;
+                                &lt;taskdef name="groovyc"
+                                    classname="org.codehaus.groovy.ant.Groovyc"&gt;
+                                    &lt;classpath refid="maven.compile.classpath"/&gt;
+                                &lt;/taskdef&gt;
+                                &lt;mkdir dir="${project.build.outputDirectory}"/&gt;
+                                &lt;groovyc destdir="${project.build.outputDirectory}"
+                                    srcdir="${basedir}/src/main/groovy/" listfiles="true"&gt;
+                                    &lt;classpath refid="maven.compile.classpath"/&gt;
+                                &lt;/groovyc&gt;
+                            &lt;/tasks&gt;
+                        &lt;/configuration&gt;
+                        &lt;goals&gt;
+                            &lt;goal&gt;run&lt;/goal&gt;
+                        &lt;/goals&gt;
+                    &lt;/execution&gt;
+                    &lt;execution&gt;
+                        &lt;id&gt;test-compile&lt;/id&gt;
+                        &lt;phase&gt;test-compile&lt;/phase&gt;
+                        &lt;configuration&gt;
+                            &lt;tasks&gt;
+                                &lt;mkdir dir="${basedir}/src/test/groovy"/&gt;
+                                &lt;taskdef name="groovyc"
+                                    classname="org.codehaus.groovy.ant.Groovyc"&gt;
+                                    &lt;classpath refid="maven.test.classpath"/&gt;
+                                &lt;/taskdef&gt;
+                                &lt;mkdir dir="${project.build.testOutputDirectory}"/&gt;
+                                &lt;groovyc destdir="${project.build.testOutputDirectory}"
+                                    srcdir="${basedir}/src/test/groovy/" listfiles="true"&gt;
+                                    &lt;classpath refid="maven.test.classpath"/&gt;
+                                &lt;/groovyc&gt;
+                            &lt;/tasks&gt;
+                        &lt;/configuration&gt;
+                        &lt;goals&gt;
+                            &lt;goal&gt;run&lt;/goal&gt;
+                        &lt;/goals&gt;
+                    &lt;/execution&gt;
+                &lt;/executions&gt;
+            &lt;/plugin&gt;
+        &lt;/plugins&gt;
+    &lt;/build&gt;
+&lt;/project&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This assumes you have a Maven project setup with <code>groovy</code> subfolders
+as peers to the java src and test subfolders. You can use the <code>java</code>/<code>jar</code>
+archetype to set this up then rename the java folders to groovy or keep
+the java folders and just create groovy peer folders. There exists, also
+a groovy plugin which has not been tested or used in production. After
+defining the build section as in the above example, you can invoke the
+typical Maven build phases normally. For example, <code>mvn test</code> will
+execute the test phase, compiling Groovy source and Groovy test source
+and finally executing the unit tests. If you run <code>mvn jar</code> it will
+execute the jar phase bundling up all of your compiled production
+classes into a jar after all of the unit tests pass. For more detail on
+Maven build phases consult the Maven2 documentation.</p>
+</div>
+<div class="sect2">
+<h3 id="_gmaven_and_gmavenplus"><a class="anchor" href="#_gmaven_and_gmavenplus"></a>5.1. GMaven and GMavenPlus</h3>
+<div class="sect3">
+<h4 id="section-gmaven"><a class="anchor" href="#section-gmaven"></a>5.1.1. GMaven</h4>
+<div class="paragraph">
+<p><a href="https://github.com/groovy/gmaven">GMaven</a> is the original Maven plugin
+for Groovy, supporting both compiling and scripting Groovy.</p>
+</div>
+<div class="paragraph">
+<p><strong>Important:</strong></p>
+</div>
+<div class="paragraph">
+<p>You should be aware that GMaven is <strong>not supported anymore</strong> and can have
+difficulties with <a href="#section-jointcompilation">joint compilation</a>.
+<a href="#section-gmavenplus">GMavenPlus</a> can be a good replacement, but if you
+are having problems with joint compilation, you might consider the
+<a href="#section-groovyeclipse">Groovy Eclipse maven plugin</a>.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="section-gmavenplus"><a class="anchor" href="#section-gmavenplus"></a>5.1.2. GMavenPlus</h4>
+<div class="paragraph">
+<p><a href="https://github.com/groovy/GMavenPlus">GMavenPlus</a> is a rewrite of
+<a href="#section-gmaven">GMaven</a> and is in active development. It supports most of the
+features of GMaven (a couple notable exceptions being
+<a href="http://maven.apache.org/plugin-tools/maven-plugin-tools-java/index.html">mojo Javadoc tags</a>
+and support for older Groovy versions). Its joint compilation uses stubs (which
+means it has the same potential issues as <a href="#section-gmaven">GMaven</a> and <a href="#Gradle">Gradle</a>). The main
+advantages over its predecessor are that it supports recent Groovy versions,
+InvokeDynamic, Groovy on Android, GroovyDoc, and configuration scripts.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="section-gmaven2"><a class="anchor" href="#section-gmaven2"></a>5.1.3. GMaven 2</h4>
+<div class="paragraph">
+<p>Unlike the name might seem to suggest, <a href="http://groovy.github.io/gmaven/">GMaven 2</a>
+is not aimed at replacing <a href="#section-gmaven">GMaven</a>. In fact, it removes the
+non-scripting features of the GMaven plugin. It has not yet had any release and
+appears to be inactive currently.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="section-groovyeclipse"><a class="anchor" href="#section-groovyeclipse"></a>5.2. The Groovy Eclipse Maven plugin</h3>
+<div class="paragraph">
+<p><a href="https://github.com/groovy/groovy-eclipse/wiki/Groovy-Eclipse-Maven-plugin">Groovy-Eclipse</a>
+provides a compiler plugin for Maven. Using the compiler
+plugin, it is possible to compile your maven projects using the
+Groovy-Eclipse compiler. One feature unavailable elsewhere is
+stubless joint compilation.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="section-jointcompilation"><a class="anchor" href="#section-jointcompilation"></a>6. Joint compilation</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Joint compilation means that the Groovy compiler will parse the
+Groovy source files, create stubs for all of them, invoke the Java
+compiler to compile the stubs along with Java sources, and then continue
+compilation in the normal Groovy compiler way. This allows mixing of
+Java and Groovy files without constraint.</p>
+</div>
+<div class="paragraph">
+<p>Joint compilation can be enabled using the <code>-j</code> flag with the command-line compiler,
+or using using a nested tag and all the attributes and further nested tags as required
+for the Ant task.</p>
+</div>
+<div class="paragraph">
+<p>It is important to know that if you don&#8217;t enable joint compilation and try to compile
+Java source files with the Groovy compiler, the Java source files will be compiled as
+if they were Groovy sources. In some situations, this might work since most of the Java
+syntax is compatible with Groovy, but semantics would be different.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="section-android"><a class="anchor" href="#section-android"></a>7. Android support</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>It is possible to write an Android application in Groovy. However this requires a special
+version of the compiler, meaning that you cannot use the regular
+<a href="#section-groovyc-compiler">groovyc tool</a> to target Android bytecode. In particular, Groovy
+provides specific JAR files for Android, which have a classifier of <code>grooid</code>. In order to make
+things easier, a <a href="https://github.com/groovy/groovy-android-gradle-plugin">Gradle plugin</a> adds
+support for the Groovy language in the Android Gradle toolchain.</p>
+</div>
+<div class="paragraph">
+<p>The plugin can be applied like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.1.2'
+        classpath 'org.codehaus.groovy:groovy-android-gradle-plugin:1.0.0'
+    }
+}
+
+apply plugin: 'groovyx.android'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then you will need to add a dependency on the <code>grooid</code> version of the Groovy compiler:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">dependencies {
+    compile 'org.codehaus.groovy:groovy:2.4.7:grooid'
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note that if a Groovy jar does not provide a <code>grooid</code> classifier alternative, then it means
+that the jar is directly compatible with Android. In that case, you can add the dependency directly
+like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">dependencies {
+    compile 'org.codehaus.groovy:groovy:2.4.7:grooid'       // requires the grooid classifier
+    compile ('org.codehaus.groovy:groovy-json:2.4.7') {     // no grooid version available
+        transitive = false                                  // so do not depend on non-grooid version
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note that the <code>transitive=false</code> parameter for <code>groovy-json</code> will let Gradle download the JSON support jar
+without adding a dependency onto the normal jar of Groovy.</p>
+</div>
+<div class="paragraph">
+<p>Please make sure to go to the <a href="https://github.com/groovy/groovy-android-gradle-plugin">plugin homepage</a> in order to
+find the latest documentation and version.</p>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 3.0.0-alpha-3<br>
+Last updated 2018-06-23 13:44:49 AEST
+</div>
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+<script>prettyPrint()</script>
+</body>
+</html>

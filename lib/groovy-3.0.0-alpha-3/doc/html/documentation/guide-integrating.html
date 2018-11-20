@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.6.1">
+<title>Integrating Groovy in a Java application</title>
+<link rel="stylesheet" href="./assets/css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+<h1>Integrating Groovy in a Java application</h1>
+<div class="details">
+<span id="revnumber">version 3.0.0-alpha-3</span>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_groovy_integration_mechanisms">1. Groovy integration mechanisms</a>
+<ul class="sectlevel2">
+<li><a href="#integ-eval">1.1. Eval</a></li>
+<li><a href="#integ-groovyshell">1.2. GroovyShell</a>
+<ul class="sectlevel3">
+<li><a href="#_multiple_sources">1.2.1. Multiple sources</a></li>
+<li><a href="#_sharing_data_between_a_script_and_the_application">1.2.2. Sharing data between a script and the application</a></li>
+<li><a href="#_custom_script_class">1.2.3. Custom script class</a></li>
+</ul>
+</li>
+<li><a href="#groovyclassloader">1.3. GroovyClassLoader</a></li>
+<li><a href="#_groovyscriptengine">1.4. GroovyScriptEngine</a></li>
+<li><a href="#_compilationunit">1.5. CompilationUnit</a></li>
+</ul>
+</li>
+<li><a href="#_bean_scripting_framework">2. Bean Scripting Framework</a>
+<ul class="sectlevel2">
+<li><a href="#_getting_started">2.1. Getting started</a></li>
+<li><a href="#_passing_in_variables">2.2. Passing in variables</a></li>
+<li><a href="#_other_calling_options">2.3. Other calling options</a></li>
+<li><a href="#_access_to_the_scripting_engine">2.4. Access to the scripting engine</a></li>
+</ul>
+</li>
+<li><a href="#jsr223">3. JSR 223 javax.script API</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_groovy_integration_mechanisms"><a class="anchor" href="#_groovy_integration_mechanisms"></a>1. Groovy integration mechanisms</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The Groovy language proposes several ways to integrate itself into applications (Java or even Groovy) at runtime, from
+the most basic, simple code execution to the most complete, integrating caching and compiler customization.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+All the examples written in this section are using Groovy, but the same integration mechanisms can be used from
+Java.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="integ-eval"><a class="anchor" href="#integ-eval"></a>1.1. Eval</h3>
+<div class="paragraph">
+<p>The <code>groovy.util.Eval</code> class is the simplest way to execute Groovy dynamically at runtime. This can be done by calling the <code>me</code>
+method:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import groovy.util.Eval
+
+assert Eval.me('33*3') == 99
+assert Eval.me('"foo".toUpperCase()') == 'FOO'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>Eval</code> supports multiple variants that accept parameters for simple evaluation:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">assert Eval.x(4, '2*x') == 8                <i class="conum" data-value="1"></i><b>(1)</b>
+assert Eval.me('k', 4, '2*k') == 8          <i class="conum" data-value="2"></i><b>(2)</b>
+assert Eval.xy(4, 5, 'x*y') == 20           <i class="conum" data-value="3"></i><b>(3)</b>
+assert Eval.xyz(4, 5, 6, 'x*y+z') == 26     <i class="conum" data-value="4"></i><b>(4)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Simple evaluation with one bound parameter named <code>x</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Same evaluation, with a custom bound parameter named <code>k</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Simple evaluation with two bound parameters named <code>x</code> and <code>y</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Simple evaluation with three bound parameters named <code>x</code>, <code>y</code> and <code>z</code></td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The <code>Eval</code> class makes it very easy to evaluate simple scripts, but doesn&#8217;t scale: there is no caching of the script, and
+it isn&#8217;t meant to evaluate more than one liners.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="integ-groovyshell"><a class="anchor" href="#integ-groovyshell"></a>1.2. GroovyShell</h3>
+<div class="sect3">
+<h4 id="_multiple_sources"><a class="anchor" href="#_multiple_sources"></a>1.2.1. Multiple sources</h4>
+<div class="paragraph">
+<p>The <code>groovy.lang.GroovyShell</code> class is the preferred way to evaluate scripts with the ability to cache the resulting
+script instance. Although the <code>Eval</code> class returns the result of the execution of the compiled script, the <code>GroovyShell</code>
+class offers more options.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def shell = new GroovyShell()                           <i class="conum" data-value="1"></i><b>(1)</b>
+def result = shell.evaluate '3*5'                       <i class="conum" data-value="2"></i><b>(2)</b>
+def result2 = shell.evaluate(new StringReader('3*5'))   <i class="conum" data-value="3"></i><b>(3)</b>
+assert result == result2
+def script = shell.parse '3*5'                          <i class="conum" data-value="4"></i><b>(4)</b>
+assert script instanceof groovy.lang.Script
+assert script.run() == 15                               <i class="conum" data-value="5"></i><b>(5)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>create a new <code>GroovyShell</code> instance</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>can be used as <code>Eval</code> with direct execution of the code</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>can read from multiple sources (<code>String</code>, <code>Reader</code>, <code>File</code>, <code>InputStream</code>)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>can defer execution of the script. <code>parse</code> returns a <code>Script</code> instance</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td><code>Script</code> defines a <code>run</code> method</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_sharing_data_between_a_script_and_the_application"><a class="anchor" href="#_sharing_data_between_a_script_and_the_application"></a>1.2.2. Sharing data between a script and the application</h4>
+<div class="paragraph">
+<p>It is possible to share data between the application and the script using a <code>groovy.lang.Binding</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def sharedData = new Binding()                          <i class="conum" data-value="1"></i><b>(1)</b>
+def shell = new GroovyShell(sharedData)                 <i class="conum" data-value="2"></i><b>(2)</b>
+def now = new Date()
+sharedData.setProperty('text', 'I am shared data!')     <i class="conum" data-value="3"></i><b>(3)</b>
+sharedData.setProperty('date', now)                     <i class="conum" data-value="4"></i><b>(4)</b>
+
+String result = shell.evaluate('"At $date, $text"')     <i class="conum" data-value="5"></i><b>(5)</b>
+
+assert result == "At $now, I am shared data!"</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>create a new <code>Binding</code> that will contain shared data</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>create a <code>GroovyShell</code> using this shared data</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>add a string to the binding</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>add a date to the binding (you are not limited to simple types)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>evaluate the script</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Note that it is also possible to write from the script into the binding:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def sharedData = new Binding()                          <i class="conum" data-value="1"></i><b>(1)</b>
+def shell = new GroovyShell(sharedData)                 <i class="conum" data-value="2"></i><b>(2)</b>
+
+shell.evaluate('foo=123')                               <i class="conum" data-value="3"></i><b>(3)</b>
+
+assert sharedData.getProperty('foo') == 123             <i class="conum" data-value="4"></i><b>(4)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>create a new <code>Binding</code> instance</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>create a new <code>GroovyShell</code> using that shared data</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>use an <strong>undeclared</strong> variable to store the result into the binding</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>read the result from the caller</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>It is important to understand that you need to use an undeclared variable if you want to write into the binding. Using
+<code>def</code> or an <code>explicit</code> type like in the example below would fail because you would then create a <em>local variable</em>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def sharedData = new Binding()
+def shell = new GroovyShell(sharedData)
+
+shell.evaluate('int foo=123')
+
+try {
+    assert sharedData.getProperty('foo')
+} catch (MissingPropertyException e) {
+    println "foo is defined as a local variable"
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+You must be very careful when using shared data in a multithreaded environment. The <code>Binding</code> instance that
+you pass to <code>GroovyShell</code> is <strong>not</strong> thread safe, and shared by all scripts.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>It is possible to work around the shared instance of <code>Binding</code> by leveraging the <code>Script</code> instance which is returned
+by <code>parse</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def shell = new GroovyShell()
+
+def b1 = new Binding(x:3)                       <i class="conum" data-value="1"></i><b>(1)</b>
+def b2 = new Binding(x:4)                       <i class="conum" data-value="2"></i><b>(2)</b>
+def script = shell.parse('x = 2*x')
+script.binding = b1
+script.run()
+script.binding = b2
+script.run()
+assert b1.getProperty('x') == 6
+assert b2.getProperty('x') == 8
+assert b1 != b2</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>will store the <code>x</code> variable inside <code>b1</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>will store the <code>x</code> variable inside <code>b2</code></td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>However, you must be aware that you are still sharing the <strong>same instance</strong> of a script. So this technique cannot be
+used if you have two threads working on the same script. In that case, you must make sure of creating two distinct
+script instances:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def shell = new GroovyShell()
+
+def b1 = new Binding(x:3)
+def b2 = new Binding(x:4)
+def script1 = shell.parse('x = 2*x')            <i class="conum" data-value="1"></i><b>(1)</b>
+def script2 = shell.parse('x = 2*x')            <i class="conum" data-value="2"></i><b>(2)</b>
+assert script1 != script2
+script1.binding = b1                            <i class="conum" data-value="3"></i><b>(3)</b>
+script2.binding = b2                            <i class="conum" data-value="4"></i><b>(4)</b>
+def t1 = Thread.start { script1.run() }         <i class="conum" data-value="5"></i><b>(5)</b>
+def t2 = Thread.start { script2.run() }         <i class="conum" data-value="6"></i><b>(6)</b>
+[t1,t2]*.join()                                 <i class="conum" data-value="7"></i><b>(7)</b>
+assert b1.getProperty('x') == 6
+assert b2.getProperty('x') == 8
+assert b1 != b2</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>create an instance of script for thread 1</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>create an instance of script for thread 2</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>assign first binding to script 1</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>assign second binding to script 2</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>start first script in a separate thread</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>start second script in a separate thread</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td>wait for completion</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>In case you need thread safety like here, it is more advisable to use the <a href="#groovyclassloader">GroovyClassLoader</a>
+directly instead.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_custom_script_class"><a class="anchor" href="#_custom_script_class"></a>1.2.3. Custom script class</h4>
+<div class="paragraph">
+<p>We have seen that the <code>parse</code> method returns an instance of <code>groovy.lang.Script</code>, but it is possible to use a custom
+class, given that it extends <code>Script</code> itself. It can be used to provide additional behavior to the script like in
+the example below:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">abstract class MyScript extends Script {
+    String name
+
+    String greet() {
+        "Hello, $name!"
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The custom class defines a property called <code>name</code> and a new method called <code>greet</code>. This class can be used as the script
+base class by using a custom configuration:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import org.codehaus.groovy.control.CompilerConfiguration
+
+def config = new CompilerConfiguration()                                    <i class="conum" data-value="1"></i><b>(1)</b>
+config.scriptBaseClass = 'MyScript'                                         <i class="conum" data-value="2"></i><b>(2)</b>
+
+def shell = new GroovyShell(this.class.classLoader, new Binding(), config)  <i class="conum" data-value="3"></i><b>(3)</b>
+def script = shell.parse('greet()')                                         <i class="conum" data-value="4"></i><b>(4)</b>
+assert script instanceof MyScript
+script.setName('Michel')
+assert script.run() == 'Hello, Michel!'</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>create a <code>CompilerConfiguration</code> instance</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>instruct it to use <code>MyScript</code> as the base class for scripts</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>then use the compiler configuration when you create the shell</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>the script now has access to the new method <code>greet</code></td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+You are not limited to the sole <em>scriptBaseClass</em> configuration. You can use any of the compiler configuration
+tweaks, including the <a href="#compilation-customizers">compilation customizers</a>.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="groovyclassloader"><a class="anchor" href="#groovyclassloader"></a>1.3. GroovyClassLoader</h3>
+<div class="paragraph">
+<p>In the <a href="#integ-groovyshell">previous section</a>, we have shown that <code>GroovyShell</code> was an easy tool to execute scripts, but
+it makes it complicated to compile anything but scripts. Internally, it makes use of the <code>groovy.lang.GroovyClassLoader</code>,
+which is at the heart of the compilation and loading of classes at runtime.</p>
+</div>
+<div class="paragraph">
+<p>By leveraging the <code>GroovyClassLoader</code> instead of <code>GroovyShell</code>, you will be able to load classes, instead of instances
+of scripts:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import groovy.lang.GroovyClassLoader
+
+def gcl = new GroovyClassLoader()                                           <i class="conum" data-value="1"></i><b>(1)</b>
+def clazz = gcl.parseClass('class Foo { void doIt() { println "ok" } }')    <i class="conum" data-value="2"></i><b>(2)</b>
+assert clazz.name == 'Foo'                                                  <i class="conum" data-value="3"></i><b>(3)</b>
+def o = clazz.newInstance()                                                 <i class="conum" data-value="4"></i><b>(4)</b>
+o.doIt()                                                                    <i class="conum" data-value="5"></i><b>(5)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>create a new <code>GroovyClassLoader</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td><code>parseClass</code> will return an instance of <code>Class</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>you can check that the class which is returns is really the one defined in the script</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>and you can create a new instance of the class, which is not a script</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>then call any method on it</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+A GroovyClassLoader keeps a reference of all the classes it created, so it is easy to create a memory leak. In
+particular, if you execute the same script twice, if it is a String, then you obtain two distinct classes!
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import groovy.lang.GroovyClassLoader
+
+def gcl = new GroovyClassLoader()
+def clazz1 = gcl.parseClass('class Foo { }')                                <i class="conum" data-value="1"></i><b>(1)</b>
+def clazz2 = gcl.parseClass('class Foo { }')                                <i class="conum" data-value="2"></i><b>(2)</b>
+assert clazz1.name == 'Foo'                                                 <i class="conum" data-value="3"></i><b>(3)</b>
+assert clazz2.name == 'Foo'
+assert clazz1 != clazz2                                                     <i class="conum" data-value="4"></i><b>(4)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>dynamically create a class named "Foo"</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>create an identical looking class, using a separate <code>parseClass</code> call</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>make sure both classes have the same name</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>but they are actually different!</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The reason is that a <code>GroovyClassLoader</code> doesn&#8217;t keep track of the source text. If you want to have the same instance,
+then the source <strong>must</strong> be a file, like in this example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def gcl = new GroovyClassLoader()
+def clazz1 = gcl.parseClass(file)                                           <i class="conum" data-value="1"></i><b>(1)</b>
+def clazz2 = gcl.parseClass(new File(file.absolutePath))                    <i class="conum" data-value="2"></i><b>(2)</b>
+assert clazz1.name == 'Foo'                                                 <i class="conum" data-value="3"></i><b>(3)</b>
+assert clazz2.name == 'Foo'
+assert clazz1 == clazz2                                                     <i class="conum" data-value="4"></i><b>(4)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>parse a class from a <code>File</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>parse a class from a distinct file instance, but pointing to the same physical file</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>make sure our classes have the same name</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>but now, they are the same instance</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Using a <code>File</code> as input, the <code>GroovyClassLoader</code> is capable of <strong>caching</strong> the generated class file, which avoids
+creating multiple classes at runtime for the same source.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_groovyscriptengine"><a class="anchor" href="#_groovyscriptengine"></a>1.4. GroovyScriptEngine</h3>
+<div class="paragraph">
+<p>The <code>groovy.util.GroovyScriptEngine</code> class provides a flexible foundation for applications which rely on script
+reloading and script dependencies. While <code>GroovyShell</code> focuses on standalone <code>Script`s and `GroovyClassLoader</code> handles
+dynamic compilation and loading of any Groovy class, the <code>GroovyScriptEngine</code> will add a layer on top of <code>GroovyClassLoader</code>
+to handle both script dependencies and reloading.</p>
+</div>
+<div class="paragraph">
+<p>To illustrate this, we will create a script engine and execute code in an infinite loop. First of all, you need to create
+a directory with the following script inside:</p>
+</div>
+<div class="listingblock">
+<div class="title">ReloadingTest.groovy</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Greeter {
+    String sayHello() {
+        def greet = "Hello, world!"
+        greet
+    }
+}
+
+new Greeter()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>then you can execute this code using a <code>GroovyScriptEngine</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def binding = new Binding()
+def engine = new GroovyScriptEngine([tmpDir.toURI().toURL()] as URL[])          <i class="conum" data-value="1"></i><b>(1)</b>
+
+while (true) {
+    def greeter = engine.run('ReloadingTest.groovy', binding)                   <i class="conum" data-value="2"></i><b>(2)</b>
+    println greeter.sayHello()                                                  <i class="conum" data-value="3"></i><b>(3)</b>
+    Thread.sleep(1000)
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>create a script engine which will look for sources into our source directory</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>execute the script, which will return an instance of <code>Greeter</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>print the greeting message</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>At this point, you should see a message printed every second:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Hello, world!
+Hello, world!
+...</pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Without</strong> interrupting the script execution, now replace the contents of the <code>ReloadingTest</code> file with:</p>
+</div>
+<div class="listingblock">
+<div class="title">ReloadingTest.groovy</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Greeter {
+    String sayHello() {
+        def greet = "Hello, Groovy!"
+        greet
+    }
+}
+
+new Greeter()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And the message should change to:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Hello, world!
+...
+Hello, Groovy!
+Hello, Groovy!
+...</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>But it is also possible to have a dependency on another script. To illustrate this, create the following file into
+the same directory, without interrupting the executing script:</p>
+</div>
+<div class="listingblock">
+<div class="title">Depencency.groovy</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Dependency {
+    String message = 'Hello, dependency 1'
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>and update the <code>ReloadingTest</code> script like this:</p>
+</div>
+<div class="listingblock">
+<div class="title">ReloadingTest.groovy</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import Dependency
+
+class Greeter {
+    String sayHello() {
+        def greet = new Dependency().message
+        greet
+    }
+}
+
+new Greeter()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And this time, the message should change to:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Hello, Groovy!
+...
+Hello, dependency 1!
+Hello, dependency 1!
+...</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And as a last test, you can update the <code>Dependency.groovy</code> file without touching the <code>ReloadingTest</code> file:</p>
+</div>
+<div class="listingblock">
+<div class="title">Depencency.groovy</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Dependency {
+    String message = 'Hello, dependency 2'
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And you should observe that the dependent file was reloaded:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Hello, dependency 1!
+...
+Hello, dependency 2!
+Hello, dependency 2!</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_compilationunit"><a class="anchor" href="#_compilationunit"></a>1.5. CompilationUnit</h3>
+<div class="paragraph">
+<p>Ultimately, it is possible to perform more operations during compilation by relying directly on the
+<code>org.codehaus.groovy.control.CompilationUnit</code> class. This class is responsible for determining the various steps of
+compilation and would let you introduce new steps or even stop compilation at various phases. This is for example how
+stub generation is done, for the joint compiler.</p>
+</div>
+<div class="paragraph">
+<p>However, overriding <code>CompilationUnit</code> is not recommended and should only be done if no other standard solution works.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_bean_scripting_framework"><a class="anchor" href="#_bean_scripting_framework"></a>2. Bean Scripting Framework</h2>
+<div class="sectionbody">
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+The <a href="http://commons.apache.org/proper/commons-bsf/">Bean Scripting Framework</a> is an attempt to create an API
+to allow calling scripting languages from Java. It hasn&#8217;t been updated for long and abandoned in favor of the
+standard <a href="#jsr223">JSR-223</a> API.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The BSF engine for Groovy is implemented by the <code>org.codehaus.groovy.bsf.GroovyEngine</code> class. However, that fact is
+normally hidden away by the BSF APIs. You just treat Groovy like any of the other scripting languages via the BSF
+API.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Since Groovy has its own native support for integration with Java, you only need to worry about BSF if you also
+want to also be able to call other languages, e.g. <a href="http://jruby.org/">JRuby</a> or if you want to remain very
+loosely coupled from your scripting language.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_getting_started"><a class="anchor" href="#_getting_started"></a>2.1. Getting started</h3>
+<div class="paragraph">
+<p>Provided you have Groovy and BSF jars in your classpath, you can use the
+following Java code to run a sample Groovy script:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">String myScript = "println('Hello World')\n  return [1, 2, 3]";
+BSFManager manager = new BSFManager();
+List answer = (List) manager.eval("groovy", "myScript.groovy", 0, 0, myScript);
+assertEquals(3, answer.size());</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_passing_in_variables"><a class="anchor" href="#_passing_in_variables"></a>2.2. Passing in variables</h3>
+<div class="paragraph">
+<p>BSF lets you pass beans between Java and your scripting language. You
+can <em>register</em>/<em>unregister</em> beans which makes them known to BSF. You can
+then use BSF methods to <em>lookup</em> beans as required. Alternatively, you
+can <em>declare</em>/<em>undeclare</em> beans. This will register them but also make
+them available for use directly in your scripting language. This second
+approach is the normal approach used with Groovy. Here is an example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">BSFManager manager = new BSFManager();
+manager.declareBean("xyz", 4, Integer.class);
+Object answer = manager.eval("groovy", "test.groovy", 0, 0, "xyz + 1");
+assertEquals(5, answer);</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_other_calling_options"><a class="anchor" href="#_other_calling_options"></a>2.3. Other calling options</h3>
+<div class="paragraph">
+<p>The previous examples used the <em>eval</em> method. BSF makes multiple methods
+available for your use (see the
+<a href="http://commons.apache.org/proper/commons-bsf/manual.html">BSF documentation</a> for more
+details). One of the other available methods is <em>apply</em>. It allows you
+to define an anonymous function in your scripting language and apply
+that function to arguments. Groovy supports this function using
+closures. Here is an example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">BSFManager manager = new BSFManager();
+Vector&lt;String&gt; ignoreParamNames = null;
+Vector&lt;Integer&gt; args = new Vector&lt;Integer&gt;();
+args.add(2);
+args.add(5);
+args.add(1);
+Integer actual = (Integer) manager.apply("groovy", "applyTest", 0, 0,
+        "def summer = { a, b, c -&gt; a * 100 + b * 10 + c }", ignoreParamNames, args);
+assertEquals(251, actual.intValue());</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_access_to_the_scripting_engine"><a class="anchor" href="#_access_to_the_scripting_engine"></a>2.4. Access to the scripting engine</h3>
+<div class="paragraph">
+<p>Although you don’t normally need it, BSF does provide a hook that lets
+you get directly to the scripting engine. One of the functions which the
+engine can perform is to invoke a single method call on an object. Here
+is an example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">BSFManager manager = new BSFManager();
+BSFEngine bsfEngine = manager.loadScriptingEngine("groovy");
+manager.declareBean("myvar", "hello", String.class);
+Object myvar = manager.lookupBean("myvar");
+String result = (String) bsfEngine.call(myvar, "reverse", new Object[0]);
+assertEquals("olleh", result);</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="jsr223"><a class="anchor" href="#jsr223"></a>3. JSR 223 javax.script API</h2>
+<div class="sectionbody">
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+JSR-223 is a standard API for calling scripting frameworks in Java. It is available since Java 6 and aims at
+providing a common framework for calling multiple languages from Java. Groovy provides its own richer integration mechanisms,
+and if you don&#8217;t plan to use multiple languages in the same application, it is recommended that you use the Groovy
+integration mechanisms instead of the limited JSR-223 API.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Here is how you need to initialize the JSR-223 engine to talk to Groovy from Java:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
+...
+ScriptEngineManager factory = new ScriptEngineManager();
+ScriptEngine engine = factory.getEngineByName("groovy");</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then you can execute Groovy scripts easily:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Integer sum = (Integer) engine.eval("(1..10).sum()");
+assertEquals(new Integer(55), sum);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>It is also possible to share variables:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">engine.put("first", "HELLO");
+engine.put("second", "world");
+String result = (String) engine.eval("first.toLowerCase() + ' ' + second.toUpperCase()");
+assertEquals("hello WORLD", result);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This next example illustrates calling an invokable function:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">import javax.script.Invocable;
+...
+ScriptEngineManager factory = new ScriptEngineManager();
+ScriptEngine engine = factory.getEngineByName("groovy");
+String fact = "def factorial(n) { n == 1 ? 1 : n * factorial(n - 1) }";
+engine.eval(fact);
+Invocable inv = (Invocable) engine;
+Object[] params = {5};
+Object result = inv.invokeFunction("factorial", params);
+assertEquals(new Integer(120), result);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The engine keeps per default hard references to the script functions. To
+change this you should set a engine level scoped attribute to the script
+context of the name <code>#jsr223.groovy.engine.keep.globals</code> with a
+String being <code>phantom</code> to use phantom references, <code>weak</code> to use weak
+references or <code>soft</code> to use soft references - casing is ignored. Any
+other string will cause the use of hard references.</p>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 3.0.0-alpha-3<br>
+Last updated 2018-06-23 13:44:38 AEST
+</div>
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+<script>prettyPrint()</script>
+</body>
+</html>

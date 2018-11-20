@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.6.1">
+<title>Working with IO</title>
+<link rel="stylesheet" href="./assets/css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+<h1>Working with IO</h1>
+<div class="details">
+<span id="revnumber">version 3.0.0-alpha-3</span>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_reading_files">1. Reading files</a></li>
+<li><a href="#_writing_files">2. Writing files</a></li>
+<li><a href="#_traversing_file_trees">3. Traversing file trees</a></li>
+<li><a href="#_data_and_objects">4. Data and objects</a></li>
+<li><a href="#process-management">5. Executing External Processes</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Groovy provides a number of
+<a href="gdk.html">helper methods</a> for working
+with I/O. While you could use standard Java code in Groovy to deal with those,
+Groovy provides much more convenient ways to handle files, streams, readers, &#8230;&#8203;</p>
+</div>
+<div class="paragraph">
+<p>In particular, you should take a look at methods added to:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>the <code>java.io.File</code> class : <a href="http://docs.groovy-lang.org/latest/html/groovy-jdk/java/io/File.html" class="bare">http://docs.groovy-lang.org/latest/html/groovy-jdk/java/io/File.html</a></p>
+</li>
+<li>
+<p>the <code>java.io.InputStream</code> class: <a href="http://docs.groovy-lang.org/latest/html/groovy-jdk/java/io/InputStream.html" class="bare">http://docs.groovy-lang.org/latest/html/groovy-jdk/java/io/InputStream.html</a></p>
+</li>
+<li>
+<p>the <code>java.io.OutputStream</code> class: <a href="http://docs.groovy-lang.org/latest/html/groovy-jdk/java/io/OutputStream.html" class="bare">http://docs.groovy-lang.org/latest/html/groovy-jdk/java/io/OutputStream.html</a></p>
+</li>
+<li>
+<p>the <code>java.io.Reader</code> class: <a href="http://docs.groovy-lang.org/latest/html/groovy-jdk/java/io/Reader.html" class="bare">http://docs.groovy-lang.org/latest/html/groovy-jdk/java/io/Reader.html</a></p>
+</li>
+<li>
+<p>the <code>java.io.Writer</code> class: <a href="http://docs.groovy-lang.org/latest/html/groovy-jdk/java/io/Writer.html" class="bare">http://docs.groovy-lang.org/latest/html/groovy-jdk/java/io/Writer.html</a></p>
+</li>
+<li>
+<p>the <code>java.nio.file.Path</code> class: <a href="http://docs.groovy-lang.org/latest/html/groovy-jdk/java/nio/file/Path.html" class="bare">http://docs.groovy-lang.org/latest/html/groovy-jdk/java/nio/file/Path.html</a></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The following section focuses on sample idiomatic constructs using helper methods available above but is not meant
+to be a complete description of all available methods. For that, please read the <a href="gdk.html">GDK API</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_reading_files"><a class="anchor" href="#_reading_files"></a>1. Reading files</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>As a first example, let&#8217;s see how you would print all lines of a text file in Groovy:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">new File(baseDir, 'haiku.txt').eachLine { line -&gt;
+    println line
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>eachLine</code> method is a method added to the <code>File</code> class automatically by Groovy and has many variants, for example
+if you need to know the line number, you can use this variant:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">new File(baseDir, 'haiku.txt').eachLine { line, nb -&gt;
+    println "Line $nb: $line"
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If for whatever reason the an exception is thrown in the <code>eachLine</code> body, the method makes sure that the resource
+is properly closed. This is true for all I/O resource methods that Groovy adds.</p>
+</div>
+<div class="paragraph">
+<p>For example in some cases you will prefer to use a <code>Reader</code>, but still benefit from the automatic resource management
+from Groovy. In the next example, the reader <strong>will</strong> be closed even if the exception occurs:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def count = 0, MAXSIZE = 3
+new File(baseDir,"haiku.txt").withReader { reader -&gt;
+    while (reader.readLine()) {
+        if (++count &gt; MAXSIZE) {
+            throw new RuntimeException('Haiku should only have 3 verses')
+        }
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Should you need to collect the lines of a text file into a list, you can do:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def list = new File(baseDir, 'haiku.txt').collect {it}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Or you can even leverage the <code>as</code> operator to get the contents of the file into an array of lines:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def array = new File(baseDir, 'haiku.txt') as String[]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>How many times did you have to get the contents of a file into a <code>byte[]</code> and how much code does it require? Groovy
+makes it very easy actually:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">byte[] contents = file.bytes</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Working with I/O is not limited to dealing with files. In fact, a lot of operations rely on input/output streams,
+hence why Groovy adds a lot of support methods to those, as you can see in the
+<a href="http://docs.groovy-lang.org/latest/html/groovy-jdk/java/io/InputStream.html">documentation</a>.</p>
+</div>
+<div class="paragraph">
+<p>As an example, you can obtain an <code>InputStream</code> from a <code>File</code> very easily:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def is = new File(baseDir,'haiku.txt').newInputStream()
+// do something ...
+is.close()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>However you can see that it requires you to deal with closing the inputstream. In Groovy it is in general a better
+idea to use the <code>withInputStream</code> idiom that will take care of that for you:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">new File(baseDir,'haiku.txt').withInputStream { stream -&gt;
+    // do something ...
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_writing_files"><a class="anchor" href="#_writing_files"></a>2. Writing files</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Of course in some cases you won&#8217;t want to read but write a file. One of the options is to use a <code>Writer</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">new File(baseDir,'haiku.txt').withWriter('utf-8') { writer -&gt;
+    writer.writeLine 'Into the ancient pond'
+    writer.writeLine 'A frog jumps'
+    writer.writeLine 'Water’s sound!'
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>But for such a simple example, using the <code>&lt;&lt;</code> operator would have been enough:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">new File(baseDir,'haiku.txt') &lt;&lt; '''Into the ancient pond
+A frog jumps
+Water’s sound!'''</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Of course we do not always deal with text contents, so you could use the <code>Writer</code> or directly write bytes as in
+this example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">file.bytes = [66,22,11]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Of course you can also directly deal with output streams. For example, here is how you would create an output
+stream to write into a file:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def os = new File(baseDir,'data.bin').newOutputStream()
+// do something ...
+os.close()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>However you can see that it requires you to deal with closing the output stream. Again it is in general a better
+idea to use the <code>withOutputStream</code> idiom that will handle the exceptions and close the stream in any case:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">new File(baseDir,'data.bin').withOutputStream { stream -&gt;
+    // do something ...
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_traversing_file_trees"><a class="anchor" href="#_traversing_file_trees"></a>3. Traversing file trees</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In scripting contexts it is a common task to traverse a file tree in order to find some specific files and do
+something with them. Groovy provides multiple methods to do this. For example you can perform something on all files
+of a directory:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">dir.eachFile { file -&gt;                      <i class="conum" data-value="1"></i><b>(1)</b>
+    println file.name
+}
+dir.eachFileMatch(~/.*\.txt/) { file -&gt;     <i class="conum" data-value="2"></i><b>(2)</b>
+    println file.name
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>executes the closure code on each file found in the directory</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>executes the closure code on files in the directory matching the specified pattern</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Often you will have to deal with a deeper hierarchy of files, in which case you can use <code>eachFileRecurse</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">dir.eachFileRecurse { file -&gt;                      <i class="conum" data-value="1"></i><b>(1)</b>
+    println file.name
+}
+
+dir.eachFileRecurse(FileType.FILES) { file -&gt;      <i class="conum" data-value="2"></i><b>(2)</b>
+    println file.name
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>executes the closure code on each file or directory found in the directory, recursively</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>executes the closure code only on files, but recursively</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>For more complex traversal techniques you can use the <code>traverse</code> method, which requires you to set a special flag
+indicating what to do with the traversal:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">dir.traverse { file -&gt;
+    if (file.directory &amp;&amp; file.name=='bin') {
+        FileVisitResult.TERMINATE                   <i class="conum" data-value="1"></i><b>(1)</b>
+    } else {
+        println file.name
+        FileVisitResult.CONTINUE                    <i class="conum" data-value="2"></i><b>(2)</b>
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>if the current file is a directory and its name is <code>bin</code>, stop the traversal</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>otherwise print the file name and continue</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_data_and_objects"><a class="anchor" href="#_data_and_objects"></a>4. Data and objects</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In Java it is not uncommon to serialize and deserialize data using the <code>java.io.DataOutputStream</code> and
+<code>java.io.DataInputStream</code> classes respectively. Groovy will make it even easier to deal with them. For example, you could
+serialize data into a file and deserialize it using this code:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">boolean b = true
+String message = 'Hello from Groovy'
+// Serialize data into a file
+file.withDataOutputStream { out -&gt;
+    out.writeBoolean(b)
+    out.writeUTF(message)
+}
+// ...
+// Then read it back
+file.withDataInputStream { input -&gt;
+    assert input.readBoolean() == b
+    assert input.readUTF() == message
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And similarily, if the data you want to serialize implements the <code>Serializable</code> interface, you can proceed with
+an object output stream, as illustrated here:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Person p = new Person(name:'Bob', age:76)
+// Serialize data into a file
+file.withObjectOutputStream { out -&gt;
+    out.writeObject(p)
+}
+// ...
+// Then read it back
+file.withObjectInputStream { input -&gt;
+    def p2 = input.readObject()
+    assert p2.name == p.name
+    assert p2.age == p.age
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="process-management"><a class="anchor" href="#process-management"></a>5. Executing External Processes</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The previous section described how easy it was to deal with files, readers or streams in Groovy. However in domains
+like system administration or devops it is often required to communicate with external processes.</p>
+</div>
+<div class="paragraph">
+<p>Groovy provides a simple way to execute command line processes. Simply
+write the command line as a string and call the <code>execute()</code> method.
+E.g., on a *nix machine (or a windows machine with appropriate *nix
+commands installed), you can execute this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def process = "ls -l".execute()             <i class="conum" data-value="1"></i><b>(1)</b>
+println "Found text ${process.text}"        <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>executes the <code>ls</code> command in an external process</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>consume the output of the command and retrieve the text</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The <code>execute()</code> method returns a <code>java.lang.Process</code> instance which will
+subsequently allow the in/out/err streams to be processed and the exit
+value from the process to be inspected etc.</p>
+</div>
+<div class="paragraph">
+<p>e.g. here is the same command as above but we will now process the
+resulting stream a line at a time:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def process = "ls -l".execute()             <i class="conum" data-value="1"></i><b>(1)</b>
+process.in.eachLine { line -&gt;               <i class="conum" data-value="2"></i><b>(2)</b>
+    println line                            <i class="conum" data-value="3"></i><b>(3)</b>
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>executes the <code>ls</code> command in an external process</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>for each line of the input stream of the process</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>print the line</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>It is worth noting that <code>in</code> corresponds to an input stream to the standard output of the command. <code>out</code> will refer
+to a stream where you can send data to the process (its standard input).</p>
+</div>
+<div class="paragraph">
+<p>Remember that many commands are shell built-ins and need special
+handling. So if you want a listing of files in a directory on a Windows
+machine and write:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def process = "dir".execute()
+println "${process.text}"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>you will receive an <code>IOException</code> saying  <em>Cannot run program "dir":
+CreateProcess error=2, The system cannot find the file specified.</em></p>
+</div>
+<div class="paragraph">
+<p>This is because <code>dir</code> is built-in to the Windows shell (<code>cmd.exe</code>) and
+can’t be run as a simple executable. Instead, you will need to write:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def process = "cmd /c dir".execute()
+println "${process.text}"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Also, because this functionality currently makes use of
+<code>java.lang.Process</code> undercover, the deficiencies of that class
+must be taken into consideration. In particular, the javadoc
+for this class says:</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Because some native platforms only provide limited buffer size for
+standard input and output streams, failure to promptly write the input
+stream or read the output stream of the subprocess may cause the
+subprocess to block, and even deadlock</p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p>Because of this, Groovy provides some additional helper methods which
+make stream handling for processes easier.</p>
+</div>
+<div class="paragraph">
+<p>Here is how to gobble all of the output (including the error stream
+output) from your process:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def p = "rm -f foo.tmp".execute([], tmpDir)
+p.consumeProcessOutput()
+p.waitFor()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>There are also variations of <code>consumeProcessOutput</code> that make use of <code>StringBuffer</code>, <code>InputStream</code>,
+<code>OutputStream</code> etc&#8230;&#8203; For a complete list, please read the
+<a href="http://docs.groovy-lang.org/latest/html/groovy-jdk/java/lang/Process.html">GDK API for java.lang.Process</a></p>
+</div>
+<div class="paragraph">
+<p>In addition, these is a <code>pipeTo</code> command (mapped to <code>|</code>
+to allow overloading) which lets the output stream of one process be fed
+into the input stream of another process.</p>
+</div>
+<div class="paragraph">
+<p>Here are some examples of use:</p>
+</div>
+<div class="listingblock">
+<div class="title">Pipes in action</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">proc1 = 'ls'.execute()
+proc2 = 'tr -d o'.execute()
+proc3 = 'tr -d e'.execute()
+proc4 = 'tr -d i'.execute()
+proc1 | proc2 | proc3 | proc4
+proc4.waitFor()
+if (proc4.exitValue()) {
+    println proc4.err.text
+} else {
+    println proc4.text
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Consuming errors</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def sout = new StringBuilder()
+def serr = new StringBuilder()
+proc2 = 'tr -d o'.execute()
+proc3 = 'tr -d e'.execute()
+proc4 = 'tr -d i'.execute()
+proc4.consumeProcessOutput(sout, serr)
+proc2 | proc3 | proc4
+[proc2, proc3].each { it.consumeProcessErrorStream(serr) }
+proc2.withWriter { writer -&gt;
+    writer &lt;&lt; 'testfile.groovy'
+}
+proc4.waitForOrKill(1000)
+println "Standard output: $sout"
+println "Standard error: $serr"</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 3.0.0-alpha-3<br>
+Last updated 2018-06-23 13:44:39 AEST
+</div>
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+<script>prettyPrint()</script>
+</body>
+</html>

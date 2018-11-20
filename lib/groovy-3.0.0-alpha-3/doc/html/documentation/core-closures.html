@@ -1,0 +1,1336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.6.1">
+<title>Closures</title>
+<link rel="stylesheet" href="./assets/css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+<h1>Closures</h1>
+<div class="details">
+<span id="revnumber">version 3.0.0-alpha-3</span>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_syntax">1. Syntax</a>
+<ul class="sectlevel2">
+<li><a href="#_defining_a_closure">1.1. Defining a closure</a></li>
+<li><a href="#closure-as-object">1.2. Closures as an object</a></li>
+<li><a href="#_calling_a_closure">1.3. Calling a closure</a></li>
+</ul>
+</li>
+<li><a href="#_parameters">2. Parameters</a>
+<ul class="sectlevel2">
+<li><a href="#_normal_parameters">2.1. Normal parameters</a></li>
+<li><a href="#implicit-it">2.2. Implicit parameter</a></li>
+<li><a href="#_varargs">2.3. Varargs</a></li>
+</ul>
+</li>
+<li><a href="#_delegation_strategy">3. Delegation strategy</a>
+<ul class="sectlevel2">
+<li><a href="#_groovy_closures_vs_lambda_expressions">3.1. Groovy closures vs lambda expressions</a></li>
+<li><a href="#closure-owner">3.2. Owner, delegate and this</a>
+<ul class="sectlevel3">
+<li><a href="#closure-this">3.2.1. The meaning of this</a></li>
+<li><a href="#_owner_of_a_closure">3.2.2. Owner of a closure</a></li>
+<li><a href="#_delegate_of_a_closure">3.2.3. Delegate of a closure</a></li>
+<li><a href="#_delegation_strategy_2">3.2.4. Delegation strategy</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_closures_in_gstrings">4. Closures in GStrings</a></li>
+<li><a href="#_closure_coercion">5. Closure coercion</a></li>
+<li><a href="#_functional_programming">6. Functional programming</a>
+<ul class="sectlevel2">
+<li><a href="#_currying">6.1. Currying</a>
+<ul class="sectlevel3">
+<li><a href="#_left_currying">6.1.1. Left currying</a></li>
+<li><a href="#_right_currying">6.1.2. Right currying</a></li>
+<li><a href="#_index_based_currying">6.1.3. Index based currying</a></li>
+</ul>
+</li>
+<li><a href="#_memoization">6.2. Memoization</a></li>
+<li><a href="#_composition">6.3. Composition</a></li>
+<li><a href="#_trampoline">6.4. Trampoline</a></li>
+<li><a href="#_method_pointers">6.5. Method pointers</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>This chapter covers Groovy Closures. A closure in Groovy is an open, anonymous, block of code that can take arguments,
+return a value and be assigned to a variable. A closure may reference variables declared in its surrounding scope. In
+opposition to the formal definition of a closure, <code>Closure</code> in the Groovy language can also contain free variables which
+are defined outside of its surrounding scope. While breaking the formal concept of a closure, it offers a variety of
+advantages which are described in this chapter.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_syntax"><a class="anchor" href="#_syntax"></a>1. Syntax</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_defining_a_closure"><a class="anchor" href="#_defining_a_closure"></a>1.1. Defining a closure</h3>
+<div class="paragraph">
+<p>A closure definition follows this syntax:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">{ [closureParameters -&gt; ] statements }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Where <code>[closureParameters-&gt;]</code> is an optional comma-delimited list of
+parameters, and statements are 0 or more Groovy statements. The parameters
+look similar to a method parameter list, and these parameters may be
+typed or untyped.</p>
+</div>
+<div class="paragraph">
+<p>When a parameter list is specified, the <code>-&gt;</code> character
+is required and serves to separate the arguments from the closure body.
+The <em>statements</em> portion consists of 0, 1, or many Groovy statements.</p>
+</div>
+<div class="paragraph">
+<p>Some examples of valid closure definitions:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">{ item++ }                                          <i class="conum" data-value="1"></i><b>(1)</b>
+
+{ -&gt; item++ }                                       <i class="conum" data-value="2"></i><b>(2)</b>
+
+{ println it }                                      <i class="conum" data-value="3"></i><b>(3)</b>
+
+{ it -&gt; println it }                                <i class="conum" data-value="4"></i><b>(4)</b>
+
+{ name -&gt; println name }                            <i class="conum" data-value="5"></i><b>(5)</b>
+
+{ String x, int y -&gt;                                <i class="conum" data-value="6"></i><b>(6)</b>
+    println "hey ${x} the value is ${y}"
+}
+
+{ reader -&gt;                                         <i class="conum" data-value="7"></i><b>(7)</b>
+    def line = reader.readLine()
+    line.trim()
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>A closure referencing a variable named <code>item</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>It is possible to explicitly separate closure parameters from code by adding an arrow (<code>-&gt;</code>)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>A closure using an implicit parameter (<code>it</code>)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>An alternative version where <code>it</code> is an explicit parameter</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>In that case it is often better to use an explicit name for the parameter</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>A closure accepting two typed parameters</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td>A closure can contain multiple statements</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="closure-as-object"><a class="anchor" href="#closure-as-object"></a>1.2. Closures as an object</h3>
+<div class="paragraph">
+<p>A closure is an instance of the <code>groovy.lang.Closure</code> class, making it assignable to a variable or a field as any
+other variable, despite being a block of code:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def listener = { e -&gt; println "Clicked on $e.source" }      <i class="conum" data-value="1"></i><b>(1)</b>
+assert listener instanceof Closure
+Closure callback = { println 'Done!' }                      <i class="conum" data-value="2"></i><b>(2)</b>
+Closure&lt;Boolean&gt; isTextFile = {
+    File it -&gt; it.name.endsWith('.txt')                     <i class="conum" data-value="3"></i><b>(3)</b>
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>You can assign a closure to a variable, and it is an instance of <code>groovy.lang.Closure</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>If not using <code>def</code>, you can assign a closure to a variable of type <code>groovy.lang.Closure</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Optionally, you can specify the return type of the closure by using the generic type of <code>groovy.lang.Closure</code></td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_calling_a_closure"><a class="anchor" href="#_calling_a_closure"></a>1.3. Calling a closure</h3>
+<div class="paragraph">
+<p>A closure, as an anonymous block of code, can be called like any other method. If you define a closure which takes
+no argument like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def code = { 123 }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then the code inside the closure will only be executed when you <em>call</em> the closure, which can be done by using the
+variable as if it was a regular method:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">assert code() == 123</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Alternatively, you can be explicit and use the <code>call</code> method:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">assert code.call() == 123</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The principle is the same if the closure accepts arguments:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def isOdd = { int i -&gt; i%2 != 0 }                           <i class="conum" data-value="1"></i><b>(1)</b>
+assert isOdd(3) == true                                     <i class="conum" data-value="2"></i><b>(2)</b>
+assert isOdd.call(2) == false                               <i class="conum" data-value="3"></i><b>(3)</b>
+
+def isEven = { it%2 == 0 }                                  <i class="conum" data-value="4"></i><b>(4)</b>
+assert isEven(3) == false                                   <i class="conum" data-value="5"></i><b>(5)</b>
+assert isEven.call(2) == true                               <i class="conum" data-value="6"></i><b>(6)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>define a closure which accepts an <code>int</code> as a parameter</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>it can be called directly</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>or using the <code>call</code> method</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>same goes for a closure with an implicit argument (<code>it</code>)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>which can be called directly using <code>(arg)</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>or using <code>call</code></td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Unlike a method, a closure <strong>always</strong> returns a value when called. The next section discusses how to declare closure arguments, when to use them and what is the <a href="#implicit-it">implicit
+"it" parameter</a>.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_parameters"><a class="anchor" href="#_parameters"></a>2. Parameters</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_normal_parameters"><a class="anchor" href="#_normal_parameters"></a>2.1. Normal parameters</h3>
+<div class="paragraph">
+<p>Parameters of closures follow the same principle as parameters of regular methods:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>an optional type</p>
+</li>
+<li>
+<p>a name</p>
+</li>
+<li>
+<p>an optional default value</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Parameters are separated with commas:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def closureWithOneArg = { str -&gt; str.toUpperCase() }
+assert closureWithOneArg('groovy') == 'GROOVY'
+
+def closureWithOneArgAndExplicitType = { String str -&gt; str.toUpperCase() }
+assert closureWithOneArgAndExplicitType('groovy') == 'GROOVY'
+
+def closureWithTwoArgs = { a,b -&gt; a+b }
+assert closureWithTwoArgs(1,2) == 3
+
+def closureWithTwoArgsAndExplicitTypes = { int a, int b -&gt; a+b }
+assert closureWithTwoArgsAndExplicitTypes(1,2) == 3
+
+def closureWithTwoArgsAndOptionalTypes = { a, int b -&gt; a+b }
+assert closureWithTwoArgsAndOptionalTypes(1,2) == 3
+
+def closureWithTwoArgAndDefaultValue = { int a, int b=2 -&gt; a+b }
+assert closureWithTwoArgAndDefaultValue(1) == 3</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="implicit-it"><a class="anchor" href="#implicit-it"></a>2.2. Implicit parameter</h3>
+<div class="paragraph">
+<p>When a closure does not explicitly define a parameter list (using <code>-&gt;</code>), a closure <strong>always</strong> defines an implicit
+parameter, named <code>it</code>. This means that this code:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def greeting = { "Hello, $it!" }
+assert greeting('Patrick') == 'Hello, Patrick!'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>is stricly equivalent to this one:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def greeting = { it -&gt; "Hello, $it!" }
+assert greeting('Patrick') == 'Hello, Patrick!'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you want to declare a closure which accepts no argument and must be restricted to calls without arguments,
+then you <strong>must</strong> declare it with an explicit empty argument list:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def magicNumber = { -&gt; 42 }
+
+// this call will fail because the closure doesn't accept any argument
+magicNumber(11)</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_varargs"><a class="anchor" href="#_varargs"></a>2.3. Varargs</h3>
+<div class="paragraph">
+<p>It is possible for a closure to declare variable arguments like any other method. <em>Vargs</em> methods are methods that
+can accept a variable number of arguments if the last parameter is of variable length (or an array) like in the next
+examples:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def concat1 = { String... args -&gt; args.join('') }           <i class="conum" data-value="1"></i><b>(1)</b>
+assert concat1('abc','def') == 'abcdef'                     <i class="conum" data-value="2"></i><b>(2)</b>
+def concat2 = { String[] args -&gt; args.join('') }            <i class="conum" data-value="3"></i><b>(3)</b>
+assert concat2('abc', 'def') == 'abcdef'
+
+def multiConcat = { int n, String... args -&gt;                <i class="conum" data-value="4"></i><b>(4)</b>
+    args.join('')*n
+}
+assert multiConcat(2, 'abc','def') == 'abcdefabcdef'</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>A closure accepting a variable number of strings as first parameter</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>It may be called using any number of arguments <strong>without</strong> having to explicitly wrap them into an array</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>The same behavior is directly available if the <em>args</em> parameter is declared as an array</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>As long as the <strong>last</strong> parameter is an array or an explicit vargs type</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_delegation_strategy"><a class="anchor" href="#_delegation_strategy"></a>3. Delegation strategy</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_groovy_closures_vs_lambda_expressions"><a class="anchor" href="#_groovy_closures_vs_lambda_expressions"></a>3.1. Groovy closures vs lambda expressions</h3>
+<div class="paragraph">
+<p>Groovy defines closures as <a href="#closure-as-object">instances of the Closure class</a>. It makes it very different from
+<a href="http://docs.oracle.com/javase/tutorial/java/javaOO/lambdaexpressions.html">lambda expressions in Java 8</a>. Delegation is a
+key concept in Groovy closures which has no equivalent in lambdas. The ability to <em>change the delegate</em> or <em>change the
+delegation strategy</em> of closures make it possible to design beautiful domain specific languages (DSLs) in Groovy.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="closure-owner"><a class="anchor" href="#closure-owner"></a>3.2. Owner, delegate and this</h3>
+<div class="paragraph">
+<p>To understand the concept of delegate, we must first explain the meaning of <code>this</code> inside a closure. A closure actually
+defines 3 distinct things:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>this</code> corresponds to the <em>enclosing class</em> where the closure is defined</p>
+</li>
+<li>
+<p><code>owner</code> corresponds to the <em>enclosing object</em> where the closure is defined, which may be either a class or a closure</p>
+</li>
+<li>
+<p><code>delegate</code> corresponds to a third party object where methods calls or properties are resolved whenever the receiver of
+the message is not defined</p>
+</li>
+</ul>
+</div>
+<div class="sect3">
+<h4 id="closure-this"><a class="anchor" href="#closure-this"></a>3.2.1. The meaning of this</h4>
+<div class="paragraph">
+<p>In a closure, calling <code>getThisObject</code> will return the enclosing class where the closure is defined. It is equivalent to
+using an explicit <code>this</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Enclosing {
+    void run() {
+        def whatIsThisObject = { getThisObject() }          <i class="conum" data-value="1"></i><b>(1)</b>
+        assert whatIsThisObject() == this                   <i class="conum" data-value="2"></i><b>(2)</b>
+        def whatIsThis = { this }                           <i class="conum" data-value="3"></i><b>(3)</b>
+        assert whatIsThis() == this                         <i class="conum" data-value="4"></i><b>(4)</b>
+    }
+}
+class EnclosedInInnerClass {
+    class Inner {
+        Closure cl = { this }                               <i class="conum" data-value="5"></i><b>(5)</b>
+    }
+    void run() {
+        def inner = new Inner()
+        assert inner.cl() == inner                          <i class="conum" data-value="6"></i><b>(6)</b>
+    }
+}
+class NestedClosures {
+    void run() {
+        def nestedClosures = {
+            def cl = { this }                               <i class="conum" data-value="7"></i><b>(7)</b>
+            cl()
+        }
+        assert nestedClosures() == this                     <i class="conum" data-value="8"></i><b>(8)</b>
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>a closure is defined inside the <code>Enclosing</code> class, and returns <code>getThisObject</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>calling the closure will return the instance of <code>Enclosing</code> where the the closure is defined</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>in general, you will just want to use the shortcut <code>this</code> notation</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>and it returns <strong>exactly</strong> the same object</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>if the closure is defined in a inner class</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td><code>this</code> in the closure <strong>will</strong> return the inner class, not the top-level one</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td>in case of nested closures, like here <code>cl</code> being defined inside the scope of <code>nestedClosures</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="8"></i><b>8</b></td>
+<td>then <code>this</code> corresponds to the closest outer class, not the enclosing closure!</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>It is of course possible to call methods from the enclosing class this way:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Person {
+    String name
+    int age
+    String toString() { "$name is $age years old" }
+
+    String dump() {
+        def cl = {
+            String msg = this.toString()               <i class="conum" data-value="1"></i><b>(1)</b>
+            println msg
+            msg
+        }
+        cl()
+    }
+}
+def p = new Person(name:'Janice', age:74)
+assert p.dump() == 'Janice is 74 years old'</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>the closure calls <code>toString</code> on <code>this</code>, which will actually call the <code>toString</code> method on the enclosing object,
+that is to say the <code>Person</code> instance</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_owner_of_a_closure"><a class="anchor" href="#_owner_of_a_closure"></a>3.2.2. Owner of a closure</h4>
+<div class="paragraph">
+<p>The owner of a closure is very similar to the definition of <a href="#closure-this">this in a closure</a> with a subtle difference:
+it will return the direct enclosing object, be it a closure or a class:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Enclosing {
+    void run() {
+        def whatIsOwnerMethod = { getOwner() }               <i class="conum" data-value="1"></i><b>(1)</b>
+        assert whatIsOwnerMethod() == this                   <i class="conum" data-value="2"></i><b>(2)</b>
+        def whatIsOwner = { owner }                          <i class="conum" data-value="3"></i><b>(3)</b>
+        assert whatIsOwner() == this                         <i class="conum" data-value="4"></i><b>(4)</b>
+    }
+}
+class EnclosedInInnerClass {
+    class Inner {
+        Closure cl = { owner }                               <i class="conum" data-value="5"></i><b>(5)</b>
+    }
+    void run() {
+        def inner = new Inner()
+        assert inner.cl() == inner                           <i class="conum" data-value="6"></i><b>(6)</b>
+    }
+}
+class NestedClosures {
+    void run() {
+        def nestedClosures = {
+            def cl = { owner }                               <i class="conum" data-value="7"></i><b>(7)</b>
+            cl()
+        }
+        assert nestedClosures() == nestedClosures            <i class="conum" data-value="8"></i><b>(8)</b>
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>a closure is defined inside the <code>Enclosing</code> class, and returns <code>getOwner</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>calling the closure will return the instance of <code>Enclosing</code> where the the closure is defined</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>in general, you will just want to use the shortcut <code>owner</code> notation</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>and it returns <strong>exactly</strong> the same object</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>if the closure is defined in a inner class</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td><code>owner</code> in the closure <strong>will</strong> return the inner class, not the top-level one</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td>but in case of nested closures, like here <code>cl</code> being defined inside the scope of <code>nestedClosures</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="8"></i><b>8</b></td>
+<td>then <code>owner</code> corresponds to the enclosing closure, hence a different object from <code>this</code>!</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_delegate_of_a_closure"><a class="anchor" href="#_delegate_of_a_closure"></a>3.2.3. Delegate of a closure</h4>
+<div class="paragraph">
+<p>The delegate of a closure can be accessed by using the <code>delegate</code> property or calling the <code>getDelegate</code> method. It is a
+powerful concept for building domain specific languages in Groovy. While <a href="#this">closure-this</a> and <a href="#owner">closure-owner</a>
+refer to the lexical scope of a closure, the delegate is a user defined object that a closure will use. By default, the
+delegate is set to <code>owner</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Enclosing {
+    void run() {
+        def cl = { getDelegate() }                          <i class="conum" data-value="1"></i><b>(1)</b>
+        def cl2 = { delegate }                              <i class="conum" data-value="2"></i><b>(2)</b>
+        assert cl() == cl2()                                <i class="conum" data-value="3"></i><b>(3)</b>
+        assert cl() == this                                 <i class="conum" data-value="4"></i><b>(4)</b>
+        def enclosed = {
+            { -&gt; delegate }.call()                          <i class="conum" data-value="5"></i><b>(5)</b>
+        }
+        assert enclosed() == enclosed                       <i class="conum" data-value="6"></i><b>(6)</b>
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>you can get the delegate of a closure calling the <code>getDelegate</code> method</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>or using the <code>delegate</code> property</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>both return the same object</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>which is the enclosing class or closure</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>in particular in case of nested closures</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td><code>delegate</code> will correspond to the <code>owner</code></td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The delegate of a closure can be changed to <strong>any object</strong>. Let&#8217;s illustrate this by creating two classes which are not
+subclasses of each other but both define a property called <code>name</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Person {
+    String name
+}
+class Thing {
+    String name
+}
+
+def p = new Person(name: 'Norman')
+def t = new Thing(name: 'Teapot')</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then let&#8217;s define a closure which fetches the <code>name</code> property on the delegate:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def upperCasedName = { delegate.name.toUpperCase() }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then by changing the delegate of the closure, you can see that the target object will change:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">upperCasedName.delegate = p
+assert upperCasedName() == 'NORMAN'
+upperCasedName.delegate = t
+assert upperCasedName() == 'TEAPOT'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>At this point, the behavior is not different from having a <code>target</code> variable defined in the lexical scope of the closure:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def target = p
+def upperCasedNameUsingVar = { target.name.toUpperCase() }
+assert upperCasedNameUsingVar() == 'NORMAN'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>However, there are major differences:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>in the last example, <em>target</em> is a local variable referenced from within the closure</p>
+</li>
+<li>
+<p>the delegate can be used transparently, that is to say without prefixing method calls with <code>delegate.</code> as explained
+in the next paragraph.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_delegation_strategy_2"><a class="anchor" href="#_delegation_strategy_2"></a>3.2.4. Delegation strategy</h4>
+<div class="paragraph">
+<p>Whenever, in a closure, a property is accessed without explicitly setting a receiver object, then a delegation strategy
+is involved:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Person {
+    String name
+}
+def p = new Person(name:'Igor')
+def cl = { name.toUpperCase() }                 <i class="conum" data-value="1"></i><b>(1)</b>
+cl.delegate = p                                 <i class="conum" data-value="2"></i><b>(2)</b>
+assert cl() == 'IGOR'                           <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>name</code> is not referencing a variable in the lexical scope of the closure</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>we can change the delegate of the closure to be an instance of <code>Person</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>and the method call will succeed</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The reason this code works is that the <code>name</code> property will be resolved transparently on the <code>delegate</code> object! This is
+a very powerful way to resolve properties or method calls inside closures. There&#8217;s no need to set an explicit <code>delegate.</code>
+receiver: the call will be made because the default delegation strategy of the closure makes it so. A closure actually
+defines multiple resolution strategies that you can choose:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>Closure.OWNER_FIRST</code> is the <strong>default strategy</strong>. If a property/method exists on the <strong>owner</strong>, then it will be called on
+the owner. If not, then the <strong>delegate</strong> is used.</p>
+</li>
+<li>
+<p><code>Closure.DELEGATE_FIRST</code> reverses the logic: the <strong>delegate</strong> is used first, then the <strong>owner</strong></p>
+</li>
+<li>
+<p><code>Closure.OWNER_ONLY</code> will only resolve the property/method lookup on the owner: the delegate will be ignored.</p>
+</li>
+<li>
+<p><code>Closure.DELEGATE_ONLY</code> will only resolve the property/method lookup on the delegate: the owner will be ignored.</p>
+</li>
+<li>
+<p><code>Closure.TO_SELF</code> can be used by developers who need advanced meta-programming techniques and wish to implement a
+custom resolution strategy: the resolution will not be made on the owner or the delegate but only on the closure class
+itself. It makes only sense to use this if you implement your own subclass of <code>Closure</code>.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s illustrate the default "owner first" strategy with this code:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Person {
+    String name
+    def pretty = { "My name is $name" }             <i class="conum" data-value="1"></i><b>(1)</b>
+    String toString() {
+        pretty()
+    }
+}
+class Thing {
+    String name                                     <i class="conum" data-value="2"></i><b>(2)</b>
+}
+
+def p = new Person(name: 'Sarah')
+def t = new Thing(name: 'Teapot')
+
+assert p.toString() == 'My name is Sarah'           <i class="conum" data-value="3"></i><b>(3)</b>
+p.pretty.delegate = t                               <i class="conum" data-value="4"></i><b>(4)</b>
+assert p.toString() == 'My name is Sarah'           <i class="conum" data-value="5"></i><b>(5)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>for the illustration, we define a closure member which references "name"</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>both the <code>Person</code> and the <code>Thing</code> class define a <code>name</code> property</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Using the default strategy, the <code>name</code> property is resolved on the owner first</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>so if we change the <code>delegate</code> to <code>t</code> which is an instance of <code>Thing</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>there is no change in the result: <code>name</code> is first resolved on the <code>owner</code> of the closure</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>However, it is possible to change the resolution strategy of the closure:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">p.pretty.resolveStrategy = Closure.DELEGATE_FIRST
+assert p.toString() == 'My name is Teapot'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>By changing the <code>resolveStrategy</code>, we are modifying the way Groovy will resolve the "implicit this" references: in this
+case, <code>name</code> will first be looked in the delegate, then if not found, on the owner. Since <code>name</code> is defined in the
+delegate, an instance of <code>Thing</code>, then this value is used.</p>
+</div>
+<div class="paragraph">
+<p>The difference between "delegate first" and "delegate only" or "owner first" and "owner only" can be illustrated if one
+of the delegate (resp. owner) does <strong>not</strong> have such a method or property:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Person {
+    String name
+    int age
+    def fetchAge = { age }
+}
+class Thing {
+    String name
+}
+
+def p = new Person(name:'Jessica', age:42)
+def t = new Thing(name:'Printer')
+def cl = p.fetchAge
+cl.delegate = p
+assert cl() == 42
+cl.delegate = t
+assert cl() == 42
+cl.resolveStrategy = Closure.DELEGATE_ONLY
+cl.delegate = p
+assert cl() == 42
+cl.delegate = t
+try {
+    cl()
+    assert false
+} catch (MissingPropertyException ex) {
+    // "age" is not defined on the delegate
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In this example, we define two classes which both have a <code>name</code> property but only the <code>Person</code> class declares an <code>age</code>.
+The <code>Person</code> class also declares a closure which references <code>age</code>. We can change the default resolution strategy from
+"owner first" to "delegate only". Since the owner of the closure is the <code>Person</code> class, then we can check that if the
+delegate is an instance of <code>Person</code>, calling the closure is successful, but if we call it with a delegate being an
+instance of <code>Thing</code>, it fails with a <code>groovy.lang.MissingPropertyException</code>. Despite the closure being defined inside
+the <code>Person</code> class, the owner is not used.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+A comprehensive explanation about how to use this feature to develop DSLs can be found in a
+<a href="core-domain-specific-languages.html">dedicated section of the manual</a>.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_closures_in_gstrings"><a class="anchor" href="#_closures_in_gstrings"></a>4. Closures in GStrings</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Take the following code:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def x = 1
+def gs = "x = ${x}"
+assert gs == 'x = 1'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The code behaves as you would expect, but what happens if you add:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">x = 2
+assert gs == 'x = 2'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You will see that the assert fails! There are two reasons for this:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>a GString only evaluates lazily the <code>toString</code> representation of values</p>
+</li>
+<li>
+<p>the syntax <code>${x}</code> in a GString does <strong>not</strong> represent a closure but an <strong>expression</strong> to <code>$x</code>, evaluated when the GString
+is created.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>In our example, the <code>GString</code> is created with an expression referencing <code>x</code>. When the <code>GString</code> is created, the <strong>value</strong>
+of <code>x</code> is 1, so the <code>GString</code> is created with a value of 1. When the assert is triggered, the <code>GString</code> is evaluated
+and 1 is converted to a <code>String</code> using <code>toString</code>. When we change <code>x</code> to 2, we did change the value of <code>x</code>, but it is
+a different object, and the <code>GString</code> still references the old one.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+A <code>GString</code> will only change its <code>toString</code> representation if the values it references are mutating. If the references
+change, nothing will happen.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>If you need a real closure in a GString and for example enforce lazy evaluation of variables, you need to use the
+alternate syntax <code>${&#8594; x}</code> like in the fixed example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def x = 1
+def gs = "x = ${-&gt; x}"
+assert gs == 'x = 1'
+
+x = 2
+assert gs == 'x = 2'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And let&#8217;s illustrate how it differs from mutation with this code:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Person {
+    String name
+    String toString() { name }          <i class="conum" data-value="1"></i><b>(1)</b>
+}
+def sam = new Person(name:'Sam')        <i class="conum" data-value="2"></i><b>(2)</b>
+def lucy = new Person(name:'Lucy')      <i class="conum" data-value="3"></i><b>(3)</b>
+def p = sam                             <i class="conum" data-value="4"></i><b>(4)</b>
+def gs = "Name: ${p}"                   <i class="conum" data-value="5"></i><b>(5)</b>
+assert gs == 'Name: Sam'                <i class="conum" data-value="6"></i><b>(6)</b>
+p = lucy                                <i class="conum" data-value="7"></i><b>(7)</b>
+assert gs == 'Name: Sam'                <i class="conum" data-value="8"></i><b>(8)</b>
+sam.name = 'Lucy'                       <i class="conum" data-value="9"></i><b>(9)</b>
+assert gs == 'Name: Lucy'               <i class="conum" data-value="10"></i><b>(10)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>the <code>Person</code> class has a <code>toString</code> method returning the <code>name</code> property</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>we create a first <code>Person</code> named <em>Sam</em></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>we create another <code>Person</code> named <em>Lucy</em></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>the <code>p</code> variable is set to <code>Sam</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>and a closure is created, referencing the value of <code>p</code>, that is to say <em>Sam</em></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>so when we evaluate the string, it returns <em>Sam</em></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td>if we change <code>p</code> to <em>Lucy</em></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="8"></i><b>8</b></td>
+<td>the string still evaluates to <em>Sam</em> because it was the <strong>value</strong> of <code>p</code> when the <code>GString</code> was created</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="9"></i><b>9</b></td>
+<td>so if we mutate <em>Sam</em> to change his name to <em>Lucy</em></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="10"></i><b>10</b></td>
+<td>this time the <code>GString</code> is correctly mutated</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>So if you don&#8217;t want to rely on mutating objects or wrapping objects, you <strong>must</strong> use closures in <code>GString</code> by explicitly
+declaring an empty argument list:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Person {
+    String name
+    String toString() { name }
+}
+def sam = new Person(name:'Sam')
+def lucy = new Person(name:'Lucy')
+def p = sam
+// Create a GString with lazy evaluation of "p"
+def gs = "Name: ${-&gt; p}"
+assert gs == 'Name: Sam'
+p = lucy
+assert gs == 'Name: Lucy'</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_closure_coercion"><a class="anchor" href="#_closure_coercion"></a>5. Closure coercion</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Closures can be converted into interfaces or single-abstract method types. Please refer to
+<a href="core-semantics.html#closure-coercion">this section of the manual</a> for a complete description.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_functional_programming"><a class="anchor" href="#_functional_programming"></a>6. Functional programming</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Closures, like <a href="http://docs.oracle.com/javase/tutorial/java/javaOO/lambdaexpressions.html">lambda expressions in Java 8</a> are at the core of the functional programming paradigm in Groovy. Some functional programming
+operations on functions are available directly on the <code>Closure</code> class, like illustrated in this section.</p>
+</div>
+<div class="sect2">
+<h3 id="_currying"><a class="anchor" href="#_currying"></a>6.1. Currying</h3>
+<div class="paragraph">
+<p>In Groovy, currying refers to the concept of partial application. It does <strong>not</strong> correspond to the real concept of currying
+in functional programming because of the different scoping rules that Groovy applies on closures. Currying in Groovy will
+let you set the value of one parameter of a closure, and it will return a new closure accepting one less argument.</p>
+</div>
+<div class="sect3">
+<h4 id="_left_currying"><a class="anchor" href="#_left_currying"></a>6.1.1. Left currying</h4>
+<div class="paragraph">
+<p>Left currying is the fact of setting the left-most parameter of a closure, like in this example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def nCopies = { int n, String str -&gt; str*n }    <i class="conum" data-value="1"></i><b>(1)</b>
+def twice = nCopies.curry(2)                    <i class="conum" data-value="2"></i><b>(2)</b>
+assert twice('bla') == 'blabla'                 <i class="conum" data-value="3"></i><b>(3)</b>
+assert twice('bla') == nCopies(2, 'bla')        <i class="conum" data-value="4"></i><b>(4)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>the <code>nCopies</code> closure defines two parameters</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td><code>curry</code> will set the first parameter to <code>2</code>, creating a new closure (function) which accepts a single <code>String</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>so the new function call be called with only a <code>String</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>and it is equivalent to calling <code>nCopies</code> with two parameters</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_right_currying"><a class="anchor" href="#_right_currying"></a>6.1.2. Right currying</h4>
+<div class="paragraph">
+<p>Similarily to left currying, it is possible to set the right-most parameter of a closure:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def nCopies = { int n, String str -&gt; str*n }    <i class="conum" data-value="1"></i><b>(1)</b>
+def blah = nCopies.rcurry('bla')                <i class="conum" data-value="2"></i><b>(2)</b>
+assert blah(2) == 'blabla'                      <i class="conum" data-value="3"></i><b>(3)</b>
+assert blah(2) == nCopies(2, 'bla')             <i class="conum" data-value="4"></i><b>(4)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>the <code>nCopies</code> closure defines two parameters</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td><code>rcurry</code> will set the last parameter to <code>bla</code>, creating a new closure (function) which accepts a single <code>int</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>so the new function call be called with only an <code>int</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>and it is equivalent to calling <code>nCopies</code> with two parameters</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_index_based_currying"><a class="anchor" href="#_index_based_currying"></a>6.1.3. Index based currying</h4>
+<div class="paragraph">
+<p>In case a closure accepts more than 2 parameters, it is possible to set an arbitrary parameter using <code>ncurry</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def volume = { double l, double w, double h -&gt; l*w*h }      <i class="conum" data-value="1"></i><b>(1)</b>
+def fixedWidthVolume = volume.ncurry(1, 2d)                 <i class="conum" data-value="2"></i><b>(2)</b>
+assert volume(3d, 2d, 4d) == fixedWidthVolume(3d, 4d)       <i class="conum" data-value="3"></i><b>(3)</b>
+def fixedWidthAndHeight = volume.ncurry(1, 2d, 4d)          <i class="conum" data-value="4"></i><b>(4)</b>
+assert volume(3d, 2d, 4d) == fixedWidthAndHeight(3d)        <i class="conum" data-value="5"></i><b>(5)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>the <code>volume</code> function defines 3 parameters</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td><code>ncurry</code> will set the second parameter (index = 1) to <code>2d</code>, creating a new volume function which accepts length and height</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>that function is equivalent to calling <code>volume</code> omitting the width</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>it is also possible to set multiple parameters, starting from the specified index</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>the resulting function accepts as many parameters as the initial one minus the number of parameters set by <code>ncurry</code></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_memoization"><a class="anchor" href="#_memoization"></a>6.2. Memoization</h3>
+<div class="paragraph">
+<p>Memoization allows the result of the call of a closure to be cached. It is interesting if the computation done by a
+function (closure) is slow, but you know that this function is going to be called often with the same arguments. A
+typical example is the Fibonacci suite. A naive implementation may look like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def fib
+fib = { long n -&gt; n&lt;2?n:fib(n-1)+fib(n-2) }
+assert fib(15) == 610 // slow!</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>It is a naive implementation because 'fib' is often called recursively with the same arguments, leading to an exponential
+algorithm:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>computing <code>fib(15)</code> requires the result of <code>fib(14)</code> and <code>fib(13)</code></p>
+</li>
+<li>
+<p>computing <code>fib(14)</code> requires the result of <code>fib(13)</code> and <code>fib(12)</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Since calls are recursive, you can already see that we will compute the same values again and again, although they could
+be cached. This naive implementation can be "fixed" by caching the result of calls using <code>memoize</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">fib = { long n -&gt; n&lt;2?n:fib(n-1)+fib(n-2) }.memoize()
+assert fib(25) == 75025 // fast!</code></pre>
+</div>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+The cache works <strong>using the actual values of the arguments</strong>. This means that you should be very careful if you use
+memoization with something else than primitive or boxed primitive types.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The behavior of the cache can be tweaked using alternate methods:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>memoizeAtMost</code> will generate a new closure which caches <strong>at most</strong> <em>n</em> values</p>
+</li>
+<li>
+<p><code>memoizeAtLeast</code> will generate a new closure which caches <strong>at least</strong> <em>n</em> values</p>
+</li>
+<li>
+<p><code>memoizeBetween</code> will generate a new closure which caches <strong>at least</strong> <em>n</em> values and <strong>at most</strong> <em>n</em> values</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The cache used in all memoize variants is a LRU cache.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_composition"><a class="anchor" href="#_composition"></a>6.3. Composition</h3>
+<div class="paragraph">
+<p>Closure composition corresponds to the concept of function composition, that is to say creating a new function by
+composing two or more functions (chaining calls), as illustrated in this example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def plus2  = { it + 2 }
+def times3 = { it * 3 }
+
+def times3plus2 = plus2 &lt;&lt; times3
+assert times3plus2(3) == 11
+assert times3plus2(4) == plus2(times3(4))
+
+def plus2times3 = times3 &lt;&lt; plus2
+assert plus2times3(3) == 15
+assert plus2times3(5) == times3(plus2(5))
+
+// reverse composition
+assert times3plus2(3) == (times3 &gt;&gt; plus2)(3)</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_trampoline"><a class="anchor" href="#_trampoline"></a>6.4. Trampoline</h3>
+<div class="paragraph">
+<p>Recursive algorithms are often restricted by a physical limit: the maximum stack height. For example, if you call a method
+that recursively calls itself too deep, you will eventually receive a <code>StackOverflowException</code>.</p>
+</div>
+<div class="paragraph">
+<p>An approach that helps in those situations is by using <code>Closure</code> and its trampoline capability.</p>
+</div>
+<div class="paragraph">
+<p>Closures are wrapped in a <code>TrampolineClosure</code>. Upon calling, a trampolined <code>Closure</code> will call the original <code>Closure</code> waiting
+for its result. If the outcome of the call is another instance of a <code>TrampolineClosure</code>, created perhaps as a result
+to a call to the <code>trampoline()</code> method, the <code>Closure</code> will again be invoked. This repetitive invocation of returned
+trampolined Closures instances will continue until a value other than a trampolined <code>Closure</code> is returned. That value
+will become the final result of the trampoline. That way, calls are made serially, rather than filling the stack.</p>
+</div>
+<div class="paragraph">
+<p>Here’s an example of the use of <code>trampoline()</code> to implement the factorial function:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def factorial
+factorial = { int n, def accu = 1G -&gt;
+    if (n &lt; 2) return accu
+    factorial.trampoline(n - 1, n * accu)
+}
+factorial = factorial.trampoline()
+
+assert factorial(1)    == 1
+assert factorial(3)    == 1 * 2 * 3
+assert factorial(1000) // == 402387260.. plus another 2560 digits</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_method_pointers"><a class="anchor" href="#_method_pointers"></a>6.5. Method pointers</h3>
+<div class="paragraph">
+<p>It is often practical to be able to use a regular method as a closure. For example, you might want to use the currying
+abilities of a closure, but those are not available to normal methods. In Groovy, you can obtain a closure from any
+method with the <a href="core-operators.html#method-pointer-operator">method pointer operator</a>.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 3.0.0-alpha-3<br>
+Last updated 2018-06-23 13:44:35 AEST
+</div>
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+<script>prettyPrint()</script>
+</body>
+</html>

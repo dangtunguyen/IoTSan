@@ -1,0 +1,2509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.6.1">
+<title>Groovy Development Kit</title>
+<link rel="stylesheet" href="./assets/css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+<h1>Groovy Development Kit</h1>
+<div class="details">
+<span id="revnumber">version 3.0.0-alpha-3</span>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_working_with_io">1. Working with IO</a>
+<ul class="sectlevel2">
+<li><a href="#_reading_files">1.1. Reading files</a></li>
+<li><a href="#_writing_files">1.2. Writing files</a></li>
+<li><a href="#_traversing_file_trees">1.3. Traversing file trees</a></li>
+<li><a href="#_data_and_objects">1.4. Data and objects</a></li>
+<li><a href="#process-management">1.5. Executing External Processes</a></li>
+</ul>
+</li>
+<li><a href="#_working_with_collections">2. Working with collections</a>
+<ul class="sectlevel2">
+<li><a href="#Collections-Lists">2.1. Lists</a>
+<ul class="sectlevel3">
+<li><a href="#_list_literals">2.1.1. List literals</a></li>
+<li><a href="#_list_as_a_boolean_expression">2.1.2. List as a boolean expression</a></li>
+<li><a href="#_iterating_on_a_list">2.1.3. Iterating on a list</a></li>
+<li><a href="#_manipulating_lists">2.1.4. Manipulating lists</a>
+<ul class="sectlevel4">
+<li><a href="#List-Filtering">Filtering and searching</a></li>
+<li><a href="#_adding_or_removing_elements">Adding or removing elements</a></li>
+<li><a href="#_set_operations">Set operations</a></li>
+<li><a href="#_sorting">Sorting</a></li>
+<li><a href="#_duplicating_elements">Duplicating elements</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#Collections-Maps">2.2. Maps</a>
+<ul class="sectlevel3">
+<li><a href="#_map_literals">2.2.1. Map literals</a></li>
+<li><a href="#_map_property_notation">2.2.2. Map property notation</a></li>
+<li><a href="#_iterating_on_maps">2.2.3. Iterating on maps</a></li>
+<li><a href="#_manipulating_maps">2.2.4. Manipulating maps</a>
+<ul class="sectlevel4">
+<li><a href="#_adding_or_removing_elements_2">Adding or removing elements</a></li>
+<li><a href="#JN1035-Maps-Collectionviewsofamap">Keys, values and entries</a></li>
+<li><a href="#_filtering_and_searching">Filtering and searching</a></li>
+<li><a href="#Maps-Grouping">Grouping</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#Collections-Ranges">2.3. Ranges</a></li>
+<li><a href="#_syntax_enhancements_for_collections">2.4. Syntax enhancements for collections</a>
+<ul class="sectlevel3">
+<li><a href="#_gpath_support">2.4.1. GPath support</a></li>
+<li><a href="#_spread_operator">2.4.2. Spread operator</a></li>
+<li><a href="#Collections-Gettingefficientwiththestar-dotoperator">2.4.3. The star-dot `*.' operator</a></li>
+<li><a href="#Collections-Slicingwiththesubscriptoperator">2.4.4. Slicing with the subscript operator</a></li>
+</ul>
+</li>
+<li><a href="#Collections-EnhancedCollectionMethods">2.5. Enhanced Collection Methods</a></li>
+</ul>
+</li>
+<li><a href="#_working_with_legacy_date_calendar_types">3. Working with legacy Date/Calendar types</a></li>
+<li><a href="#_working_with_date_time_types">4. Working with Date/Time types</a>
+<ul class="sectlevel2">
+<li><a href="#_formatting_and_parsing">4.1. Formatting and parsing</a></li>
+<li><a href="#_manipulating_date_time">4.2. Manipulating date/time</a>
+<ul class="sectlevel3">
+<li><a href="#_addition_and_subtraction">4.2.1. Addition and subtraction</a></li>
+<li><a href="#_multiplication_and_division">4.2.2. Multiplication and division</a></li>
+<li><a href="#_incrementing_and_decrementing">4.2.3. Incrementing and decrementing</a></li>
+<li><a href="#_negation">4.2.4. Negation</a></li>
+</ul>
+</li>
+<li><a href="#_interacting_with_date_time_values">4.3. Interacting with date/time values</a>
+<ul class="sectlevel3">
+<li><a href="#_property_notation">4.3.1. Property notation</a></li>
+<li><a href="#_ranges_code_upto_code_and_code_downto_code">4.3.2. Ranges, <code>upto</code>, and <code>downto</code></a></li>
+<li><a href="#_combining_date_time_values">4.3.3. Combining date/time values</a></li>
+<li><a href="#_creating_periods_and_durations">4.3.4. Creating periods and durations</a></li>
+</ul>
+</li>
+<li><a href="#_converting_between_legacy_and_jsr_310_types">4.4. Converting between legacy and JSR 310 types</a></li>
+</ul>
+</li>
+<li><a href="#_handy_utilities">5. Handy utilities</a>
+<ul class="sectlevel2">
+<li><a href="#_configslurper">5.1. ConfigSlurper</a></li>
+<li><a href="#_expando">5.2. Expando</a></li>
+<li><a href="#_observable_list_map_and_set">5.3. Observable list, map and set</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_working_with_io"><a class="anchor" href="#_working_with_io"></a>1. Working with IO</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Groovy provides a number of
+<a href="gdk.html">helper methods</a> for working
+with I/O. While you could use standard Java code in Groovy to deal with those,
+Groovy provides much more convenient ways to handle files, streams, readers, &#8230;&#8203;</p>
+</div>
+<div class="paragraph">
+<p>In particular, you should take a look at methods added to:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>the <code>java.io.File</code> class : <a href="http://docs.groovy-lang.org/latest/html/groovy-jdk/java/io/File.html" class="bare">http://docs.groovy-lang.org/latest/html/groovy-jdk/java/io/File.html</a></p>
+</li>
+<li>
+<p>the <code>java.io.InputStream</code> class: <a href="http://docs.groovy-lang.org/latest/html/groovy-jdk/java/io/InputStream.html" class="bare">http://docs.groovy-lang.org/latest/html/groovy-jdk/java/io/InputStream.html</a></p>
+</li>
+<li>
+<p>the <code>java.io.OutputStream</code> class: <a href="http://docs.groovy-lang.org/latest/html/groovy-jdk/java/io/OutputStream.html" class="bare">http://docs.groovy-lang.org/latest/html/groovy-jdk/java/io/OutputStream.html</a></p>
+</li>
+<li>
+<p>the <code>java.io.Reader</code> class: <a href="http://docs.groovy-lang.org/latest/html/groovy-jdk/java/io/Reader.html" class="bare">http://docs.groovy-lang.org/latest/html/groovy-jdk/java/io/Reader.html</a></p>
+</li>
+<li>
+<p>the <code>java.io.Writer</code> class: <a href="http://docs.groovy-lang.org/latest/html/groovy-jdk/java/io/Writer.html" class="bare">http://docs.groovy-lang.org/latest/html/groovy-jdk/java/io/Writer.html</a></p>
+</li>
+<li>
+<p>the <code>java.nio.file.Path</code> class: <a href="http://docs.groovy-lang.org/latest/html/groovy-jdk/java/nio/file/Path.html" class="bare">http://docs.groovy-lang.org/latest/html/groovy-jdk/java/nio/file/Path.html</a></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The following section focuses on sample idiomatic constructs using helper methods available above but is not meant
+to be a complete description of all available methods. For that, please read the <a href="gdk.html">GDK API</a>.</p>
+</div>
+<div class="sect2">
+<h3 id="_reading_files"><a class="anchor" href="#_reading_files"></a>1.1. Reading files</h3>
+<div class="paragraph">
+<p>As a first example, let&#8217;s see how you would print all lines of a text file in Groovy:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">new File(baseDir, 'haiku.txt').eachLine { line -&gt;
+    println line
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>eachLine</code> method is a method added to the <code>File</code> class automatically by Groovy and has many variants, for example
+if you need to know the line number, you can use this variant:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">new File(baseDir, 'haiku.txt').eachLine { line, nb -&gt;
+    println "Line $nb: $line"
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If for whatever reason the an exception is thrown in the <code>eachLine</code> body, the method makes sure that the resource
+is properly closed. This is true for all I/O resource methods that Groovy adds.</p>
+</div>
+<div class="paragraph">
+<p>For example in some cases you will prefer to use a <code>Reader</code>, but still benefit from the automatic resource management
+from Groovy. In the next example, the reader <strong>will</strong> be closed even if the exception occurs:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def count = 0, MAXSIZE = 3
+new File(baseDir,"haiku.txt").withReader { reader -&gt;
+    while (reader.readLine()) {
+        if (++count &gt; MAXSIZE) {
+            throw new RuntimeException('Haiku should only have 3 verses')
+        }
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Should you need to collect the lines of a text file into a list, you can do:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def list = new File(baseDir, 'haiku.txt').collect {it}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Or you can even leverage the <code>as</code> operator to get the contents of the file into an array of lines:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def array = new File(baseDir, 'haiku.txt') as String[]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>How many times did you have to get the contents of a file into a <code>byte[]</code> and how much code does it require? Groovy
+makes it very easy actually:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">byte[] contents = file.bytes</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Working with I/O is not limited to dealing with files. In fact, a lot of operations rely on input/output streams,
+hence why Groovy adds a lot of support methods to those, as you can see in the
+<a href="http://docs.groovy-lang.org/latest/html/groovy-jdk/java/io/InputStream.html">documentation</a>.</p>
+</div>
+<div class="paragraph">
+<p>As an example, you can obtain an <code>InputStream</code> from a <code>File</code> very easily:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def is = new File(baseDir,'haiku.txt').newInputStream()
+// do something ...
+is.close()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>However you can see that it requires you to deal with closing the inputstream. In Groovy it is in general a better
+idea to use the <code>withInputStream</code> idiom that will take care of that for you:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">new File(baseDir,'haiku.txt').withInputStream { stream -&gt;
+    // do something ...
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_writing_files"><a class="anchor" href="#_writing_files"></a>1.2. Writing files</h3>
+<div class="paragraph">
+<p>Of course in some cases you won&#8217;t want to read but write a file. One of the options is to use a <code>Writer</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">new File(baseDir,'haiku.txt').withWriter('utf-8') { writer -&gt;
+    writer.writeLine 'Into the ancient pond'
+    writer.writeLine 'A frog jumps'
+    writer.writeLine 'Water’s sound!'
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>But for such a simple example, using the <code>&lt;&lt;</code> operator would have been enough:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">new File(baseDir,'haiku.txt') &lt;&lt; '''Into the ancient pond
+A frog jumps
+Water’s sound!'''</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Of course we do not always deal with text contents, so you could use the <code>Writer</code> or directly write bytes as in
+this example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">file.bytes = [66,22,11]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Of course you can also directly deal with output streams. For example, here is how you would create an output
+stream to write into a file:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def os = new File(baseDir,'data.bin').newOutputStream()
+// do something ...
+os.close()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>However you can see that it requires you to deal with closing the output stream. Again it is in general a better
+idea to use the <code>withOutputStream</code> idiom that will handle the exceptions and close the stream in any case:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">new File(baseDir,'data.bin').withOutputStream { stream -&gt;
+    // do something ...
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_traversing_file_trees"><a class="anchor" href="#_traversing_file_trees"></a>1.3. Traversing file trees</h3>
+<div class="paragraph">
+<p>In scripting contexts it is a common task to traverse a file tree in order to find some specific files and do
+something with them. Groovy provides multiple methods to do this. For example you can perform something on all files
+of a directory:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">dir.eachFile { file -&gt;                      <i class="conum" data-value="1"></i><b>(1)</b>
+    println file.name
+}
+dir.eachFileMatch(~/.*\.txt/) { file -&gt;     <i class="conum" data-value="2"></i><b>(2)</b>
+    println file.name
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>executes the closure code on each file found in the directory</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>executes the closure code on files in the directory matching the specified pattern</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Often you will have to deal with a deeper hierarchy of files, in which case you can use <code>eachFileRecurse</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">dir.eachFileRecurse { file -&gt;                      <i class="conum" data-value="1"></i><b>(1)</b>
+    println file.name
+}
+
+dir.eachFileRecurse(FileType.FILES) { file -&gt;      <i class="conum" data-value="2"></i><b>(2)</b>
+    println file.name
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>executes the closure code on each file or directory found in the directory, recursively</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>executes the closure code only on files, but recursively</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>For more complex traversal techniques you can use the <code>traverse</code> method, which requires you to set a special flag
+indicating what to do with the traversal:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">dir.traverse { file -&gt;
+    if (file.directory &amp;&amp; file.name=='bin') {
+        FileVisitResult.TERMINATE                   <i class="conum" data-value="1"></i><b>(1)</b>
+    } else {
+        println file.name
+        FileVisitResult.CONTINUE                    <i class="conum" data-value="2"></i><b>(2)</b>
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>if the current file is a directory and its name is <code>bin</code>, stop the traversal</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>otherwise print the file name and continue</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_data_and_objects"><a class="anchor" href="#_data_and_objects"></a>1.4. Data and objects</h3>
+<div class="paragraph">
+<p>In Java it is not uncommon to serialize and deserialize data using the <code>java.io.DataOutputStream</code> and
+<code>java.io.DataInputStream</code> classes respectively. Groovy will make it even easier to deal with them. For example, you could
+serialize data into a file and deserialize it using this code:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">boolean b = true
+String message = 'Hello from Groovy'
+// Serialize data into a file
+file.withDataOutputStream { out -&gt;
+    out.writeBoolean(b)
+    out.writeUTF(message)
+}
+// ...
+// Then read it back
+file.withDataInputStream { input -&gt;
+    assert input.readBoolean() == b
+    assert input.readUTF() == message
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And similarily, if the data you want to serialize implements the <code>Serializable</code> interface, you can proceed with
+an object output stream, as illustrated here:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Person p = new Person(name:'Bob', age:76)
+// Serialize data into a file
+file.withObjectOutputStream { out -&gt;
+    out.writeObject(p)
+}
+// ...
+// Then read it back
+file.withObjectInputStream { input -&gt;
+    def p2 = input.readObject()
+    assert p2.name == p.name
+    assert p2.age == p.age
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="process-management"><a class="anchor" href="#process-management"></a>1.5. Executing External Processes</h3>
+<div class="paragraph">
+<p>The previous section described how easy it was to deal with files, readers or streams in Groovy. However in domains
+like system administration or devops it is often required to communicate with external processes.</p>
+</div>
+<div class="paragraph">
+<p>Groovy provides a simple way to execute command line processes. Simply
+write the command line as a string and call the <code>execute()</code> method.
+E.g., on a *nix machine (or a windows machine with appropriate *nix
+commands installed), you can execute this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def process = "ls -l".execute()             <i class="conum" data-value="1"></i><b>(1)</b>
+println "Found text ${process.text}"        <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>executes the <code>ls</code> command in an external process</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>consume the output of the command and retrieve the text</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The <code>execute()</code> method returns a <code>java.lang.Process</code> instance which will
+subsequently allow the in/out/err streams to be processed and the exit
+value from the process to be inspected etc.</p>
+</div>
+<div class="paragraph">
+<p>e.g. here is the same command as above but we will now process the
+resulting stream a line at a time:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def process = "ls -l".execute()             <i class="conum" data-value="1"></i><b>(1)</b>
+process.in.eachLine { line -&gt;               <i class="conum" data-value="2"></i><b>(2)</b>
+    println line                            <i class="conum" data-value="3"></i><b>(3)</b>
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>executes the <code>ls</code> command in an external process</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>for each line of the input stream of the process</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>print the line</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>It is worth noting that <code>in</code> corresponds to an input stream to the standard output of the command. <code>out</code> will refer
+to a stream where you can send data to the process (its standard input).</p>
+</div>
+<div class="paragraph">
+<p>Remember that many commands are shell built-ins and need special
+handling. So if you want a listing of files in a directory on a Windows
+machine and write:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def process = "dir".execute()
+println "${process.text}"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>you will receive an <code>IOException</code> saying  <em>Cannot run program "dir":
+CreateProcess error=2, The system cannot find the file specified.</em></p>
+</div>
+<div class="paragraph">
+<p>This is because <code>dir</code> is built-in to the Windows shell (<code>cmd.exe</code>) and
+can’t be run as a simple executable. Instead, you will need to write:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def process = "cmd /c dir".execute()
+println "${process.text}"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Also, because this functionality currently makes use of
+<code>java.lang.Process</code> undercover, the deficiencies of that class
+must be taken into consideration. In particular, the javadoc
+for this class says:</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Because some native platforms only provide limited buffer size for
+standard input and output streams, failure to promptly write the input
+stream or read the output stream of the subprocess may cause the
+subprocess to block, and even deadlock</p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p>Because of this, Groovy provides some additional helper methods which
+make stream handling for processes easier.</p>
+</div>
+<div class="paragraph">
+<p>Here is how to gobble all of the output (including the error stream
+output) from your process:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def p = "rm -f foo.tmp".execute([], tmpDir)
+p.consumeProcessOutput()
+p.waitFor()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>There are also variations of <code>consumeProcessOutput</code> that make use of <code>StringBuffer</code>, <code>InputStream</code>,
+<code>OutputStream</code> etc&#8230;&#8203; For a complete list, please read the
+<a href="http://docs.groovy-lang.org/latest/html/groovy-jdk/java/lang/Process.html">GDK API for java.lang.Process</a></p>
+</div>
+<div class="paragraph">
+<p>In addition, these is a <code>pipeTo</code> command (mapped to <code>|</code>
+to allow overloading) which lets the output stream of one process be fed
+into the input stream of another process.</p>
+</div>
+<div class="paragraph">
+<p>Here are some examples of use:</p>
+</div>
+<div class="listingblock">
+<div class="title">Pipes in action</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">proc1 = 'ls'.execute()
+proc2 = 'tr -d o'.execute()
+proc3 = 'tr -d e'.execute()
+proc4 = 'tr -d i'.execute()
+proc1 | proc2 | proc3 | proc4
+proc4.waitFor()
+if (proc4.exitValue()) {
+    println proc4.err.text
+} else {
+    println proc4.text
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Consuming errors</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def sout = new StringBuilder()
+def serr = new StringBuilder()
+proc2 = 'tr -d o'.execute()
+proc3 = 'tr -d e'.execute()
+proc4 = 'tr -d i'.execute()
+proc4.consumeProcessOutput(sout, serr)
+proc2 | proc3 | proc4
+[proc2, proc3].each { it.consumeProcessErrorStream(serr) }
+proc2.withWriter { writer -&gt;
+    writer &lt;&lt; 'testfile.groovy'
+}
+proc4.waitForOrKill(1000)
+println "Standard output: $sout"
+println "Standard error: $serr"</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_working_with_collections"><a class="anchor" href="#_working_with_collections"></a>2. Working with collections</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Groovy provides native support for various collection types, including <a href="#Collections-Lists">lists</a>,
+<a href="#Collections-Maps">maps</a> or <a href="#Collections-Ranges">ranges</a>. Most of those are based on the Java
+collection types and decorated with additional methods found in the <a href="http://www.groovy-lang.org/gdk.html">Groovy development kit</a>.</p>
+</div>
+<div class="sect2">
+<h3 id="Collections-Lists"><a class="anchor" href="#Collections-Lists"></a>2.1. Lists</h3>
+<div class="sect3">
+<h4 id="_list_literals"><a class="anchor" href="#_list_literals"></a>2.1.1. List literals</h4>
+<div class="paragraph">
+<p>You can create lists as follows. Notice that <code>[]</code> is the empty list
+expression.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def list = [5, 6, 7, 8]
+assert list.get(2) == 7
+assert list[2] == 7
+assert list instanceof java.util.List
+
+def emptyList = []
+assert emptyList.size() == 0
+emptyList.add(5)
+assert emptyList.size() == 1</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Each list expression creates an implementation of <a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html">java.util.List</a>.</p>
+</div>
+<div class="paragraph">
+<p>Of course lists can be used as a source to construct another list:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def list1 = ['a', 'b', 'c']
+//construct a new list, seeded with the same items as in list1
+def list2 = new ArrayList&lt;String&gt;(list1)
+
+assert list2 == list1 // == checks that each corresponding element is the same
+
+// clone() can also be called
+def list3 = list1.clone()
+assert list3 == list1</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A list is an ordered collection of objects:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def list = [5, 6, 7, 8]
+assert list.size() == 4
+assert list.getClass() == ArrayList     // the specific kind of list being used
+
+assert list[2] == 7                     // indexing starts at 0
+assert list.getAt(2) == 7               // equivalent method to subscript operator []
+assert list.get(2) == 7                 // alternative method
+
+list[2] = 9
+assert list == [5, 6, 9, 8,]           // trailing comma OK
+
+list.putAt(2, 10)                       // equivalent method to [] when value being changed
+assert list == [5, 6, 10, 8]
+assert list.set(2, 11) == 10            // alternative method that returns old value
+assert list == [5, 6, 11, 8]
+
+assert ['a', 1, 'a', 'a', 2.5, 2.5f, 2.5d, 'hello', 7g, null, 9 as byte]
+//objects can be of different types; duplicates allowed
+
+assert [1, 2, 3, 4, 5][-1] == 5             // use negative indices to count from the end
+assert [1, 2, 3, 4, 5][-2] == 4
+assert [1, 2, 3, 4, 5].getAt(-2) == 4       // getAt() available with negative index...
+try {
+    [1, 2, 3, 4, 5].get(-2)                 // but negative index not allowed with get()
+    assert false
+} catch (e) {
+    assert e instanceof IndexOutOfBoundsException
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_list_as_a_boolean_expression"><a class="anchor" href="#_list_as_a_boolean_expression"></a>2.1.2. List as a boolean expression</h4>
+<div class="paragraph">
+<p>Lists can be evaluated as a <code>boolean</code> value:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">assert ![]             // an empty list evaluates as false
+
+//all other lists, irrespective of contents, evaluate as true
+assert [1] &amp;&amp; ['a'] &amp;&amp; [0] &amp;&amp; [0.0] &amp;&amp; [false] &amp;&amp; [null]</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_iterating_on_a_list"><a class="anchor" href="#_iterating_on_a_list"></a>2.1.3. Iterating on a list</h4>
+<div class="paragraph">
+<p>Iterating on elements of a list is usually done calling the <code>each</code> and <code>eachWithIndex</code> methods, which execute code on each
+item of a list:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">[1, 2, 3].each {
+    println "Item: $it" // `it` is an implicit parameter corresponding to the current element
+}
+['a', 'b', 'c'].eachWithIndex { it, i -&gt; // `it` is the current element, while `i` is the index
+    println "$i: $it"
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In addition to iterating, it is often useful to create a new list by transforming each of its elements into
+something else. This operation, often called mapping, is done in Groovy thanks to the <code>collect</code> method:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">assert [1, 2, 3].collect { it * 2 } == [2, 4, 6]
+
+// shortcut syntax instead of collect
+assert [1, 2, 3]*.multiply(2) == [1, 2, 3].collect { it.multiply(2) }
+
+def list = [0]
+// it is possible to give `collect` the list which collects the elements
+assert [1, 2, 3].collect(list) { it * 2 } == [0, 2, 4, 6]
+assert list == [0, 2, 4, 6]</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_manipulating_lists"><a class="anchor" href="#_manipulating_lists"></a>2.1.4. Manipulating lists</h4>
+<div class="sect4">
+<h5 id="List-Filtering"><a class="anchor" href="#List-Filtering"></a>Filtering and searching</h5>
+<div class="paragraph">
+<p>The <a href="http://www.groovy-lang.org/gdk.html">Groovy development kit</a> contains a lot of methods on collections that enhance
+the standard collections with pragmatic methods, some of which are illustrated here:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">assert [1, 2, 3].find { it &gt; 1 } == 2           // find 1st element matching criteria
+assert [1, 2, 3].findAll { it &gt; 1 } == [2, 3]   // find all elements matching critieria
+assert ['a', 'b', 'c', 'd', 'e'].findIndexOf {      // find index of 1st element matching criteria
+    it in ['c', 'e', 'g']
+} == 2
+
+assert ['a', 'b', 'c', 'd', 'c'].indexOf('c') == 2  // index returned
+assert ['a', 'b', 'c', 'd', 'c'].indexOf('z') == -1 // index -1 means value not in list
+assert ['a', 'b', 'c', 'd', 'c'].lastIndexOf('c') == 4
+
+assert [1, 2, 3].every { it &lt; 5 }               // returns true if all elements match the predicate
+assert ![1, 2, 3].every { it &lt; 3 }
+assert [1, 2, 3].any { it &gt; 2 }                 // returns true if any element matches the predicate
+assert ![1, 2, 3].any { it &gt; 3 }
+
+assert [1, 2, 3, 4, 5, 6].sum() == 21                // sum anything with a plus() method
+assert ['a', 'b', 'c', 'd', 'e'].sum {
+    it == 'a' ? 1 : it == 'b' ? 2 : it == 'c' ? 3 : it == 'd' ? 4 : it == 'e' ? 5 : 0
+    // custom value to use in sum
+} == 15
+assert ['a', 'b', 'c', 'd', 'e'].sum { ((char) it) - ((char) 'a') } == 10
+assert ['a', 'b', 'c', 'd', 'e'].sum() == 'abcde'
+assert [['a', 'b'], ['c', 'd']].sum() == ['a', 'b', 'c', 'd']
+
+// an initial value can be provided
+assert [].sum(1000) == 1000
+assert [1, 2, 3].sum(1000) == 1006
+
+assert [1, 2, 3].join('-') == '1-2-3'           // String joining
+assert [1, 2, 3].inject('counting: ') {
+    str, item -&gt; str + item                     // reduce operation
+} == 'counting: 123'
+assert [1, 2, 3].inject(0) { count, item -&gt;
+    count + item
+} == 6</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And here is idiomatic Groovy code for finding the maximum and minimum in a collection:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def list = [9, 4, 2, 10, 5]
+assert list.max() == 10
+assert list.min() == 2
+
+// we can also compare single characters, as anything comparable
+assert ['x', 'y', 'a', 'z'].min() == 'a'
+
+// we can use a closure to specify the sorting behaviour
+def list2 = ['abc', 'z', 'xyzuvw', 'Hello', '321']
+assert list2.max { it.size() } == 'xyzuvw'
+assert list2.min { it.size() } == 'z'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In addition to closures, you can use a <code>Comparator</code> to define the comparison criteria:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Comparator mc = { a, b -&gt; a == b ? 0 : (a &lt; b ? -1 : 1) }
+
+def list = [7, 4, 9, -6, -1, 11, 2, 3, -9, 5, -13]
+assert list.max(mc) == 11
+assert list.min(mc) == -13
+
+Comparator mc2 = { a, b -&gt; a == b ? 0 : (Math.abs(a) &lt; Math.abs(b)) ? -1 : 1 }
+
+
+assert list.max(mc2) == -13
+assert list.min(mc2) == -1
+
+assert list.max { a, b -&gt; a.equals(b) ? 0 : Math.abs(a) &lt; Math.abs(b) ? -1 : 1 } == -13
+assert list.min { a, b -&gt; a.equals(b) ? 0 : Math.abs(a) &lt; Math.abs(b) ? -1 : 1 } == -1</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_adding_or_removing_elements"><a class="anchor" href="#_adding_or_removing_elements"></a>Adding or removing elements</h5>
+<div class="paragraph">
+<p>We can use <code>[]</code> to assign a new empty list and <code>&lt;&lt;</code> to append items to it:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def list = []
+assert list.empty
+
+list &lt;&lt; 5
+assert list.size() == 1
+
+list &lt;&lt; 7 &lt;&lt; 'i' &lt;&lt; 11
+assert list == [5, 7, 'i', 11]
+
+list &lt;&lt; ['m', 'o']
+assert list == [5, 7, 'i', 11, ['m', 'o']]
+
+//first item in chain of &lt;&lt; is target list
+assert ([1, 2] &lt;&lt; 3 &lt;&lt; [4, 5] &lt;&lt; 6) == [1, 2, 3, [4, 5], 6]
+
+//using leftShift is equivalent to using &lt;&lt;
+assert ([1, 2, 3] &lt;&lt; 4) == ([1, 2, 3].leftShift(4))</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>We can add to a list in many ways:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">assert [1, 2] + 3 + [4, 5] + 6 == [1, 2, 3, 4, 5, 6]
+// equivalent to calling the `plus` method
+assert [1, 2].plus(3).plus([4, 5]).plus(6) == [1, 2, 3, 4, 5, 6]
+
+def a = [1, 2, 3]
+a += 4      // creates a new list and assigns it to `a`
+a += [5, 6]
+assert a == [1, 2, 3, 4, 5, 6]
+
+assert [1, *[222, 333], 456] == [1, 222, 333, 456]
+assert [*[1, 2, 3]] == [1, 2, 3]
+assert [1, [2, 3, [4, 5], 6], 7, [8, 9]].flatten() == [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+def list = [1, 2]
+list.add(3)
+list.addAll([5, 4])
+assert list == [1, 2, 3, 5, 4]
+
+list = [1, 2]
+list.add(1, 3) // add 3 just before index 1
+assert list == [1, 3, 2]
+
+list.addAll(2, [5, 4]) //add [5,4] just before index 2
+assert list == [1, 3, 5, 4, 2]
+
+list = ['a', 'b', 'z', 'e', 'u', 'v', 'g']
+list[8] = 'x' // the [] operator is growing the list as needed
+// nulls inserted if required
+assert list == ['a', 'b', 'z', 'e', 'u', 'v', 'g', null, 'x']</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>It is however important that the <code>+</code> operator on a list is <strong>not mutating</strong>. Compared to <code>&lt;&lt;</code>, it will create a new
+list, which is often not what you want and can lead to performance issues.</p>
+</div>
+<div class="paragraph">
+<p>The <a href="http://www.groovy-lang.org/gdk.html">Groovy development kit</a> also contains methods allowing you to easily remove elements from a list by value:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">assert ['a','b','c','b','b'] - 'c' == ['a','b','b','b']
+assert ['a','b','c','b','b'] - 'b' == ['a','c']
+assert ['a','b','c','b','b'] - ['b','c'] == ['a']
+
+def list = [1,2,3,4,3,2,1]
+list -= 3           // creates a new list by removing `3` from the original one
+assert list == [1,2,4,2,1]
+assert ( list -= [2,4] ) == [1,1]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>It is also possible to remove an element by passing its index to the <code>remove</code> method, in which case the list is mutated:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def list = ['a','b','c','d','e','f','b','b','a']
+assert list.remove(2) == 'c'        // remove the third element, and return it
+assert list == ['a','b','d','e','f','b','b','a']</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In case you only want to remove the first element having the same value in a list, instead of removing all
+elements, you can call the <code>remove</code> method passing the value:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def list= ['a','b','c','b','b']
+assert list.remove('c')             // remove 'c', and return true because element removed
+assert list.remove('b')             // remove first 'b', and return true because element removed
+
+assert ! list.remove('z')           // return false because no elements removed
+assert list == ['a','b','b']</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As you can see, there are two <code>remove</code> methods available.  One that takes an integer and removes an element
+by its index, and another that will remove the first element that matches the passed value.  So what should we
+do when we have a list of integers?  In this case, you may wish to use <code>removeAt</code> to remove an element by its
+index, and <code>removeElement</code> to remove the first element that matches a value.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def list = [1,2,3,4,5,6,2,2,1]
+
+assert list.remove(2) == 3          // this removes the element at index 2, and returns it
+assert list == [1,2,4,5,6,2,2,1]
+
+assert list.removeElement(2)        // remove first 2 and return true
+assert list == [1,4,5,6,2,2,1]
+
+assert ! list.removeElement(8)      // return false because 8 is not in the list
+assert list == [1,4,5,6,2,2,1]
+
+assert list.removeAt(1) == 4        // remove element at index 1, and return it
+assert list == [1,5,6,2,2,1]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Of course, <code>removeAt</code> and <code>removeElement</code> will work with lists of any type.</p>
+</div>
+<div class="paragraph">
+<p>Additionally, removing all the elements in a list can be done by calling the <code>clear</code> method:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def list= ['a',2,'c',4]
+list.clear()
+assert list == []</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_set_operations"><a class="anchor" href="#_set_operations"></a>Set operations</h5>
+<div class="paragraph">
+<p>The <a href="http://www.groovy-lang.org/gdk.html">Groovy development kit</a> also includes methods making it easy to reason on sets:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">assert 'a' in ['a','b','c']             // returns true if an element belongs to the list
+assert ['a','b','c'].contains('a')      // equivalent to the `contains` method in Java
+assert [1,3,4].containsAll([1,4])       // `containsAll` will check that all elements are found
+
+assert [1,2,3,3,3,3,4,5].count(3) == 4  // count the number of elements which have some value
+assert [1,2,3,3,3,3,4,5].count {
+    it%2==0                             // count the number of elements which match the predicate
+} == 2
+
+assert [1,2,4,6,8,10,12].intersect([1,3,6,9,12]) == [1,6,12]
+
+assert [1,2,3].disjoint( [4,6,9] )
+assert ![1,2,3].disjoint( [2,4,6] )</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_sorting"><a class="anchor" href="#_sorting"></a>Sorting</h5>
+<div class="paragraph">
+<p>Working with collections often implies sorting. Groovy offers a variety of options to sort lists,
+from using closures to comparators, as in the following examples:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">assert [6, 3, 9, 2, 7, 1, 5].sort() == [1, 2, 3, 5, 6, 7, 9]
+
+def list = ['abc', 'z', 'xyzuvw', 'Hello', '321']
+assert list.sort {
+    it.size()
+} == ['z', 'abc', '321', 'Hello', 'xyzuvw']
+
+def list2 = [7, 4, -6, -1, 11, 2, 3, -9, 5, -13]
+assert list2.sort { a, b -&gt; a == b ? 0 : Math.abs(a) &lt; Math.abs(b) ? -1 : 1 } ==
+        [-1, 2, 3, 4, 5, -6, 7, -9, 11, -13]
+
+Comparator mc = { a, b -&gt; a == b ? 0 : Math.abs(a) &lt; Math.abs(b) ? -1 : 1 }
+
+// JDK 8+ only
+// list2.sort(mc)
+// assert list2 == [-1, 2, 3, 4, 5, -6, 7, -9, 11, -13]
+
+def list3 = [6, -3, 9, 2, -7, 1, 5]
+
+Collections.sort(list3)
+assert list3 == [-7, -3, 1, 2, 5, 6, 9]
+
+Collections.sort(list3, mc)
+assert list3 == [1, 2, -3, 5, 6, -7, 9]</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_duplicating_elements"><a class="anchor" href="#_duplicating_elements"></a>Duplicating elements</h5>
+<div class="paragraph">
+<p>The <a href="http://www.groovy-lang.org/gdk.html">Groovy development kit</a> also takes advantage of operator overloading to provide methods allowing duplication of elements
+of a list:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">assert [1, 2, 3] * 3 == [1, 2, 3, 1, 2, 3, 1, 2, 3]
+assert [1, 2, 3].multiply(2) == [1, 2, 3, 1, 2, 3]
+assert Collections.nCopies(3, 'b') == ['b', 'b', 'b']
+
+// nCopies from the JDK has different semantics than multiply for lists
+assert Collections.nCopies(2, [1, 2]) == [[1, 2], [1, 2]] //not [1,2,1,2]</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="Collections-Maps"><a class="anchor" href="#Collections-Maps"></a>2.2. Maps</h3>
+<div class="sect3">
+<h4 id="_map_literals"><a class="anchor" href="#_map_literals"></a>2.2.1. Map literals</h4>
+<div class="paragraph">
+<p>In Groovy, maps (also known as associative arrays) can be created using the map literal syntax: <code>[:]</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def map = [name: 'Gromit', likes: 'cheese', id: 1234]
+assert map.get('name') == 'Gromit'
+assert map.get('id') == 1234
+assert map['name'] == 'Gromit'
+assert map['id'] == 1234
+assert map instanceof java.util.Map
+
+def emptyMap = [:]
+assert emptyMap.size() == 0
+emptyMap.put("foo", 5)
+assert emptyMap.size() == 1
+assert emptyMap.get("foo") == 5</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Map keys are strings by default: <code>[a:1]</code> is equivalent to <code>['a':1]</code>. This can be confusing if you define a variable
+named <code>a</code> and that you want the <strong>value</strong> of <code>a</code> to be the key in your map. If this is the case, then you <strong>must</strong> escape
+the key by adding parenthesis, like in the following example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def a = 'Bob'
+def ages = [a: 43]
+assert ages['Bob'] == null // `Bob` is not found
+assert ages['a'] == 43     // because `a` is a literal!
+
+ages = [(a): 43]            // now we escape `a` by using parenthesis
+assert ages['Bob'] == 43   // and the value is found!</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In addition to map literals, it is possible, to get a new copy of a map, to clone it:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def map = [
+        simple : 123,
+        complex: [a: 1, b: 2]
+]
+def map2 = map.clone()
+assert map2.get('simple') == map.get('simple')
+assert map2.get('complex') == map.get('complex')
+map2.get('complex').put('c', 3)
+assert map.get('complex').get('c') == 3</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The resulting map is a <strong>shallow</strong> copy of the original one, as illustrated in the previous example.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_map_property_notation"><a class="anchor" href="#_map_property_notation"></a>2.2.2. Map property notation</h4>
+<div class="paragraph">
+<p>Maps also act like beans so you can use the property notation to get/set
+items inside the <code>Map</code> as long as the keys are strings which are valid
+Groovy identifiers:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def map = [name: 'Gromit', likes: 'cheese', id: 1234]
+assert map.name == 'Gromit'     // can be used instead of map.get('name')
+assert map.id == 1234
+
+def emptyMap = [:]
+assert emptyMap.size() == 0
+emptyMap.foo = 5
+assert emptyMap.size() == 1
+assert emptyMap.foo == 5</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note: by design <code>map.foo</code> will always look for the key <code>foo</code> in the map. This
+means <code>foo.class</code> will return <code>null</code> on a map that doesn&#8217;t contain the <code>class</code> key. Should you really want to know
+the class, then you must use <code>getClass()</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def map = [name: 'Gromit', likes: 'cheese', id: 1234]
+assert map.class == null
+assert map.get('class') == null
+assert map.getClass() == LinkedHashMap // this is probably what you want
+
+map = [1      : 'a',
+       (true) : 'p',
+       (false): 'q',
+       (null) : 'x',
+       'null' : 'z']
+assert map.containsKey(1) // 1 is not an identifier so used as is
+assert map.true == null
+assert map.false == null
+assert map.get(true) == 'p'
+assert map.get(false) == 'q'
+assert map.null == 'z'
+assert map.get(null) == 'x'</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_iterating_on_maps"><a class="anchor" href="#_iterating_on_maps"></a>2.2.3. Iterating on maps</h4>
+<div class="paragraph">
+<p>As usual in the <a href="http://www.groovy-lang.org/gdk.html">Groovy development kit</a>, idiomatic iteration on maps makes use of the <code>each</code> and <code>eachWithIndex</code> methods.
+It&#8217;s worth noting that maps created using the map literal notation are <strong>ordered</strong>, that is to say that if you iterate
+on map entries, it is guaranteed that the entries will be returned in the same order they were added in the map.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def map = [
+        Bob  : 42,
+        Alice: 54,
+        Max  : 33
+]
+
+// `entry` is a map entry
+map.each { entry -&gt;
+    println "Name: $entry.key Age: $entry.value"
+}
+
+// `entry` is a map entry, `i` the index in the map
+map.eachWithIndex { entry, i -&gt;
+    println "$i - Name: $entry.key Age: $entry.value"
+}
+
+// Alternatively you can use key and value directly
+map.each { key, value -&gt;
+    println "Name: $key Age: $value"
+}
+
+// Key, value and i as the index in the map
+map.eachWithIndex { key, value, i -&gt;
+    println "$i - Name: $key Age: $value"
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_manipulating_maps"><a class="anchor" href="#_manipulating_maps"></a>2.2.4. Manipulating maps</h4>
+<div class="sect4">
+<h5 id="_adding_or_removing_elements_2"><a class="anchor" href="#_adding_or_removing_elements_2"></a>Adding or removing elements</h5>
+<div class="paragraph">
+<p>Adding an element to a map can be done either using the <code>put</code> method, the subscript operator or using <code>putAll</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def defaults = [1: 'a', 2: 'b', 3: 'c', 4: 'd']
+def overrides = [2: 'z', 5: 'x', 13: 'x']
+
+def result = new LinkedHashMap(defaults)
+result.put(15, 't')
+result[17] = 'u'
+result.putAll(overrides)
+assert result == [1: 'a', 2: 'z', 3: 'c', 4: 'd', 5: 'x', 13: 'x', 15: 't', 17: 'u']</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Removing all the elements of a map can be done by calling the <code>clear</code> method:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def m = [1:'a', 2:'b']
+assert m.get(1) == 'a'
+m.clear()
+assert m == [:]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Maps generated using the map literal syntax are using the object <code>equals</code> and <code>hashcode</code> methods. This means that
+you should <strong>never</strong> use an object which hash code is subject to change over time, or you wouldn&#8217;t be able to get
+the associated value back.</p>
+</div>
+<div class="paragraph">
+<p>It is also worth noting that you should <strong>never</strong> use a <code>GString</code> as the key of a map, because the hash code of a <code>GString</code>
+is not the same as the hash code of an equivalent <code>String</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def key = 'some key'
+def map = [:]
+def gstringKey = "${key.toUpperCase()}"
+map.put(gstringKey,'value')
+assert map.get('SOME KEY') == null</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="JN1035-Maps-Collectionviewsofamap"><a class="anchor" href="#JN1035-Maps-Collectionviewsofamap"></a>Keys, values and entries</h5>
+<div class="paragraph">
+<p>We can inspect the keys, values, and entries in a view:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def map = [1:'a', 2:'b', 3:'c']
+
+def entries = map.entrySet()
+entries.each { entry -&gt;
+  assert entry.key in [1,2,3]
+  assert entry.value in ['a','b','c']
+}
+
+def keys = map.keySet()
+assert keys == [1,2,3] as Set</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Mutating values returned by the view (be it a map entry, a key or a value) is highly discouraged because success
+of the operation directly depends on the type of the map being manipulated. In particular, Groovy relies on collections
+from the JDK that in general make no guarantee that a collection can safely be manipulated through <code>keySet</code>, <code>entrySet</code>, or
+<code>values</code>.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_filtering_and_searching"><a class="anchor" href="#_filtering_and_searching"></a>Filtering and searching</h5>
+<div class="paragraph">
+<p>The <a href="http://www.groovy-lang.org/gdk.html">Groovy development kit</a> contains filtering, searching and collecting methods similar to those found
+for <a href="#List-Filtering">lists</a>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def people = [
+    1: [name:'Bob', age: 32, gender: 'M'],
+    2: [name:'Johnny', age: 36, gender: 'M'],
+    3: [name:'Claire', age: 21, gender: 'F'],
+    4: [name:'Amy', age: 54, gender:'F']
+]
+
+def bob = people.find { it.value.name == 'Bob' } // find a single entry
+def females = people.findAll { it.value.gender == 'F' }
+
+// both return entries, but you can use collect to retrieve the ages for example
+def ageOfBob = bob.value.age
+def agesOfFemales = females.collect {
+    it.value.age
+}
+
+assert ageOfBob == 32
+assert agesOfFemales == [21,54]
+
+// but you could also use a key/pair value as the parameters of the closures
+def agesOfMales = people.findAll { id, person -&gt;
+    person.gender == 'M'
+}.collect { id, person -&gt;
+    person.age
+}
+assert agesOfMales == [32, 36]
+
+// `every` returns true if all entries match the predicate
+assert people.every { id, person -&gt;
+    person.age &gt; 18
+}
+
+// `any` returns true if any entry matches the predicate
+
+assert people.any { id, person -&gt;
+    person.age == 54
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="Maps-Grouping"><a class="anchor" href="#Maps-Grouping"></a>Grouping</h5>
+<div class="paragraph">
+<p>We can group a list into a map using some criteria:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">assert ['a', 7, 'b', [2, 3]].groupBy {
+    it.class
+} == [(String)   : ['a', 'b'],
+      (Integer)  : [7],
+      (ArrayList): [[2, 3]]
+]
+
+assert [
+        [name: 'Clark', city: 'London'], [name: 'Sharma', city: 'London'],
+        [name: 'Maradona', city: 'LA'], [name: 'Zhang', city: 'HK'],
+        [name: 'Ali', city: 'HK'], [name: 'Liu', city: 'HK'],
+].groupBy { it.city } == [
+        London: [[name: 'Clark', city: 'London'],
+                 [name: 'Sharma', city: 'London']],
+        LA    : [[name: 'Maradona', city: 'LA']],
+        HK    : [[name: 'Zhang', city: 'HK'],
+                 [name: 'Ali', city: 'HK'],
+                 [name: 'Liu', city: 'HK']],
+]</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="Collections-Ranges"><a class="anchor" href="#Collections-Ranges"></a>2.3. Ranges</h3>
+<div class="paragraph">
+<p>Ranges allow you to create a list of sequential values. These can be
+used as <code>List</code> since
+<a href="http://docs.groovy-lang.org/latest/html/api/groovy/lang/Range.html">Range</a> extends
+<a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html">java.util.List</a>.</p>
+</div>
+<div class="paragraph">
+<p>Ranges defined with the <code>..</code> notation are inclusive (that is the list
+contains the from and to value).</p>
+</div>
+<div class="paragraph">
+<p>Ranges defined with the <code>..&lt;</code> notation are half-open, they include the
+first value but not the last value.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// an inclusive range
+def range = 5..8
+assert range.size() == 4
+assert range.get(2) == 7
+assert range[2] == 7
+assert range instanceof java.util.List
+assert range.contains(5)
+assert range.contains(8)
+
+// lets use a half-open range
+range = 5..&lt;8
+assert range.size() == 3
+assert range.get(2) == 7
+assert range[2] == 7
+assert range instanceof java.util.List
+assert range.contains(5)
+assert !range.contains(8)
+
+//get the end points of the range without using indexes
+range = 1..10
+assert range.from == 1
+assert range.to == 10</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note that int ranges are implemented efficiently, creating a lightweight
+Java object containing a from and to value.</p>
+</div>
+<div class="paragraph">
+<p>Ranges can be used for any Java object which implements java.lang.Comparable
+for comparison and also have methods <code>next()</code> and <code>previous()</code> to return the
+next / previous item in the range. For example, you can create a range of <code>String</code> elements:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// an inclusive range
+def range = 'a'..'d'
+assert range.size() == 4
+assert range.get(2) == 'c'
+assert range[2] == 'c'
+assert range instanceof java.util.List
+assert range.contains('a')
+assert range.contains('d')
+assert !range.contains('e')</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can iterate on a range using a classic <code>for</code> loop:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">for (i in 1..10) {
+    println "Hello ${i}"
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>but alternatively you can achieve the same effect in a more Groovy idiomatic style, by iterating a range
+with <code>each</code> method:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">(1..10).each { i -&gt;
+    println "Hello ${i}"
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Ranges can be also used in the <code>switch</code> statement:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">switch (years) {
+    case 1..10: interestRate = 0.076; break;
+    case 11..25: interestRate = 0.052; break;
+    default: interestRate = 0.037;
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_syntax_enhancements_for_collections"><a class="anchor" href="#_syntax_enhancements_for_collections"></a>2.4. Syntax enhancements for collections</h3>
+<div class="sect3">
+<h4 id="_gpath_support"><a class="anchor" href="#_gpath_support"></a>2.4.1. GPath support</h4>
+<div class="paragraph">
+<p>Thanks to the support of property notation for both lists and maps, Groovy provides syntactic sugar making it
+really easy to deal with nested collections, as illustrated in the following examples:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def listOfMaps = [['a': 11, 'b': 12], ['a': 21, 'b': 22]]
+assert listOfMaps.a == [11, 21] //GPath notation
+assert listOfMaps*.a == [11, 21] //spread dot notation
+
+listOfMaps = [['a': 11, 'b': 12], ['a': 21, 'b': 22], null]
+assert listOfMaps*.a == [11, 21, null] // caters for null values
+assert listOfMaps*.a == listOfMaps.collect { it?.a } //equivalent notation
+// But this will only collect non-null values
+assert listOfMaps.a == [11,21]</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_spread_operator"><a class="anchor" href="#_spread_operator"></a>2.4.2. Spread operator</h4>
+<div class="paragraph">
+<p>The spread operator can be used to "inline" a collection into another. It is syntactic sugar which often avoids calls
+to <code>putAll</code> and facilitates the realization of one-liners:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">assert [ 'z': 900,
+         *: ['a': 100, 'b': 200], 'a': 300] == ['a': 300, 'b': 200, 'z': 900]
+//spread map notation in map definition
+assert [*: [3: 3, *: [5: 5]], 7: 7] == [3: 3, 5: 5, 7: 7]
+
+def f = { [1: 'u', 2: 'v', 3: 'w'] }
+assert [*: f(), 10: 'zz'] == [1: 'u', 10: 'zz', 2: 'v', 3: 'w']
+//spread map notation in function arguments
+f = { map -&gt; map.c }
+assert f(*: ['a': 10, 'b': 20, 'c': 30], 'e': 50) == 30
+
+f = { m, i, j, k -&gt; [m, i, j, k] }
+//using spread map notation with mixed unnamed and named arguments
+assert f('e': 100, *[4, 5], *: ['a': 10, 'b': 20, 'c': 30], 6) ==
+        [["e": 100, "b": 20, "c": 30, "a": 10], 4, 5, 6]</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="Collections-Gettingefficientwiththestar-dotoperator"><a class="anchor" href="#Collections-Gettingefficientwiththestar-dotoperator"></a>2.4.3. The star-dot `*.' operator</h4>
+<div class="paragraph">
+<p>The "star-dot" operator is a shortcut operator allowing you to call a method or a property on all elements of a
+collection:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">assert [1, 3, 5] == ['a', 'few', 'words']*.size()
+
+class Person {
+    String name
+    int age
+}
+def persons = [new Person(name:'Hugo', age:17), new Person(name:'Sandra',age:19)]
+assert [17, 19] == persons*.age</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="Collections-Slicingwiththesubscriptoperator"><a class="anchor" href="#Collections-Slicingwiththesubscriptoperator"></a>2.4.4. Slicing with the subscript operator</h4>
+<div class="paragraph">
+<p>You can index into lists, arrays, maps using the subscript expression. It is interesting that strings
+are considered as special kinds of collections in that context:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def text = 'nice cheese gromit!'
+def x = text[2]
+
+assert x == 'c'
+assert x.class == String
+
+def sub = text[5..10]
+assert sub == 'cheese'
+
+def list = [10, 11, 12, 13]
+def answer = list[2,3]
+assert answer == [12,13]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Notice that you can use ranges to extract part of a collection:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">list = 100..200
+sub = list[1, 3, 20..25, 33]
+assert sub == [101, 103, 120, 121, 122, 123, 124, 125, 133]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The subscript operator can be used to update an existing collection (for collection type which are not immutable):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">list = ['a','x','x','d']
+list[1..2] = ['b','c']
+assert list == ['a','b','c','d']</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>It is worth noting that negative indices are allowed, to extract more easily from the end of a collection:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">text = "nice cheese gromit!"
+x = text[-1]
+assert x == "!"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can use negative indices to count from the end of the List, array,
+String etc.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def name = text[-7..-2]
+assert name == "gromit"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Eventually, if you use a backwards range (the starting index is greater than
+the end index), then the answer is reversed.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">text = "nice cheese gromit!"
+name = text[3..1]
+assert name == "eci"</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="Collections-EnhancedCollectionMethods"><a class="anchor" href="#Collections-EnhancedCollectionMethods"></a>2.5. Enhanced Collection Methods</h3>
+<div class="paragraph">
+<p>In addition to <a href="#Collections-Lists">lists</a>, <a href="#Collections-Maps">maps</a> or <a href="#Collections-Ranges">ranges</a>, Groovy offers
+a lot of additional methods for filtering, collecting, grouping, counting, &#8230;&#8203; which are directly available on either
+collections or more easily iterables.</p>
+</div>
+<div class="paragraph">
+<p>In particular, we invite you to read the <a href="http://www.groovy-lang.org/gdk.html">Groovy development kit</a> API docs and specifically:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>methods added to <code>Iterable</code> can be found <a href="http://docs.groovy-lang.org/latest/html/groovy-jdk/java/lang/Iterable.html">here</a></p>
+</li>
+<li>
+<p>methods added to <code>Iterator</code> can be found <a href="http://docs.groovy-lang.org/latest/html/groovy-jdk/java/util/Iterator.html">here</a></p>
+</li>
+<li>
+<p>methods added to <code>Collection</code> can be found <a href="http://docs.groovy-lang.org/latest/html/groovy-jdk/java/util/Collection.html">here</a></p>
+</li>
+<li>
+<p>methods added to <code>List</code> can be found <a href="http://docs.groovy-lang.org/latest/html/groovy-jdk/java/util/List.html">here</a></p>
+</li>
+<li>
+<p>methods added to <code>Map</code> can be found <a href="http://docs.groovy-lang.org/latest/html/groovy-jdk/java/util/Map.html">here</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_working_with_legacy_date_calendar_types"><a class="anchor" href="#_working_with_legacy_date_calendar_types"></a>3. Working with legacy Date/Calendar types</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>groovy-dateutil</code> module supports numerous extensions for working with
+Java&#8217;s classic <code>Date</code> and <code>Calendar</code> classes.</p>
+</div>
+<div class="paragraph">
+<p>You can access the properties of a <code>Date</code> or <code>Calendar</code> using the normal array index notation
+with the constant field numbers from the <code>Calendar</code> class as shown in the following example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import static java.util.Calendar.*    <i class="conum" data-value="1"></i><b>(1)</b>
+
+def cal = Calendar.instance
+cal[YEAR] = 2000                      <i class="conum" data-value="2"></i><b>(2)</b>
+cal[MONTH] = JANUARY                  <i class="conum" data-value="2"></i><b>(2)</b>
+cal[DAY_OF_MONTH] = 1                 <i class="conum" data-value="2"></i><b>(2)</b>
+assert cal[DAY_OF_WEEK] == SATURDAY   <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Import the constants</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Setting the calendar&#8217;s year, month and day of month</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Accessing the calendar&#8217;s day of week</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Groovy supports arithmetic on and iteration between <code>Date</code> and <code>Calendar</code> instances as shown in the following example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def utc = TimeZone.getTimeZone('UTC')
+Date date = Date.parse("yyyy-MM-dd HH:mm", "2010-05-23 09:01", utc)
+
+def prev = date - 1
+def next = date + 1
+
+def diffInDays = next - prev
+assert diffInDays == 2
+
+int count = 0
+prev.upto(next) { count++ }
+assert count == 3</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can parse strings into dates and output dates into formatted strings:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def orig = '2000-01-01'
+def newYear = Date.parse('yyyy-MM-dd', orig)
+assert newYear[DAY_OF_WEEK] == SATURDAY
+assert newYear.format('yyyy-MM-dd') == orig
+assert newYear.format('dd/MM/yyyy') == '01/01/2000'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can also create a new Date or Calendar based on an existing one:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def newYear = Date.parse('yyyy-MM-dd', '2000-01-01')
+def newYearsEve = newYear.copyWith(
+    year: 1999,
+    month: DECEMBER,
+    dayOfMonth: 31
+)
+assert newYearsEve[DAY_OF_WEEK] == FRIDAY</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_working_with_date_time_types"><a class="anchor" href="#_working_with_date_time_types"></a>4. Working with Date/Time types</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>groovy-datetime</code> module supports numerous extensions for working with
+the <a href="http://www.oracle.com/technetwork/articles/java/jf14-date-time-2125367.html">Date/Time API</a>
+introduced in Java 8. This documentation refers to the data types defined by this API as
+"JSR 310 types."</p>
+</div>
+<div class="sect2">
+<h3 id="_formatting_and_parsing"><a class="anchor" href="#_formatting_and_parsing"></a>4.1. Formatting and parsing</h3>
+<div class="paragraph">
+<p>A common use case when working with date/time types is to convert them to Strings (formatting)
+and from Strings (parsing). Groovy provides these additional formatting methods:</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Method</th>
+<th class="tableblock halign-left valign-top">Description</th>
+<th class="tableblock halign-left valign-top">Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>getDateString()</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">For <code>LocalDate</code> and <code>LocalDateTime</code>, formats with
+<a href="https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html#ISO_LOCAL_DATE"><code>DateTimeFormatter.ISO_LOCAL_DATE</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>2018-03-10</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">For <code>OffsetDateTime</code>, formats with
+<a href="https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html#ISO_OFFSET_DATE"><code>DateTimeFormatter.ISO_OFFSET_DATE</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>2018-03-10+04:00</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">For <code>ZonedDateTime</code>, formats with
+<a href="https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html#ISO_LOCAL_DATE"><code>DateTimeFormatter.ISO_LOCAL_DATE</code></a>
+and appends the <code>ZoneId</code> short name</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>2018-03-10EST</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>getDateTimeString()</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">For <code>LocalDateTime</code>, formats with
+<a href="https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html#ISO_LOCAL_DATE_TIME"><code>DateTimeFormatter.ISO_LOCAL_DATE_TIME</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>2018-03-10T20:30:45</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">For <code>OffsetDateTime</code>, formats with
+<a href="https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html#ISO_OFFSET_DATE_TIME"><code>DateTimeFormatter.ISO_OFFSET_DATE_TIME</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>2018-03-10T20:30:45+04:00</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">For <code>ZonedDateTime</code>, formats with
+<a href="https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html#ISO_LOCAL_DATE_TIME"><code>DateTimeFormatter.ISO_LOCAL_DATE_TIME</code></a>
+and appends the <code>ZoneId</code> short name</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>2018-03-10T20:30:45EST</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>getTimeString()</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">For <code>LocalTime</code> and <code>LocalDateTime</code>, formats with
+<a href="https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html#ISO_LOCAL_TIME"><code>DateTimeFormatter.ISO_LOCAL_TIME</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>20:30:45</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">For <code>OffsetTime</code> and <code>OffsetDateTime</code>, formats with
+<a href="https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html#ISO_OFFSET_TIME"><code>DateTimeFormatter.ISO_OFFSET_TIME</code></a>
+formatter</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>20:30:45+04:00</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">For <code>ZonedDateTime</code>, formats with
+<a href="https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html#ISO_LOCAL_TIME"><code>DateTimeFormatter.ISO_LOCAL_TIME</code></a>
+and appends the <code>ZoneId</code> short name</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>20:30:45EST</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>format(FormatStyle style)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">For <code>LocalTime</code> and <code>OffsetTime</code>, formats with
+<a href="https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html#ofLocalizedTime-java.time.format.FormatStyle-"><code>DateTimeFormatter.ofLocalizedTime(style)</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>4:30 AM</code> (with style <code>FormatStyle.SHORT</code>, e.g.)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">For <code>LocalDate</code>, formats with
+<a href="https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html#ofLocalizedDate-java.time.format.FormatStyle-"><code>DateTimeFormatter.ofLocalizedDate(style)</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Saturday, March 10, 2018</code> (with style <code>FormatStyle.FULL</code>, e.g.)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">For <code>LocalDateTime</code>, <code>OffsetDateTime</code>, and <code>ZonedDateTime</code> formats with
+<a href="https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html#ofLocalizedDateTime-java.time.format.FormatStyle-"><code>DateTimeFormatter.ofLocalizedDateTime(style)</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Mar 10, 2019 4:30:45 AM</code> (with style <code>FormatStyle.MEDIUM</code>, e.g.)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>format(String pattern)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Formats with
+<a href="https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html#ofPattern-java.lang.String-"><code>DateTimeFormatter.ofPattern(pattern)</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>03/10/2018</code> (with pattern &#8217;MM/dd/yyyy', e.g.)</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>For parsing, Groovy adds a static <code>parse</code> method to many of the JSR 310 types. The method
+takes two arguments: the value to be formatted and the pattern to use. The pattern is
+defined by the
+<a href="https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html"><code>java.time.format.DateTimeFormatter</code> API</a>.
+As an example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def date = LocalDate.parse('Jun 3, 04', 'MMM d, yy')
+assert date == LocalDate.of(2004, Month.JUNE, 3)
+
+def time = LocalTime.parse('4:45', 'H:mm')
+assert time == LocalTime.of(4, 45, 0)
+
+def offsetTime = OffsetTime.parse('09:47:51-1234', 'HH:mm:ssZ')
+assert offsetTime == OffsetTime.of(9, 47, 51, 0, ZoneOffset.ofHoursMinutes(-12, -34))
+
+def dateTime = ZonedDateTime.parse('2017/07/11 9:47PM Pacific Standard Time', 'yyyy/MM/dd h:mma zzzz')
+assert dateTime == ZonedDateTime.of(
+        LocalDate.of(2017, 7, 11),
+        LocalTime.of(21, 47, 0),
+        ZoneId.of('America/Los_Angeles')
+)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note that these <code>parse</code> methods have a different argument ordering than the static
+<code>parse</code> method Groovy added to <code>java.util.Date</code>.
+This was done to be consistent with the existing <code>parse</code> methods of the Date/Time API.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_manipulating_date_time"><a class="anchor" href="#_manipulating_date_time"></a>4.2. Manipulating date/time</h3>
+<div class="sect3">
+<h4 id="_addition_and_subtraction"><a class="anchor" href="#_addition_and_subtraction"></a>4.2.1. Addition and subtraction</h4>
+<div class="paragraph">
+<p><code>Temporal</code> types have <code>plus</code> and <code>minus</code> methods for adding or subtracting a provided
+<code>java.time.temporal.TemporalAmount</code> argument. Because Groovy maps the <code>+</code> and <code>-</code> operators
+to single-argument methods of these names, a more natural expression syntax can be used to add and subtract.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def aprilFools = LocalDate.of(2018, Month.APRIL, 1)
+
+def nextAprilFools = aprilFools + Period.ofDays(365) // add 365 days
+assert nextAprilFools.year == 2019
+
+def idesOfMarch = aprilFools - Period.ofDays(17) // subtract 17 days
+assert idesOfMarch.dayOfMonth == 15
+assert idesOfMarch.month == Month.MARCH</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Groovy provides additional <code>plus</code> and <code>minus</code> methods that accept an integer argument,
+enabling the above to be rewritten more succinctly:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def nextAprilFools = aprilFools + 365 // add 365 days
+def idesOfMarch = aprilFools - 17 // subtract 17 days</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The unit of these integers depends on the JSR 310 type operand. As evident above,
+integers used with <code>ChronoLocalDate</code> types like <code>LocalDate</code> have a unit of
+<a href="https://docs.oracle.com/javase/8/docs/api/java/time/temporal/ChronoUnit.html#DAYShttp://days">days</a>.
+Integers used with <code>Year</code> and <code>YearMonth</code> have a unit of
+<a href="https://docs.oracle.com/javase/8/docs/api/java/time/temporal/ChronoUnit.html#YEARS">years</a> and
+<a href="https://docs.oracle.com/javase/8/docs/api/java/time/temporal/ChronoUnit.html#MONTHS">months</a>, respectively.
+All other types have a unit of
+<a href="https://docs.oracle.com/javase/8/docs/api/java/time/temporal/ChronoUnit.html#SECONDS">seconds</a>,
+such as <code>LocalTime</code>, for instance:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def mars = LocalTime.of(12, 34, 56) // 12:34:56 pm
+
+def thirtySecondsToMars = mars - 30 // go back 30 seconds
+assert thirtySecondsToMars.second == 26</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_multiplication_and_division"><a class="anchor" href="#_multiplication_and_division"></a>4.2.2. Multiplication and division</h4>
+<div class="paragraph">
+<p>The <code>*</code> operator can be used to multiply <code>Period</code> and <code>Duration</code> instances by an
+integer value; the <code>/</code> operator can be used to divide <code>Duration</code> instances by an integer value.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def period = Period.ofMonths(1) * 2 // a 1-month period times 2
+assert period.months == 2
+
+def duration = Duration.ofSeconds(10) / 5// a 10-second duration divided by 5
+assert duration.seconds == 2</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_incrementing_and_decrementing"><a class="anchor" href="#_incrementing_and_decrementing"></a>4.2.3. Incrementing and decrementing</h4>
+<div class="paragraph">
+<p>The  <code>++</code> and <code>--</code> operators can be used increment and decrement date/time values by one unit. Since the JSR 310 types
+are immutable, the operation will create a new instance with the incremented/decremented value and reassign it to the
+reference.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def year = Year.of(2000)
+--year // decrement by one year
+assert year.value == 1999
+
+def offsetTime = OffsetTime.of(0, 0, 0, 0, ZoneOffset.UTC) // 00:00:00.000 UTC
+offsetTime++ // increment by one second
+assert offsetTime.second == 1</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_negation"><a class="anchor" href="#_negation"></a>4.2.4. Negation</h4>
+<div class="paragraph">
+<p>The <code>Duration</code> and <code>Period</code> types represent a negative or positive length of time.
+These can be negated with the unary <code>-</code> operator.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def duration = Duration.ofSeconds(-15)
+def negated = -duration
+assert negated.seconds == 15</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_interacting_with_date_time_values"><a class="anchor" href="#_interacting_with_date_time_values"></a>4.3. Interacting with date/time values</h3>
+<div class="sect3">
+<h4 id="_property_notation"><a class="anchor" href="#_property_notation"></a>4.3.1. Property notation</h4>
+<div class="paragraph">
+<p>The
+<a href="https://docs.oracle.com/javase/8/docs/api/java/time/temporal/TemporalAccessor.html#getLong-java.time.temporal.TemporalField-"><code>getLong(TemporalField)</code></a>
+method of <code>TemporalAccessor</code> types (e.g. <code>LocalDate</code>,
+<code>LocalTime</code>, <code>ZonedDateTime</code>, etc.) and the
+<a href="https://docs.oracle.com/javase/8/docs/api/java/time/temporal/TemporalAmount.html#get-java.time.temporal.TemporalUnit-"><code>get(TemporalUnit)</code></a>
+method of <code>TemporalAmount</code> types (namely <code>Period</code> and <code>Duration</code>), can be invoked with
+Groovy&#8217;s property notation. For example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def date = LocalDate.of(2018, Month.MARCH, 12)
+assert date[ChronoField.YEAR] == 2018
+assert date[ChronoField.MONTH_OF_YEAR] == Month.MARCH.value
+assert date[ChronoField.DAY_OF_MONTH] == 12
+assert date[ChronoField.DAY_OF_WEEK] == DayOfWeek.MONDAY.value
+
+def period = Period.ofYears(2).withMonths(4).withDays(6)
+assert period[ChronoUnit.YEARS] == 2
+assert period[ChronoUnit.MONTHS] == 4
+assert period[ChronoUnit.DAYS] == 6</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_ranges_code_upto_code_and_code_downto_code"><a class="anchor" href="#_ranges_code_upto_code_and_code_downto_code"></a>4.3.2. Ranges, <code>upto</code>, and <code>downto</code></h4>
+<div class="paragraph">
+<p>The JSR 310 types can be used with the <a href="core-operators.html#_range_operator">range operator</a>.
+The following example iterates between today and the <code>LocalDate</code> six days from now,
+printing out the day of the week for each iteration. As both range bounds are inclusive,
+this prints all seven days of the week.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def start = LocalDate.now()
+def end = start + 6 // 6 days later
+(start..end).each { date -&gt;
+    println date.dayOfWeek
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>upto</code> method will accomplish the same as the range in the above example.
+The <code>upto</code> method iterates from the earlier start value (inclusive) to the later end value
+(also inclusive), calling the closure with the incremented value once per iteration.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def start = LocalDate.now()
+def end = start + 6 // 6 days later
+start.upto(end) { date -&gt;
+    println date.dayOfWeek
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>downto</code> method iterates in the opposite direction, from a later start value
+to an earlier end value.</p>
+</div>
+<div class="paragraph">
+<p>The unit of iteration for <code>upto</code>, <code>downto</code>, and ranges is the same as the unit for addition
+and subtraction: <code>LocalDate</code> iterates by one day at a time,
+<code>YearMonth</code> iterates by one month, <code>Year</code> by one year, and everything else by one second.
+Both methods also support an optional a <code>TemporalUnit</code> argument to change the unit of
+iteration.</p>
+</div>
+<div class="paragraph">
+<p>Consider the following example, where March 1st, 2018 is iterated up to March 2nd, 2018
+using an iteration unit of
+<a href="https://docs.oracle.com/javase/8/docs/api/java/time/temporal/ChronoUnit.html#MONTHS">months</a>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def start = LocalDate.of(2018, Month.MARCH, 2)
+def end = start + 1 // 1 day later
+
+int iterationCount = 0
+start.upto(end, ChronoUnit.MONTHS) { date -&gt;
+    println date
+    ++iterationCount
+}
+
+assert iterationCount == 1</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Since the start date is inclusive, the closure is called with date March 1st. The <code>upto</code> method
+then increments the date by one month, yielding the date, April 1st. Because this date is <em>after</em> the
+specified end date of March 2nd, the iteration stops immediately, having only called the closure
+once. This behavior is the same for the <code>downto</code> method except that the iteration will stop
+as soon as the the value of <code>end</code> becomes earlier than the targeted end date.</p>
+</div>
+<div class="paragraph">
+<p>In short, when iterating with the <code>upto</code> or <code>downto</code> methods with a custom unit of iteration,
+the current value of iteration will never exceed the end value.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_combining_date_time_values"><a class="anchor" href="#_combining_date_time_values"></a>4.3.3. Combining date/time values</h4>
+<div class="paragraph">
+<p>The left-shift operator (<code>&lt;&lt;</code>) can be used to combine two JSR 310 types into an aggregate type.
+For example, a <code>LocalDate</code> can be left-shifted into a <code>LocalTime</code> to produce a composite
+<code>LocalDateTime</code> instance.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">MonthDay monthDay = Month.JUNE &lt;&lt; 3 // June 3rd
+LocalDate date = monthDay &lt;&lt; Year.of(2015) // 3-Jun-2015
+LocalDateTime dateTime = date &lt;&lt; LocalTime.NOON // 3-Jun-2015 @ 12pm
+OffsetDateTime offsetDateTime = dateTime &lt;&lt; ZoneOffset.ofHours(-5) // 3-Jun-2015 @ 12pm UTC-5</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The left-shift operator is reflexive; the order of the operands does not matter.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def year = Year.of(2000)
+def month = Month.DECEMBER
+
+YearMonth a = year &lt;&lt; month
+YearMonth b = month &lt;&lt; year
+assert a == b</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_creating_periods_and_durations"><a class="anchor" href="#_creating_periods_and_durations"></a>4.3.4. Creating periods and durations</h4>
+<div class="paragraph">
+<p>The right-shift operator (<code>&gt;&gt;</code>) produces a value representing the period or duration between the
+operands. For <code>ChronoLocalDate</code>, <code>YearMonth</code>, and <code>Year</code>, the operator yields
+a <code>Period</code> instance:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def newYears = LocalDate.of(2018, Month.JANUARY, 1)
+def aprilFools = LocalDate.of(2018, Month.APRIL, 1)
+
+def period = newYears &gt;&gt; aprilFools
+assert period instanceof Period
+assert period.months == 3</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The operator produces a <code>Duration</code> for the time-aware JSR types:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def duration = LocalTime.NOON &gt;&gt; (LocalTime.NOON + 30)
+assert duration instanceof Duration
+assert duration.seconds == 30</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If the value on the left-hand side of the operator is earlier than the value on the right-hand
+side, the result is positive. If the left-hand side is later than the right-hand side, the
+result is negative:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def decade = Year.of(2010) &gt;&gt; Year.of(2000)
+assert decade.years == -10</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_converting_between_legacy_and_jsr_310_types"><a class="anchor" href="#_converting_between_legacy_and_jsr_310_types"></a>4.4. Converting between legacy and JSR 310 types</h3>
+<div class="paragraph">
+<p>Despite the shortcomings of <code>Date</code>, <code>Calendar</code>, and <code>TimeZone</code> types in the <code>java.util</code> package
+they are farily common in Java APIs (at least in those prior to Java 8).
+To accommodate use of such APIs, Groovy provides methods for converting between the
+JSR 310 types and legacy types.</p>
+</div>
+<div class="paragraph">
+<p>Most JSR types have been fitted with <code>toDate()</code> and <code>toCalendar()</code> methods for
+converting to relatively equivalent <code>java.util.Date</code> and <code>java.util.Calendar</code> values.
+Both <code>ZoneId</code> and <code>ZoneOffset</code> have been given a <code>toTimeZone()</code> method for converting to
+<code>java.util.TimeZone</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// LocalDate to java.util.Date
+def valentines = LocalDate.of(2018, Month.FEBRUARY, 14)
+assert valentines.toDate().format('MMMM dd, yyyy') == 'February 14, 2018'
+
+// LocalTime to java.util.Date
+def noon = LocalTime.of(12, 0, 0)
+assert noon.toDate().format('HH:mm:ss') == '12:00:00'
+
+// ZoneId to java.util.TimeZone
+def newYork = ZoneId.of('America/New_York')
+assert newYork.toTimeZone() == TimeZone.getTimeZone('America/New_York')
+
+// ZonedDateTime to java.util.Calendar
+def valAtNoonInNY = ZonedDateTime.of(valentines, noon, newYork)
+assert valAtNoonInNY.toCalendar().getTimeZone().toZoneId() == newYork</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note that when converting to a legacy type:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Nanosecond values are truncated to milliseconds. A <code>LocalTime</code>, for example, with a <code>ChronoUnit.NANOS</code> value
+of 999,999,999 nanoseconds translates to 999 milliseconds.</p>
+</li>
+<li>
+<p>When converting the "local" types (<code>LocalDate</code>, <code>LocalTime</code>, and <code>LocalDateTime</code>), the time zone of the
+returned <code>Date</code> or <code>Calendar</code> will be the system default.</p>
+</li>
+<li>
+<p>When converting a time-only type (<code>LocalTime</code> or <code>OffsetTime</code>), the year/month/day of the <code>Date</code> or <code>Calendar</code> is set
+to the current date.</p>
+</li>
+<li>
+<p>When converting a date-only type (<code>LocalDate</code>), the time value of the <code>Date</code> or <code>Calendar</code> will be cleared,
+i.e. <code>00:00:00.000</code>.</p>
+</li>
+<li>
+<p>When converting an <code>OffsetDateTime</code> to a <code>Calendar</code>, only the hours and minutes of the <code>ZoneOffset</code> convey
+into the corresponding <code>TimeZone</code>. Fortunately, Zone Offsets with non-zero seconds are rare.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Groovy has added a number of methods to <code>Date</code> and <code>Calendar</code>
+for converting into the various JSR 310 types:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Date legacy = Date.parse('yyyy-MM-dd HH:mm:ss.SSS', '2010-04-03 10:30:58.999')
+
+assert legacy.toLocalDate() == LocalDate.of(2010, 4, 3)
+assert legacy.toLocalTime() == LocalTime.of(10, 30, 58, 999_000_000) // 999M ns = 999ms
+assert legacy.toOffsetTime().hour == 10
+assert legacy.toYear() == Year.of(2010)
+assert legacy.toMonth() == Month.APRIL
+assert legacy.toDayOfWeek() == DayOfWeek.SATURDAY
+assert legacy.toMonthDay() == MonthDay.of(Month.APRIL, 3)
+assert legacy.toYearMonth() == YearMonth.of(2010, Month.APRIL)
+assert legacy.toLocalDateTime().year == 2010
+assert legacy.toOffsetDateTime().dayOfMonth == 3
+assert legacy.toZonedDateTime().zone == ZoneId.systemDefault()</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_handy_utilities"><a class="anchor" href="#_handy_utilities"></a>5. Handy utilities</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_configslurper"><a class="anchor" href="#_configslurper"></a>5.1. ConfigSlurper</h3>
+<div class="paragraph">
+<p><code>ConfigSlurper</code> is a utility class for reading configuration files defined in the form of Groovy scripts. Like it is
+the case with Java <code>*.properties</code> files, <code>ConfigSlurper</code> allows a dot notation. But in addition, it allows for Closure scoped
+configuration values and arbitrary object types.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def config = new ConfigSlurper().parse('''
+    app.date = new Date()  <i class="conum" data-value="1"></i><b>(1)</b>
+    app.age  = 42
+    app {                  <i class="conum" data-value="2"></i><b>(2)</b>
+        name = "Test${42}"
+    }
+''')
+
+assert config.app.date instanceof Date
+assert config.app.age == 42
+assert config.app.name == 'Test42'</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Usage of the dot notation</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Usage of Closure scopes as an alternative to the dot notation</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>As can be seen in the above example, the <code>parse</code> method can be used to retrieve <code>groovy.util.ConfigObject</code> instances. The
+<code>ConfigObject</code> is a specialized <code>java.util.Map</code> implementation that either returns the configured value or a new <code>ConfigObject</code>
+instance but never <code>null</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def config = new ConfigSlurper().parse('''
+    app.date = new Date()
+    app.age  = 42
+    app.name = "Test${42}"
+''')
+
+assert config.test != null   <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>config.test</code> has not been specified yet it returns a <code>ConfigObject</code> when being called.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>In the case of a dot being part of a configuration variable name, it can be escaped by using single or double quotes.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def config = new ConfigSlurper().parse('''
+    app."person.age"  = 42
+''')
+
+assert config.app."person.age" == 42</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In addition, <code>ConfigSlurper</code> comes with support for <code>environments</code>. The <code>environments</code> method can be used to hand over
+a Closure instance that itself may consist of a several sections. Let&#8217;s say we wanted to create a particular configuration
+value for the development environment. When creating the <code>ConfigSlurper</code> instance we can use the <code>ConfigSlurper(String)</code>
+constructor to specify the target environment.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def config = new ConfigSlurper('development').parse('''
+  environments {
+       development {
+           app.port = 8080
+       }
+
+       test {
+           app.port = 8082
+       }
+
+       production {
+           app.port = 80
+       }
+  }
+''')
+
+assert config.app.port == 8080</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The <code>ConfigSlurper</code> environments aren&#8217;t restricted to any particular environment names. It solely depends on the
+<code>ConfigSlurper</code> client code what value are supported and interpreted accordingly.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The <code>environments</code> method is built-in but the <code>registerConditionalBlock</code> method can be used to register other method names
+in addition to the <code>environments</code> name.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def slurper = new ConfigSlurper()
+slurper.registerConditionalBlock('myProject', 'developers')   <i class="conum" data-value="1"></i><b>(1)</b>
+
+def config = slurper.parse('''
+  sendMail = true
+
+  myProject {
+       developers {
+           sendMail = false
+       }
+  }
+''')
+
+assert !config.sendMail</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Once the new block is registered <code>ConfigSlurper</code> can parse it.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>For Java integration purposes the <code>toProperties</code> method can be used to convert the <code>ConfigObject</code> to a <code>java.util.Properties</code>
+object that might be stored to a <code>*.properties</code> text file. Be aware though that the configuration values are converted to
+<code>String</code> instances during adding them to the newly created <code>Properties</code> instance.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def config = new ConfigSlurper().parse('''
+    app.date = new Date()
+    app.age  = 42
+    app {
+        name = "Test${42}"
+    }
+''')
+
+def properties = config.toProperties()
+
+assert properties."app.date" instanceof String
+assert properties."app.age" == '42'
+assert properties."app.name" == 'Test42'</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_expando"><a class="anchor" href="#_expando"></a>5.2. Expando</h3>
+<div class="paragraph">
+<p>The <code>Expando</code> class can be used to create a dynamically expandable object. Despite its name it does not use the
+<code>ExpandoMetaClass</code> underneath. Each <code>Expando</code> object represents a standalone, dynamically-crafted instance that can be
+extended with properties (or methods) at runtime.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def expando = new Expando()
+expando.name = 'John'
+
+assert expando.name == 'John'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A special case occurs when a dynamic property registers a <code>Closure</code> code block. Once being registered it can be invoked
+as it would be done with a method call.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def expando = new Expando()
+expando.toString = { -&gt; 'John' }
+expando.say = { String s -&gt; "John says: ${s}" }
+
+assert expando as String == 'John'
+assert expando.say('Hi') == 'John says: Hi'</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_observable_list_map_and_set"><a class="anchor" href="#_observable_list_map_and_set"></a>5.3. Observable list, map and set</h3>
+<div class="paragraph">
+<p>Groovy comes with observable lists, maps and sets. Each of these collections trigger <code>java.beans.PropertyChangeEvent</code> events when elements
+are added, removed or changed. Note that a <code>PropertyChangeEvent</code> is not only signalling that a certain event has
+ occurred, moreover, it holds information on the property name and the old/new value a certain property has been changed to.</p>
+</div>
+<div class="paragraph">
+<p>Depending on the type of change that has happened, observable collections might fire more specialized <code>PropertyChangeEvent</code>
+ types. For example, adding an element to an observable list fires an <code>ObservableList.ElementAddedEvent</code> event.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def event                                       <i class="conum" data-value="1"></i><b>(1)</b>
+def listener = {
+    if (it instanceof ObservableList.ElementEvent)  {  <i class="conum" data-value="2"></i><b>(2)</b>
+        event = it
+    }
+} as PropertyChangeListener
+
+
+def observable = [1, 2, 3] as ObservableList    <i class="conum" data-value="3"></i><b>(3)</b>
+observable.addPropertyChangeListener(listener)  <i class="conum" data-value="4"></i><b>(4)</b>
+
+observable.add 42                               <i class="conum" data-value="5"></i><b>(5)</b>
+
+assert event instanceof ObservableList.ElementAddedEvent
+
+def elementAddedEvent = event as ObservableList.ElementAddedEvent
+assert elementAddedEvent.changeType == ObservableList.ChangeType.ADDED
+assert elementAddedEvent.index == 3
+assert elementAddedEvent.oldValue == null
+assert elementAddedEvent.newValue == 42</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Declares a <code>PropertyChangeEventListener</code> that is capturing the fired events</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td><code>ObservableList.ElementEvent</code> and its descendant types are relevant for this listener</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Registers the listener</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Creates an <code>ObservableList</code> from the given list</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>Triggers an <code>ObservableList.ElementAddedEvent</code> event</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Be aware that adding an element in fact causes two events to be triggered. The first is of type <code>ObservableList.ElementAddedEvent</code>,
+the second is a plain <code>PropertyChangeEvent</code> that informs listeners about the change of property <code>size</code>.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The <code>ObservableList.ElementClearedEvent</code> event type is another interesting one. Whenever multiple
+ elements are removed, for example when calling <code>clear()</code>, it holds the elements being removed from the list.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def event
+def listener = {
+    if (it instanceof ObservableList.ElementEvent)  {
+        event = it
+    }
+} as PropertyChangeListener
+
+
+def observable = [1, 2, 3] as ObservableList
+observable.addPropertyChangeListener(listener)
+
+observable.clear()
+
+assert event instanceof ObservableList.ElementClearedEvent
+
+def elementClearedEvent = event as ObservableList.ElementClearedEvent
+assert elementClearedEvent.values == [1, 2, 3]
+assert observable.size() == 0</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To get an overview of all the supported event types the reader is encouraged to have a look at the JavaDoc documentation
+or the source code of the observable collection in use.</p>
+</div>
+<div class="paragraph">
+<p><code>ObservableMap</code> and <code>ObservableSet</code> come with the same concepts as we have seen for <code>ObservableList</code> in this section.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 3.0.0-alpha-3<br>
+Last updated 2018-06-23 13:44:48 AEST
+</div>
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+<script>prettyPrint()</script>
+</body>
+</html>

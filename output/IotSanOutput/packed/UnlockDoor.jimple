@@ -261,7 +261,7 @@ public class UnlockDoor extends java.lang.Object
     public void changedLocationModeEvtHandler()
     {
         int JJJCTEMP$4, index0;
-        STLock m2_0_JJJCTEMP$0, it;
+        STLock m0_0_JJJCTEMP$0, it;
         UnlockDoor JJJCTEMP$0;
         STLock[] _static_UnlockDoor_locks;
 
@@ -271,8 +271,8 @@ public class UnlockDoor extends java.lang.Object
 
      label0:
         it = _static_UnlockDoor_locks[index0];
-        m2_0_JJJCTEMP$0 = it;
-        m2_0_JJJCTEMP$0.[STLock.STCommand_STLock_unlock:boolean] = 1;
+        m0_0_JJJCTEMP$0 = it;
+        m0_0_JJJCTEMP$0.[STLock.STCommand_STLock_unlock:boolean] = 1;
         goto label1;
 
      label1:

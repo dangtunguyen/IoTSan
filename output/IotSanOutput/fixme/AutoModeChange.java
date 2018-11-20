@@ -132,10 +132,10 @@ public class AutoModeChange
      private boolean everyoneIsAway ()
      {
           boolean result = true;
-          int index2 = 0;
-          while (index2 < _static_AutoModeChange_people.length)
+          int index5 = 0;
+          while (index5 < _static_AutoModeChange_people.length)
           {
-               STPresSensor person = _static_AutoModeChange_people[index2];
+               STPresSensor person = _static_AutoModeChange_people[index5];
           }
           return result;
      }

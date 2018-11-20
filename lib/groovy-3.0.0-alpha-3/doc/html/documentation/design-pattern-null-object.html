@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.6.1">
+<title>Null Object Pattern</title>
+<link rel="stylesheet" href="./assets/css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+<h1>Null Object Pattern</h1>
+<div class="details">
+<span id="revnumber">version 3.0.0-alpha-3</span>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_simple_example">1. Simple Example</a></li>
+<li><a href="#_tree_example">2. Tree Example</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <a href="http://en.wikipedia.org/wiki/Null_Object_pattern">Null Object Pattern</a> involves using a special object place-marker object representing null. Typically, if you have a reference to null, you can&#8217;t invoke <code>reference.field</code> or <code>reference.method()</code> You receive the dreaded <code>NullPointerException</code>. The null object pattern uses a special object representing null, instead of using an actual <code>null</code>. This allows you to invoke field and method references on the null object. The result of using the null object should semantically be equivalent to <em>doing nothing</em>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_simple_example"><a class="anchor" href="#_simple_example"></a>1. Simple Example</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Suppose we have the following system:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Job {
+    def salary
+}
+
+class Person {
+    def name
+    def Job job
+}
+
+def people = [
+    new Person(name: 'Tom', job: new Job(salary: 1000)),
+    new Person(name: 'Dick', job: new Job(salary: 1200)),
+]
+
+def biggestSalary = people.collect { p -&gt; p.job.salary }.max()
+println biggestSalary</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When run, this prints out <code>1200</code>. Suppose now that we now invoke:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">people &lt;&lt; new Person(name: 'Harry')</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If we now try to calculate <code>biggestSalary</code> again, we receive a null pointer exception.</p>
+</div>
+<div class="paragraph">
+<p>To overcome this problem, we can introduce a <code>NullJob</code> class and change the above statement to become:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class NullJob extends Job { def salary = 0 }
+
+people &lt;&lt; new Person(name: 'Harry', job: new NullJob())
+biggestSalary = people.collect { p -&gt; p.job.salary }.max()
+println biggestSalary</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This works as we require but it&#8217;s not always the best way to do this with Groovy. Groovy&#8217;s safe-dereference operator (<code>?.</code>) operator and null aware closures often allow Groovy to avoid the need to create a special null object or null class. This is illustrated by examining a groovier way to write the above example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">people &lt;&lt; new Person(name:'Harry')
+biggestSalary = people.collect { p -&gt; p.job?.salary }.max()
+println biggestSalary</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Two things are going on here to allow this to work. First of all, <code>max()</code> is <em>'null aware'</em> so that [300, null, 400].max() == 400. Secondly, with the <code>?.</code> operator, an expression like <code>p?.job?.salary</code> will be equal to null if <code>salary</code> is equal to null, or if <code>job</code> is equal ` null or if <code>p</code> is equal to null. You don&#8217;t need to code a complex nested if ... then ... else to avoid a <code>NullPointerException</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_tree_example"><a class="anchor" href="#_tree_example"></a>2. Tree Example</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Consider the following example where we want to calculate size, cumulative sum and cumulative product of all the values in a tree structure.</p>
+</div>
+<div class="paragraph">
+<p>Our first attempt has special logic within the calculation methods to handle null values.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class NullHandlingTree {
+    def left, right, value
+
+    def size() {
+        1 + (left ? left.size() : 0) + (right ? right.size() : 0)
+    }
+
+    def sum() {
+       value + (left ? left.sum() : 0) + (right ? right.sum() : 0)
+    }
+
+    def product() {
+       value * (left ? left.product() : 1) * (right ? right.product() : 1)
+    }
+}
+
+def root = new NullHandlingTree(
+    value: 2,
+    left: new NullHandlingTree(
+        value: 3,
+        right: new NullHandlingTree(value: 4),
+        left: new NullHandlingTree(value: 5)
+    )
+)
+
+println root.size()
+println root.sum()
+println root.product()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If we introduce the null object pattern (here by defining the <code>NullTree</code> class), we can now simplify the logic in the <code>size()</code>, <code>sum()</code> and`product()` methods. These methods now much more clearly represent the logic for the normal (and now universal) case. Each of the methods within <code>NullTree</code> returns a value which represents doing nothing.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Tree {
+    def left = new NullTree(), right = new NullTree(), value
+
+    def size() {
+        1 + left.size() + right.size()
+    }
+
+    def sum() {
+       value + left.sum() + right.sum()
+    }
+
+    def product() {
+       value * left.product() * right.product()
+    }
+}
+
+class NullTree {
+    def size() { 0 }
+    def sum() { 0 }
+    def product() { 1 }
+}
+
+def root = new Tree(
+    value: 2,
+    left: new Tree(
+        value: 3,
+        right: new Tree(value: 4),
+        left: new Tree(value: 5)
+    )
+)
+
+println root.size()
+println root.sum()
+println root.product()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The result of running either of these examples is:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>4
+14
+120</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note: a slight variation with the null object pattern is to combine it with the singleton pattern. So, we wouldn&#8217;t write new NullTree() wherever we needed a null object as shown above. Instead we would have a single null object instance which we would place within our data structures as needed.</p>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 3.0.0-alpha-3<br>
+Last updated 2018-06-23 13:44:49 AEST
+</div>
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+<script>prettyPrint()</script>
+</body>
+</html>

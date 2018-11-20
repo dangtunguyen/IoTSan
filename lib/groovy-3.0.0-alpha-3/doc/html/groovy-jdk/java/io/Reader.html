@@ -1,0 +1,863 @@
+<!--
+
+     Licensed to the Apache Software Foundation (ASF) under one
+     or more contributor license agreements.  See the NOTICE file
+     distributed with this work for additional information
+     regarding copyright ownership.  The ASF licenses this file
+     to you under the Apache License, Version 2.0 (the
+     "License"); you may not use this file except in compliance
+     with the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing,
+     software distributed under the License is distributed on an
+     "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+     specific language governing permissions and limitations
+     under the License.
+
+-->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>Reader (Groovy JDK enhancements)</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../stylesheet.css" title="Style">
+    <script type="text/javascript">
+        function windowTitle() {
+            parent.document.title = document.title;
+        }
+    </script>
+</head>
+
+<body class="center" onload="windowTitle();">
+
+    <!-- ========== START OF NAVBAR ========== -->
+    <a name="navbar_top"><!-- --></a>
+
+    <div class="topNav">
+        <ul class="navList" title="Navigation">
+            <li><a href="../../overview-summary.html">Overview</a></li>
+            <li><a href="package-summary.html">Package</a></li>
+            <li class="navBarCell1Rev">Class</li>
+            <li><a href="../../index-all.html">Index</a></li>
+        </ul>
+    </div>
+
+    <!-- =========== END OF NAVBAR =========== -->
+
+    <!-- ======== START OF class DATA ======== -->
+
+    <div class="header">
+        <div class="subTitle">Package: <strong>java.io</strong></div>
+        <h2>Class Reader</h2>
+    </div>
+
+    <div class="contentContainer">
+
+    <!-- ========== METHOD SUMMARY =========== -->
+
+        <a name="method_summary"><!-- --></a>
+
+        <div class="summary">
+            <ul class="blockList">
+                <li class="blockList">
+                    <ul class="blockList">
+                        <li class="blockList">
+                            <h3>Methods Summary</h3>
+                            <table border="0" cellpadding="3" cellspacing="0" class="overviewSummary">
+                               <caption><span>Methods</span><span class="tabEnd">&nbsp;</span></caption>
+                                <tbody>
+                                    <tr>
+                                        <th>Return type</th>
+                                        <th>Name and parameters</th>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="Class in java.lang">Object</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#eachLine(groovy.lang.Closure)">eachLine</a></strong>(<a href="http://docs.groovy-lang.org/latest/html/gapi/groovy/lang/Closure.html" title="Class in groovy.lang">Closure</a> closure)</code>
+                                            <br>
+                                            Iterates through the given reader line by line.  
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="rawColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="Class in java.lang">Object</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#eachLine(int, groovy.lang.Closure)">eachLine</a></strong>(int firstLine, <a href="http://docs.groovy-lang.org/latest/html/gapi/groovy/lang/Closure.html" title="Class in groovy.lang">Closure</a> closure)</code>
+                                            <br>
+                                            Iterates through the given reader line by line.  
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.groovy-lang.org/latest/html/gapi/groovy/lang/Writable.html" title="Class in groovy.lang">Writable</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#filterLine(groovy.lang.Closure)">filterLine</a></strong>(<a href="http://docs.groovy-lang.org/latest/html/gapi/groovy/lang/Closure.html" title="Class in groovy.lang">Closure</a> closure)</code>
+                                            <br>
+                                            Filter the lines from this Reader, and return a Writable which can be
+used to stream the filtered lines to a destination.  
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="rawColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code>void</code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#filterLine(java.io.Writer, groovy.lang.Closure)">filterLine</a></strong>(<a href="http://docs.oracle.com/javase/8/docs/api/java/io/Writer.html" title="Class in java.io">Writer</a> writer, <a href="http://docs.groovy-lang.org/latest/html/gapi/groovy/lang/Closure.html" title="Class in groovy.lang">Closure</a> closure)</code>
+                                            <br>
+                                            Filter the lines from a reader and write them on the writer,
+according to a closure which returns true if the line should be included.
+
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="Class in java.lang">String</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#getText()">getText</a></strong>()</code>
+                                            <br>
+                                            Read the content of the Reader and return it as a String.  
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="rawColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html" title="Class in java.util">Iterator</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#iterator()">iterator</a></strong>()</code>
+                                            <br>
+                                            Creates an iterator which will traverse through the reader a line at a time.
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="Class in java.lang">String</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#readLine()">readLine</a></strong>()</code>
+                                            <br>
+                                            Read a single, whole line from the given Reader. 
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="rawColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="Class in java.util">List</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#readLines()">readLines</a></strong>()</code>
+                                            <br>
+                                            Reads the reader into a list of Strings, with one entry for each line.
+
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="Class in java.lang">Object</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#splitEachLine(java.lang.String, groovy.lang.Closure)">splitEachLine</a></strong>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="Class in java.lang">String</a> regex, <a href="http://docs.groovy-lang.org/latest/html/gapi/groovy/lang/Closure.html" title="Class in groovy.lang">Closure</a> closure)</code>
+                                            <br>
+                                            Iterates through the given reader line by line, splitting each line using
+the given regex separator. 
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="rawColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="Class in java.lang">Object</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#splitEachLine(java.util.regex.Pattern, groovy.lang.Closure)">splitEachLine</a></strong>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html" title="Class in java.util.regex">Pattern</a> pattern, <a href="http://docs.groovy-lang.org/latest/html/gapi/groovy/lang/Closure.html" title="Class in groovy.lang">Closure</a> closure)</code>
+                                            <br>
+                                            Iterates through the given reader line by line, splitting each line using
+the given regex separator Pattern. 
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code>void</code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#transformChar(java.io.Writer, groovy.lang.Closure)">transformChar</a></strong>(<a href="http://docs.oracle.com/javase/8/docs/api/java/io/Writer.html" title="Class in java.io">Writer</a> writer, <a href="http://docs.groovy-lang.org/latest/html/gapi/groovy/lang/Closure.html" title="Class in groovy.lang">Closure</a> closure)</code>
+                                            <br>
+                                            Transforms each character from this reader by passing it to the given
+closure.  
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="rawColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code>void</code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#transformLine(java.io.Writer, groovy.lang.Closure)">transformLine</a></strong>(<a href="http://docs.oracle.com/javase/8/docs/api/java/io/Writer.html" title="Class in java.io">Writer</a> writer, <a href="http://docs.groovy-lang.org/latest/html/gapi/groovy/lang/Closure.html" title="Class in groovy.lang">Closure</a> closure)</code>
+                                            <br>
+                                            Transforms the lines from a reader with a Closure and
+write them to a writer. 
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
+                                        <td align="right" valign="top" width="1%">
+                                            <span> <code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="Class in java.lang">Object</a></code></span>
+                                        </td>
+                                        <td>
+                                            <code><strong><a href="#withReader(groovy.lang.Closure)">withReader</a></strong>(<a href="http://docs.groovy-lang.org/latest/html/gapi/groovy/lang/Closure.html" title="Class in groovy.lang">Closure</a> closure)</code>
+                                            <br>
+                                            Allows this reader to be used within the closure, ensuring that it
+is closed before this method returns.
+                                        </td>
+                                    </tr>
+                                    
+                                </tbody>
+                            </table>
+                        </li>
+                        
+                        <ul class="blockList">
+                            <li class="blockList">
+                            <h4>Methods inherited from class java.lang.<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="Class in java.lang">Object</a></h4>
+                                <p>
+                                    <code><strong><a href="../../java/lang/Object.html#addShutdownHook(groovy.lang.Closure)">addShutdownHook</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#any()">any</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#any(groovy.lang.Closure)">any</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#asBoolean()">asBoolean</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#asType(java.lang.Class)">asType</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#collect()">collect</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#collect(groovy.lang.Closure)">collect</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#collect(java.util.Collection, groovy.lang.Closure)">collect</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#contains(java.lang.Object)">contains</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#count(java.lang.Object)">count</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#dump()">dump</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#each(groovy.lang.Closure)">each</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#eachWithIndex(groovy.lang.Closure)">eachWithIndex</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#equals(java.util.List)">equals</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#every()">every</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#every(groovy.lang.Closure)">every</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#find()">find</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#find(groovy.lang.Closure)">find</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#findAll()">findAll</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#findAll(groovy.lang.Closure)">findAll</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#findIndexOf(groovy.lang.Closure)">findIndexOf</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#findIndexOf(int, groovy.lang.Closure)">findIndexOf</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#findIndexValues(groovy.lang.Closure)">findIndexValues</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#findIndexValues(java.lang.Number, groovy.lang.Closure)">findIndexValues</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#findLastIndexOf(groovy.lang.Closure)">findLastIndexOf</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#findLastIndexOf(int, groovy.lang.Closure)">findLastIndexOf</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#findResult(groovy.lang.Closure)">findResult</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#findResult(java.lang.Object, groovy.lang.Closure)">findResult</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#flatten()">flatten</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#getAt(java.lang.String)">getAt</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#getMetaClass()">getMetaClass</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#getMetaPropertyValues()">getMetaPropertyValues</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#getProperties()">getProperties</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#grep()">grep</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#grep(java.lang.Object)">grep</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#groupBy(java.lang.Object)">groupBy</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#groupBy(java.util.List)">groupBy</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#hasProperty(java.lang.String)">hasProperty</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#identity(groovy.lang.Closure)">identity</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#inject(groovy.lang.Closure)">inject</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#inject(java.lang.Object, groovy.lang.Closure)">inject</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#inspect()">inspect</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#invokeMethod(java.lang.String, java.lang.Object)">invokeMethod</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#is(java.lang.Object)">is</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#isCase(java.lang.Object)">isCase</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#iterator()">iterator</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#join(java.lang.String)">join</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#metaClass(groovy.lang.Closure)">metaClass</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#print(java.io.PrintWriter)">print</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#print(java.lang.Object)">print</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#printf(java.lang.String, java.lang.Object)">printf</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#printf(java.lang.String, java.lang.Object[])">printf</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#println()">println</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#println(java.io.PrintWriter)">println</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#println(java.lang.Object)">println</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#putAt(java.lang.String, java.lang.Object)">putAt</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#respondsTo(java.lang.String)">respondsTo</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#respondsTo(java.lang.String, java.lang.Object[])">respondsTo</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#setMetaClass(groovy.lang.MetaClass)">setMetaClass</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#size()">size</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#split(groovy.lang.Closure)">split</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#sprintf(java.lang.String, java.lang.Object)">sprintf</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#sprintf(java.lang.String, java.lang.Object[])">sprintf</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#sum()">sum</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#sum(java.lang.Object)">sum</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#tap(groovy.lang.Closure)">tap</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#toArrayString()">toArrayString</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#toSpreadMap()">toSpreadMap</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#toString()">toString</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#use(java.lang.Class, groovy.lang.Closure)">use</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#use(java.lang.Object[])">use</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#use(java.util.List, groovy.lang.Closure)">use</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#with(boolean, groovy.lang.Closure)">with</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#with(groovy.lang.Closure)">with</a></strong></code>, <code><strong><a href="../../java/lang/Object.html#withTraits(java.lang.Class)">withTraits</a></strong></code>
+                                </p>
+                            </li>
+                        </ul>
+                        
+                        <ul class="blockList">
+                            <li class="blockList">
+                            <h4>Methods inherited from interface java.io.<a href="http://docs.oracle.com/javase/8/docs/api/java/io/Closeable.html" title="Class in java.io">Closeable</a></h4>
+                                <p>
+                                    <code><strong><a href="../../java/io/Closeable.html#withCloseable(groovy.lang.Closure)">withCloseable</a></strong></code>
+                                </p>
+                            </li>
+                        </ul>
+                        
+                        <ul class="blockList">
+                            <li class="blockList">
+                            <h4>Methods inherited from interface java.lang.<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/AutoCloseable.html" title="Class in java.lang">AutoCloseable</a></h4>
+                                <p>
+                                    <code><strong><a href="../../java/lang/AutoCloseable.html#withCloseable(groovy.lang.Closure)">withCloseable</a></strong></code>
+                                </p>
+                            </li>
+                        </ul>
+                        
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+    <!-- ============ METHOD DETAIL ========== -->
+
+    <a name="method_detail"><!-- --></a>
+
+
+        <div class="details">
+            <ul class="blockList">
+                <li class="blockList">
+                    <ul class="blockList">
+                        <li class="blockList">
+                            <h3>Methods Detail</h3>
+
+                            
+                            <a name="eachLine(groovy.lang.Closure)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="Class in java.lang">Object</a> <b>eachLine</b>(<a href="http://docs.groovy-lang.org/latest/html/gapi/groovy/lang/Closure.html" title="Class in groovy.lang">Closure</a> closure)</h4>
+
+                                    <p>Iterates through the given reader line by line.  Each line is passed to the
+given 1 or 2 arg closure. If the closure has two arguments, the line count is passed
+as the second argument. The Reader is closed before this method returns.</p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>closure</code> -  a closure (arg 1 is line, optional arg 2 is line number starting at line 1)</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>the last value returned by the closure</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>1.5.6</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>See Also:</b></dt>
+                                        
+                                        <dd><a href="../../java/io/Reader.html#eachLine(int, groovy.lang.Closure)" title="GDK enhancement for java.io.Reader">Reader#eachLine(int, groovy.lang.Closure)</a></dd>
+                                        
+                                    </dl>
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="eachLine(int, groovy.lang.Closure)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="Class in java.lang">Object</a> <b>eachLine</b>(int firstLine, <a href="http://docs.groovy-lang.org/latest/html/gapi/groovy/lang/Closure.html" title="Class in groovy.lang">Closure</a> closure)</h4>
+
+                                    <p>Iterates through the given reader line by line.  Each line is passed to the
+given 1 or 2 arg closure. If the closure has two arguments, the line count is passed
+as the second argument. The Reader is closed before this method returns.</p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>firstLine</code> -  the line number value used for the first line (default is 1, set to 0 to start counting from 0)</dd>
+                                        
+                                        <dd><code>closure</code> -    a closure which will be passed each line (or for 2 arg closures the line and line count)</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>the last value returned by the closure</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>1.5.7</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="filterLine(groovy.lang.Closure)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.groovy-lang.org/latest/html/gapi/groovy/lang/Writable.html" title="Class in groovy.lang">Writable</a> <b>filterLine</b>(<a href="http://docs.groovy-lang.org/latest/html/gapi/groovy/lang/Closure.html" title="Class in groovy.lang">Closure</a> closure)</h4>
+
+                                    <p>Filter the lines from this Reader, and return a Writable which can be
+used to stream the filtered lines to a destination.  The closure should
+return <code>true</code> if the line should be passed to the writer.</p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>closure</code> -  a closure used for filtering</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>a Writable which will use the closure to filter each line
+        from the reader when the Writable#writeTo(Writer) is called.</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>1.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="filterLine(java.io.Writer, groovy.lang.Closure)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public void <b>filterLine</b>(<a href="http://docs.oracle.com/javase/8/docs/api/java/io/Writer.html" title="Class in java.io">Writer</a> writer, <a href="http://docs.groovy-lang.org/latest/html/gapi/groovy/lang/Closure.html" title="Class in groovy.lang">Closure</a> closure)</h4>
+
+                                    <p>Filter the lines from a reader and write them on the writer,
+according to a closure which returns true if the line should be included.
+Both Reader and Writer are closed after the operation.</p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>writer</code> -   a writer, closed after the call</dd>
+                                        
+                                        <dd><code>closure</code> -  the closure which returns booleans</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>1.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="getText()"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="Class in java.lang">String</a> <b>getText</b>()</h4>
+
+                                    <p>Read the content of the Reader and return it as a String.  The reader
+is closed before this method returns.</p>
+
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>a String containing the content of the buffered reader</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>1.0</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>See Also:</b></dt>
+                                        
+                                        <dd><a href="../../java/io/BufferedReader.html#getText()" title="GDK enhancement for java.io.BufferedReader">BufferedReader#getText()</a></dd>
+                                        
+                                    </dl>
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="iterator()"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html" title="Class in java.util">Iterator</a> <b>iterator</b>()</h4>
+
+                                    <p>Creates an iterator which will traverse through the reader a line at a time.</p>
+
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>an Iterator for the Reader</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>1.5.0</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>See Also:</b></dt>
+                                        
+                                        <dd><a href="http://docs.oracle.com/javase/8/docs/api/java/io/BufferedReader.html#readLine()" title="Class in java.io">BufferedReader#readLine()</a></dd>
+                                        
+                                    </dl>
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="readLine()"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="Class in java.lang">String</a> <b>readLine</b>()</h4>
+
+                                    <p>Read a single, whole line from the given Reader. This method is designed for use with
+Readers that support the <code>mark()</code> operation like BufferReader. It has a fallback
+behavior for Readers that don't support mark() but the behavior doesn't correctly
+detect multi-character line termination (e.g. carriage return followed by linefeed).
+We recommend for Readers that don't support mark() you consider using one of the
+following methods instead: eachLine, readLines, or iterator.</p>
+
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>a line</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>1.0</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>See Also:</b></dt>
+                                        
+                                        <dd><a href="../../java/io/Reader.html#readLines()" title="GDK enhancement for java.io.Reader">Reader#readLines()</a></dd>
+                                        
+                                        <dd><a href="../../java/io/Reader.html#iterator()" title="GDK enhancement for java.io.Reader">Reader#iterator()</a></dd>
+                                        
+                                        <dd><a href="../../java/io/Reader.html#eachLine(groovy.lang.Closure)" title="GDK enhancement for java.io.Reader">Reader#eachLine(groovy.lang.Closure)</a></dd>
+                                        
+                                    </dl>
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="readLines()"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="Class in java.util">List</a> <b>readLines</b>()</h4>
+
+                                    <p>Reads the reader into a list of Strings, with one entry for each line.
+The reader is closed before this method returns.</p>
+
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>a List of lines</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>1.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="splitEachLine(java.lang.String, groovy.lang.Closure)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="Class in java.lang">Object</a> <b>splitEachLine</b>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="Class in java.lang">String</a> regex, <a href="http://docs.groovy-lang.org/latest/html/gapi/groovy/lang/Closure.html" title="Class in groovy.lang">Closure</a> closure)</h4>
+
+                                    <p>Iterates through the given reader line by line, splitting each line using
+the given regex separator. For each line, the given closure is called with
+a single parameter being the list of strings computed by splitting the line
+around matches of the given regular expression.  The Reader is closed afterwards.
+<p>
+Here is an example:
+<pre>
+def s = 'The 3 quick\nbrown 4 fox'
+def result = ''
+new StringReader(s).splitEachLine(/\d/){ parts ->
+    result += "${parts[0]}_${parts[1]}|"
+}
+assert result == 'The _ quick|brown _ fox|'
+</pre></p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>regex</code> -    the delimiting regular expression</dd>
+                                        
+                                        <dd><code>closure</code> -  a closure</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>the last value returned by the closure</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>1.5.5</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>See Also:</b></dt>
+                                        
+                                        <dd><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html#split(java.lang.String)" title="Class in java.lang">String#split(java.lang.String)</a></dd>
+                                        
+                                    </dl>
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="splitEachLine(java.util.regex.Pattern, groovy.lang.Closure)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="Class in java.lang">Object</a> <b>splitEachLine</b>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html" title="Class in java.util.regex">Pattern</a> pattern, <a href="http://docs.groovy-lang.org/latest/html/gapi/groovy/lang/Closure.html" title="Class in groovy.lang">Closure</a> closure)</h4>
+
+                                    <p>Iterates through the given reader line by line, splitting each line using
+the given regex separator Pattern. For each line, the given closure is called with
+a single parameter being the list of strings computed by splitting the line
+around matches of the given regular expression.  The Reader is closed afterwards.
+<p>
+Here is an example:
+<pre>
+def s = 'The 3 quick\nbrown 4 fox'
+def result = ''
+new StringReader(s).splitEachLine(~/\d/){ parts ->
+    result += "${parts[0]}_${parts[1]}|"
+}
+assert result == 'The _ quick|brown _ fox|'
+</pre></p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>pattern</code> -  the regular expression Pattern for the delimiter</dd>
+                                        
+                                        <dd><code>closure</code> -  a closure</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>the last value returned by the closure</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>1.6.8</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>See Also:</b></dt>
+                                        
+                                        <dd><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html#split(java.lang.String)" title="Class in java.lang">String#split(java.lang.String)</a></dd>
+                                        
+                                    </dl>
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="transformChar(java.io.Writer, groovy.lang.Closure)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public void <b>transformChar</b>(<a href="http://docs.oracle.com/javase/8/docs/api/java/io/Writer.html" title="Class in java.io">Writer</a> writer, <a href="http://docs.groovy-lang.org/latest/html/gapi/groovy/lang/Closure.html" title="Class in groovy.lang">Closure</a> closure)</h4>
+
+                                    <p>Transforms each character from this reader by passing it to the given
+closure.  The Closure should return each transformed character, which
+will be passed to the Writer.  The reader and writer will both be
+closed before this method returns.</p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>writer</code> -   a Writer to receive the transformed characters</dd>
+                                        
+                                        <dd><code>closure</code> -  a closure that performs the required transformation</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>1.5.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="transformLine(java.io.Writer, groovy.lang.Closure)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public void <b>transformLine</b>(<a href="http://docs.oracle.com/javase/8/docs/api/java/io/Writer.html" title="Class in java.io">Writer</a> writer, <a href="http://docs.groovy-lang.org/latest/html/gapi/groovy/lang/Closure.html" title="Class in groovy.lang">Closure</a> closure)</h4>
+
+                                    <p>Transforms the lines from a reader with a Closure and
+write them to a writer. Both Reader and Writer are
+closed after the operation.</p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>writer</code> -   Where transformed lines are written. Writer is closed afterwards.</dd>
+                                        
+                                        <dd><code>closure
+</code> -  Single parameter closure that is called to transform each line of
+               text from the reader, before writing it to the writer.</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>1.0</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+                            <a name="withReader(groovy.lang.Closure)"><!-- --></a>
+
+                            <ul class="blockListLast">
+                                <li class="blockList">
+
+                                    <h4>public <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="Class in java.lang">Object</a> <b>withReader</b>(<a href="http://docs.groovy-lang.org/latest/html/gapi/groovy/lang/Closure.html" title="Class in groovy.lang">Closure</a> closure)</h4>
+
+                                    <p>Allows this reader to be used within the closure, ensuring that it
+is closed before this method returns.</p>
+
+                                    
+                                    <dl>
+                                        <dt><b>Parameters:</b></dt>
+                                        
+                                        <dd><code>closure</code> -  the closure that the writer is passed into</dd>
+                                        
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Returns:</b></dt>
+                                        <dd>the value returned by the closure</dd>
+                                    </dl>
+                                    
+
+                                    
+                                    <dl>
+                                        <dt><b>Since:</b></dt>
+                                        <dd>1.5.2</dd>
+                                    </dl>
+                                    
+
+                                    
+
+                                </li>
+                            </ul>
+
+                            
+
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+
+    <!-- ========= END OF class DATA ========= -->
+
+    <!-- ======= START OF BOTTOM NAVBAR ====== -->
+    <a name="navbar_bottom"><!-- --></a>
+    <a href="#skip-navbar_bottom" title="Skip navigation links"></a>
+
+    <div class="topNav">
+        <ul class="navList" title="Navigation">
+            <li><a href="../../overview-summary.html">Overview</a></li>
+            <li><a href="package-summary.html">Package</a></li>
+            <li class="navBarCell1Rev">Class</li>
+            <li><a href="../../index-all.html">Index</a></li>
+        </ul>
+    </div>
+    <!-- =========== END OF NAVBAR =========== -->
+
+</body>
+</html>

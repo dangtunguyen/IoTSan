@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.6.1">
+<title>Working with Date/Time types</title>
+<link rel="stylesheet" href="./assets/css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+<h1>Working with Date/Time types</h1>
+<div class="details">
+<span id="revnumber">version 3.0.0-alpha-3</span>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_formatting_and_parsing">1. Formatting and parsing</a></li>
+<li><a href="#_manipulating_date_time">2. Manipulating date/time</a>
+<ul class="sectlevel2">
+<li><a href="#_addition_and_subtraction">2.1. Addition and subtraction</a></li>
+<li><a href="#_multiplication_and_division">2.2. Multiplication and division</a></li>
+<li><a href="#_incrementing_and_decrementing">2.3. Incrementing and decrementing</a></li>
+<li><a href="#_negation">2.4. Negation</a></li>
+</ul>
+</li>
+<li><a href="#_interacting_with_date_time_values">3. Interacting with date/time values</a>
+<ul class="sectlevel2">
+<li><a href="#_property_notation">3.1. Property notation</a></li>
+<li><a href="#_ranges_code_upto_code_and_code_downto_code">3.2. Ranges, <code>upto</code>, and <code>downto</code></a></li>
+<li><a href="#_combining_date_time_values">3.3. Combining date/time values</a></li>
+<li><a href="#_creating_periods_and_durations">3.4. Creating periods and durations</a></li>
+</ul>
+</li>
+<li><a href="#_converting_between_legacy_and_jsr_310_types">4. Converting between legacy and JSR 310 types</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>groovy-datetime</code> module supports numerous extensions for working with
+the <a href="http://www.oracle.com/technetwork/articles/java/jf14-date-time-2125367.html">Date/Time API</a>
+introduced in Java 8. This documentation refers to the data types defined by this API as
+"JSR 310 types."</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_formatting_and_parsing"><a class="anchor" href="#_formatting_and_parsing"></a>1. Formatting and parsing</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>A common use case when working with date/time types is to convert them to Strings (formatting)
+and from Strings (parsing). Groovy provides these additional formatting methods:</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Method</th>
+<th class="tableblock halign-left valign-top">Description</th>
+<th class="tableblock halign-left valign-top">Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>getDateString()</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">For <code>LocalDate</code> and <code>LocalDateTime</code>, formats with
+<a href="https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html#ISO_LOCAL_DATE"><code>DateTimeFormatter.ISO_LOCAL_DATE</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>2018-03-10</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">For <code>OffsetDateTime</code>, formats with
+<a href="https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html#ISO_OFFSET_DATE"><code>DateTimeFormatter.ISO_OFFSET_DATE</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>2018-03-10+04:00</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">For <code>ZonedDateTime</code>, formats with
+<a href="https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html#ISO_LOCAL_DATE"><code>DateTimeFormatter.ISO_LOCAL_DATE</code></a>
+and appends the <code>ZoneId</code> short name</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>2018-03-10EST</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>getDateTimeString()</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">For <code>LocalDateTime</code>, formats with
+<a href="https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html#ISO_LOCAL_DATE_TIME"><code>DateTimeFormatter.ISO_LOCAL_DATE_TIME</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>2018-03-10T20:30:45</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">For <code>OffsetDateTime</code>, formats with
+<a href="https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html#ISO_OFFSET_DATE_TIME"><code>DateTimeFormatter.ISO_OFFSET_DATE_TIME</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>2018-03-10T20:30:45+04:00</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">For <code>ZonedDateTime</code>, formats with
+<a href="https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html#ISO_LOCAL_DATE_TIME"><code>DateTimeFormatter.ISO_LOCAL_DATE_TIME</code></a>
+and appends the <code>ZoneId</code> short name</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>2018-03-10T20:30:45EST</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>getTimeString()</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">For <code>LocalTime</code> and <code>LocalDateTime</code>, formats with
+<a href="https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html#ISO_LOCAL_TIME"><code>DateTimeFormatter.ISO_LOCAL_TIME</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>20:30:45</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">For <code>OffsetTime</code> and <code>OffsetDateTime</code>, formats with
+<a href="https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html#ISO_OFFSET_TIME"><code>DateTimeFormatter.ISO_OFFSET_TIME</code></a>
+formatter</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>20:30:45+04:00</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">For <code>ZonedDateTime</code>, formats with
+<a href="https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html#ISO_LOCAL_TIME"><code>DateTimeFormatter.ISO_LOCAL_TIME</code></a>
+and appends the <code>ZoneId</code> short name</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>20:30:45EST</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>format(FormatStyle style)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">For <code>LocalTime</code> and <code>OffsetTime</code>, formats with
+<a href="https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html#ofLocalizedTime-java.time.format.FormatStyle-"><code>DateTimeFormatter.ofLocalizedTime(style)</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>4:30 AM</code> (with style <code>FormatStyle.SHORT</code>, e.g.)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">For <code>LocalDate</code>, formats with
+<a href="https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html#ofLocalizedDate-java.time.format.FormatStyle-"><code>DateTimeFormatter.ofLocalizedDate(style)</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Saturday, March 10, 2018</code> (with style <code>FormatStyle.FULL</code>, e.g.)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">For <code>LocalDateTime</code>, <code>OffsetDateTime</code>, and <code>ZonedDateTime</code> formats with
+<a href="https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html#ofLocalizedDateTime-java.time.format.FormatStyle-"><code>DateTimeFormatter.ofLocalizedDateTime(style)</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Mar 10, 2019 4:30:45 AM</code> (with style <code>FormatStyle.MEDIUM</code>, e.g.)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>format(String pattern)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Formats with
+<a href="https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html#ofPattern-java.lang.String-"><code>DateTimeFormatter.ofPattern(pattern)</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>03/10/2018</code> (with pattern &#8217;MM/dd/yyyy', e.g.)</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>For parsing, Groovy adds a static <code>parse</code> method to many of the JSR 310 types. The method
+takes two arguments: the value to be formatted and the pattern to use. The pattern is
+defined by the
+<a href="https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html"><code>java.time.format.DateTimeFormatter</code> API</a>.
+As an example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def date = LocalDate.parse('Jun 3, 04', 'MMM d, yy')
+assert date == LocalDate.of(2004, Month.JUNE, 3)
+
+def time = LocalTime.parse('4:45', 'H:mm')
+assert time == LocalTime.of(4, 45, 0)
+
+def offsetTime = OffsetTime.parse('09:47:51-1234', 'HH:mm:ssZ')
+assert offsetTime == OffsetTime.of(9, 47, 51, 0, ZoneOffset.ofHoursMinutes(-12, -34))
+
+def dateTime = ZonedDateTime.parse('2017/07/11 9:47PM Pacific Standard Time', 'yyyy/MM/dd h:mma zzzz')
+assert dateTime == ZonedDateTime.of(
+        LocalDate.of(2017, 7, 11),
+        LocalTime.of(21, 47, 0),
+        ZoneId.of('America/Los_Angeles')
+)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note that these <code>parse</code> methods have a different argument ordering than the static
+<code>parse</code> method Groovy added to <code>java.util.Date</code>.
+This was done to be consistent with the existing <code>parse</code> methods of the Date/Time API.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_manipulating_date_time"><a class="anchor" href="#_manipulating_date_time"></a>2. Manipulating date/time</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_addition_and_subtraction"><a class="anchor" href="#_addition_and_subtraction"></a>2.1. Addition and subtraction</h3>
+<div class="paragraph">
+<p><code>Temporal</code> types have <code>plus</code> and <code>minus</code> methods for adding or subtracting a provided
+<code>java.time.temporal.TemporalAmount</code> argument. Because Groovy maps the <code>+</code> and <code>-</code> operators
+to single-argument methods of these names, a more natural expression syntax can be used to add and subtract.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def aprilFools = LocalDate.of(2018, Month.APRIL, 1)
+
+def nextAprilFools = aprilFools + Period.ofDays(365) // add 365 days
+assert nextAprilFools.year == 2019
+
+def idesOfMarch = aprilFools - Period.ofDays(17) // subtract 17 days
+assert idesOfMarch.dayOfMonth == 15
+assert idesOfMarch.month == Month.MARCH</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Groovy provides additional <code>plus</code> and <code>minus</code> methods that accept an integer argument,
+enabling the above to be rewritten more succinctly:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def nextAprilFools = aprilFools + 365 // add 365 days
+def idesOfMarch = aprilFools - 17 // subtract 17 days</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The unit of these integers depends on the JSR 310 type operand. As evident above,
+integers used with <code>ChronoLocalDate</code> types like <code>LocalDate</code> have a unit of
+<a href="https://docs.oracle.com/javase/8/docs/api/java/time/temporal/ChronoUnit.html#DAYShttp://days">days</a>.
+Integers used with <code>Year</code> and <code>YearMonth</code> have a unit of
+<a href="https://docs.oracle.com/javase/8/docs/api/java/time/temporal/ChronoUnit.html#YEARS">years</a> and
+<a href="https://docs.oracle.com/javase/8/docs/api/java/time/temporal/ChronoUnit.html#MONTHS">months</a>, respectively.
+All other types have a unit of
+<a href="https://docs.oracle.com/javase/8/docs/api/java/time/temporal/ChronoUnit.html#SECONDS">seconds</a>,
+such as <code>LocalTime</code>, for instance:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def mars = LocalTime.of(12, 34, 56) // 12:34:56 pm
+
+def thirtySecondsToMars = mars - 30 // go back 30 seconds
+assert thirtySecondsToMars.second == 26</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_multiplication_and_division"><a class="anchor" href="#_multiplication_and_division"></a>2.2. Multiplication and division</h3>
+<div class="paragraph">
+<p>The <code>*</code> operator can be used to multiply <code>Period</code> and <code>Duration</code> instances by an
+integer value; the <code>/</code> operator can be used to divide <code>Duration</code> instances by an integer value.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def period = Period.ofMonths(1) * 2 // a 1-month period times 2
+assert period.months == 2
+
+def duration = Duration.ofSeconds(10) / 5// a 10-second duration divided by 5
+assert duration.seconds == 2</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_incrementing_and_decrementing"><a class="anchor" href="#_incrementing_and_decrementing"></a>2.3. Incrementing and decrementing</h3>
+<div class="paragraph">
+<p>The  <code>++</code> and <code>--</code> operators can be used increment and decrement date/time values by one unit. Since the JSR 310 types
+are immutable, the operation will create a new instance with the incremented/decremented value and reassign it to the
+reference.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def year = Year.of(2000)
+--year // decrement by one year
+assert year.value == 1999
+
+def offsetTime = OffsetTime.of(0, 0, 0, 0, ZoneOffset.UTC) // 00:00:00.000 UTC
+offsetTime++ // increment by one second
+assert offsetTime.second == 1</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_negation"><a class="anchor" href="#_negation"></a>2.4. Negation</h3>
+<div class="paragraph">
+<p>The <code>Duration</code> and <code>Period</code> types represent a negative or positive length of time.
+These can be negated with the unary <code>-</code> operator.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def duration = Duration.ofSeconds(-15)
+def negated = -duration
+assert negated.seconds == 15</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_interacting_with_date_time_values"><a class="anchor" href="#_interacting_with_date_time_values"></a>3. Interacting with date/time values</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_property_notation"><a class="anchor" href="#_property_notation"></a>3.1. Property notation</h3>
+<div class="paragraph">
+<p>The
+<a href="https://docs.oracle.com/javase/8/docs/api/java/time/temporal/TemporalAccessor.html#getLong-java.time.temporal.TemporalField-"><code>getLong(TemporalField)</code></a>
+method of <code>TemporalAccessor</code> types (e.g. <code>LocalDate</code>,
+<code>LocalTime</code>, <code>ZonedDateTime</code>, etc.) and the
+<a href="https://docs.oracle.com/javase/8/docs/api/java/time/temporal/TemporalAmount.html#get-java.time.temporal.TemporalUnit-"><code>get(TemporalUnit)</code></a>
+method of <code>TemporalAmount</code> types (namely <code>Period</code> and <code>Duration</code>), can be invoked with
+Groovy&#8217;s property notation. For example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def date = LocalDate.of(2018, Month.MARCH, 12)
+assert date[ChronoField.YEAR] == 2018
+assert date[ChronoField.MONTH_OF_YEAR] == Month.MARCH.value
+assert date[ChronoField.DAY_OF_MONTH] == 12
+assert date[ChronoField.DAY_OF_WEEK] == DayOfWeek.MONDAY.value
+
+def period = Period.ofYears(2).withMonths(4).withDays(6)
+assert period[ChronoUnit.YEARS] == 2
+assert period[ChronoUnit.MONTHS] == 4
+assert period[ChronoUnit.DAYS] == 6</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_ranges_code_upto_code_and_code_downto_code"><a class="anchor" href="#_ranges_code_upto_code_and_code_downto_code"></a>3.2. Ranges, <code>upto</code>, and <code>downto</code></h3>
+<div class="paragraph">
+<p>The JSR 310 types can be used with the <a href="core-operators.html#_range_operator">range operator</a>.
+The following example iterates between today and the <code>LocalDate</code> six days from now,
+printing out the day of the week for each iteration. As both range bounds are inclusive,
+this prints all seven days of the week.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def start = LocalDate.now()
+def end = start + 6 // 6 days later
+(start..end).each { date -&gt;
+    println date.dayOfWeek
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>upto</code> method will accomplish the same as the range in the above example.
+The <code>upto</code> method iterates from the earlier start value (inclusive) to the later end value
+(also inclusive), calling the closure with the incremented value once per iteration.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def start = LocalDate.now()
+def end = start + 6 // 6 days later
+start.upto(end) { date -&gt;
+    println date.dayOfWeek
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>downto</code> method iterates in the opposite direction, from a later start value
+to an earlier end value.</p>
+</div>
+<div class="paragraph">
+<p>The unit of iteration for <code>upto</code>, <code>downto</code>, and ranges is the same as the unit for addition
+and subtraction: <code>LocalDate</code> iterates by one day at a time,
+<code>YearMonth</code> iterates by one month, <code>Year</code> by one year, and everything else by one second.
+Both methods also support an optional a <code>TemporalUnit</code> argument to change the unit of
+iteration.</p>
+</div>
+<div class="paragraph">
+<p>Consider the following example, where March 1st, 2018 is iterated up to March 2nd, 2018
+using an iteration unit of
+<a href="https://docs.oracle.com/javase/8/docs/api/java/time/temporal/ChronoUnit.html#MONTHS">months</a>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def start = LocalDate.of(2018, Month.MARCH, 2)
+def end = start + 1 // 1 day later
+
+int iterationCount = 0
+start.upto(end, ChronoUnit.MONTHS) { date -&gt;
+    println date
+    ++iterationCount
+}
+
+assert iterationCount == 1</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Since the start date is inclusive, the closure is called with date March 1st. The <code>upto</code> method
+then increments the date by one month, yielding the date, April 1st. Because this date is <em>after</em> the
+specified end date of March 2nd, the iteration stops immediately, having only called the closure
+once. This behavior is the same for the <code>downto</code> method except that the iteration will stop
+as soon as the the value of <code>end</code> becomes earlier than the targeted end date.</p>
+</div>
+<div class="paragraph">
+<p>In short, when iterating with the <code>upto</code> or <code>downto</code> methods with a custom unit of iteration,
+the current value of iteration will never exceed the end value.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_combining_date_time_values"><a class="anchor" href="#_combining_date_time_values"></a>3.3. Combining date/time values</h3>
+<div class="paragraph">
+<p>The left-shift operator (<code>&lt;&lt;</code>) can be used to combine two JSR 310 types into an aggregate type.
+For example, a <code>LocalDate</code> can be left-shifted into a <code>LocalTime</code> to produce a composite
+<code>LocalDateTime</code> instance.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">MonthDay monthDay = Month.JUNE &lt;&lt; 3 // June 3rd
+LocalDate date = monthDay &lt;&lt; Year.of(2015) // 3-Jun-2015
+LocalDateTime dateTime = date &lt;&lt; LocalTime.NOON // 3-Jun-2015 @ 12pm
+OffsetDateTime offsetDateTime = dateTime &lt;&lt; ZoneOffset.ofHours(-5) // 3-Jun-2015 @ 12pm UTC-5</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The left-shift operator is reflexive; the order of the operands does not matter.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def year = Year.of(2000)
+def month = Month.DECEMBER
+
+YearMonth a = year &lt;&lt; month
+YearMonth b = month &lt;&lt; year
+assert a == b</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_creating_periods_and_durations"><a class="anchor" href="#_creating_periods_and_durations"></a>3.4. Creating periods and durations</h3>
+<div class="paragraph">
+<p>The right-shift operator (<code>&gt;&gt;</code>) produces a value representing the period or duration between the
+operands. For <code>ChronoLocalDate</code>, <code>YearMonth</code>, and <code>Year</code>, the operator yields
+a <code>Period</code> instance:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def newYears = LocalDate.of(2018, Month.JANUARY, 1)
+def aprilFools = LocalDate.of(2018, Month.APRIL, 1)
+
+def period = newYears &gt;&gt; aprilFools
+assert period instanceof Period
+assert period.months == 3</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The operator produces a <code>Duration</code> for the time-aware JSR types:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def duration = LocalTime.NOON &gt;&gt; (LocalTime.NOON + 30)
+assert duration instanceof Duration
+assert duration.seconds == 30</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If the value on the left-hand side of the operator is earlier than the value on the right-hand
+side, the result is positive. If the left-hand side is later than the right-hand side, the
+result is negative:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def decade = Year.of(2010) &gt;&gt; Year.of(2000)
+assert decade.years == -10</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_converting_between_legacy_and_jsr_310_types"><a class="anchor" href="#_converting_between_legacy_and_jsr_310_types"></a>4. Converting between legacy and JSR 310 types</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Despite the shortcomings of <code>Date</code>, <code>Calendar</code>, and <code>TimeZone</code> types in the <code>java.util</code> package
+they are farily common in Java APIs (at least in those prior to Java 8).
+To accommodate use of such APIs, Groovy provides methods for converting between the
+JSR 310 types and legacy types.</p>
+</div>
+<div class="paragraph">
+<p>Most JSR types have been fitted with <code>toDate()</code> and <code>toCalendar()</code> methods for
+converting to relatively equivalent <code>java.util.Date</code> and <code>java.util.Calendar</code> values.
+Both <code>ZoneId</code> and <code>ZoneOffset</code> have been given a <code>toTimeZone()</code> method for converting to
+<code>java.util.TimeZone</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// LocalDate to java.util.Date
+def valentines = LocalDate.of(2018, Month.FEBRUARY, 14)
+assert valentines.toDate().format('MMMM dd, yyyy') == 'February 14, 2018'
+
+// LocalTime to java.util.Date
+def noon = LocalTime.of(12, 0, 0)
+assert noon.toDate().format('HH:mm:ss') == '12:00:00'
+
+// ZoneId to java.util.TimeZone
+def newYork = ZoneId.of('America/New_York')
+assert newYork.toTimeZone() == TimeZone.getTimeZone('America/New_York')
+
+// ZonedDateTime to java.util.Calendar
+def valAtNoonInNY = ZonedDateTime.of(valentines, noon, newYork)
+assert valAtNoonInNY.toCalendar().getTimeZone().toZoneId() == newYork</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note that when converting to a legacy type:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Nanosecond values are truncated to milliseconds. A <code>LocalTime</code>, for example, with a <code>ChronoUnit.NANOS</code> value
+of 999,999,999 nanoseconds translates to 999 milliseconds.</p>
+</li>
+<li>
+<p>When converting the "local" types (<code>LocalDate</code>, <code>LocalTime</code>, and <code>LocalDateTime</code>), the time zone of the
+returned <code>Date</code> or <code>Calendar</code> will be the system default.</p>
+</li>
+<li>
+<p>When converting a time-only type (<code>LocalTime</code> or <code>OffsetTime</code>), the year/month/day of the <code>Date</code> or <code>Calendar</code> is set
+to the current date.</p>
+</li>
+<li>
+<p>When converting a date-only type (<code>LocalDate</code>), the time value of the <code>Date</code> or <code>Calendar</code> will be cleared,
+i.e. <code>00:00:00.000</code>.</p>
+</li>
+<li>
+<p>When converting an <code>OffsetDateTime</code> to a <code>Calendar</code>, only the hours and minutes of the <code>ZoneOffset</code> convey
+into the corresponding <code>TimeZone</code>. Fortunately, Zone Offsets with non-zero seconds are rare.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Groovy has added a number of methods to <code>Date</code> and <code>Calendar</code>
+for converting into the various JSR 310 types:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Date legacy = Date.parse('yyyy-MM-dd HH:mm:ss.SSS', '2010-04-03 10:30:58.999')
+
+assert legacy.toLocalDate() == LocalDate.of(2010, 4, 3)
+assert legacy.toLocalTime() == LocalTime.of(10, 30, 58, 999_000_000) // 999M ns = 999ms
+assert legacy.toOffsetTime().hour == 10
+assert legacy.toYear() == Year.of(2010)
+assert legacy.toMonth() == Month.APRIL
+assert legacy.toDayOfWeek() == DayOfWeek.SATURDAY
+assert legacy.toMonthDay() == MonthDay.of(Month.APRIL, 3)
+assert legacy.toYearMonth() == YearMonth.of(2010, Month.APRIL)
+assert legacy.toLocalDateTime().year == 2010
+assert legacy.toOffsetDateTime().dayOfMonth == 3
+assert legacy.toZonedDateTime().zone == ZoneId.systemDefault()</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 3.0.0-alpha-3<br>
+Last updated 2018-06-23 13:44:49 AEST
+</div>
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+<script>prettyPrint()</script>
+</body>
+</html>

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.6.1">
+<title>InvokeDynamic support</title>
+<link rel="stylesheet" href="./assets/css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+<h1>InvokeDynamic support</h1>
+<div class="details">
+<span id="revnumber">version 3.0.0-alpha-3</span>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_foreword">1. Foreword</a></li>
+<li><a href="#_the_distributions">2. The distributions</a>
+<ul class="sectlevel2">
+<li><a href="#_two_jars">2.1. Two jars</a></li>
+<li><a href="#_command_line_and_indy">2.2. Command-line and indy</a></li>
+</ul>
+</li>
+<li><a href="#_running_groovy_script_from_command_line">3. Running groovy script from command line</a></li>
+<li><a href="#_the_compilation_flag">4. The compilation flag</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_foreword"><a class="anchor" href="#_foreword"></a>1. Foreword</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Since Groovy 2.0, support was added for the JVM <a href="http://docs.oracle.com/javase/7/docs/technotes/guides/vm/multiple-language-support.html#invokedynamic">invokedynamic</a> instruction. This instruction is supported since Java 7 and is a new bytecode instruction in the JVM that allows easier implementation of dynamic languages. This instruction will also be used internally, by the JVM, for the lambda support in Java 8.</p>
+</div>
+<div class="paragraph">
+<p>This means that unlike APIs, AST transformations or syntactic sugar, this feature is <strong>not visible</strong> to the developer or the end user. It is a compilation and runtime feature only. This means that given two programs written in Groovy, you have the choice to compile it with or without invokedynamic support. Whatever you choose, it comes with pros and cons:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>it is possible to mix classes compiled with and without invokedynamic in the same project, as long as you run JDK 1.7+</p>
+</li>
+<li>
+<p>depending on the JVM (even different minor versions of the JVM), you can target close to Java performance for dynamic Groovy with invokedynamic support activated</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_the_distributions"><a class="anchor" href="#_the_distributions"></a>2. The distributions</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_two_jars"><a class="anchor" href="#_two_jars"></a>2.1. Two jars</h3>
+<div class="paragraph">
+<p>The Groovy distribution comes with <strong>two</strong> jars:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>groovy-x.y.z.jar : contains Groovy sources compiled with call site caching</p>
+</li>
+<li>
+<p>groovy-x-y-z-indy.jar : contains Groovy sources compiled with invokedynamic instructions</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>As Groovy core and the Groovy modules are sometimes written in Groovy, we currently have no choice but to distribute two
+distinct versions of Groovy. This means that if you pick the "normal" jar, the Groovy classes of Groovy itself are
+compiled with call site caching (1.6+), while if you use the "indy" jar, the Groovy classes of Groovy itself are
+compiled using invokedynamic.</p>
+</div>
+<div class="paragraph">
+<p>Both jars contain a fully working Groovy implementation that is capable of compiling user supplied Groovy sources using either
+invokedynamic or call site caching. The sets of jars are mutually exclusive (don&#8217;t put both on classpath) and the key difference between
+them has to do with how the Groovy source files that make up Groovy itself are compiled.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_command_line_and_indy"><a class="anchor" href="#_command_line_and_indy"></a>2.2. Command-line and indy</h3>
+<div class="paragraph">
+<p>If you download the distribution and use the command line, it&#8217;s always the "normal" version of Groovy which is picked up in classpath. This means that whatever command you use (<code>groovy</code>, <code>groovyc</code>, <code>groovysh</code> or <code>groovyConsole</code>), invokedynamic support is not available out of the box. To use a Groovy distribution that was compiled with invokedynamic for its Groovy sources you have to switch the jars manually. The distribution makes use of the jars in the lib directory, while the indy jars are available in the indy directory. You have three things to do:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>remove or rename the groovy-*.jar files in the lib directory</p>
+</li>
+<li>
+<p>replace them with the indy version from the indy directory</p>
+</li>
+<li>
+<p>remove the -indy classifier from jar names</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Here&#8217;s a bash script that would do it all at once:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-bash" data-lang="bash">$ for f in `ls lib/groovy*.jar | cut -d/ -f2`;do k=`basename $f .jar`; mv lib/$k.jar lib/$k.jar.old; cp indy/$k-indy.jar lib/$k.jar ; done</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_running_groovy_script_from_command_line"><a class="anchor" href="#_running_groovy_script_from_command_line"></a>3. Running groovy script from command line</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The usual way to run a script from the command line is by <code>groovy foo.groovy</code>, where <code>foo.groovy</code> is the Groovy program
+in source form. To use indy for this you have to use the indy compilation flag, <code>groovy --indy foo.groovy</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_the_compilation_flag"><a class="anchor" href="#_the_compilation_flag"></a>4. The compilation flag</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Independently of the jar version that you use (and after having exchanged the jars as described), invokedynamic support requires a specific compilation flag (<em>indy</em>). If you want to compile your classes with invokedynamic support, this flag must be set at compile time. The following tables show you what happens with user compiled classes and Groovy core classes depending on the jar you use and the compilation flag:</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<caption class="title">Table 1. user compiled classes</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">indy flag</th>
+<th class="tableblock halign-left valign-top"><strong>off</strong></th>
+<th class="tableblock halign-left valign-top"><strong>on</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">normal jar</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">call site caching</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invokedynamic</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">indy jar</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">call site caching</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invokedynamic</p></td>
+</tr>
+</tbody>
+</table>
+<table class="tableblock frame-all grid-all spread">
+<caption class="title">Table 2. core Groovy classes</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">indy flag</th>
+<th class="tableblock halign-left valign-top"><strong>off</strong></th>
+<th class="tableblock halign-left valign-top"><strong>on</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">normal jar</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">call site caching</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">call site caching</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">indy jar</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invokedynamic</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">invokedynamic</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>So even if you use the indy jar, if you don&#8217;t use the invokedynamic flag at compile time, then the compiled classes will use the "old" format.</p>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 3.0.0-alpha-3<br>
+Last updated 2018-06-23 13:44:39 AEST
+</div>
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+<script>prettyPrint()</script>
+</body>
+</html>

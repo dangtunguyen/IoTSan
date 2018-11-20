@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.6.1">
+<title>Bean Scripting Framework</title>
+<link rel="stylesheet" href="./assets/css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+<h1>Bean Scripting Framework</h1>
+<div class="details">
+<span id="revnumber">version 3.0.0-alpha-3</span>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_getting_started">1. Getting started</a></li>
+<li><a href="#_passing_in_variables">2. Passing in variables</a></li>
+<li><a href="#_other_calling_options">3. Other calling options</a></li>
+<li><a href="#_access_to_the_scripting_engine">4. Access to the scripting engine</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+The <a href="http://commons.apache.org/proper/commons-bsf/">Bean Scripting Framework</a> is an attempt to create an API
+to allow calling scripting languages from Java. It hasn&#8217;t been updated for long and abandoned in favor of the
+standard <a href="#jsr223">JSR-223</a> API.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The BSF engine for Groovy is implemented by the <code>org.codehaus.groovy.bsf.GroovyEngine</code> class. However, that fact is
+normally hidden away by the BSF APIs. You just treat Groovy like any of the other scripting languages via the BSF
+API.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Since Groovy has its own native support for integration with Java, you only need to worry about BSF if you also
+want to also be able to call other languages, e.g. <a href="http://jruby.org/">JRuby</a> or if you want to remain very
+loosely coupled from your scripting language.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_getting_started"><a class="anchor" href="#_getting_started"></a>1. Getting started</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Provided you have Groovy and BSF jars in your classpath, you can use the
+following Java code to run a sample Groovy script:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">String myScript = "println('Hello World')\n  return [1, 2, 3]";
+BSFManager manager = new BSFManager();
+List answer = (List) manager.eval("groovy", "myScript.groovy", 0, 0, myScript);
+assertEquals(3, answer.size());</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_passing_in_variables"><a class="anchor" href="#_passing_in_variables"></a>2. Passing in variables</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>BSF lets you pass beans between Java and your scripting language. You
+can <em>register</em>/<em>unregister</em> beans which makes them known to BSF. You can
+then use BSF methods to <em>lookup</em> beans as required. Alternatively, you
+can <em>declare</em>/<em>undeclare</em> beans. This will register them but also make
+them available for use directly in your scripting language. This second
+approach is the normal approach used with Groovy. Here is an example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">BSFManager manager = new BSFManager();
+manager.declareBean("xyz", 4, Integer.class);
+Object answer = manager.eval("groovy", "test.groovy", 0, 0, "xyz + 1");
+assertEquals(5, answer);</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_other_calling_options"><a class="anchor" href="#_other_calling_options"></a>3. Other calling options</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The previous examples used the <em>eval</em> method. BSF makes multiple methods
+available for your use (see the
+<a href="http://commons.apache.org/proper/commons-bsf/manual.html">BSF documentation</a> for more
+details). One of the other available methods is <em>apply</em>. It allows you
+to define an anonymous function in your scripting language and apply
+that function to arguments. Groovy supports this function using
+closures. Here is an example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">BSFManager manager = new BSFManager();
+Vector&lt;String&gt; ignoreParamNames = null;
+Vector&lt;Integer&gt; args = new Vector&lt;Integer&gt;();
+args.add(2);
+args.add(5);
+args.add(1);
+Integer actual = (Integer) manager.apply("groovy", "applyTest", 0, 0,
+        "def summer = { a, b, c -&gt; a * 100 + b * 10 + c }", ignoreParamNames, args);
+assertEquals(251, actual.intValue());</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_access_to_the_scripting_engine"><a class="anchor" href="#_access_to_the_scripting_engine"></a>4. Access to the scripting engine</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Although you don’t normally need it, BSF does provide a hook that lets
+you get directly to the scripting engine. One of the functions which the
+engine can perform is to invoke a single method call on an object. Here
+is an example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">BSFManager manager = new BSFManager();
+BSFEngine bsfEngine = manager.loadScriptingEngine("groovy");
+manager.declareBean("myvar", "hello", String.class);
+Object myvar = manager.lookupBean("myvar");
+String result = (String) bsfEngine.call(myvar, "reverse", new Object[0]);
+assertEquals("olleh", result);</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 3.0.0-alpha-3<br>
+Last updated 2018-06-23 13:44:47 AEST
+</div>
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+<script>prettyPrint()</script>
+</body>
+</html>

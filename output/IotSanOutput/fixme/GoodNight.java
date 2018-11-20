@@ -175,10 +175,10 @@ public class GoodNight
      {
           int threshold = (((1000 * 60) * _static_GoodNight_minutes) - 1000);
           STState[] collectResult1;
-          int index5 = 0;
-          while (index5 < _static_GoodNight_motionSensors.length)
+          int index3 = 0;
+          while (index3 < _static_GoodNight_motionSensors.length)
           {
-               STMotionSensor it = _static_GoodNight_motionSensors[index5];
+               STMotionSensor it = _static_GoodNight_motionSensors[index3];
           }
           STState[] states = collectResult1;
           if (states != 0)
@@ -193,10 +193,10 @@ public class GoodNight
      private boolean switchesOk ()
      {
           boolean result = true;
-          int index4 = 0;
-          while (index4 < _static_GoodNight_switches.length)
+          int index2 = 0;
+          while (index2 < _static_GoodNight_switches.length)
           {
-               STSwitch it = _static_GoodNight_switches[index4];
+               STSwitch it = _static_GoodNight_switches[index2];
           }
           return result;
      }

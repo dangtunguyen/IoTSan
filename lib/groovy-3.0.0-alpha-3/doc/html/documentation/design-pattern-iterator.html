@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.6.1">
+<title>Iterator Pattern</title>
+<link rel="stylesheet" href="./assets/css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+</head>
+<body class="book">
+<div id="header">
+<h1>Iterator Pattern</h1>
+<div class="details">
+<span id="revnumber">version 3.0.0-alpha-3</span>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <a href="http://en.wikipedia.org/wiki/Iterator_pattern">Iterator Pattern</a> allows sequential access to the elements of an aggregate object without exposing its underlying representation.</p>
+</div>
+<div class="paragraph">
+<p>Groovy has the iterator pattern built right in to many of its closure operators, e.g. <code>each</code> and <code>eachWithIndex</code> as well as the <code>for .. in</code> loop.</p>
+</div>
+<div class="paragraph">
+<p>For example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def printAll(container) {
+    for (item in container) { println item }
+}
+
+def numbers = [ 1,2,3,4 ]
+def months = [ Mar:31, Apr:30, May:31 ]
+def colors = [ java.awt.Color.BLACK, java.awt.Color.WHITE ]
+printAll numbers
+printAll months
+printAll colors</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Results in the output:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>1
+2
+3
+4
+May=31
+Mar=31
+Apr=30
+java.awt.Color[r=0,g=0,b=0]
+java.awt.Color[r=255,g=255,b=255]</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Another example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">colors.eachWithIndex { item, pos -&gt;
+    println "Position $pos contains '$item'"
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Results in:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Position 0 contains 'java.awt.Color[r=0,g=0,b=0]'
+Position 1 contains 'java.awt.Color[r=255,g=255,b=255]'</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The iterator pattern is also built in to other special operators such as the <code>eachByte</code>, <code>eachFile</code>, <code>eachDir</code>, <code>eachLine</code>, <code>eachObject</code>, <code>eachMatch</code> operators for working with streams, URLs, files, directories and regular expressions matches.</p>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 3.0.0-alpha-3<br>
+Last updated 2018-06-23 13:44:42 AEST
+</div>
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+<script>prettyPrint()</script>
+</body>
+</html>

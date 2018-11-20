@@ -1,0 +1,4091 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.6.1">
+<title>Object orientation</title>
+<link rel="stylesheet" href="./assets/css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+<h1>Object orientation</h1>
+<div class="details">
+<span id="revnumber">version 3.0.0-alpha-3</span>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_types">1. Types</a>
+<ul class="sectlevel2">
+<li><a href="#_primitive_types">1.1. Primitive types</a></li>
+<li><a href="#_class">1.2. Class</a>
+<ul class="sectlevel3">
+<li><a href="#_normal_class">1.2.1. Normal class</a></li>
+<li><a href="#_inner_class">1.2.2. Inner class</a>
+<ul class="sectlevel4">
+<li><a href="#_anonymous_inner_class">Anonymous inner class</a></li>
+</ul>
+</li>
+<li><a href="#_abstract_class">1.2.3. Abstract class</a></li>
+</ul>
+</li>
+<li><a href="#_interface">1.3. Interface</a></li>
+<li><a href="#_constructors">1.4. Constructors</a>
+<ul class="sectlevel3">
+<li><a href="#_positional_argument_constructor">1.4.1. Positional argument constructor</a></li>
+<li><a href="#_named_argument_constructor">1.4.2. Named argument constructor</a></li>
+</ul>
+</li>
+<li><a href="#_methods">1.5. Methods</a>
+<ul class="sectlevel3">
+<li><a href="#_method_definition">1.5.1. Method definition</a></li>
+<li><a href="#_named_arguments">1.5.2. Named arguments</a></li>
+<li><a href="#_default_arguments">1.5.3. Default arguments</a></li>
+<li><a href="#_varargs">1.5.4. Varargs</a></li>
+<li><a href="#_method_selection_algorithm">1.5.5. Method selection algorithm</a></li>
+<li><a href="#_exception_declaration">1.5.6. Exception declaration</a></li>
+</ul>
+</li>
+<li><a href="#_fields_and_properties">1.6. Fields and properties</a>
+<ul class="sectlevel3">
+<li><a href="#fields">1.6.1. Fields</a></li>
+<li><a href="#properties">1.6.2. Properties</a></li>
+</ul>
+</li>
+<li><a href="#_annotation">1.7. Annotation</a>
+<ul class="sectlevel3">
+<li><a href="#ann-definition">1.7.1. Annotation definition</a></li>
+<li><a href="#ann-placement">1.7.2. Annotation placement</a></li>
+<li><a href="#_annotation_member_values">1.7.3. Annotation member values</a></li>
+<li><a href="#_retention_policy">1.7.4. Retention policy</a></li>
+<li><a href="#_closure_annotation_parameters">1.7.5. Closure annotation parameters</a></li>
+<li><a href="#_meta_annotations">1.7.6. Meta-annotations</a>
+<ul class="sectlevel4">
+<li><a href="#_declaring_meta_annotations">Declaring meta-annotations</a></li>
+<li><a href="#meta-ann-behavior">Behavior of meta-annotations</a></li>
+<li><a href="#meta-ann-members">Meta-annotation parameters</a></li>
+<li><a href="#handling_duplicate_annotations">Handling duplicate annotations</a></li>
+<li><a href="#meta-ann-processor">Custom annotation processors</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_inheritance">1.8. Inheritance</a></li>
+<li><a href="#generics">1.9. Generics</a></li>
+</ul>
+</li>
+<li><a href="#_traits">2. Traits</a>
+<ul class="sectlevel2">
+<li><a href="#_methods_2">2.1. Methods</a>
+<ul class="sectlevel3">
+<li><a href="#_public_methods">2.1.1. Public methods</a></li>
+<li><a href="#_abstract_methods">2.1.2. Abstract methods</a></li>
+<li><a href="#_private_methods">2.1.3. Private methods</a></li>
+</ul>
+</li>
+<li><a href="#_the_meaning_of_this">2.2. The meaning of this</a></li>
+<li><a href="#_interfaces">2.3. Interfaces</a></li>
+<li><a href="#_properties">2.4. Properties</a></li>
+<li><a href="#_fields">2.5. Fields</a>
+<ul class="sectlevel3">
+<li><a href="#_private_fields">2.5.1. Private fields</a></li>
+<li><a href="#_public_fields">2.5.2. Public fields</a></li>
+</ul>
+</li>
+<li><a href="#_composition_of_behaviors">2.6. Composition of behaviors</a></li>
+<li><a href="#_overriding_default_methods">2.7. Overriding default methods</a></li>
+<li><a href="#_extending_traits">2.8. Extending traits</a>
+<ul class="sectlevel3">
+<li><a href="#_simple_inheritance">2.8.1. Simple inheritance</a></li>
+<li><a href="#_multiple_inheritance">2.8.2. Multiple inheritance</a></li>
+</ul>
+</li>
+<li><a href="#_duck_typing_and_traits">2.9. Duck typing and traits</a>
+<ul class="sectlevel3">
+<li><a href="#_dynamic_code">2.9.1. Dynamic code</a></li>
+<li><a href="#_dynamic_methods_in_a_trait">2.9.2. Dynamic methods in a trait</a></li>
+</ul>
+</li>
+<li><a href="#_multiple_inheritance_conflicts">2.10. Multiple inheritance conflicts</a>
+<ul class="sectlevel3">
+<li><a href="#_default_conflict_resolution">2.10.1. Default conflict resolution</a></li>
+<li><a href="#_user_conflict_resolution">2.10.2. User conflict resolution</a></li>
+</ul>
+</li>
+<li><a href="#_runtime_implementation_of_traits">2.11. Runtime implementation of traits</a>
+<ul class="sectlevel3">
+<li><a href="#_implementing_a_trait_at_runtime">2.11.1. Implementing a trait at runtime</a></li>
+<li><a href="#_implementing_multiple_traits_at_once">2.11.2. Implementing multiple traits at once</a></li>
+</ul>
+</li>
+<li><a href="#_chaining_behavior">2.12. Chaining behavior</a>
+<ul class="sectlevel3">
+<li><a href="#_semantics_of_super_inside_a_trait">2.12.1. Semantics of super inside a trait</a></li>
+</ul>
+</li>
+<li><a href="#_advanced_features">2.13. Advanced features</a>
+<ul class="sectlevel3">
+<li><a href="#_sam_type_coercion">2.13.1. SAM type coercion</a></li>
+<li><a href="#_differences_with_java_8_default_methods">2.13.2. Differences with Java 8 default methods</a></li>
+</ul>
+</li>
+<li><a href="#_differences_with_mixins">2.14. Differences with mixins</a></li>
+<li><a href="#_static_methods_properties_and_fields">2.15. Static methods, properties and fields</a></li>
+<li><a href="#_inheritance_of_state_gotchas">2.16. Inheritance of state gotchas</a></li>
+<li><a href="#_self_types">2.17. Self types</a>
+<ul class="sectlevel3">
+<li><a href="#_type_constraints_on_traits">2.17.1. Type constraints on traits</a></li>
+<li><a href="#traits-selftype">2.17.2. The @SelfType annotation</a></li>
+</ul>
+</li>
+<li><a href="#_limitations">2.18. Limitations</a>
+<ul class="sectlevel3">
+<li><a href="#_compatibility_with_ast_transformations">2.18.1. Compatibility with AST transformations</a></li>
+<li><a href="#_prefix_and_postfix_operations">2.18.2. Prefix and postfix operations</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>This chapter covers the object orientation of the Groovy programming language.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_types"><a class="anchor" href="#_types"></a>1. Types</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_primitive_types"><a class="anchor" href="#_primitive_types"></a>1.1. Primitive types</h3>
+<div class="paragraph">
+<p>Groovy supports the same primitive types as those defined by the <a href="http://docs.oracle.com/javase/specs/jls/se8/html/">Java Language Specification</a>:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>integral types: <code>byte</code> (8 bit), <code>short</code> (16 bit), <code>int</code> (32 bit) and <code>long</code> (64 bit)</p>
+</li>
+<li>
+<p>floating-point types: <code>float</code> (32 bit) and <code>double</code> (64 bit)</p>
+</li>
+<li>
+<p><code>boolean</code> type (exactly <code>true</code> or <code>false</code>)</p>
+</li>
+<li>
+<p><code>char</code> type (16 bit, usable as a numeric type, representing an UTF-16 code)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>While Groovy declares and stores primitive fields and variables as primitives, because it uses Objects for
+everything, it autowraps references to primitives. Just like Java, the wrappers it uses are</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<caption class="title">Table 1. primitive wrappers</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Primitive type</th>
+<th class="tableblock halign-left valign-top">Wrapper class</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Boolean</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">char</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Character</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">short</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Short</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Integer</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">long</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Long</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">float</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Float</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">double</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Double</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Here&#8217;s an example using <code>int</code></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Foo {
+  static int i
+}
+
+assert Foo.class.getDeclaredField('i').type == int.class
+assert Foo.i.class != int.class &amp;&amp; Foo.i.class == Integer.class</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now you may be concerned that this means every time you use a mathematical operator on a reference to a primitive
+that you&#8217;ll incur the cost of unboxing and reboxing the primitive. But this is not the case, as Groovy will compile
+your operators into their <a href="core-operators.html#_operator-overloading">method equivalents</a> and uses those instead.
+Additionally, Groovy will automatically unbox to a primitive when calling a Java method that takes a primitive
+parameter and automatically box primitive method return values from Java. However, be aware there are some
+<a href="core-differences-java.html#_primitives_and_wrappers">differences</a> from Java&#8217;s method resolution.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_class"><a class="anchor" href="#_class"></a>1.2. Class</h3>
+<div class="paragraph">
+<p>Groovy classes are very similar to Java classes, and are compatible with Java ones at JVM level.
+They may have methods, fields and properties (think JavaBean properties but with less boilerplate).
+Classes and class members can have the same modifiers (public, protected, private, static, etc) as in Java
+with some minor differences at the source level which are explained shortly.</p>
+</div>
+<div class="paragraph">
+<p>The key differences between Groovy classes and their Java counterparts are:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Classes or methods with no visibility modifier are automatically public (a special annotation can be used to achieve package private visibility).</p>
+</li>
+<li>
+<p>Fields with no visibility modifier are turned into properties automatically, which results in less verbose code,
+since explicit getter and setter methods aren&#8217;t needed. More on this aspect will be covered in the <a href="#fields">fields and properties section</a>.</p>
+</li>
+<li>
+<p>Classes do not need to have the same base name as their source file definitions but it is highly recommended in most scenarios (see also the next point about scripts).</p>
+</li>
+<li>
+<p>One source file may contain one or more classes (but if a file contains any code not in a class, it is considered a script). Scripts are just classes with some
+special conventions and will have the same name as their source file (so don&#8217;t include a class definition within a script having the same name as the script source file).</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The following code presents an example class.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Person {                       <i class="conum" data-value="1"></i><b>(1)</b>
+
+    String name                      <i class="conum" data-value="2"></i><b>(2)</b>
+    Integer age
+
+    def increaseAge(Integer years) { <i class="conum" data-value="3"></i><b>(3)</b>
+        this.age += years
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>class beginning, with the name <code>Person</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>string field and property named <code>name</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>method definition</td>
+</tr>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_normal_class"><a class="anchor" href="#_normal_class"></a>1.2.1. Normal class</h4>
+<div class="paragraph">
+<p>Normal classes refer to classes which are top level and concrete. This means they can be instantiated without restrictions from any other classes or scripts. This way, they can only be public (even though the <code>public</code> keyword may be suppressed). Classes are instantiated by calling their constructors, using the <code>new</code> keyword, as in the following snippet.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def p = new Person()</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_inner_class"><a class="anchor" href="#_inner_class"></a>1.2.2. Inner class</h4>
+<div class="paragraph">
+<p>Inner classes are defined within another classes. The enclosing class can use the inner class as usual. On the other side, a inner class can access members of its enclosing class, even if they are private. Classes other than the enclosing class are not allowed to access inner classes. Here is an example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Outer {
+    private String privateStr
+
+    def callInnerMethod() {
+        new Inner().methodA()       <i class="conum" data-value="1"></i><b>(1)</b>
+    }
+
+    class Inner {                   <i class="conum" data-value="2"></i><b>(2)</b>
+        def methodA() {
+            println "${privateStr}." <i class="conum" data-value="3"></i><b>(3)</b>
+        }
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>the inner class is instantiated and its method gets called</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>inner class definition, inside its enclosing class</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>even being private, a field of the enclosing class is accessed by the inner class</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>There are some reasons for using inner classes:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>They increase encapsulation by hiding the inner class from other classes, which do not need to know about it. This also leads to cleaner packages and workspaces.</p>
+</li>
+<li>
+<p>They provide a good organization, by grouping classes that are used by only one class.</p>
+</li>
+<li>
+<p>They lead to more maintainable codes, since inner classes are near the classes that use them.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>In several cases, inner classes are implementation of interfaces whose methods are needed by the outer class. The code below illustrates this with the usage of threads, which are very common.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Outer2 {
+    private String privateStr = 'some string'
+
+    def startThread() {
+       new Thread(new Inner2()).start()
+    }
+
+    class Inner2 implements Runnable {
+        void run() {
+            println "${privateStr}."
+        }
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note that the class <code>Inner2</code> is defined only to provide an implementation of the method <code>run</code> to class <code>Outer2</code>. Anonymous inner classes help to eliminate verbosity in this case.</p>
+</div>
+<div class="sect4">
+<h5 id="_anonymous_inner_class"><a class="anchor" href="#_anonymous_inner_class"></a>Anonymous inner class</h5>
+<div class="paragraph">
+<p>The last example of inner class can be simplified with an anonymous inner class. The same functionality can be achieved with the following code.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Outer3 {
+    private String privateStr = 'some string'
+
+    def startThread() {
+        new Thread(new Runnable() {      <i class="conum" data-value="1"></i><b>(1)</b>
+            void run() {
+                println "${privateStr}."
+            }
+        }).start()                       <i class="conum" data-value="2"></i><b>(2)</b>
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>comparing with the last example of previous section, the <code>new Inner2()</code> was replaced by <code>new Runnable()</code> along with all its implementation</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>the method <code>start</code> is invoked normally</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Thus, there was no need to define a new class to be used just once.</p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_abstract_class"><a class="anchor" href="#_abstract_class"></a>1.2.3. Abstract class</h4>
+<div class="paragraph">
+<p>Abstract classes represent generic concepts, thus, they cannot be instantiated, being created to be subclassed. Their members include fields/properties and abstract or concrete methods. Abstract methods do not have implementation, and must be implemented by concrete subclasses.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">abstract class Abstract {         <i class="conum" data-value="1"></i><b>(1)</b>
+    String name
+
+    abstract def abstractMethod() <i class="conum" data-value="2"></i><b>(2)</b>
+
+    def concreteMethod() {
+        println 'concrete'
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>abstract classes must be declared with <code>abstract</code> keyword</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>abstract methods must also be declared with <code>abstract</code> keyword</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Abstract classes are commonly compared to interfaces. But there are at least two important differences of choosing one or another. First, while abstract classes may contain fields/properties and concrete methods, interfaces may contain only abstract methods (method signatures). Moreover, one class can implement several interfaces, whereas it can extend just one class, abstract or not.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_interface"><a class="anchor" href="#_interface"></a>1.3. Interface</h3>
+<div class="paragraph">
+<p>An interface defines a contract that a class needs to conform to. An interface only defines a list of methods that need
+to be implemented, but does not define the methods implementation.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">interface Greeter {                                         <i class="conum" data-value="1"></i><b>(1)</b>
+    void greet(String name)                                 <i class="conum" data-value="2"></i><b>(2)</b>
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>an interface needs to be declared using the <code>interface</code> keyword</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>an interface only defines method signatures</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Methods of an interface are always <strong>public</strong>. It is an error to use <code>protected</code> or <code>private</code> methods in interfaces:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">interface Greeter {
+    protected void greet(String name)           <i class="conum" data-value="1"></i><b>(1)</b>
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Using <code>protected</code> is a compile-time error</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>A class <em>implements</em> an interface if it defines the interface in its <code>implements</code> list or if any of its superclasses
+does:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class SystemGreeter implements Greeter {                    <i class="conum" data-value="1"></i><b>(1)</b>
+    void greet(String name) {                               <i class="conum" data-value="2"></i><b>(2)</b>
+        println "Hello $name"
+    }
+}
+
+def greeter = new SystemGreeter()
+assert greeter instanceof Greeter                           <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The <code>SystemGreeter</code> declares the <code>Greeter</code> interface using the <code>implements</code> keyword</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Then implements the required <code>greet</code> method</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Any instance of <code>SystemGreeter</code> is also an instance of the <code>Greeter</code> interface</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>An interface can extend another interface:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">interface ExtendedGreeter extends Greeter {                 <i class="conum" data-value="1"></i><b>(1)</b>
+    void sayBye(String name)
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>the <code>ExtendedGreeter</code> interface extends the <code>Greeter</code> interface using the <code>extends</code> keyword</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>It is worth noting that for a class to be an instance of an interface, it has to be explicit. For example, the following
+class defines the <code>greet</code> method as it is declared in the <code>Greeter</code> interface, but does not declare <code>Greeter</code> in its
+interfaces:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class DefaultGreeter {
+    void greet(String name) { println "Hello" }
+}
+
+greeter = new DefaultGreeter()
+assert !(greeter instanceof Greeter)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In other words, Groovy does not define structural typing. It is however possible to make an instance of an object
+implement an interface at runtime, using the <code>as</code> coercion operator:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">greeter = new DefaultGreeter()                              <i class="conum" data-value="1"></i><b>(1)</b>
+coerced = greeter as Greeter                                <i class="conum" data-value="2"></i><b>(2)</b>
+assert coerced instanceof Greeter                           <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>create an instance of <code>DefaultGreeter</code> that does not implement the interface</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>coerce the instance into a <code>Greeter</code> at runtime</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>the coerced instance implements the <code>Greeter</code> interface</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>You can see that there are two distinct objects: one is the source object, a <code>DefaultGreeter</code> instance, which does not
+implement the interface. The other is an instance of <code>Greeter</code> that delegates to the coerced object.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Groovy interfaces do not support default implementation like Java 8 interfaces. If you are looking for something
+similar (but not equal), <a href="#_traits">traits</a> are close to interfaces, but allow default implementation as well as other
+important features described in this manual.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_constructors"><a class="anchor" href="#_constructors"></a>1.4. Constructors</h3>
+<div class="paragraph">
+<p>Constructors are special methods used to initialize an object with a specific state. As with normal methods,
+it is possible for a class to declare more than one constructor, so long as each constructor has a unique
+type signature. If an object doesn&#8217;t require any parameters during construction, it may use a <em>no-arg</em> constructor.
+If no constructors are supplied, an empty no-arg constructor will be provided by the Groovy compiler. For constructors
+with parameters, Groovy supports two invocation styles: using positional parameters or named parameters.
+The former style is similar to how you would use Java constructors, while the second way
+allows one to specify parameter names when invoking the constructor.</p>
+</div>
+<div class="sect3">
+<h4 id="_positional_argument_constructor"><a class="anchor" href="#_positional_argument_constructor"></a>1.4.1. Positional argument constructor</h4>
+<div class="paragraph">
+<p>To create an object by using positional argument constructors, the respective class needs to declare one or more
+constructors. In the case of multiple constructors, each must have a unique type signature. The constructors can also
+added to the class using the <a href="http://docs.groovy-lang.org/3.0.0-alpha-3/html/gapi/index.html?groovy/transform/TupleConstructor.html">groovy.transform.TupleConstructor</a> annotation.</p>
+</div>
+<div class="paragraph">
+<p>Typically, once at least one constructor is declared, the class can only be instantiated by having one of its
+constructors called. It is worth noting that, in this case, you can&#8217;t normally create the class with named parameters.
+Groovy does support named parameters so long as the class contains a no-arg constructor or a constructor which takes
+a single <code>Map</code> argument - see the next section for details.</p>
+</div>
+<div class="paragraph">
+<p>There are three forms of using a declared constructor. The first one is the normal Java way, with the <code>new</code> keyword.
+The others rely on coercion of lists into the desired types. In this case, it is possible to coerce with the <code>as</code>
+keyword and by statically typing the variable.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class PersonConstructor {
+    String name
+    Integer age
+
+    PersonConstructor(name, age) {          <i class="conum" data-value="1"></i><b>(1)</b>
+        this.name = name
+        this.age = age
+    }
+}
+
+def person1 = new PersonConstructor('Marie', 1)  <i class="conum" data-value="2"></i><b>(2)</b>
+def person2 = ['Marie', 2] as PersonConstructor  <i class="conum" data-value="3"></i><b>(3)</b>
+PersonConstructor person3 = ['Marie', 3]         <i class="conum" data-value="4"></i><b>(4)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Constructor declaration</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Constructor invocation, classic Java way</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Constructor usage, using coercion with <code>as</code> keyword</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Constructor usage, using coercion in assignment</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_named_argument_constructor"><a class="anchor" href="#_named_argument_constructor"></a>1.4.2. Named argument constructor</h4>
+<div class="paragraph">
+<p>If no (or a no-arg) constructor is declared, it is possible to create objects by passing parameters in the form of a
+map (property/value pairs). This can be in handy in cases where one wants to allow several combinations of parameters.
+Otherwise, by using traditional positional parameters it would be necessary to declare all possible constructors.
+Having a constructor taking a single <code>Map</code> argument is also supported - such a constructor may also be added using
+the <a href="http://docs.groovy-lang.org/3.0.0-alpha-3/html/gapi/index.html?groovy/transform/MapConstructor.html">groovy.transform.MapConstructor</a> annotation.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class PersonWOConstructor {                                  <i class="conum" data-value="1"></i><b>(1)</b>
+    String name
+    Integer age
+}
+
+def person4 = new PersonWOConstructor()                      <i class="conum" data-value="2"></i><b>(2)</b>
+def person5 = new PersonWOConstructor(name: 'Marie')         <i class="conum" data-value="3"></i><b>(3)</b>
+def person6 = new PersonWOConstructor(age: 1)                <i class="conum" data-value="4"></i><b>(4)</b>
+def person7 = new PersonWOConstructor(name: 'Marie', age: 2) <i class="conum" data-value="5"></i><b>(5)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>No constructor declared</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>No parameters given in the instantiation</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td><code>name</code> parameter given in the instantiation</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td><code>age</code> parameter given in the instantiation</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td><code>name</code> and <code>age</code> parameters given in the instantiation</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>It is important to highlight, however, that this approach gives more power to the constructor caller,
+while imposing an increased responsibility on the caller to get the names and value types correct.
+Thus, if greater control is desired, declaring constructors using positional parameters might be preferred.</p>
+</div>
+<div class="paragraph">
+<p>Notes:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>While the example above supplied no constructor, you can also supply a no-arg constructor
+or a constructor with a single <code>Map</code> argument as previously mentioned.</p>
+</li>
+<li>
+<p>You can support both named and positional construction
+by supply both positional constructors as well as a no-arg or Map constructor.</p>
+</li>
+<li>
+<p>When no (or a no-arg) constructor is declared, Groovy replaces the named constructor call by a call
+to the no-arg constructor followed by calls to the setter for each supplied named property. So, you
+might be better off using the Map constructor if your properties are declared as <code>final</code> (since they
+must be set in the constructor rather than after the fact with setters).</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_methods"><a class="anchor" href="#_methods"></a>1.5. Methods</h3>
+<div class="paragraph">
+<p>Groovy methods are quite similar to other languages. Some peculiarities will be shown in the next subsections.</p>
+</div>
+<div class="sect3">
+<h4 id="_method_definition"><a class="anchor" href="#_method_definition"></a>1.5.1. Method definition</h4>
+<div class="paragraph">
+<p>A method is defined with a return type or with the <code>def</code> keyword, to make the return type untyped. A method can also receive any number of arguments, which may not have their types explicitly declared. Java modifiers can be used normally, and if no visibility modifier is provided, the method is public.</p>
+</div>
+<div class="paragraph">
+<p>Methods in Groovy always return some value. If no <code>return</code> statement is provided, the value evaluated in the last line executed will be returned. For instance, note that none of the following methods uses the <code>return</code> keyword.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def someMethod() { 'method called' }                           <i class="conum" data-value="1"></i><b>(1)</b>
+String anotherMethod() { 'another method called' }             <i class="conum" data-value="2"></i><b>(2)</b>
+def thirdMethod(param1) { "$param1 passed" }                   <i class="conum" data-value="3"></i><b>(3)</b>
+static String fourthMethod(String param1) { "$param1 passed" } <i class="conum" data-value="4"></i><b>(4)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Method with no return type declared and no parameter</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Method with explicit return type and no parameter</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Method with a parameter with no type defined</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Static method with a String parameter</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_named_arguments"><a class="anchor" href="#_named_arguments"></a>1.5.2. Named arguments</h4>
+<div class="paragraph">
+<p>Like constructors, normal methods can also be called with named arguments. They need to receive the parameters as a map. In the method body, the values can be accessed as in normal maps (<code>map.key</code>).</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def foo(Map args) { "${args.name}: ${args.age}" }
+foo(name: 'Marie', age: 1)</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_default_arguments"><a class="anchor" href="#_default_arguments"></a>1.5.3. Default arguments</h4>
+<div class="paragraph">
+<p>Default arguments make parameters optional. If the argument is not supplied, the method assumes a default value.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def foo(String par1, Integer par2 = 1) { [name: par1, age: par2] }
+assert foo('Marie').age == 1</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note that no mandatory parameter can be defined after a default parameter is present, only other default parameters.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_varargs"><a class="anchor" href="#_varargs"></a>1.5.4. Varargs</h4>
+<div class="paragraph">
+<p>Groovy supports methods with a variable number of arguments. They are defined like this: <code>def foo(p1, &#8230;&#8203;, pn, T&#8230;&#8203; args)</code>.
+Here <code>foo</code> supports <code>n</code> arguments by default, but also an unspecified number of further arguments exceeding <code>n</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def foo(Object... args) { args.length }
+assert foo() == 0
+assert foo(1) == 1
+assert foo(1, 2) == 2</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This example defines a method <code>foo</code>, that can take any number of arguments, including no arguments at all.
+<code>args.length</code> will return the number of arguments given. Groovy allows <code>T[]</code> as a alternative notation to <code>T&#8230;&#8203;</code>.
+That means any method with an array as last parameter is seen by Groovy as a method that can take a variable number of arguments.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def foo(Object[] args) { args.length }
+assert foo() == 0
+assert foo(1) == 1
+assert foo(1, 2) == 2</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If a method with varargs is called with <code>null</code> as the vararg parameter, then the argument will be <code>null</code> and not an array of length one with <code>null</code> as the only element.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def foo(Object... args) { args }
+assert foo(null) == null</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If a varargs method is called with an array as an argument, then the argument will be that array instead of an array of length one containing the given array as the only element.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def foo(Object... args) { args }
+Integer[] ints = [1, 2]
+assert foo(ints) == [1, 2]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Another important point are varargs in combination with method overloading. In case of method overloading Groovy will select the most specific method.
+For example if a method <code>foo</code> takes a varargs argument of type <code>T</code> and another method <code>foo</code> also takes one argument of type <code>T</code>, the second method is preferred.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def foo(Object... args) { 1 }
+def foo(Object x) { 2 }
+assert foo() == 1
+assert foo(1) == 2
+assert foo(1, 2) == 1</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_method_selection_algorithm"><a class="anchor" href="#_method_selection_algorithm"></a>1.5.5. Method selection algorithm</h4>
+<div class="paragraph">
+<p>(TBD)</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_exception_declaration"><a class="anchor" href="#_exception_declaration"></a>1.5.6. Exception declaration</h4>
+<div class="paragraph">
+<p>Groovy automatically allows you to treat checked exceptions like unchecked exceptions.
+This means that you don&#8217;t need to declare any checked exceptions that a method may throw
+as shown in the following example which can throw a <code>FileNotFoundException</code> if the file isn&#8217;t found:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def badRead() {
+    new File('doesNotExist.txt').text
+}
+
+shouldFail(FileNotFoundException) {
+    badRead()
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Nor will you be required to surround the call to the <code>badRead</code> method in the previous example within a try/catch
+block - though you are free to do so if you wish.</p>
+</div>
+<div class="paragraph">
+<p>If you wish to declare any exceptions that your code might throw (checked or otherwise) you are free to do so.
+Adding exceptions won&#8217;t change how the code is used from any other Groovy code but can be seen as documentation
+for the human reader of your code. The exceptions will become part of the method declaration in the bytecode,
+so if your code might be called from Java, it might be useful to include them.
+Using an explicit checked exception declaration is illustrated in the following example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def badRead() throws FileNotFoundException {
+    new File('doesNotExist.txt').text
+}
+
+shouldFail(FileNotFoundException) {
+    badRead()
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_fields_and_properties"><a class="anchor" href="#_fields_and_properties"></a>1.6. Fields and properties</h3>
+<div class="sect3">
+<h4 id="fields"><a class="anchor" href="#fields"></a>1.6.1. Fields</h4>
+<div class="paragraph">
+<p>A field is a member of a class or a trait which has:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>a mandatory <em>access modifier</em> (<code>public</code>, <code>protected</code>, or <code>private</code>)</p>
+</li>
+<li>
+<p>one or more optional <em>modifiers</em> (<code>static</code>, <code>final</code>, <code>synchronized</code>)</p>
+</li>
+<li>
+<p>an optional <em>type</em></p>
+</li>
+<li>
+<p>a mandatory <em>name</em></p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Data {
+    private int id                                  <i class="conum" data-value="1"></i><b>(1)</b>
+    protected String description                    <i class="conum" data-value="2"></i><b>(2)</b>
+    public static final boolean DEBUG = false       <i class="conum" data-value="3"></i><b>(3)</b>
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>a <code>private</code> field named <code>id</code>, of type <code>int</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>a <code>protected</code> field named <code>description</code>, of type <code>String</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>a <code>public static final</code> field named <em>DEBUG</em> of type <code>boolean</code></td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>A field may be initialized directly at declaration:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Data {
+    private String id = IDGenerator.next() <i class="conum" data-value="1"></i><b>(1)</b>
+    // ...
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>the private field <code>id</code> is initialized with <code>IDGenerator.next()</code></td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>It is possible to omit the type declaration of a field. This is however considered a bad practice and in general it
+is a good idea to use strong typing for fields:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class BadPractice {
+    private mapping                         <i class="conum" data-value="1"></i><b>(1)</b>
+}
+class GoodPractice {
+    private Map&lt;String,String&gt; mapping      <i class="conum" data-value="2"></i><b>(2)</b>
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>the field <code>mapping</code> doesn&#8217;t declare a type</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>the field <code>mapping</code> has a strong type</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The difference between the two is important if you want to use optional type checking later. It is also important
+for documentation. However in some cases like scripting or if you want to rely on duck typing it may be interesting
+to omit the type.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="properties"><a class="anchor" href="#properties"></a>1.6.2. Properties</h4>
+<div class="paragraph">
+<p>A property is an externally visible feature of a class. Rather than just using a public field to represent
+such features (which provides a more limited abstraction and would restrict refactoring possibilities),
+the typical convention in Java is to follow JavaBean conventions, i.e. represent the property using a
+combination of a private backing field and getters/setters. Groovy follows these same conventions
+but provides a simpler approach to defining the property. You can define a property with:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>an <strong>absent</strong> access modifier (no <code>public</code>, <code>protected</code> or <code>private</code>)</p>
+</li>
+<li>
+<p>one or more optional <em>modifiers</em> (<code>static</code>, <code>final</code>, <code>synchronized</code>)</p>
+</li>
+<li>
+<p>an optional <em>type</em></p>
+</li>
+<li>
+<p>a mandatory <em>name</em></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Groovy will then generate the getters/setters appropriately. For example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Person {
+    String name                             <i class="conum" data-value="1"></i><b>(1)</b>
+    int age                                 <i class="conum" data-value="2"></i><b>(2)</b>
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>creates a backing <code>private String name</code> field, a <code>getName</code> and a <code>setName</code> method</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>creates a backing <code>private int age</code> field, a <code>getAge</code> and a <code>setAge</code> method</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>If a property is declared <code>final</code>, no setter is generated:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Person {
+    final String name                   <i class="conum" data-value="1"></i><b>(1)</b>
+    final int age                       <i class="conum" data-value="2"></i><b>(2)</b>
+    Person(String name, int age) {
+        this.name = name                <i class="conum" data-value="3"></i><b>(3)</b>
+        this.age = age                  <i class="conum" data-value="4"></i><b>(4)</b>
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>defines a read-only property of type <code>String</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>defines a read-only property of type <code>int</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>assigns the <code>name</code> parameter to the <code>name</code> field</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>assigns the <code>age</code> parameter to the <code>age</code> field</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Properties are accessed by name and will call the getter or setter transparently, unless the code is in the class
+which defines the property:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Person {
+    String name
+    void name(String name) {
+        this.name = "Wonder$name"       <i class="conum" data-value="1"></i><b>(1)</b>
+    }
+    String wonder() {
+        this.name                       <i class="conum" data-value="2"></i><b>(2)</b>
+    }
+}
+def p = new Person()
+p.name = 'Marge'                        <i class="conum" data-value="3"></i><b>(3)</b>
+assert p.name == 'Marge'                <i class="conum" data-value="4"></i><b>(4)</b>
+p.name('Marge')                         <i class="conum" data-value="5"></i><b>(5)</b>
+assert p.wonder() == 'WonderMarge'      <i class="conum" data-value="6"></i><b>(6)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>this.name</code> will directly access the field because the property is accessed from within the class that defines it</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>similarily a read access is done directly on the <code>name</code> field</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>write access to the property is done outside of the <code>Person</code> class so it will implicitly call <code>setName</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>read access to the property is done outside of the <code>Person</code> class so it will implicitly call <code>getName</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>this will call the <code>name</code> method on <code>Person</code> which performs a direct access to the field</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>this will call the <code>wonder</code> method on <code>Person</code> which performs a direct read access to the field</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>It is worth noting that this behavior of accessing the backing field directly is done in order to prevent a stack
+overflow when using the property access syntax within a class that defines the property.</p>
+</div>
+<div class="paragraph">
+<p>It is possible to list the properties of a class thanks to the meta <code>properties</code> field of an instance:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Person {
+    String name
+    int age
+}
+def p = new Person()
+assert p.properties.keySet().containsAll(['name','age'])</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>By convention, Groovy will recognize properties even if there is no backing field
+provided there are getters or setters
+that follow the Java Beans specification. For example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class PseudoProperties {
+    // a pseudo property "name"
+    void setName(String name) {}
+    String getName() {}
+
+    // a pseudo read-only property "age"
+    int getAge() { 42 }
+
+    // a pseudo write-only property "groovy"
+    void setGroovy(boolean groovy) {  }
+}
+def p = new PseudoProperties()
+p.name = 'Foo'                      <i class="conum" data-value="1"></i><b>(1)</b>
+assert p.age == 42                  <i class="conum" data-value="2"></i><b>(2)</b>
+p.groovy = true                     <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>writing <code>p.name</code> is allowed because there is a pseudo-property <code>name</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>reading <code>p.age</code> is allowed because there is a pseudo-readonly property <code>age</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>writing <code>p.groovy</code> is allowed because there is a pseudo-writeonly property <code>groovy</code></td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>This syntactic sugar is at the core of many DSLs written in Groovy.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_annotation"><a class="anchor" href="#_annotation"></a>1.7. Annotation</h3>
+<div class="sect3">
+<h4 id="ann-definition"><a class="anchor" href="#ann-definition"></a>1.7.1. Annotation definition</h4>
+<div class="paragraph">
+<p>An annotation is a kind of special interface dedicated at annotating elements of the code. An annotation is a type which
+superinterface is the <a href="http://docs.oracle.com/javase/8/docs/api/index.html?java/lang/annotation/Annotation.html">Annotation</a> interface. Annotations are declared in a very
+similar way to interfaces, using the <code>@interface</code> keyword:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@interface SomeAnnotation {}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>An annotation may define members in the form of methods without bodies and an optional default value. The possible
+member types are limited to:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>primitive types</p>
+</li>
+<li>
+<p><a href="http://docs.oracle.com/javase/8/docs/api/index.html?java/lang/String.html">Strings</a></p>
+</li>
+<li>
+<p><a href="http://docs.oracle.com/javase/8/docs/api/index.html?java/lang/Class.html">Classes</a></p>
+</li>
+<li>
+<p>an <a href="http://docs.oracle.com/javase/8/docs/api/index.html?java/lang/Enum.html">enumeration</a></p>
+</li>
+<li>
+<p>another <a href="http://docs.oracle.com/javase/8/docs/api/index.html?java/lang/annotation/Annotation.html">annotation type</a></p>
+</li>
+<li>
+<p>or any array of the above</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>For example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@interface SomeAnnotation {
+    String value()                          <i class="conum" data-value="1"></i><b>(1)</b>
+}
+@interface SomeAnnotation {
+    String value() default 'something'      <i class="conum" data-value="2"></i><b>(2)</b>
+}
+@interface SomeAnnotation {
+    int step()                              <i class="conum" data-value="3"></i><b>(3)</b>
+}
+@interface SomeAnnotation {
+    Class appliesTo()                       <i class="conum" data-value="4"></i><b>(4)</b>
+}
+@interface SomeAnnotation {}
+@interface SomeAnnotations {
+    SomeAnnotation[] value()                <i class="conum" data-value="5"></i><b>(5)</b>
+}
+enum DayOfWeek { mon, tue, wed, thu, fri, sat, sun }
+@interface Scheduled {
+    DayOfWeek dayOfWeek()                   <i class="conum" data-value="6"></i><b>(6)</b>
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>an annotation defining a <code>value</code> member of type <code>String</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>an annotation defining a <code>value</code> member of type <code>String</code> with a default value of <code>something</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>an annotation defining a <code>step</code> member of type the primitive type <code>int</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>an annotation defining a <code>appliesTo</code> member of type <code>Class</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>an annotation defining a <code>value</code> member which type is an array of another annotation type</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>an annotation defining a <code>dayOfWeek</code> member which type is the enumeration type <code>DayOfWeek</code></td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Unlike in the Java language, in Groovy, an annotation can be used to alter the semantics of the language. It is especially
+true of AST transformations which will generate code based on annotations.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="ann-placement"><a class="anchor" href="#ann-placement"></a>1.7.2. Annotation placement</h4>
+<div class="paragraph">
+<p>An annotation can be applied on various elements of the code:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@SomeAnnotation                 <i class="conum" data-value="1"></i><b>(1)</b>
+void someMethod() {
+    // ...
+}
+
+@SomeAnnotation                 <i class="conum" data-value="2"></i><b>(2)</b>
+class SomeClass {}
+
+@SomeAnnotation String var      <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>@SomeAnnotation</code> applies to the <code>someMethod</code> method</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td><code>@SomeAnnotation</code> applies to the <code>SomeClass</code> class</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td><code>@SomeAnnotation</code> applies to the <code>var</code> variable</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>In order to limit the scope where an annotation can be applied, it is necessary to declare it on the annotation
+definition, using the <a href="http://docs.oracle.com/javase/8/docs/api/index.html?java/lang/annotation/Target.html">Target</a> annotation. For example, here is how you would
+declare that an annotation can be applied to a class or a method:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import java.lang.annotation.ElementType
+import java.lang.annotation.Target
+
+@Target([ElementType.METHOD, ElementType.TYPE])     <i class="conum" data-value="1"></i><b>(1)</b>
+@interface SomeAnnotation {}                        <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>the <code>@Target</code> annotation is meant to annotate an annotation with a scope.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td><code>@SomeAnnotation</code> will therefore only be allowed on <code>TYPE</code> or <code>METHOD</code></td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The list of possible targets is available in the <a href="http://docs.oracle.com/javase/8/docs/api/index.html?java/lang/annotation/ElementType.html">ElementType enumeration</a>.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+Groovy does not support the <a href="http://docs.oracle.com/javase/8/docs/api/index.html?java/lang/annotation/ElementType.html#TYPE_PARAMETER">TYPE_PARAMETER</a> and
+<a href="http://docs.oracle.com/javase/8/docs/api/index.html?java/lang/annotation/ElementType.html#TYPE_PARAMETER">TYPE_USE</a> element types which were introduced in Java 8.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_annotation_member_values"><a class="anchor" href="#_annotation_member_values"></a>1.7.3. Annotation member values</h4>
+<div class="paragraph">
+<p>When an annotation is used, it is required to set at least all members that do not have a default value. For example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@interface Page {
+    int statusCode()
+}
+
+@Page(statusCode=404)
+void notFound() {
+    // ...
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>However it is possible to omit <code>value=</code> in the declaration of the value of an annotation if the member <code>value</code> is the
+only one being set:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@interface Page {
+    String value()
+    int statusCode() default 200
+}
+
+@Page(value='/home')                    <i class="conum" data-value="1"></i><b>(1)</b>
+void home() {
+    // ...
+}
+
+@Page('/users')                         <i class="conum" data-value="2"></i><b>(2)</b>
+void userList() {
+    // ...
+}
+
+@Page(value='error',statusCode=404)     <i class="conum" data-value="3"></i><b>(3)</b>
+void notFound() {
+    // ...
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>we can omit the <code>statusCode</code> because it has a default value, but <code>value</code> needs to be set</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>since <code>value</code> is the only mandatory member without a default, we can omit <code>value=</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>if both <code>value</code> and <code>statusCode</code> need to be set, it is required to use <code>value=</code> for the default <code>value</code> member</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_retention_policy"><a class="anchor" href="#_retention_policy"></a>1.7.4. Retention policy</h4>
+<div class="paragraph">
+<p>The visibility of an annotation depends on its retention policy. The retention policy of an annotation is set using
+the <a href="http://docs.oracle.com/javase/8/docs/api/index.html?java/lang/annotation/Retention.html">Retention</a> annotation:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import java.lang.annotation.Retention
+import java.lang.annotation.RetentionPolicy
+
+@Retention(RetentionPolicy.SOURCE)                   <i class="conum" data-value="1"></i><b>(1)</b>
+@interface SomeAnnotation {}                         <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>the <code>@Retention</code> annotation annotates the <code>@SomeAnnotation</code> annotation</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>so <code>@SomeAnnotation</code> will have a <code>SOURCE</code> retention</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The list of possible retention targets and description is available in the
+<a href="http://docs.oracle.com/javase/8/docs/api/index.html?java/lang/annotation/RetentionPolicy.html">RetentionPolicy</a> enumeration. The
+choice usually depends on whether you want an annotation to be visible at
+compile time or runtime.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_closure_annotation_parameters"><a class="anchor" href="#_closure_annotation_parameters"></a>1.7.5. Closure annotation parameters</h4>
+<div class="paragraph">
+<p>An interesting feature of annotations in Groovy is that you can use a closure as an annotation value. Therefore
+annotations may be used with a wide variety of expressions and still have IDE support. For example, imagine a
+framework where you want to execute some methods based on environmental constraints like the JDK version or the OS.
+One could write the following code:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Tasks {
+    Set result = []
+    void alwaysExecuted() {
+        result &lt;&lt; 1
+    }
+    @OnlyIf({ jdk&gt;=6 })
+    void supportedOnlyInJDK6() {
+        result &lt;&lt; 'JDK 6'
+    }
+    @OnlyIf({ jdk&gt;=7 &amp;&amp; windows })
+    void requiresJDK7AndWindows() {
+        result &lt;&lt; 'JDK 7 Windows'
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For the <code>@OnlyIf</code> annotation to accept a <code>Closure</code> as an argument, you only have to declare the <code>value</code> as a <code>Class</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@Retention(RetentionPolicy.RUNTIME)
+@interface OnlyIf {
+    Class value()                    <i class="conum" data-value="1"></i><b>(1)</b>
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To complete the example, let&#8217;s write a sample runner that would use that information:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Runner {
+    static &lt;T&gt; T run(Class&lt;T&gt; taskClass) {
+        def tasks = taskClass.newInstance()                                         <i class="conum" data-value="1"></i><b>(1)</b>
+        def params = [jdk:6, windows: false]                                        <i class="conum" data-value="2"></i><b>(2)</b>
+        tasks.class.declaredMethods.each { m -&gt;                                     <i class="conum" data-value="3"></i><b>(3)</b>
+            if (Modifier.isPublic(m.modifiers) &amp;&amp; m.parameterTypes.length == 0) {   <i class="conum" data-value="4"></i><b>(4)</b>
+                def onlyIf = m.getAnnotation(OnlyIf)                                <i class="conum" data-value="5"></i><b>(5)</b>
+                if (onlyIf) {
+                    Closure cl = onlyIf.value().newInstance(tasks,tasks)            <i class="conum" data-value="6"></i><b>(6)</b>
+                    cl.delegate = params                                            <i class="conum" data-value="7"></i><b>(7)</b>
+                    if (cl()) {                                                     <i class="conum" data-value="8"></i><b>(8)</b>
+                        m.invoke(tasks)                                             <i class="conum" data-value="9"></i><b>(9)</b>
+                    }
+                } else {
+                    m.invoke(tasks)                                                 <i class="conum" data-value="10"></i><b>(10)</b>
+                }
+            }
+        }
+        tasks                                                                       <i class="conum" data-value="11"></i><b>(11)</b>
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>create a new instance of the class passed as an argument (the task class)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>emulate an environment which is JDK 6 and not Windows</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>iterate on all declared methods of the task class</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>if the method is public and takes no-argument</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>try to find the <code>@OnlyIf</code> annotation</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>if it is found get the <code>value</code> and create a new <code>Closure</code> out of it</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td>set the <code>delegate</code> of the closure to our environment variable</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="8"></i><b>8</b></td>
+<td>call the closure, which is the annotation closure. It will return a <code>boolean</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="9"></i><b>9</b></td>
+<td>if it is <code>true</code>, call the method</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="10"></i><b>10</b></td>
+<td>if the method is not annotated with <code>@OnlyIf</code>, execute the method anyway</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="11"></i><b>11</b></td>
+<td>after that, return the task object</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Then the runner can be used this way:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def tasks = Runner.run(Tasks)
+assert tasks.result == [1, 'JDK 6'] as Set</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_meta_annotations"><a class="anchor" href="#_meta_annotations"></a>1.7.6. Meta-annotations</h4>
+<div class="sect4">
+<h5 id="_declaring_meta_annotations"><a class="anchor" href="#_declaring_meta_annotations"></a>Declaring meta-annotations</h5>
+<div class="paragraph">
+<p>Meta-annotations, also known as annotation aliases are annotations that
+are replaced at compile time by other annotations (one meta-annotation
+is an alias for one or more annotations). Meta-annotations can be used to
+reduce the size of code involving multiple annotations.</p>
+</div>
+<div class="paragraph">
+<p>Let’s start with a simple example. Imagine you have the <code>@Service</code>
+and <code>@Transactional</code> annotations and that you want to annotate a class
+with both:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@Service
+@Transactional
+class MyTransactionalService {}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Given the multiplication of annotations that you could add to the same class, a meta-annotation
+could help by reducing the two annotations with a single one having the very same semantics. For example,
+we might want to write this instead:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@TransactionalService                           <i class="conum" data-value="1"></i><b>(1)</b>
+class MyTransactionalService {}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>@TransactionalService</code> is a meta-annotation</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>A meta-annotation is declared as a regular annotation but annotated with <code>@AnnotationCollector</code> and the
+list of annotations it is collecting. In our case, the <code>@TransactionalService</code> annotation can be written:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import groovy.transform.AnnotationCollector
+
+@Service                                        <i class="conum" data-value="1"></i><b>(1)</b>
+@Transactional                                  <i class="conum" data-value="2"></i><b>(2)</b>
+@AnnotationCollector                            <i class="conum" data-value="3"></i><b>(3)</b>
+@interface TransactionalService {
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>annotate the meta-annotation with <code>@Service</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>annotate the meta-annotation with <code>@Transactional</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>annotate the meta-annotation with <code>@AnnotationCollector</code></td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect4">
+<h5 id="meta-ann-behavior"><a class="anchor" href="#meta-ann-behavior"></a>Behavior of meta-annotations</h5>
+<div class="paragraph">
+<p>Groovy supports both <em>precompiled</em> and <em>source form</em>
+meta-annotations. This means that your meta-annotation <em>may</em> be
+precompiled, or you can have it in the same source tree as the one you
+are currently compiling.</p>
+</div>
+<div class="paragraph">
+<p>INFO: Meta-annotations are a Groovy-only feature. There is
+no chance for you to annotate a Java class with a meta-annotation and
+hope it will do the same as in Groovy. Likewise, you cannot write a
+meta-annotation in Java: both the meta-annotation definition <strong>and</strong> usage
+have to be Groovy code. But you can happily collect Java annotations
+and Groovy annotations within your meta-annotation.</p>
+</div>
+<div class="paragraph">
+<p>When the Groovy compiler encounters a class annotated with a
+meta-annotation, it <strong>replaces</strong> it with the collected annotations. So,
+in our previous example, it will
+replace <code>@TransactionalService</code> with <code>@Transactional</code> and <code>@Service</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def annotations = MyTransactionalService.annotations*.annotationType()
+assert (Service in annotations)
+assert (Transactional in annotations)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The conversion from a meta-annotation to the collected annotations is performed during the
+<em>semantic analysis</em> compilation phase. </p>
+</div>
+<div class="paragraph">
+<p>In addition to replacing the alias with the collected annotations, a meta-annotation is capable of
+processing them, including arguments.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="meta-ann-members"><a class="anchor" href="#meta-ann-members"></a>Meta-annotation parameters</h5>
+<div class="paragraph">
+<p>Meta-annotations can collect annotations which have parameters. To illustrate this,
+we will imagine two annotations, each of them accepting one argument:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@Timeout(after=3600)
+@Dangerous(type='explosive')</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And suppose that you want create a meta-annotation named <code>@Explosive</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@Timeout(after=3600)
+@Dangerous(type='explosive')
+@AnnotationCollector
+public @interface Explosive {}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>By default, when the annotations are replaced, they will get the
+annotation parameter values <strong>as they were defined in the alias</strong>. More interesting,
+the meta-annotation supports overriding specific values:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@Explosive(after=0)                 <i class="conum" data-value="1"></i><b>(1)</b>
+class Bomb {}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>the <code>after</code> value provided as a parameter to <code>@Explosive</code> overrides the one defined in the <code>@Timeout</code> annotation</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>If two annotations define the same parameter name, the default processor
+will copy the annotation value to all annotations that accept this parameter:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@Retention(RetentionPolicy.RUNTIME)
+public @interface Foo {
+   String value()                                   <i class="conum" data-value="1"></i><b>(1)</b>
+}
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Bar {
+    String value()                                  <i class="conum" data-value="2"></i><b>(2)</b>
+}
+
+@Foo
+@Bar
+@AnnotationCollector
+public @interface FooBar {}                         <i class="conum" data-value="3"></i><b>(3)</b>
+
+@Foo('a')
+@Bar('b')
+class Bob {}                                        <i class="conum" data-value="4"></i><b>(4)</b>
+
+assert Bob.getAnnotation(Foo).value() == 'a'        <i class="conum" data-value="5"></i><b>(5)</b>
+println Bob.getAnnotation(Bar).value() == 'b'       <i class="conum" data-value="6"></i><b>(6)</b>
+
+@FooBar('a')
+class Joe {}                                        <i class="conum" data-value="7"></i><b>(7)</b>
+assert Joe.getAnnotation(Foo).value() == 'a'        <i class="conum" data-value="8"></i><b>(8)</b>
+println Joe.getAnnotation(Bar).value() == 'a'       <i class="conum" data-value="9"></i><b>(9)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>the <code>@Foo</code> annotation defines the <code>value</code> member of type <code>String</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>the <code>@Bar</code> annotation also defines the <code>value</code> member of type <code>String</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>the <code>@FooBar</code> meta-annotation aggregates <code>@Foo</code> and <code>@Bar</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>class <code>Bob</code> is annotated with <code>@Foo</code> and <code>@Bar</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>the value of the <code>@Foo</code> annotation on <code>Bob</code> is <code>a</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>while the value of the <code>@Bar</code> annotation on <code>Bob</code> is <code>b</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td>class <code>Joe</code> is annotated with <code>@FooBar</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="8"></i><b>8</b></td>
+<td>then the value of the <code>@Foo</code> annotation on <code>Joe</code> is <code>a</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="9"></i><b>9</b></td>
+<td>and the value of the <code>@Bar</code> annotation on <code>Joe</code> is also <code>a</code></td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>In the second case, the meta-annotation value was copied in
+both <code>@Foo</code> and <code>@Bar</code> annotations.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+It is a compile time error if the collected annotations define the same members
+with incompatible types. For example if on the previous example <code>@Foo</code> defined a value of
+type <code>String</code> but <code>@Bar</code> defined a value of type <code>int</code>.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>It is however possible to customize the behavior of meta-annotations and describe how collected
+annotations are expanded. We&#8217;ll look at how to do that shortly but first there is an advanced
+processing option to cover.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="handling_duplicate_annotations"><a class="anchor" href="#handling_duplicate_annotations"></a>Handling duplicate annotations</h5>
+<div class="paragraph">
+<p>The <code>@AnnotationCollector</code> annotation supports a <code>mode</code> parameter which can be used to
+alter how the default processor handles annotation replacement in the presence of
+duplicate annotations.</p>
+</div>
+<div class="paragraph">
+<p>INFO: Custom processors (discussed next) may or may not support this parameter.</p>
+</div>
+<div class="paragraph">
+<p>As an example, suppose you create a meta-annotation containing the <code>@ToString</code> annotation
+and then place your meta-annotation on a class that already has an explicit <code>@ToString</code>
+annotation. Should this be an error? Should both annotations be applied? Does one take
+priority over the other? There is no correct answer. In some scenarios it might be
+quite appropriate for any of these answers to be correct. So, rather than trying to
+preempt one correct way to handle the duplicate annotation issue, Groovy let&#8217;s you
+write your own custom meta-annotation processors (covered next) and let&#8217;s you write
+whatever checking logic you like within AST transforms - which are a frequent target for
+aggregating. Having said that, by simply setting the <code>mode</code>, a number of commonly
+expected scenarios are handled automatically for you within any extra coding.
+The behavior of the <code>mode</code> parameter is determined by the <code>AnnotationCollectorMode</code>
+enum value chosen and is summarized in the following table.</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Mode</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Description</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">DUPLICATE</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Annotations from the annotation collection will always be inserted. After all transforms have been run, it will be an error if multiple annotations (excluding those with SOURCE retention) exist.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">PREFER_COLLECTOR</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Annotations from the collector will be added and any existing annotations with the same name will be removed.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">PREFER_COLLECTOR_MERGED</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Annotations from the collector will be added and any existing annotations with the same name will be removed but any new parameters found within existing annotations will be merged into the added annotation.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">PREFER_EXPLICIT</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Annotations from the collector will be ignored if any existing annotations with the same name are found.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">PREFER_EXPLICIT_MERGED</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Annotations from the collector will be ignored if any existing annotations with the same name are found but any new parameters on the collector annotation will be added to existing annotations.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect4">
+<h5 id="meta-ann-processor"><a class="anchor" href="#meta-ann-processor"></a>Custom annotation processors</h5>
+<div class="paragraph">
+<p>A custom annotation processor will let you choose how to expand a
+meta-annotation into collected annotations. The behaviour of the meta-annotation is,
+in this case, totally up to you. To do this, you must:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>create a meta-annotation processor, extending <a href="http://docs.groovy-lang.org/3.0.0-alpha-3/html/gapi/index.html?org/codehaus/groovy/transform/AnnotationCollectorTransform.html">AnnotationCollectorTransform</a></p>
+</li>
+<li>
+<p>declare the processor to be used in the meta-annotation declaration</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>To illustrate this, we are going to explore how the meta-annotation <code>@CompileDynamic</code> is implemented.</p>
+</div>
+<div class="paragraph">
+<p><code>@CompileDynamic</code> is a meta-annotation that expands itself
+to <code>@CompileStatic(TypeCheckingMode.SKIP)</code>. The problem is that the
+default meta annotation processor doesn’t support enums and the
+annotation value <code>TypeCheckingMode.SKIP</code> is one.</p>
+</div>
+<div class="paragraph">
+<p>The naive implementation here would not work:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@CompileStatic(TypeCheckingMode.SKIP)
+@AnnotationCollector
+public @interface CompileDynamic {}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Instead, we will define it like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@AnnotationCollector(processor = "org.codehaus.groovy.transform.CompileDynamicProcessor")
+public @interface CompileDynamic {
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The first thing you may notice is that our interface is no longer
+annotated with <code>@CompileStatic</code>. The reason for this is that we rely on
+the <code>processor</code> parameter instead, that references a class which
+will <strong>generate</strong> the annotation.</p>
+</div>
+<div class="paragraph">
+<p>Here is how the custom processor is implemented:</p>
+</div>
+<div class="listingblock">
+<div class="title">CompileDynamicProcessor.groovy</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@CompileStatic                                                                  <i class="conum" data-value="1"></i><b>(1)</b>
+class CompileDynamicProcessor extends AnnotationCollectorTransform {            <i class="conum" data-value="2"></i><b>(2)</b>
+    private static final ClassNode CS_NODE = ClassHelper.make(CompileStatic)    <i class="conum" data-value="3"></i><b>(3)</b>
+    private static final ClassNode TC_NODE = ClassHelper.make(TypeCheckingMode) <i class="conum" data-value="4"></i><b>(4)</b>
+
+    List&lt;AnnotationNode&gt; visit(AnnotationNode collector,                        <i class="conum" data-value="5"></i><b>(5)</b>
+                               AnnotationNode aliasAnnotationUsage,             <i class="conum" data-value="6"></i><b>(6)</b>
+                               AnnotatedNode aliasAnnotated,                    <i class="conum" data-value="7"></i><b>(7)</b>
+                               SourceUnit source) {                             <i class="conum" data-value="8"></i><b>(8)</b>
+        def node = new AnnotationNode(CS_NODE)                                  <i class="conum" data-value="9"></i><b>(9)</b>
+        def enumRef = new PropertyExpression(
+            new ClassExpression(TC_NODE), "SKIP")                               <i class="conum" data-value="10"></i><b>(10)</b>
+        node.addMember("value", enumRef)                                        <i class="conum" data-value="11"></i><b>(11)</b>
+        Collections.singletonList(node)                                         <i class="conum" data-value="12"></i><b>(12)</b>
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>our custom processor is written in Groovy, and for better compilation performance, we use static compilation</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>the custom processor has to extend <a href="http://docs.groovy-lang.org/3.0.0-alpha-3/html/gapi/index.html?org/codehaus/groovy/transform/AnnotationCollectorTransform.html">AnnotationCollectorTransform</a></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>create a class node representing the <code>@CompileStatic</code> annotation type</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>create a class node representing the <code>TypeCheckingMode</code> enum type</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td><code>collector</code> is the <code>@AnnotationCollector</code> node found in the meta-annotation. Usually unused.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td><code>aliasAnnotationUsage</code> is the meta-annotation being expanded, here it is <code>@CompileDynamic</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td><code>aliasAnnotated</code> is the node being annotated with the meta-annotation</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="8"></i><b>8</b></td>
+<td><code>sourceUnit</code> is the <code>SourceUnit</code> being compiled</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="9"></i><b>9</b></td>
+<td>we create a new annotation node for <code>@CompileStatic</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="10"></i><b>10</b></td>
+<td>we create an expression equivalent to <code>TypeCheckingMode.SKIP</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="11"></i><b>11</b></td>
+<td>we add that expression to the annotation node, which is now <code>@CompileStatic(TypeCheckingMode.SKIP)</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="12"></i><b>12</b></td>
+<td>return the generated annotation</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>In the example, the <code>visit</code> method is the only method which has to be overridden. It is meant to return a list of
+annotation nodes that will be added to the node annotated with the meta-annotation. In this example, we return a
+single one corresponding to <code>@CompileStatic(TypeCheckingMode.SKIP)</code>.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_inheritance"><a class="anchor" href="#_inheritance"></a>1.8. Inheritance</h3>
+<div class="paragraph">
+<p>(TBD)</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="generics"><a class="anchor" href="#generics"></a>1.9. Generics</h3>
+<div class="paragraph">
+<p>(TBD)</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_traits"><a class="anchor" href="#_traits"></a>2. Traits</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Traits are a structural construct of the language which allows:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>composition of behaviors</p>
+</li>
+<li>
+<p>runtime implementation of interfaces</p>
+</li>
+<li>
+<p>behavior overriding</p>
+</li>
+<li>
+<p>compatibility with static type checking/compilation</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>They can be seen as <strong>interfaces</strong> carrying both <strong>default implementations</strong> and <strong>state</strong>. A trait is defined using the
+<code>trait</code> keyword:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">trait FlyingAbility {                           <i class="conum" data-value="1"></i><b>(1)</b>
+        String fly() { "I'm flying!" }          <i class="conum" data-value="2"></i><b>(2)</b>
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>declaration of a trait</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>declaration of a method inside a trait</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Then it can be used like a normal interface using the <code>implements</code> keyword:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Bird implements FlyingAbility {}          <i class="conum" data-value="1"></i><b>(1)</b>
+def b = new Bird()                              <i class="conum" data-value="2"></i><b>(2)</b>
+assert b.fly() == "I'm flying!"                 <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Adds the trait <code>FlyingAbility</code> to the <code>Bird</code> class capabilities</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>instantiate a new <code>Bird</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>the <code>Bird</code> class automatically gets the behavior of the <code>FlyingAbility</code> trait</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Traits allow a wide range of capabilities, from simple composition to testing, which are described thoroughly in this section.</p>
+</div>
+<div class="sect2">
+<h3 id="_methods_2"><a class="anchor" href="#_methods_2"></a>2.1. Methods</h3>
+<div class="sect3">
+<h4 id="_public_methods"><a class="anchor" href="#_public_methods"></a>2.1.1. Public methods</h4>
+<div class="paragraph">
+<p>Declaring a method in a trait can be done like any regular method in a class:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">trait FlyingAbility {                           <i class="conum" data-value="1"></i><b>(1)</b>
+        String fly() { "I'm flying!" }          <i class="conum" data-value="2"></i><b>(2)</b>
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>declaration of a trait</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>declaration of a method inside a trait</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_abstract_methods"><a class="anchor" href="#_abstract_methods"></a>2.1.2. Abstract methods</h4>
+<div class="paragraph">
+<p>In addition, traits may declare <em>abstract</em> methods too, which therefore need to be implemented in the class implementing the trait:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">trait Greetable {
+    abstract String name()                              <i class="conum" data-value="1"></i><b>(1)</b>
+    String greeting() { "Hello, ${name()}!" }           <i class="conum" data-value="2"></i><b>(2)</b>
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>implementing class will have to declare the <code>name</code> method</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>can be mixed with a concrete method</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Then the trait can be used like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Person implements Greetable {                     <i class="conum" data-value="1"></i><b>(1)</b>
+    String name() { 'Bob' }                             <i class="conum" data-value="2"></i><b>(2)</b>
+}
+
+def p = new Person()
+assert p.greeting() == 'Hello, Bob!'                    <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>implement the trait <code>Greetable</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>since <code>name</code> was abstract, it is required to implement it</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>then <code>greeting</code> can be called</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_private_methods"><a class="anchor" href="#_private_methods"></a>2.1.3. Private methods</h4>
+<div class="paragraph">
+<p>Traits may also define private methods. Those methods will not appear in the trait contract interface:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">trait Greeter {
+    private String greetingMessage() {                      <i class="conum" data-value="1"></i><b>(1)</b>
+        'Hello from a private method!'
+    }
+    String greet() {
+        def m = greetingMessage()                           <i class="conum" data-value="2"></i><b>(2)</b>
+        println m
+        m
+    }
+}
+class GreetingMachine implements Greeter {}                 <i class="conum" data-value="3"></i><b>(3)</b>
+def g = new GreetingMachine()
+assert g.greet() == "Hello from a private method!"          <i class="conum" data-value="4"></i><b>(4)</b>
+try {
+    assert g.greetingMessage()                              <i class="conum" data-value="5"></i><b>(5)</b>
+} catch (MissingMethodException e) {
+    println "greetingMessage is private in trait"
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>define a private method <code>greetingMessage</code> in the trait</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>the public <code>greet</code> message calls <code>greetingMessage</code> by default</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>create a class implementing the trait</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td><code>greet</code> can be called</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>but not <code>greetingMessage</code></td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+Traits only support <code>public</code> and <code>private</code> methods. Neither <code>protected</code> nor <code>package private</code> scopes are
+supported.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_the_meaning_of_this"><a class="anchor" href="#_the_meaning_of_this"></a>2.2. The meaning of this</h3>
+<div class="paragraph">
+<p><code>this</code> represents the implementing instance. Think of a trait as a superclass. This means that when you write:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">trait Introspector {
+    def whoAmI() { this }
+}
+class Foo implements Introspector {}
+def foo = new Foo()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>then calling:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">foo.whoAmI()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>will return the same instance:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">assert foo.whoAmI().is(foo)</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_interfaces"><a class="anchor" href="#_interfaces"></a>2.3. Interfaces</h3>
+<div class="paragraph">
+<p>Traits may implement interfaces, in which case the interfaces are declared using the <code>implements</code> keyword:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">interface Named {                                       <i class="conum" data-value="1"></i><b>(1)</b>
+    String name()
+}
+trait Greetable implements Named {                      <i class="conum" data-value="2"></i><b>(2)</b>
+    String greeting() { "Hello, ${name()}!" }
+}
+class Person implements Greetable {                     <i class="conum" data-value="3"></i><b>(3)</b>
+    String name() { 'Bob' }                             <i class="conum" data-value="4"></i><b>(4)</b>
+}
+
+def p = new Person()
+assert p.greeting() == 'Hello, Bob!'                    <i class="conum" data-value="5"></i><b>(5)</b>
+assert p instanceof Named                               <i class="conum" data-value="6"></i><b>(6)</b>
+assert p instanceof Greetable                           <i class="conum" data-value="7"></i><b>(7)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>declaration of a normal interface</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>add <code>Named</code> to the list of implemented interfaces</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>declare a class that implements the <code>Greetable</code> trait</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>implement the missing <code>name</code> method</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>the <code>greeting</code> implementation comes from the trait</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>make sure <code>Person</code> implements the <code>Named</code> interface</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td>make sure <code>Person</code> implements the <code>Greetable</code> trait</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_properties"><a class="anchor" href="#_properties"></a>2.4. Properties</h3>
+<div class="paragraph">
+<p>A trait may define properties, like in the following example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">trait Named {
+    String name                             <i class="conum" data-value="1"></i><b>(1)</b>
+}
+class Person implements Named {}            <i class="conum" data-value="2"></i><b>(2)</b>
+def p = new Person(name: 'Bob')             <i class="conum" data-value="3"></i><b>(3)</b>
+assert p.name == 'Bob'                      <i class="conum" data-value="4"></i><b>(4)</b>
+assert p.getName() == 'Bob'                 <i class="conum" data-value="5"></i><b>(5)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>declare a property <code>name</code> inside a trait</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>declare a class which implements the trait</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>the property is automatically made visible</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>it can be accessed using the regular property accessor</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>or using the regular getter syntax</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_fields"><a class="anchor" href="#_fields"></a>2.5. Fields</h3>
+<div class="sect3">
+<h4 id="_private_fields"><a class="anchor" href="#_private_fields"></a>2.5.1. Private fields</h4>
+<div class="paragraph">
+<p>Since traits allow the use of private methods, it can also be interesting to use private fields to store state. Traits
+will let you do that:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">trait Counter {
+    private int count = 0                   <i class="conum" data-value="1"></i><b>(1)</b>
+    int count() { count += 1; count }       <i class="conum" data-value="2"></i><b>(2)</b>
+}
+class Foo implements Counter {}             <i class="conum" data-value="3"></i><b>(3)</b>
+def f = new Foo()
+assert f.count() == 1                       <i class="conum" data-value="4"></i><b>(4)</b>
+assert f.count() == 2</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>declare a private field <code>count</code> inside a trait</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>declare a public method <code>count</code> that increments the counter and returns it</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>declare a class that implements the <code>Counter</code> trait</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>the <code>count</code> method can use the private field to keep state</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+This is a major difference with <a href="http://docs.oracle.com/javase/tutorial/java/IandI/defaultmethods.html">Java 8 virtual extension methods</a>. While virtual extension methods
+do not carry state, traits can. Moreover, traits in Groovy are supported starting with Java 6, because their implementation does not rely on virtual extension methods. This
+means that even if a trait can be seen from a Java class as a regular interface, that interface will <strong>not</strong> have default methods, only abstract ones.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_public_fields"><a class="anchor" href="#_public_fields"></a>2.5.2. Public fields</h4>
+<div class="paragraph">
+<p>Public fields work the same way as private fields, but in order to avoid the <a href="http://en.wikipedia.org/wiki/Multiple_inheritance#The_diamond_problem">diamond problem</a>,
+field names are remapped in the implementing class:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">trait Named {
+    public String name                      <i class="conum" data-value="1"></i><b>(1)</b>
+}
+class Person implements Named {}            <i class="conum" data-value="2"></i><b>(2)</b>
+def p = new Person()                        <i class="conum" data-value="3"></i><b>(3)</b>
+p.Named__name = 'Bob'                       <i class="conum" data-value="4"></i><b>(4)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>declare a public <strong>field</strong> inside the trait</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>declare a class implementing the trait</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>create an instance of that class</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>the public field is available, but renamed</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The name of the field depends on the fully qualified name of the trait. All dots (<code>.</code>) in package are replaced with an underscore (<code>_</code>), and the final name includes a double underscore.
+So if the type of the field is <code>String</code>, the name of the package is <code>my.package</code>, the name of the trait is <code>Foo</code> and the name of the field is <code>bar</code>,
+in the implementing class, the public field will appear as:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">String my_package_Foo__bar</code></pre>
+</div>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+While traits support public fields, it is not recommended to use them and considered as a bad practice.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_composition_of_behaviors"><a class="anchor" href="#_composition_of_behaviors"></a>2.6. Composition of behaviors</h3>
+<div class="paragraph">
+<p>Traits can be used to implement multiple inheritance in a controlled way. For example, we can have the following traits:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">trait FlyingAbility {                           <i class="conum" data-value="1"></i><b>(1)</b>
+        String fly() { "I'm flying!" }          <i class="conum" data-value="2"></i><b>(2)</b>
+}
+trait SpeakingAbility {
+    String speak() { "I'm speaking!" }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And a class implementing both traits:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Duck implements FlyingAbility, SpeakingAbility {} <i class="conum" data-value="1"></i><b>(1)</b>
+
+def d = new Duck()                                      <i class="conum" data-value="2"></i><b>(2)</b>
+assert d.fly() == "I'm flying!"                         <i class="conum" data-value="3"></i><b>(3)</b>
+assert d.speak() == "I'm speaking!"                     <i class="conum" data-value="4"></i><b>(4)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>the <code>Duck</code> class implements both <code>FlyingAbility</code> and <code>SpeakingAbility</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>creates a new instance of <code>Duck</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>we can call the method <code>fly</code> from <code>FlyingAbility</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>but also the method <code>speak</code> from <code>SpeakingAbility</code></td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Traits encourage the reuse of capabilities among objects, and the creation of new classes by the composition of existing behavior.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_overriding_default_methods"><a class="anchor" href="#_overriding_default_methods"></a>2.7. Overriding default methods</h3>
+<div class="paragraph">
+<p>Traits provide default implementations for methods, but it is possible to override them in the implementing class. For example, we
+can slightly change the example above, by having a duck which quacks:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Duck implements FlyingAbility, SpeakingAbility {
+    String quack() { "Quack!" }                         <i class="conum" data-value="1"></i><b>(1)</b>
+    String speak() { quack() }                          <i class="conum" data-value="2"></i><b>(2)</b>
+}
+
+def d = new Duck()
+assert d.fly() == "I'm flying!"                         <i class="conum" data-value="3"></i><b>(3)</b>
+assert d.quack() == "Quack!"                            <i class="conum" data-value="4"></i><b>(4)</b>
+assert d.speak() == "Quack!"                            <i class="conum" data-value="5"></i><b>(5)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>define a method specific to <code>Duck</code>, named <code>quack</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>override the default implementation of <code>speak</code> so that we use <code>quack</code> instead</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>the duck is still flying, from the default implementation</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td><code>quack</code> comes from the <code>Duck</code> class</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td><code>speak</code> no longer uses the default implementation from <code>SpeakingAbility</code></td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_extending_traits"><a class="anchor" href="#_extending_traits"></a>2.8. Extending traits</h3>
+<div class="sect3">
+<h4 id="_simple_inheritance"><a class="anchor" href="#_simple_inheritance"></a>2.8.1. Simple inheritance</h4>
+<div class="paragraph">
+<p>Traits may extend another trait, in which case you must use the <code>extends</code> keyword:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">trait Named {
+    String name                                     <i class="conum" data-value="1"></i><b>(1)</b>
+}
+trait Polite extends Named {                        <i class="conum" data-value="2"></i><b>(2)</b>
+    String introduce() { "Hello, I am $name" }      <i class="conum" data-value="3"></i><b>(3)</b>
+}
+class Person implements Polite {}
+def p = new Person(name: 'Alice')                   <i class="conum" data-value="4"></i><b>(4)</b>
+assert p.introduce() == 'Hello, I am Alice'         <i class="conum" data-value="5"></i><b>(5)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>the <code>Named</code> trait defines a single <code>name</code> property</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>the <code>Polite</code> trait <strong>extends</strong> the <code>Named</code> trait</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td><code>Polite</code> adds a new method which has access to the <code>name</code> property of the super-trait</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>the <code>name</code> property is visible from the <code>Person</code> class implementing <code>Polite</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>as is the <code>introduce</code> method</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_multiple_inheritance"><a class="anchor" href="#_multiple_inheritance"></a>2.8.2. Multiple inheritance</h4>
+<div class="paragraph">
+<p>Alternatively, a trait may extend multiple traits. In that case, all super traits must be declared in the <code>implements</code>
+clause:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">trait WithId {                                      <i class="conum" data-value="1"></i><b>(1)</b>
+    Long id
+}
+trait WithName {                                    <i class="conum" data-value="2"></i><b>(2)</b>
+    String name
+}
+trait Identified implements WithId, WithName {}     <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>WithId</code> trait defines the <code>id</code> property</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td><code>WithName</code> trait defines the <code>name</code> property</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td><code>Identified</code> is a trait which inherits both <code>WithId</code> and <code>WithName</code></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_duck_typing_and_traits"><a class="anchor" href="#_duck_typing_and_traits"></a>2.9. Duck typing and traits</h3>
+<div class="sect3">
+<h4 id="_dynamic_code"><a class="anchor" href="#_dynamic_code"></a>2.9.1. Dynamic code</h4>
+<div class="paragraph">
+<p>Traits can call any dynamic code, like a normal Groovy class. This means that you can, in the body of a method, call
+methods which are supposed to exist in an implementing class, without having to explicitly declare them in an interface.
+This means that traits are fully compatible with duck typing:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">trait SpeakingDuck {
+    String speak() { quack() }                      <i class="conum" data-value="1"></i><b>(1)</b>
+}
+class Duck implements SpeakingDuck {
+    String methodMissing(String name, args) {
+        "${name.capitalize()}!"                     <i class="conum" data-value="2"></i><b>(2)</b>
+    }
+}
+def d = new Duck()
+assert d.speak() == 'Quack!'                        <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>the <code>SpeakingDuck</code> expects the <code>quack</code> method to be defined</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>the <code>Duck</code> class does implement the method using <em>methodMissing</em></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>calling the <code>speak</code> method triggers a call to <code>quack</code> which is handled by <code>methodMissing</code></td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_dynamic_methods_in_a_trait"><a class="anchor" href="#_dynamic_methods_in_a_trait"></a>2.9.2. Dynamic methods in a trait</h4>
+<div class="paragraph">
+<p>It is also possible for a trait to implement MOP methods like <code>methodMissing</code> or <code>propertyMissing</code>, in which case implementing classes
+will inherit the behavior from the trait, like in this example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">trait DynamicObject {                               <i class="conum" data-value="1"></i><b>(1)</b>
+    private Map props = [:]
+    def methodMissing(String name, args) {
+        name.toUpperCase()
+    }
+    def propertyMissing(String prop) {
+        props[prop]
+    }
+    void setProperty(String prop, Object value) {
+        props[prop] = value
+    }
+}
+
+class Dynamic implements DynamicObject {
+    String existingProperty = 'ok'                  <i class="conum" data-value="2"></i><b>(2)</b>
+    String existingMethod() { 'ok' }                <i class="conum" data-value="3"></i><b>(3)</b>
+}
+def d = new Dynamic()
+assert d.existingProperty == 'ok'                   <i class="conum" data-value="4"></i><b>(4)</b>
+assert d.foo == null                                <i class="conum" data-value="5"></i><b>(5)</b>
+d.foo = 'bar'                                       <i class="conum" data-value="6"></i><b>(6)</b>
+assert d.foo == 'bar'                               <i class="conum" data-value="7"></i><b>(7)</b>
+assert d.existingMethod() == 'ok'                   <i class="conum" data-value="8"></i><b>(8)</b>
+assert d.someMethod() == 'SOMEMETHOD'               <i class="conum" data-value="9"></i><b>(9)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>create a trait implementing several MOP methods</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>the <code>Dynamic</code> class defines a property</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>the <code>Dynamic</code> class defines a method</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>calling an existing property will call the method from <code>Dynamic</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>calling an non-existing property will call the method from the trait</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>will call <code>setProperty</code> defined on the trait</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td>will call <code>getProperty</code> defined on the trait</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="8"></i><b>8</b></td>
+<td>calling an existing method on <code>Dynamic</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="9"></i><b>9</b></td>
+<td>but calling a non existing method thanks to the trait <code>methodMissing</code></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_multiple_inheritance_conflicts"><a class="anchor" href="#_multiple_inheritance_conflicts"></a>2.10. Multiple inheritance conflicts</h3>
+<div class="sect3">
+<h4 id="_default_conflict_resolution"><a class="anchor" href="#_default_conflict_resolution"></a>2.10.1. Default conflict resolution</h4>
+<div class="paragraph">
+<p>It is possible for a class to implement multiple traits. If some trait defines a method with the same signature as a
+method in another trait, we have a conflict:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">trait A {
+    String exec() { 'A' }               <i class="conum" data-value="1"></i><b>(1)</b>
+}
+trait B {
+    String exec() { 'B' }               <i class="conum" data-value="2"></i><b>(2)</b>
+}
+class C implements A,B {}               <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>trait <code>A</code> defines a method named <code>exec</code> returning a <code>String</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>trait <code>B</code> defines the very same method</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>class <code>C</code> implements both traits</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>In this case, the default behavior is that the method from the <strong>last declared trait</strong> in the <code>implements</code> clause wins.
+Here, <code>B</code> is declared after <code>A</code> so the method from <code>B</code> will be picked up:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def c = new C()
+assert c.exec() == 'B'</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_user_conflict_resolution"><a class="anchor" href="#_user_conflict_resolution"></a>2.10.2. User conflict resolution</h4>
+<div class="paragraph">
+<p>In case this behavior is not the one you want, you can explicitly choose which method to call using the <code>Trait.super.foo</code> syntax.
+In the example above, we can force to choose the method from trait A, by writing this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class C implements A,B {
+    String exec() { A.super.exec() }    <i class="conum" data-value="1"></i><b>(1)</b>
+}
+def c = new C()
+assert c.exec() == 'A'                  <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>explicit call of <code>exec</code> from the trait <code>A</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>calls the version from <code>A</code> instead of using the default resolution, which would be the one from <code>B</code></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_runtime_implementation_of_traits"><a class="anchor" href="#_runtime_implementation_of_traits"></a>2.11. Runtime implementation of traits</h3>
+<div class="sect3">
+<h4 id="_implementing_a_trait_at_runtime"><a class="anchor" href="#_implementing_a_trait_at_runtime"></a>2.11.1. Implementing a trait at runtime</h4>
+<div class="paragraph">
+<p>Groovy also supports implementing traits dynamically at runtime. It allows you to "decorate" an existing object using a
+trait. As an example, let&#8217;s start with this trait and the following class:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">trait Extra {
+    String extra() { "I'm an extra method" }            <i class="conum" data-value="1"></i><b>(1)</b>
+}
+class Something {                                       <i class="conum" data-value="2"></i><b>(2)</b>
+    String doSomething() { 'Something' }                <i class="conum" data-value="3"></i><b>(3)</b>
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>the <code>Extra</code> trait defines an <code>extra</code> method</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>the <code>Something</code> class does <strong>not</strong> implement the <code>Extra</code> trait</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td><code>Something</code> only defines a method <code>doSomething</code></td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Then if we do:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def s = new Something()
+s.extra()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>the call to extra would fail because <code>Something</code> is not implementing <code>Extra</code>. It is possible to do it at runtime with
+the following syntax:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def s = new Something() as Extra                        <i class="conum" data-value="1"></i><b>(1)</b>
+s.extra()                                               <i class="conum" data-value="2"></i><b>(2)</b>
+s.doSomething()                                         <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>use of the <strong>as</strong> keyword to coerce an object to a trait <strong>at runtime</strong></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>then <code>extra</code> can be called on the object</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>and <code>doSomething</code> is still callable</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+When coercing an object to a trait, the result of the operation is not the same instance. It is guaranteed
+that the coerced object will implement both the trait <strong>and</strong> the interfaces that the original object implements, but
+the result will <strong>not</strong> be an instance of the original class.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_implementing_multiple_traits_at_once"><a class="anchor" href="#_implementing_multiple_traits_at_once"></a>2.11.2. Implementing multiple traits at once</h4>
+<div class="paragraph">
+<p>Should you need to implement several traits at once, you can use the <code>withTraits</code> method instead of the <code>as</code> keyword:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">trait A { void methodFromA() {} }
+trait B { void methodFromB() {} }
+
+class C {}
+
+def c = new C()
+c.methodFromA()                     <i class="conum" data-value="1"></i><b>(1)</b>
+c.methodFromB()                     <i class="conum" data-value="2"></i><b>(2)</b>
+def d = c.withTraits A, B           <i class="conum" data-value="3"></i><b>(3)</b>
+d.methodFromA()                     <i class="conum" data-value="4"></i><b>(4)</b>
+d.methodFromB()                     <i class="conum" data-value="5"></i><b>(5)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>call to <code>methodFromA</code> will fail because <code>C</code> doesn&#8217;t implement <code>A</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>call to <code>methodFromB</code> will fail because <code>C</code> doesn&#8217;t implement <code>B</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td><code>withTrait</code> will wrap <code>c</code> into something which implements <code>A</code> and <code>B</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td><code>methodFromA</code> will now pass because <code>d</code> implements <code>A</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td><code>methodFromB</code> will now pass because <code>d</code> also implements <code>B</code></td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+When coercing an object to multiple traits, the result of the operation is not the same instance. It is guaranteed
+that the coerced object will implement both the traits <strong>and</strong> the interfaces that the original object implements, but
+the result will <strong>not</strong> be an instance of the original class.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_chaining_behavior"><a class="anchor" href="#_chaining_behavior"></a>2.12. Chaining behavior</h3>
+<div class="paragraph">
+<p>Groovy supports the concept of <em>stackable traits</em>. The idea is to delegate from one trait to the other if the current trait
+is not capable of handling a message. To illustrate this, let&#8217;s imagine a message handler interface like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">interface MessageHandler {
+    void on(String message, Map payload)
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then you can compose a message handler by applying small behaviors. For example, let&#8217;s define a default handler in the
+form of a trait:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">trait DefaultHandler implements MessageHandler {
+    void on(String message, Map payload) {
+        println "Received $message with payload $payload"
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then any class can inherit the behavior of the default handler by implementing the trait:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class SimpleHandler implements DefaultHandler {}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now what if you want to log all messages, in addition to the default handler? One option is to write this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class SimpleHandlerWithLogging implements DefaultHandler {
+    void on(String message, Map payload) {                                  <i class="conum" data-value="1"></i><b>(1)</b>
+        println "Seeing $message with payload $payload"                     <i class="conum" data-value="2"></i><b>(2)</b>
+        DefaultHandler.super.on(message, payload)                           <i class="conum" data-value="3"></i><b>(3)</b>
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>explicitly implement the <code>on</code> method</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>perform logging</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>continue by delegating to the <code>DefaultHandler</code> trait</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>This works but this approach has drawbacks:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>the logging logic is bound to a "concrete" handler</p>
+</li>
+<li>
+<p>we have an explicit reference to <code>DefaultHandler</code> in the <code>on</code> method, meaning that if we happen to change the trait that our class implements, code will be broken</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>As an alternative, we can write another trait which responsibility is limited to logging:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">trait LoggingHandler implements MessageHandler {                            <i class="conum" data-value="1"></i><b>(1)</b>
+    void on(String message, Map payload) {
+        println "Seeing $message with payload $payload"                     <i class="conum" data-value="2"></i><b>(2)</b>
+        super.on(message, payload)                                          <i class="conum" data-value="3"></i><b>(3)</b>
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>the logging handler is itself a handler</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>prints the message it receives</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>then <code>super</code> makes it delegate the call to the next trait in the chain</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Then our class can be rewritten as this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class HandlerWithLogger implements DefaultHandler, LoggingHandler {}
+def loggingHandler = new HandlerWithLogger()
+loggingHandler.on('test logging', [:])</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>which will print:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Seeing test logging with payload [:]
+Received test logging with payload [:]</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As the priority rules imply that <code>LoggerHandler</code> wins because it is declared last, then a call to <code>on</code> will use
+the implementation from <code>LoggingHandler</code>. But the latter has a call to <code>super</code>, which means the next trait in the
+chain. Here, the next trait is <code>DefaultHandler</code> so <strong>both</strong> will be called:</p>
+</div>
+<div class="paragraph">
+<p>The interest of this approach becomes more evident if we add a third handler, which is responsible for handling messages
+that start with <code>say</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">trait SayHandler implements MessageHandler {
+    void on(String message, Map payload) {
+        if (message.startsWith("say")) {                                    <i class="conum" data-value="1"></i><b>(1)</b>
+            println "I say ${message - 'say'}!"
+        } else {
+            super.on(message, payload)                                      <i class="conum" data-value="2"></i><b>(2)</b>
+        }
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>a handler specific precondition</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>if the precondition is not met, pass the message to the next handler in the chain</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Then our final handler looks like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Handler implements DefaultHandler, SayHandler, LoggingHandler {}
+def h = new Handler()
+h.on('foo', [:])
+h.on('sayHello', [:])</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Which means:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>messages will first go through the logging handler</p>
+</li>
+<li>
+<p>the logging handler calls <code>super</code> which will delegate to the next handler, which is the <code>SayHandler</code></p>
+</li>
+<li>
+<p>if the message starts with <code>say</code>, then the handler consumes the message</p>
+</li>
+<li>
+<p>if not, the <code>say</code> handler delegates to the next handler in the chain</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>This approach is very powerful because it allows you to write handlers that do not know each other and yet let you
+combine them in the order you want. For example, if we execute the code, it will print:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Seeing foo with payload [:]
+Received foo with payload [:]
+Seeing sayHello with payload [:]
+I say Hello!</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>but if we move the logging handler to be the second one in the chain, the output is different:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class AlternateHandler implements DefaultHandler, LoggingHandler, SayHandler {}
+h = new AlternateHandler()
+h.on('foo', [:])
+h.on('sayHello', [:])</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>prints:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Seeing foo with payload [:]
+Received foo with payload [:]
+I say Hello!</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The reason is that now, since the <code>SayHandler</code> consumes the message without calling <code>super</code>, the logging handler is
+not called anymore.</p>
+</div>
+<div class="sect3">
+<h4 id="_semantics_of_super_inside_a_trait"><a class="anchor" href="#_semantics_of_super_inside_a_trait"></a>2.12.1. Semantics of super inside a trait</h4>
+<div class="paragraph">
+<p>If a class implements multiple traits and a call to an unqualified <code>super</code> is found, then:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>if the class implements another trait, the call delegates to the next trait in the chain</p>
+</li>
+<li>
+<p>if there isn&#8217;t any trait left in the chain, <code>super</code> refers to the super class of the implementing class (<em>this</em>)</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>For example, it is possible to decorate final classes thanks to this behavior:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">trait Filtering {                                       <i class="conum" data-value="1"></i><b>(1)</b>
+    StringBuilder append(String str) {                  <i class="conum" data-value="2"></i><b>(2)</b>
+        def subst = str.replace('o','')                 <i class="conum" data-value="3"></i><b>(3)</b>
+        super.append(subst)                             <i class="conum" data-value="4"></i><b>(4)</b>
+    }
+    String toString() { super.toString() }              <i class="conum" data-value="5"></i><b>(5)</b>
+}
+def sb = new StringBuilder().withTraits Filtering       <i class="conum" data-value="6"></i><b>(6)</b>
+sb.append('Groovy')
+assert sb.toString() == 'Grvy'                          <i class="conum" data-value="7"></i><b>(7)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>define a trait named <code>Filtering</code>, supposed to be applied on a <code>StringBuilder</code> at runtime</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>redefine the <code>append</code> method</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>remove all 'o&#8217;s from the string</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>then delegate to <code>super</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>in case <code>toString</code> is called, delegate to <code>super.toString</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>runtime implementation of the <code>Filtering</code> trait on a <code>StringBuilder</code> instance</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td>the string which has been appended no longer contains the letter <code>o</code></td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>In this example, when <code>super.append</code> is encountered, there is no other trait implemented by the target object, so the
+method which is called is the original <code>append</code> method, that is to say the one from <code>StringBuilder</code>. The same trick
+is used for <code>toString</code>, so that the string representation of the proxy object which is generated delegates to the
+<code>toString</code> of the <code>StringBuilder</code> instance.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_advanced_features"><a class="anchor" href="#_advanced_features"></a>2.13. Advanced features</h3>
+<div class="sect3">
+<h4 id="_sam_type_coercion"><a class="anchor" href="#_sam_type_coercion"></a>2.13.1. SAM type coercion</h4>
+<div class="paragraph">
+<p>If a trait defines a single abstract method, it is candidate for SAM (Single Abstract Method) type coercion. For example,
+imagine the following trait:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">trait Greeter {
+    String greet() { "Hello $name" }        <i class="conum" data-value="1"></i><b>(1)</b>
+    abstract String getName()               <i class="conum" data-value="2"></i><b>(2)</b>
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>the <code>greet</code> method is not abstract and calls the abstract method <code>getName</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td><code>getName</code> is an abstract method</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Since <code>getName</code> is the <em>single abstract method</em> in the <code>Greeter</code> trait, you can write:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Greeter greeter = { 'Alice' }               <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>the closure "becomes" the implementation of the <code>getName</code> single abstract method</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>or even:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">void greet(Greeter g) { println g.greet() } <i class="conum" data-value="1"></i><b>(1)</b>
+greet { 'Alice' }                           <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>the greet method accepts the SAM type Greeter as parameter</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>we can call it directly with a closure</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_differences_with_java_8_default_methods"><a class="anchor" href="#_differences_with_java_8_default_methods"></a>2.13.2. Differences with Java 8 default methods</h4>
+<div class="paragraph">
+<p>In Java 8, interfaces can have default implementations of methods. If a class implements an interface and does not provide
+an implementation for a default method, then the implementation from the interface is chosen. Traits behave the same but
+with a major difference: the implementation from the trait is <strong>always</strong> used if the class declares the trait in its interface
+list <strong>and</strong> that it doesn&#8217;t provide an implementation <strong>even</strong> if a super class does.</p>
+</div>
+<div class="paragraph">
+<p>This feature can be used to compose behaviors in an very precise way, in case you want to override the behavior of an
+already implemented method.</p>
+</div>
+<div class="paragraph">
+<p>To illustrate the concept, let&#8217;s start with this simple example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import groovy.transform.CompileStatic
+import org.codehaus.groovy.control.CompilerConfiguration
+import org.codehaus.groovy.control.customizers.ASTTransformationCustomizer
+import org.codehaus.groovy.control.customizers.ImportCustomizer
+
+class SomeTest extends GroovyTestCase {
+    def config
+    def shell
+
+    void setup() {
+        config = new CompilerConfiguration()
+        shell = new GroovyShell(config)
+    }
+    void testSomething() {
+        assert shell.evaluate('1+1') == 2
+    }
+    void otherTest() { /* ... */ }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In this example, we create a simple test case which uses two properties (<em>config</em> and <em>shell</em>) and uses those in
+multiple test methods. Now imagine that you want to test the same, but with another distinct compiler configuration.
+One option is to create a subclass of <code>SomeTest</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class AnotherTest extends SomeTest {
+    void setup() {
+        config = new CompilerConfiguration()
+        config.addCompilationCustomizers( ... )
+        shell = new GroovyShell(config)
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>It works, but what if you have actually multiple test classes, and that you want to test the new configuration for all
+those test classes? Then you would have to create a distinct subclass for each test class:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class YetAnotherTest extends SomeTest {
+    void setup() {
+        config = new CompilerConfiguration()
+        config.addCompilationCustomizers( ... )
+        shell = new GroovyShell(config)
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then what you see is that the <code>setup</code> method of both tests is the same. The idea, then, is to create a trait:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">trait MyTestSupport {
+    void setup() {
+        config = new CompilerConfiguration()
+        config.addCompilationCustomizers( new ASTTransformationCustomizer(CompileStatic) )
+        shell = new GroovyShell(config)
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then use it in the subclasses:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class AnotherTest extends SomeTest implements MyTestSupport {}
+class YetAnotherTest extends SomeTest2 implements MyTestSupport {}
+...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>It would allow us to dramatically reduce the boilerplate code, and reduces the risk of forgetting to change the setup
+code in case we decide to change it. Even if <code>setup</code> is already implemented in the super class, since the test class declares
+the trait in its interface list, the behavior will be borrowed from the trait implementation!</p>
+</div>
+<div class="paragraph">
+<p>This feature is in particular useful when you don&#8217;t have access to the super class source code. It can be used to
+mock methods or force a particular implementation of a method in a subclass. It lets you refactor your code to keep
+the overridden logic in a single trait and inherit a new behavior just by implementing it. The alternative, of course,
+is to override the method in <strong>every</strong> place you would have used the new code.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+It&#8217;s worth noting that if you use runtime traits, the methods from the trait are <strong>always</strong> preferred to those of the proxied
+object:
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Person {
+    String name                                         <i class="conum" data-value="1"></i><b>(1)</b>
+}
+trait Bob {
+    String getName() { 'Bob' }                          <i class="conum" data-value="2"></i><b>(2)</b>
+}
+
+def p = new Person(name: 'Alice')
+assert p.name == 'Alice'                                <i class="conum" data-value="3"></i><b>(3)</b>
+def p2 = p as Bob                                       <i class="conum" data-value="4"></i><b>(4)</b>
+assert p2.name == 'Bob'                                 <i class="conum" data-value="5"></i><b>(5)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>the <code>Person</code> class defines a <code>name</code> property which results in a <code>getName</code> method</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td><code>Bob</code> is a trait which defines <code>getName</code> as returning <code>Bob</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>the default object will return <em>Alice</em></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td><code>p2</code> coerces <code>p</code> into <code>Bob</code> at runtime</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td><code>getName</code> returns <em>Bob</em> because <code>getName</code> is taken from the <strong>trait</strong></td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Again, don&#8217;t forget that dynamic trait coercion returns a distinct object which only implements the original
+interfaces, as well as the traits.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_differences_with_mixins"><a class="anchor" href="#_differences_with_mixins"></a>2.14. Differences with mixins</h3>
+<div class="paragraph">
+<p>There are several conceptual differences with mixins, as they are available in Groovy. Note that we are talking about
+runtime mixins, not the @Mixin annotation which is deprecated in favour of traits.</p>
+</div>
+<div class="paragraph">
+<p>First of all, methods defined in a trait are visible in bytecode:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>internally, the trait is represented as an interface (without default methods) and several helper classes</p>
+</li>
+<li>
+<p>this means that an object implementing a trait effectively implements an <em>interface</em></p>
+</li>
+<li>
+<p>those methods are visible from Java</p>
+</li>
+<li>
+<p>they are compatible with type checking and static compilation</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Methods added through a mixin are, on the contrary, only visible at runtime:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class A { String methodFromA() { 'A' } }        <i class="conum" data-value="1"></i><b>(1)</b>
+class B { String methodFromB() { 'B' } }        <i class="conum" data-value="2"></i><b>(2)</b>
+A.metaClass.mixin B                             <i class="conum" data-value="3"></i><b>(3)</b>
+def o = new A()
+assert o.methodFromA() == 'A'                   <i class="conum" data-value="4"></i><b>(4)</b>
+assert o.methodFromB() == 'B'                   <i class="conum" data-value="5"></i><b>(5)</b>
+assert o instanceof A                           <i class="conum" data-value="6"></i><b>(6)</b>
+assert !(o instanceof B)                        <i class="conum" data-value="7"></i><b>(7)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>class <code>A</code> defines <code>methodFromA</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>class <code>B</code> defines <code>methodFromB</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>mixin B into A</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>we can call <code>methodFromA</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>we can also call <code>methodFromB</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>the object is an instance of <code>A</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td>but it&#8217;s <strong>not</strong> an instanceof <code>B</code></td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The last point is actually a very important and illustrates a place where mixins have an advantage over traits: the instances
+are <strong>not</strong> modified, so if you mixin some class into another, there isn&#8217;t a third class generated, and methods which respond to
+A will continue responding to A even if mixed in.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_static_methods_properties_and_fields"><a class="anchor" href="#_static_methods_properties_and_fields"></a>2.15. Static methods, properties and fields</h3>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+The following instructions are subject to caution. Static member support is work in progress and still experimental. The
+information below is valid for 3.0.0-alpha-3 only.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>It is possible to define static methods in a trait, but it comes with numerous limitations:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>traits with static methods cannot be compiled statically or type checked. All static methods/properties/field are accessed dynamically (it&#8217;s a limitation from the JVM).</p>
+</li>
+<li>
+<p>the trait is interpreted as a <em>template</em> for the implementing class, which means that each implementing class will get its own static methods/properties/methods. So a
+static member declared on a trait doesn&#8217;t belong to the <code>Trait</code>, but to it&#8217;s implementing class.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s start with a simple example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">trait TestHelper {
+    public static boolean CALLED = false        <i class="conum" data-value="1"></i><b>(1)</b>
+    static void init() {                        <i class="conum" data-value="2"></i><b>(2)</b>
+        CALLED = true                           <i class="conum" data-value="3"></i><b>(3)</b>
+    }
+}
+class Foo implements TestHelper {}
+Foo.init()                                      <i class="conum" data-value="4"></i><b>(4)</b>
+assert Foo.TestHelper__CALLED                   <i class="conum" data-value="5"></i><b>(5)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>the static field is declared in the trait</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>a static method is also declared in the trait</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>the static field is updated <em>within</em> the trait</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>a static method <em>init</em> is made available to the implementing class</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>the static field is <em>remapped</em> to avoid the diamond issue</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>As usual, it is not recommended to use public fields. Anyway, should you want this, you must understand that the following code would fail:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Foo.CALLED = true</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>because there is <em>no</em> static field <em>CALLED</em> defined on the trait itself. Likewise, if you have two distinct implementing classes, each one gets a distinct static field:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Bar implements TestHelper {}              <i class="conum" data-value="1"></i><b>(1)</b>
+class Baz implements TestHelper {}              <i class="conum" data-value="2"></i><b>(2)</b>
+Bar.init()                                      <i class="conum" data-value="3"></i><b>(3)</b>
+assert Bar.TestHelper__CALLED                   <i class="conum" data-value="4"></i><b>(4)</b>
+assert !Baz.TestHelper__CALLED                  <i class="conum" data-value="5"></i><b>(5)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>class <code>Bar</code> implements the trait</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>class <code>Baz</code> also implements the trait</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td><code>init</code> is only called on <code>Bar</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>the static field <code>CALLED</code> on <code>Bar</code> is updated</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>but the static field <code>CALLED</code> on <code>Baz</code> is not, because it is <strong>distinct</strong></td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_inheritance_of_state_gotchas"><a class="anchor" href="#_inheritance_of_state_gotchas"></a>2.16. Inheritance of state gotchas</h3>
+<div class="paragraph">
+<p>We have seen that traits are stateful. It is possible for a trait to define fields or properties, but when a class implements a trait, it gets those fields/properties on
+a per-trait basis. So consider the following example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">trait IntCouple {
+    int x = 1
+    int y = 2
+    int sum() { x+y }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The trait defines two properties, <code>x</code> and <code>y</code>, as well as a <code>sum</code> method. Now let&#8217;s create a class which implements the trait:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class BaseElem implements IntCouple {
+    int f() { sum() }
+}
+def base = new BaseElem()
+assert base.f() == 3</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The result of calling <code>f</code> is <code>3</code>, because <code>f</code> delegates to <code>sum</code> in the trait, which has state. But what if we write this instead?</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Elem implements IntCouple {
+    int x = 3                                       <i class="conum" data-value="1"></i><b>(1)</b>
+    int y = 4                                       <i class="conum" data-value="2"></i><b>(2)</b>
+    int f() { sum() }                               <i class="conum" data-value="3"></i><b>(3)</b>
+}
+def elem = new Elem()</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Override property <code>x</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Override property <code>y</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Call <code>sum</code> from trait</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>If you call <code>elem.f()</code>, what is the expected output? Actually it is:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">assert elem.f() == 3</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The reason is that the <code>sum</code> method accesses the <em>fields</em> of the trait. So it is using the <code>x</code> and <code>y</code> values defined
+in the trait. If you want to use the values from the implementing class, then you need to dereference fields by using
+getters and setters, like in this last example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">trait IntCouple {
+    int x = 1
+    int y = 2
+    int sum() { getX()+getY() }
+}
+
+class Elem implements IntCouple {
+    int x = 3
+    int y = 4
+    int f() { sum() }
+}
+def elem = new Elem()
+assert elem.f() == 7</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_self_types"><a class="anchor" href="#_self_types"></a>2.17. Self types</h3>
+<div class="sect3">
+<h4 id="_type_constraints_on_traits"><a class="anchor" href="#_type_constraints_on_traits"></a>2.17.1. Type constraints on traits</h4>
+<div class="paragraph">
+<p>Sometimes you will want to write a trait that can only be applied to some type. For example, you may want to apply a
+trait on a class that extends another class which is beyond your control, and still be able to call those methods.
+To illustrate this, let&#8217;s start with this example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class CommunicationService {
+    static void sendMessage(String from, String to, String message) {       <i class="conum" data-value="1"></i><b>(1)</b>
+        println "$from sent [$message] to $to"
+    }
+}
+
+class Device { String id }                                                  <i class="conum" data-value="2"></i><b>(2)</b>
+
+trait Communicating {
+    void sendMessage(Device to, String message) {
+        CommunicationService.sendMessage(id, to.id, message)                <i class="conum" data-value="3"></i><b>(3)</b>
+    }
+}
+
+class MyDevice extends Device implements Communicating {}                   <i class="conum" data-value="4"></i><b>(4)</b>
+
+def bob = new MyDevice(id:'Bob')
+def alice = new MyDevice(id:'Alice')
+bob.sendMessage(alice,'secret')                                             <i class="conum" data-value="5"></i><b>(5)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>A <code>Service</code> class, beyond your control (in a library, &#8230;&#8203;) defines a <code>sendMessage</code> method</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>A <code>Device</code> class, beyond your control (in a library, &#8230;&#8203;)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Defines a communicating trait for devices that can call the service</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Defines <code>MyDevice</code> as a communicating device</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>The method from the trait is called, and <code>id</code> is resolved</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>It is clear, here, that the <code>Communicating</code> trait can only apply to <code>Device</code>. However, there&#8217;s no explicit
+contract to tell that, because traits cannot extend classes. However, the code compiles and runs perfectly
+fine, because <code>id</code> in the trait method will be resolved dynamically. The problem is that there is nothing that
+prevents the trait from being applied to any class which is <strong>not</strong> a <code>Device</code>. Any class which has an <code>id</code> would
+work, while any class that does not have an <code>id</code> property would cause a runtime error.</p>
+</div>
+<div class="paragraph">
+<p>The problem is even more complex if you want to enable type checking or apply <code>@CompileStatic</code> on the trait: because
+the trait knows nothing about itself being a <code>Device</code>, the type checker will complain saying that it does not find
+the <code>id</code> property.</p>
+</div>
+<div class="paragraph">
+<p>One possibility is to explicitly add a <code>getId</code> method in the trait, but it would not solve all issues. What if a method
+requires <code>this</code> as a parameter, and actually requires it to be a <code>Device</code>?</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class SecurityService {
+    static void check(Device d) { if (d.id==null) throw new SecurityException() }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you want to be able to call this in the trait, then you will explicitly need to cast <code>this</code> into a <code>Device</code>. This can
+quickly become unreadable with explicit casts to this everywhere.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="traits-selftype"><a class="anchor" href="#traits-selftype"></a>2.17.2. The @SelfType annotation</h4>
+<div class="paragraph">
+<p>In order to make this contract explicit, and to make the type checker aware of the <em>type of itself</em>, Groovy provides
+a <code>@SelfType</code> annotation that will:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>let you declare the types that a class that implements this trait must inherit or implement</p>
+</li>
+<li>
+<p>throw a compile time error if those type constraints are not satisfied</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>So in our previous example, we can fix the trait using the <code>@groovy.transform.SelfType</code> annotation:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@SelfType(Device)
+@CompileStatic
+trait Communicating {
+    void sendMessage(Device to, String message) {
+        SecurityService.check(this)
+        CommunicationService.sendMessage(id, to.id, message)
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now if you try to implement this trait on a class that is <strong>not</strong> a device, a compile-time error will occur:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class MyDevice implements Communicating {} // forgot to extend Device</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The error will be:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>class 'MyDevice' implements trait 'Communicating' but does not extend self type class 'Device'</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In conclusion, self types are a powerful way of declaring constraints on traits without having to declare the contract
+directly in the trait or having to use casts everywhere, maintaining separation of concerns as tight as it should be.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_limitations"><a class="anchor" href="#_limitations"></a>2.18. Limitations</h3>
+<div class="sect3">
+<h4 id="_compatibility_with_ast_transformations"><a class="anchor" href="#_compatibility_with_ast_transformations"></a>2.18.1. Compatibility with AST transformations</h4>
+<div class="admonitionblock caution">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-caution" title="Caution"></i>
+</td>
+<td class="content">
+Traits are not officially compatible with AST transformations. Some of them, like <code>@CompileStatic</code> will be applied
+on the trait itself (not on implementing classes), while others will apply on both the implementing class and the trait.
+There is absolutely no guarantee that an AST transformation will run on a trait as it does on a regular class, so use it
+at your own risk!
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_prefix_and_postfix_operations"><a class="anchor" href="#_prefix_and_postfix_operations"></a>2.18.2. Prefix and postfix operations</h4>
+<div class="paragraph">
+<p>Within traits, prefix and postfix operations are not allowed if they update a field of the trait:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">trait Counting {
+    int x
+    void inc() {
+        x++                             <i class="conum" data-value="1"></i><b>(1)</b>
+    }
+    void dec() {
+        --x                             <i class="conum" data-value="2"></i><b>(2)</b>
+    }
+}
+class Counter implements Counting {}
+def c = new Counter()
+c.inc()</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>x</code> is defined within the trait, postfix increment is not allowed</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td><code>x</code> is defined within the trait, prefix decrement is not allowed</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>A workaround is to use the <code>+=</code> operator instead.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 3.0.0-alpha-3<br>
+Last updated 2018-06-23 13:44:45 AEST
+</div>
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+<script>prettyPrint()</script>
+</body>
+</html>

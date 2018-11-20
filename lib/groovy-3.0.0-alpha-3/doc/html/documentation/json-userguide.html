@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.6.1">
+<title>Processing JSON</title>
+<link rel="stylesheet" href="./assets/css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+<h1>Processing JSON</h1>
+<div class="details">
+<span id="revnumber">version 3.0.0-alpha-3</span>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#json_jsonslurper">1. JsonSlurper</a>
+<ul class="sectlevel2">
+<li><a href="#_parser_variants">1.1. Parser Variants</a></li>
+</ul>
+</li>
+<li><a href="#_jsonoutput">2. JsonOutput</a>
+<ul class="sectlevel2">
+<li><a href="#_customizing_output">2.1. Customizing Output</a>
+<ul class="sectlevel3">
+<li><a href="#_formatted_output">2.1.1. Formatted Output</a></li>
+</ul>
+</li>
+<li><a href="#_builders">2.2. Builders</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Groovy comes with integrated support for converting between Groovy objects and JSON. The classes dedicated to
+JSON serialisation and parsing are found in the <code>groovy.json</code> package.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="json_jsonslurper"><a class="anchor" href="#json_jsonslurper"></a>1. JsonSlurper</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><code>JsonSlurper</code> is a class that parses JSON text or reader content into Groovy data structures (objects) such as maps, lists and
+primitive types like <code>Integer</code>, <code>Double</code>, <code>Boolean</code> and <code>String</code>.</p>
+</div>
+<div class="paragraph">
+<p>The class comes with a bunch of overloaded <code>parse</code> methods plus some special methods such as <code>parseText</code>,
+<code>parseFile</code> and others. For the next example we will use the <code>parseText</code> method. It parses a JSON <code>String</code> and recursively converts it to a
+list or map of objects. The other <code>parse*</code> methods are similar in that they return a JSON <code>String</code> but for different parameter
+types.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def jsonSlurper = new JsonSlurper()
+def object = jsonSlurper.parseText('{ "name": "John Doe" } /* some comment */')
+
+assert object instanceof Map
+assert object.name == 'John Doe'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Notice the result is a plain map and can be handled like a normal Groovy object instance. <code>JsonSlurper</code> parses the
+given JSON as defined by the <a href="http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf">ECMA-404 JSON Interchange Standard</a>
+plus support for JavaScript comments and dates.</p>
+</div>
+<div class="paragraph">
+<p>In addition to maps <code>JsonSlurper</code> supports JSON arrays which are converted to lists.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def jsonSlurper = new JsonSlurper()
+def object = jsonSlurper.parseText('{ "myList": [4, 8, 15, 16, 23, 42] }')
+
+assert object instanceof Map
+assert object.myList instanceof List
+assert object.myList == [4, 8, 15, 16, 23, 42]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The JSON standard supports the following primitive data types: string, number, object, <code>true</code>, <code>false</code> and <code>null</code>. <code>JsonSlurper</code>
+converts these JSON types into corresponding Groovy types.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def jsonSlurper = new JsonSlurper()
+def object = jsonSlurper.parseText '''
+    { "simple": 123,
+      "fraction": 123.66,
+      "exponential": 123e12
+    }'''
+
+assert object instanceof Map
+assert object.simple.class == Integer
+assert object.fraction.class == BigDecimal
+assert object.exponential.class == BigDecimal</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As <code>JsonSlurper</code> is returning pure Groovy object instances without any special JSON classes in the back, its usage
+is transparent. In fact, <code>JsonSlurper</code> results conform to GPath expressions. GPath is a powerful expression language
+that is supported by multiple slurpers for different data formats (<code>XmlSlurper</code> for XML being one example).</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+For more details please have a look at the section on <a href="core-semantics.html#gpath_expressions">GPath expressions</a>.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The following table gives an overview of the JSON types and the corresponding Groovy data types:</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">JSON</th>
+<th class="tableblock halign-left valign-top">Groovy</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>java.lang.String</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">number</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>java.lang.BigDecimal</code> or <code>java.lang.Integer</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">object</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>java.util.LinkedHashMap</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">array</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>java.util.ArrayList</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">null</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>null</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">date</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>java.util.Date</code> based on the <code>yyyy-MM-dd&#8217;T&#8217;HH:mm:ssZ</code> date format</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Whenever a value in JSON is <code>null</code>, <code>JsonSlurper</code> supplements it with the Groovy <code>null</code> value. This is in contrast to other
+JSON parsers that represent a <code>null</code> value with a library-provided singleton object.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_parser_variants"><a class="anchor" href="#_parser_variants"></a>1.1. Parser Variants</h3>
+<div class="paragraph">
+<p><code>JsonSlurper</code> comes with a couple of parser implementations. Each parser fits different requirements, it could well be that for certain
+scenarios the <code>JsonSlurper</code> default parser is not the best bet for all situations. Here is an overview of the shipped parser implementations:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The <code>JsonParserCharArray</code> parser basically takes a JSON string and operates on the underlying character array. During value
+conversion it copies character sub-arrays (a mechanism known as "chopping") and operates on them.</p>
+</li>
+<li>
+<p>The <code>JsonFastParser</code> is a special variant of the <code>JsonParserCharArray</code> and is the fastest parser. However, it is not the
+default parser for a reason. <code>JsonFastParser</code> is a so-called index-overlay parser. During parsing of the given JSON <code>String</code> it
+tries as hard as possible to avoid creating new char arrays or <code>String</code> instances. It keeps pointers to
+the underlying original character array only. In addition, it defers object creation as late as possible. If parsed maps are
+put into long-term caches care must be taken as the map objects might not be created and still consist of pointer to the
+original char buffer only. However, <code>JsonFastParser</code> comes with a special chop mode which dices up the char buffer
+early to keep a small copy of the original buffer. Recommendation is to use the <code>JsonFastParser</code> for JSON buffers
+under 2MB and keeping the long-term cache restriction in mind.</p>
+</li>
+<li>
+<p>The <code>JsonParserLax</code> is a special variant of the <code>JsonParserCharArray</code> parser. It has similar performance characteristics as <code>JsonFastParser</code>
+but differs in that it isn&#8217;t exclusively relying on the ECMA-404 JSON grammar. For example it allows for comments, no quote strings etc.</p>
+</li>
+<li>
+<p>The <code>JsonParserUsingCharacterSource</code> is a special parser for very large files. It uses a technique called "character windowing" to
+parse large JSON files (large means files over 2MB size in this case) with constant performance characteristics.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The default parser implementation for <code>JsonSlurper</code> is <code>JsonParserCharArray</code>. The <code>JsonParserType</code> enumeration contains constants for
+the parser implementations described above:</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Implementation</th>
+<th class="tableblock halign-left valign-top">Constant</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>JsonParserCharArray</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>JsonParserType#CHAR_BUFFER</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>JsonFastParser</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>JsonParserType#INDEX_OVERLAY</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>JsonParserLax</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>JsonParserType#LAX</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>JsonParserUsingCharacterSource</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>JsonParserType#CHARACTER_SOURCE</code></p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Changing the parser implementation is as easy as setting the <code>JsonParserType</code> with a call to <code>JsonSlurper#setType()</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def jsonSlurper = new JsonSlurper(type: JsonParserType.INDEX_OVERLAY)
+def object = jsonSlurper.parseText('{ "myList": [4, 8, 15, 16, 23, 42] }')
+
+assert object instanceof Map
+assert object.myList instanceof List
+assert object.myList == [4, 8, 15, 16, 23, 42]</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_jsonoutput"><a class="anchor" href="#_jsonoutput"></a>2. JsonOutput</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><code>JsonOutput</code> is responsible for serialising Groovy objects into JSON strings. It can be seen as companion object to
+<a href="#json_jsonslurper">JsonSlurper</a>, being a JSON parser.</p>
+</div>
+<div class="paragraph">
+<p><code>JsonOutput</code> comes with overloaded, static <code>toJson</code> methods. Each <code>toJson</code> implementation takes a different parameter type.
+The static methods can either be used directly or by importing the methods with a static import statement.</p>
+</div>
+<div class="paragraph">
+<p>The result of a <code>toJson</code> call is a <code>String</code> containing the JSON code.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def json = JsonOutput.toJson([name: 'John Doe', age: 42])
+
+assert json == '{"name":"John Doe","age":42}'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>JsonOutput</code> does not only support primitive, maps or list data types to be serialized to JSON, it goes further and even
+has support for serialising POGOs, that is, plain-old Groovy objects.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Person { String name }
+
+def json = JsonOutput.toJson([ new Person(name: 'John'), new Person(name: 'Max') ])
+
+assert json == '[{"name":"John"},{"name":"Max"}]'</code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_customizing_output"><a class="anchor" href="#_customizing_output"></a>2.1. Customizing Output</h3>
+<div class="paragraph">
+<p>If you need control over the serialized output you can use a <code>JsonGenerator</code>.  The <code>JsonGenerator.Options</code> builder
+can be used to create a customized generator.  One or more options can be set on this builder in order to alter
+the resulting output.  When you are done setting the options simply call the <code>build()</code> method in order to get a fully
+configured instance that will generate output based on the options selected.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Person {
+    String name
+    String title
+    int age
+    String password
+    Date dob
+    URL favoriteUrl
+}
+
+Person person = new Person(name: 'John', title: null, age: 21, password: 'secret',
+                            dob: Date.parse('yyyy-MM-dd', '1984-12-15'),
+                            favoriteUrl: new URL('http://groovy-lang.org/'))
+
+def generator = new JsonGenerator.Options()
+    .excludeNulls()
+    .dateFormat('yyyy@MM')
+    .excludeFieldsByName('age', 'password')
+    .excludeFieldsByType(URL)
+    .build()
+
+assert generator.toJson(person) == '{"dob":"1984@12","name":"John"}'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A closure can be used to transform a type.  These closure converters are registered for a given type and will be
+called any time that type or a subtype is encountered.  The first parameter to the closure is an object matching the
+type for which the converter is registered and this parameter is required. The closure may take an optional second
+<code>String</code> parameter and this will be set to the key name if one is available.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Person {
+    String name
+    URL favoriteUrl
+}
+
+Person person = new Person(name: 'John', favoriteUrl: new URL('http://groovy-lang.org/json.html#_jsonoutput'))
+
+def generator = new JsonGenerator.Options()
+    .addConverter(URL) { URL u, String key -&gt;
+        if (key == 'favoriteUrl') {
+            u.getHost()
+        } else {
+            u
+        }
+    }
+    .build()
+
+assert generator.toJson(person) == '{"favoriteUrl":"groovy-lang.org","name":"John"}'
+
+// No key available when generating a JSON Array
+def list = [new URL('http://groovy-lang.org/json.html#_jsonoutput')]
+assert generator.toJson(list) == '["http://groovy-lang.org/json.html#_jsonoutput"]'
+
+// First parameter to the converter must match the type for which it is registered
+shouldFail(IllegalArgumentException) {
+    new JsonGenerator.Options()
+        .addConverter(Date) { Calendar cal -&gt; }
+}</code></pre>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_formatted_output"><a class="anchor" href="#_formatted_output"></a>2.1.1. Formatted Output</h4>
+<div class="paragraph">
+<p>As we saw in previous examples, the JSON output is not pretty printed per default. However, the <code>prettyPrint</code> method in <code>JsonOutput</code> comes
+to rescue for this task.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def json = JsonOutput.toJson([name: 'John Doe', age: 42])
+
+assert json == '{"name":"John Doe","age":42}'
+
+assert JsonOutput.prettyPrint(json) == '''\
+{
+    "name": "John Doe",
+    "age": 42
+}'''.stripIndent()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>prettyPrint</code> takes a <code>String</code> as single parameter; therefore, it can be applied on arbitrary JSON <code>String</code> instances, not only the result of
+<code>JsonOutput.toJson</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_builders"><a class="anchor" href="#_builders"></a>2.2. Builders</h3>
+<div class="paragraph">
+<p>Another way to create JSON from Groovy is to use <code>JsonBuilder</code> or <code>StreamingJsonBuilder</code>. Both builders provide a
+DSL which allows to formulate an object graph which is then converted to JSON.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+For more details on builders, have a look at the builders chapter which covers both <a href="core-domain-specific-languages.html#_jsonbuilder">JsonBuilder</a>
+and <a href="core-domain-specific-languages.html#_streamingjsonbuilder">StreamingJsonBuilder</a>.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 3.0.0-alpha-3<br>
+Last updated 2018-06-23 13:44:43 AEST
+</div>
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+<script>prettyPrint()</script>
+</body>
+</html>

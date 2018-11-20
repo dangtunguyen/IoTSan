@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.6.1">
+<title>Bouncer Pattern</title>
+<link rel="stylesheet" href="./assets/css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+<h1>Bouncer Pattern</h1>
+<div class="details">
+<span id="revnumber">version 3.0.0-alpha-3</span>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_null_checking_example">1. Null Checking Example</a></li>
+<li><a href="#_validation_example">2. Validation Example</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <a href="http://www.c2.com/cgi/wiki?BouncerPattern">Bouncer Pattern</a> describes usage of a method whose sole purpose is to either throw an exception (when particular conditions hold) or do nothing. Such methods are often used to defensively guard pre-conditions of a method.</p>
+</div>
+<div class="paragraph">
+<p>When writing utility methods, you should always guard against faulty input arguments. When writing internal methods, you may be able to ensure that certain pre-conditions always hold by having sufficient unit tests in place. Under such circumstances, you may reduce the desirability to have guards on your methods.</p>
+</div>
+<div class="paragraph">
+<p>Groovy differs from other languages in that you frequently use the <code>assert</code> method within your methods rather than having a large number of utility checker methods or classes.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_null_checking_example"><a class="anchor" href="#_null_checking_example"></a>1. Null Checking Example</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>We might have a utility method such as:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class NullChecker {
+    static check(name, arg) {
+        if (arg == null) {
+            throw new IllegalArgumentException(name + ' is null')
+        }
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And we would use it like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">void doStuff(String name, Object value) {
+    NullChecker.check('name', name)
+    NullChecker.check('value', value)
+    // do stuff
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>But a more Groovy way to do this would simply be like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">void doStuff(String name, Object value) {
+    assert name != null, 'name should not be null'
+    assert value != null, 'value should not be null'
+    // do stuff
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_validation_example"><a class="anchor" href="#_validation_example"></a>2. Validation Example</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>As an alternative example, we might have this utility method:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class NumberChecker {
+    static final String NUMBER_PATTERN = "\\\\d+(\\\\.\\\\d+(E-?\\\\d+)?)?"
+    static isNumber(str) {
+        if (!str ==~ NUMBER_PATTERN) {
+            throw new IllegalArgumentException("Argument '$str' must be a number")
+        }
+    }
+    static isNotZero(number) {
+        if (number == 0) {
+            throw new IllegalArgumentException('Argument must not be 0')
+        }
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And we would use it like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def stringDivide(String dividendStr, String divisorStr) {
+    NumberChecker.isNumber(dividendStr)
+    NumberChecker.isNumber(divisorStr)
+    def dividend = dividendStr.toDouble()
+    def divisor = divisorStr.toDouble()
+    NumberChecker.isNotZero(divisor)
+    dividend / divisor
+}
+
+println stringDivide('1.2E2', '3.0')
+// =&gt; 40.0</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>But with Groovy we could just as easily use:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def stringDivide(String dividendStr, String divisorStr) {
+    assert dividendStr =~ NumberChecker.NUMBER_PATTERN
+    assert divisorStr =~ NumberChecker.NUMBER_PATTERN
+    def dividend = dividendStr.toDouble()
+    def divisor = divisorStr.toDouble()
+    assert divisor != 0, 'Divisor must not be 0'
+    dividend / divisor
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 3.0.0-alpha-3<br>
+Last updated 2018-06-23 13:44:43 AEST
+</div>
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+<script>prettyPrint()</script>
+</body>
+</html>

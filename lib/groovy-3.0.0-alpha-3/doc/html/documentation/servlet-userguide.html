@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.6.1">
+<title>Servlet support</title>
+<link rel="stylesheet" href="./assets/css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+<h1>Servlet support</h1>
+<div class="details">
+<span id="revnumber">version 3.0.0-alpha-3</span>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_implicit_variables">1. Implicit variables</a></li>
+<li><a href="#_setting_up_groovylets">2. Setting up groovylets</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>You can write (Java) Servlets in Groovy (called Groovlets).</p>
+</div>
+<div class="paragraph">
+<p>There is also a <code>GroovyServlet</code>.</p>
+</div>
+<div class="paragraph">
+<p>This feature will automatically compile your .groovy source files, turn them into bytecode, load the Class and cache it until you change the source file.</p>
+</div>
+<div class="paragraph">
+<p>Here&#8217;s a simple example to show you the kind of things you can do from a Groovlet.</p>
+</div>
+<div class="paragraph">
+<p>Notice the use of implicit variables to access the session, output and request. Also notice that this is more like a script as it does not have a class wrapper.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">if (!session) {
+  session = request.getSession(true)
+}
+
+if (!session.counter) {
+  session.counter = 1
+}
+
+println """
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;Groovy Servlet&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;p&gt;
+Hello, ${request.remoteHost}: ${session.counter}! ${new Date()}
+        &lt;/p&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+"""
+session.counter = session.counter + 1</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Or, do the same thing using MarkupBuilder:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">if (!session) {
+    session = request.getSession(true)
+}
+
+if (!session.counter) {
+    session.counter = 1
+}
+
+html.html { // html is implicitly bound to new MarkupBuilder(out)
+  head {
+      title('Groovy Servlet')
+  }
+  body {
+    p("Hello, ${request.remoteHost}: ${session.counter}! ${new Date()}")
+  }
+}
+session.counter = session.counter + 1</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_implicit_variables"><a class="anchor" href="#_implicit_variables"></a>1. Implicit variables</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The following variables are ready for use in Groovlets:</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">variable name</th>
+<th class="tableblock halign-left valign-top">bound to</th>
+<th class="tableblock halign-left valign-top">note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ServletRequest</p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>-</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">response</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ServletResponse</p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>-</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">context</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ServletContext</p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>-</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">application</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ServletContext</p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>-</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">session</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">getSession(false)</p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>can be null! see &lt;1&gt;</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">params</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>a Map object</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">headers</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>a Map object</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">out</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">response.getWriter()</p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>see &lt;2&gt;</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">sout</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">response.getOutputStream()</p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>see &lt;2&gt;</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">html</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">new MarkupBuilder(out)</p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>see &lt;2&gt;</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">json</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">new StreamingJsonBuilder(out)</p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>see &lt;2&gt;</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>The session variable is only set, if there was already a session object. See the <code>if (session == null)</code> checks in the examples above.</p>
+</li>
+<li>
+<p>These variables cannot be re-assigned inside a <code>Groovlet</code>. They are bound on first access, allowing to e.g. calling methods on the <code>response</code> object before using <code>out</code>.</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_setting_up_groovylets"><a class="anchor" href="#_setting_up_groovylets"></a>2. Setting up groovylets</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Add the following to your <code>web.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;servlet&gt;
+    &lt;servlet-name&gt;Groovy&lt;/servlet-name&gt;
+    &lt;servlet-class&gt;groovy.servlet.GroovyServlet&lt;/servlet-class&gt;
+&lt;/servlet&gt;
+
+&lt;servlet-mapping&gt;
+    &lt;servlet-name&gt;Groovy&lt;/servlet-name&gt;
+    &lt;url-pattern&gt;*.groovy&lt;/url-pattern&gt;
+&lt;/servlet-mapping&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then put the required groovy jar files into <code>WEB-INF/lib</code>.</p>
+</div>
+<div class="paragraph">
+<p>Now put the .groovy files in, say, the root directory (i.e. where you would put your html files). The <code>GroovyServlet</code> takes care of compiling the .groovy files.</p>
+</div>
+<div class="paragraph">
+<p>So for example using tomcat you could edit <code>tomcat/conf/server.xml</code> like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-xml" data-lang="xml">&lt;Context path="/groovy" docBase="c:/groovy-servlet"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then access it with <a href="http://localhost:8080/groovy/hello.groovy" class="bare">http://localhost:8080/groovy/hello.groovy</a></p>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 3.0.0-alpha-3<br>
+Last updated 2018-06-23 13:44:43 AEST
+</div>
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+<script>prettyPrint()</script>
+</body>
+</html>

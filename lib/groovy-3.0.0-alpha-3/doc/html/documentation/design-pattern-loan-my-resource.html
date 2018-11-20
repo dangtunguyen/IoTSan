@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.6.1">
+<title>Loan my Resource Pattern</title>
+<link rel="stylesheet" href="./assets/css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+<h1>Loan my Resource Pattern</h1>
+<div class="details">
+<span id="revnumber">version 3.0.0-alpha-3</span>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_example">1. Example</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <a href="https://wiki.scala-lang.org/display/SYGN/Loan">Loan my Resource</a> pattern ensures that a resource is deterministically disposed of once it goes out of scope.</p>
+</div>
+<div class="paragraph">
+<p>This pattern is built in to many Groovy helper methods. You should consider using it yourself if you need to work with resources in ways beyond what Groovy supports.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_example"><a class="anchor" href="#_example"></a>1. Example</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Consider the following code which works with a file. First we might write some line to the file and then print its size:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def f = new File('junk.txt')
+f.withPrintWriter { pw -&gt;
+    pw.println(new Date())
+    pw.println(this.class.name)
+}
+println f.size()
+// =&gt; 42</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>We could also read back the contents of the file a line at a time and print each line out:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">f.eachLine { line -&gt;
+    println line
+}
+// =&gt;
+// Mon Jun 18 22:38:17 EST 2007
+// RunPattern</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note that normal Java <code>Reader</code> and <code>PrintWriter</code> objects were used under the covers by Groovy but the code writer did not have to worry about explicitly creating or closing those resources. The built-in Groovy methods loan the respective reader or writer to the closure code and then tidy up after themselves. So, you are using this pattern without having to do any work.</p>
+</div>
+<div class="paragraph">
+<p>Sometimes however, you wish to do things slightly differently to what you can get for free using Groovy&#8217;s built-in mechanisms. You should consider utilising this pattern within your own resource-handling operations.</p>
+</div>
+<div class="paragraph">
+<p>Consider how you might process the list of words on each line within the file. We could actually do this one too using Groovy&#8217;s built-in functions, but bear with us and assume we have to do some resource handling ourselves. Here is how we might write the code without using this pattern:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def reader = f.newReader()
+reader.splitEachLine(' ') { wordList -&gt;
+    println wordList
+}
+reader.close()
+// =&gt;
+// [ "Mon", "Jun", "18", "22:38:17", "EST", "2007" ]
+// [ "RunPattern" ]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Notice that we now have an explicit call to <code>close()</code> in our code. If we didn&#8217;t code it just right (here we didn&#8217;t surround the code in a <code>try &#8230;&#8203; finally</code> block, we run the risk of leaving the file handle open.</p>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s now apply the loan pattern. First, we&#8217;ll write a helper method:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def withListOfWordsForEachLine(File f, Closure c) {
+    def r = f.newReader()
+    try {
+        r.splitEachLine(' ', c)
+    } finally {
+        r?.close()
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now, we can re-write our code as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">withListOfWordsForEachLine(f) { wordList -&gt;
+    println wordList
+}
+// =&gt;
+// [ "Mon", "Jun", "18", "22:38:17", "EST", "2007" ]
+// [ "RunPattern" ]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This is much simpler and has removed the explicit <code>close()</code>. This is now catered for in one spot so we can apply the appropriate level of testing or reviewing in just one spot to be sure we have no problems.</p>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 3.0.0-alpha-3<br>
+Last updated 2018-06-23 13:44:42 AEST
+</div>
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+<script>prettyPrint()</script>
+</body>
+</html>

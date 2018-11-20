@@ -239,7 +239,7 @@ public class AutoModeChange extends java.lang.Object
     private boolean everyoneIsAway()
     {
         STPresSensor person;
-        int JJJCTEMP$5, $ret, JJJCTEMP$2, index2, result;
+        int JJJCTEMP$5, $ret, index5, JJJCTEMP$2, result;
         STPresSensor[] _static_AutoModeChange_people;
         AutoModeChange JJJCTEMP$0;
 
@@ -248,11 +248,11 @@ public class AutoModeChange extends java.lang.Object
 
      label0:
         result = 1;
-        index2 = 0;
+        index5 = 0;
         goto label3;
 
      label1:
-        person = _static_AutoModeChange_people[index2];
+        person = _static_AutoModeChange_people[index5];
         JJJCTEMP$2 = person.[STPresSensor.currentPresence:int];
         if JJJCTEMP$2 != 19 goto label2;
 
@@ -260,11 +260,11 @@ public class AutoModeChange extends java.lang.Object
         goto label4;
 
      label2:
-        index2 = index2 + 1;
+        index5 = index5 + 1;
 
      label3:
         JJJCTEMP$5 = lengthof _static_AutoModeChange_people;
-        if index2 < JJJCTEMP$5 goto label1;
+        if index5 < JJJCTEMP$5 goto label1;
 
      label4:
         $ret = result;
@@ -273,63 +273,63 @@ public class AutoModeChange extends java.lang.Object
 
     public void presenceEvtHandler()
     {
-        STPresSensor m0_person;
+        STPresSensor m14_person;
         STLocation _static_location;
-        int m0_$ret, m0_JJJCTEMP$2, m0_index2, JJJCTEMP$6, _static_AutoModeChange_newMode2, _static_AutoModeChange_newMode1, m0_result, m1_mode, _static_location.mode, _static_evt.value, m0_JJJCTEMP$5;
+        int JJJCTEMP$6, m14_$ret, m13_mode, _static_AutoModeChange_newMode2, _static_AutoModeChange_newMode1, m14_JJJCTEMP$5, _static_location.mode, m14_JJJCTEMP$2, m14_result, _static_evt.value, m14_index5;
         STPresSensor[] _static_AutoModeChange_people;
-        AutoModeChange JJJCTEMP$0, m0_JJJCTEMP$0;
+        AutoModeChange JJJCTEMP$0, m14_JJJCTEMP$0;
 
         JJJCTEMP$0 := @this;
         if _static_evt.value != 18 goto label11;
 
         if _static_location.mode == _static_AutoModeChange_newMode1 goto label10;
 
-        m0_JJJCTEMP$0 = JJJCTEMP$0;
+        m14_JJJCTEMP$0 = JJJCTEMP$0;
         goto label0;
 
      label0:
-        m0_result = 1;
-        m0_index2 = 0;
+        m14_result = 1;
+        m14_index5 = 0;
         goto label3;
 
      label1:
-        m0_person = _static_AutoModeChange_people[m0_index2];
-        m0_JJJCTEMP$2 = m0_person.[STPresSensor.currentPresence:int];
-        if m0_JJJCTEMP$2 != 19 goto label2;
+        m14_person = _static_AutoModeChange_people[m14_index5];
+        m14_JJJCTEMP$2 = m14_person.[STPresSensor.currentPresence:int];
+        if m14_JJJCTEMP$2 != 19 goto label2;
 
-        m0_result = 0;
+        m14_result = 0;
         goto label4;
 
      label2:
-        m0_index2 = m0_index2 + 1;
+        m14_index5 = m14_index5 + 1;
 
      label3:
-        m0_JJJCTEMP$5 = lengthof _static_AutoModeChange_people;
-        if m0_index2 < m0_JJJCTEMP$5 goto label1;
+        m14_JJJCTEMP$5 = lengthof _static_AutoModeChange_people;
+        if m14_index5 < m14_JJJCTEMP$5 goto label1;
 
      label4:
-        m0_$ret = m0_result;
-        JJJCTEMP$6 = m0_$ret;
+        m14_$ret = m14_result;
+        JJJCTEMP$6 = m14_$ret;
         goto label5;
 
      label5:
         nop;
         if JJJCTEMP$6 == 0 goto label10;
 
-        m1_mode = _static_AutoModeChange_newMode1;
-        if m1_mode != 1400 goto label6;
+        m13_mode = _static_AutoModeChange_newMode1;
+        if m13_mode != 1400 goto label6;
 
         _static_location.[STLocation.STCommand_Location_Home:boolean] = 1;
         goto label8;
 
      label6:
-        if m1_mode != 1401 goto label7;
+        if m13_mode != 1401 goto label7;
 
         _static_location.[STLocation.STCommand_Location_Away:boolean] = 1;
         goto label8;
 
      label7:
-        if m1_mode != 1402 goto label8;
+        if m13_mode != 1402 goto label8;
 
         _static_location.[STLocation.STCommand_Location_Night:boolean] = 1;
 
@@ -345,20 +345,20 @@ public class AutoModeChange extends java.lang.Object
      label11:
         if _static_location.mode == _static_AutoModeChange_newMode2 goto label16;
 
-        m1_mode = _static_AutoModeChange_newMode2;
-        if m1_mode != 1400 goto label12;
+        m13_mode = _static_AutoModeChange_newMode2;
+        if m13_mode != 1400 goto label12;
 
         _static_location.[STLocation.STCommand_Location_Home:boolean] = 1;
         goto label14;
 
      label12:
-        if m1_mode != 1401 goto label13;
+        if m13_mode != 1401 goto label13;
 
         _static_location.[STLocation.STCommand_Location_Away:boolean] = 1;
         goto label14;
 
      label13:
-        if m1_mode != 1402 goto label14;
+        if m13_mode != 1402 goto label14;
 
         _static_location.[STLocation.STCommand_Location_Night:boolean] = 1;
 

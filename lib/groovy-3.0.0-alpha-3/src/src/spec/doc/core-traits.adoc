@@ -1,0 +1,841 @@
+//////////////////////////////////////////
+
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+
+//////////////////////////////////////////
+
+= Traits
+
+Traits are a structural construct of the language which allows:
+
+* composition of behaviors
+* runtime implementation of interfaces
+* behavior overriding
+* compatibility with static type checking/compilation
+
+They can be seen as *interfaces* carrying both *default implementations* and *state*. A trait is defined using the
+`trait` keyword:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/TraitsSpecificationTest.groovy[tags=flying_simple,indent=0]
+----
+<1> declaration of a trait
+<2> declaration of a method inside a trait
+
+Then it can be used like a normal interface using the `implements` keyword:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/TraitsSpecificationTest.groovy[tags=bird,indent=0]
+----
+<1> Adds the trait `FlyingAbility` to the `Bird` class capabilities
+<2> instantiate a new `Bird`
+<3> the `Bird` class automatically gets the behavior of the `FlyingAbility` trait
+
+Traits allow a wide range of capabilities, from simple composition to testing, which are described thoroughly in this section.
+
+== Methods
+=== Public methods
+
+Declaring a method in a trait can be done like any regular method in a class:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/TraitsSpecificationTest.groovy[tags=flying_simple,indent=0]
+----
+<1> declaration of a trait
+<2> declaration of a method inside a trait
+
+=== Abstract methods
+
+In addition, traits may declare _abstract_ methods too, which therefore need to be implemented in the class implementing the trait:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/TraitsSpecificationTest.groovy[tags=greetable,indent=0]
+----
+<1> implementing class will have to declare the `name` method
+<2> can be mixed with a concrete method
+
+Then the trait can be used like this:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/TraitsSpecificationTest.groovy[tags=greetable_person,indent=0]
+----
+<1> implement the trait `Greetable`
+<2> since `name` was abstract, it is required to implement it
+<3> then `greeting` can be called
+
+=== Private methods
+
+Traits may also define private methods. Those methods will not appear in the trait contract interface:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/TraitsSpecificationTest.groovy[tags=private_method_in_trait,indent=0]
+----
+<1> define a private method `greetingMessage` in the trait
+<2> the public `greet` message calls `greetingMessage` by default
+<3> create a class implementing the trait
+<4> `greet` can be called
+<5> but not `greetingMessage`
+
+WARNING: Traits only support `public` and `private` methods. Neither `protected` nor `package private` scopes are
+supported.
+
+== The meaning of this
+
+`this` represents the implementing instance. Think of a trait as a superclass. This means that when you write:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/TraitsSpecificationTest.groovy[tags=meaningofthis_header,indent=0]
+----
+
+then calling:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/TraitsSpecificationTest.groovy[tags=meaningofthis_snippet,indent=0]
+----
+
+will return the same instance:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/TraitsSpecificationTest.groovy[tags=meaningofthis_assert,indent=0]
+----
+
+== Interfaces
+
+Traits may implement interfaces, in which case the interfaces are declared using the `implements` keyword:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/TraitsSpecificationTest.groovy[tags=trait_implementing_interface,indent=0]
+----
+<1> declaration of a normal interface
+<2> add `Named` to the list of implemented interfaces
+<3> declare a class that implements the `Greetable` trait
+<4> implement the missing `name` method
+<5> the `greeting` implementation comes from the trait
+<6> make sure `Person` implements the `Named` interface
+<7> make sure `Person` implements the `Greetable` trait
+
+== Properties
+
+A trait may define properties, like in the following example:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/TraitsSpecificationTest.groovy[tags=trait_with_property,indent=0]
+----
+<1> declare a property `name` inside a trait
+<2> declare a class which implements the trait
+<3> the property is automatically made visible
+<4> it can be accessed using the regular property accessor
+<5> or using the regular getter syntax
+
+== Fields
+=== Private fields
+
+Since traits allow the use of private methods, it can also be interesting to use private fields to store state. Traits
+will let you do that:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/TraitsSpecificationTest.groovy[tags=trait_with_private_field,indent=0]
+----
+<1> declare a private field `count` inside a trait
+<2> declare a public method `count` that increments the counter and returns it
+<3> declare a class that implements the `Counter` trait
+<4> the `count` method can use the private field to keep state
+
+TIP: This is a major difference with http://docs.oracle.com/javase/tutorial/java/IandI/defaultmethods.html[Java 8 virtual extension methods]. While virtual extension methods
+do not carry state, traits can. Moreover, traits in Groovy are supported starting with Java 6, because their implementation does not rely on virtual extension methods. This
+means that even if a trait can be seen from a Java class as a regular interface, that interface will *not* have default methods, only abstract ones.
+
+=== Public fields
+
+Public fields work the same way as private fields, but in order to avoid the http://en.wikipedia.org/wiki/Multiple_inheritance#The_diamond_problem[diamond problem],
+field names are remapped in the implementing class:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/TraitsSpecificationTest.groovy[tags=trait_with_public_field,indent=0]
+----
+<1> declare a public *field* inside the trait
+<2> declare a class implementing the trait
+<3> create an instance of that class
+<4> the public field is available, but renamed
+
+The name of the field depends on the fully qualified name of the trait. All dots (`.`) in package are replaced with an underscore (`_`), and the final name includes a double underscore.
+So if the type of the field is `String`, the name of the package is `my.package`, the name of the trait is `Foo` and the name of the field is `bar`,
+in the implementing class, the public field will appear as:
+
+[source,groovy]
+----
+String my_package_Foo__bar
+----
+
+WARNING: While traits support public fields, it is not recommended to use them and considered as a bad practice.
+
+== Composition of behaviors
+
+Traits can be used to implement multiple inheritance in a controlled way. For example, we can have the following traits:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/TraitsSpecificationTest.groovy[tags=flying_simple,indent=0]
+include::{projectdir}/src/spec/test/TraitsSpecificationTest.groovy[tags=speaking_simple,indent=0]
+----
+
+And a class implementing both traits:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/TraitsSpecificationTest.groovy[tags=speakingduck,indent=0]
+----
+<1> the `Duck` class implements both `FlyingAbility` and `SpeakingAbility`
+<2> creates a new instance of `Duck`
+<3> we can call the method `fly` from `FlyingAbility`
+<4> but also the method `speak` from `SpeakingAbility`
+
+Traits encourage the reuse of capabilities among objects, and the creation of new classes by the composition of existing behavior.
+
+== Overriding default methods
+
+Traits provide default implementations for methods, but it is possible to override them in the implementing class. For example, we
+can slightly change the example above, by having a duck which quacks:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/TraitsSpecificationTest.groovy[tags=quackingduck,indent=0]
+----
+<1> define a method specific to `Duck`, named `quack`
+<2> override the default implementation of `speak` so that we use `quack` instead
+<3> the duck is still flying, from the default implementation
+<4> `quack` comes from the `Duck` class
+<5> `speak` no longer uses the default implementation from `SpeakingAbility`
+
+== Extending traits
+=== Simple inheritance
+Traits may extend another trait, in which case you must use the `extends` keyword:
+
+[source,groovy]
+-----
+include::{projectdir}/src/spec/test/TraitsSpecificationTest.groovy[tags=trait_inherit,indent=0]
+-----
+<1> the `Named` trait defines a single `name` property
+<2> the `Polite` trait *extends* the `Named` trait
+<3> `Polite` adds a new method which has access to the `name` property of the super-trait
+<4> the `name` property is visible from the `Person` class implementing `Polite`
+<5> as is the `introduce` method
+
+=== Multiple inheritance
+
+Alternatively, a trait may extend multiple traits. In that case, all super traits must be declared in the `implements`
+clause:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/TraitsSpecificationTest.groovy[tags=trait_multiple_inherit,indent=0]
+----
+<1> `WithId` trait defines the `id` property
+<2> `WithName` trait defines the `name` property
+<3> `Identified` is a trait which inherits both `WithId` and `WithName`
+
+== Duck typing and traits
+=== Dynamic code
+Traits can call any dynamic code, like a normal Groovy class. This means that you can, in the body of a method, call
+methods which are supposed to exist in an implementing class, without having to explicitly declare them in an interface.
+This means that traits are fully compatible with duck typing:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/TraitsSpecificationTest.groovy[tags=ducktyping,indent=0]
+----
+<1> the `SpeakingDuck` expects the `quack` method to be defined
+<2> the `Duck` class does implement the method using _methodMissing_
+<3> calling the `speak` method triggers a call to `quack` which is handled by `methodMissing`
+
+=== Dynamic methods in a trait
+
+It is also possible for a trait to implement MOP methods like `methodMissing` or `propertyMissing`, in which case implementing classes
+will inherit the behavior from the trait, like in this example:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/TraitsSpecificationTest.groovy[tags=dynamicobject,indent=0]
+----
+<1> create a trait implementing several MOP methods
+<2> the `Dynamic` class defines a property
+<3> the `Dynamic` class defines a method
+<4> calling an existing property will call the method from `Dynamic`
+<5> calling an non-existing property will call the method from the trait
+<6> will call `setProperty` defined on the trait
+<7> will call `getProperty` defined on the trait
+<8> calling an existing method on `Dynamic`
+<9> but calling a non existing method thanks to the trait `methodMissing`
+
+== Multiple inheritance conflicts
+=== Default conflict resolution
+
+It is possible for a class to implement multiple traits. If some trait defines a method with the same signature as a
+method in another trait, we have a conflict:
+
+[source,groovy]
+-----
+include::{projectdir}/src/spec/test/TraitsSpecificationTest.groovy[tags=multiple_inherit_default,indent=0]
+-----
+<1> trait `A` defines a method named `exec` returning a `String`
+<2> trait `B` defines the very same method
+<3> class `C` implements both traits
+
+In this case, the default behavior is that the method from the *last declared trait* in the `implements` clause wins.
+Here, `B` is declared after `A` so the method from `B` will be picked up:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/TraitsSpecificationTest.groovy[tags=multiple_inherit_default_assert,indent=0]
+----
+
+=== User conflict resolution
+
+In case this behavior is not the one you want, you can explicitly choose which method to call using the `Trait.super.foo` syntax.
+In the example above, we can force to choose the method from trait A, by writing this:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/TraitsSpecificationTest.groovy[tags=multiple_inherit_user,indent=0]
+----
+<1> explicit call of `exec` from the trait `A`
+<2> calls the version from `A` instead of using the default resolution, which would be the one from `B`
+
+== Runtime implementation of traits
+=== Implementing a trait at runtime
+Groovy also supports implementing traits dynamically at runtime. It allows you to "decorate" an existing object using a
+trait. As an example, let's start with this trait and the following class:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/TraitsSpecificationTest.groovy[tags=runtime_header,indent=0]
+----
+<1> the `Extra` trait defines an `extra` method
+<2> the `Something` class does *not* implement the `Extra` trait
+<3> `Something` only defines a method `doSomething`
+
+Then if we do:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/TraitsSpecificationTest.groovy[tags=runtime_fail,indent=0]
+----
+
+the call to extra would fail because `Something` is not implementing `Extra`. It is possible to do it at runtime with
+the following syntax:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/TraitsSpecificationTest.groovy[tags=runtime_success,indent=0]
+----
+<1> use of the *as* keyword to coerce an object to a trait *at runtime*
+<2> then `extra` can be called on the object
+<3> and `doSomething` is still callable
+
+IMPORTANT: When coercing an object to a trait, the result of the operation is not the same instance. It is guaranteed
+that the coerced object will implement both the trait *and* the interfaces that the original object implements, but
+the result will *not* be an instance of the original class.
+
+=== Implementing multiple traits at once
+
+Should you need to implement several traits at once, you can use the `withTraits` method instead of the `as` keyword:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/TraitsSpecificationTest.groovy[tags=withtraits_header,indent=0]
+include::{projectdir}/src/spec/test/TraitsSpecificationTest.groovy[tags=withtraits_fail,indent=0]
+include::{projectdir}/src/spec/test/TraitsSpecificationTest.groovy[tags=withtraits_success,indent=0]
+----
+<1> call to `methodFromA` will fail because `C` doesn't implement `A`
+<2> call to `methodFromB` will fail because `C` doesn't implement `B`
+<3> `withTrait` will wrap `c` into something which implements `A` and `B`
+<4> `methodFromA` will now pass because `d` implements `A`
+<5> `methodFromB` will now pass because `d` also implements `B`
+
+IMPORTANT: When coercing an object to multiple traits, the result of the operation is not the same instance. It is guaranteed
+that the coerced object will implement both the traits *and* the interfaces that the original object implements, but
+the result will *not* be an instance of the original class.
+
+== Chaining behavior
+
+Groovy supports the concept of _stackable traits_. The idea is to delegate from one trait to the other if the current trait
+is not capable of handling a message. To illustrate this, let's imagine a message handler interface like this:
+
+[source,groovy]
+-----
+include::{projectdir}/src/spec/test/TraitsSpecificationTest.groovy[tags=messagehandler,indent=0]
+-----
+
+Then you can compose a message handler by applying small behaviors. For example, let's define a default handler in the
+form of a trait:
+
+[source,groovy]
+-----
+include::{projectdir}/src/spec/test/TraitsSpecificationTest.groovy[tags=defaulthandler,indent=0]
+-----
+
+Then any class can inherit the behavior of the default handler by implementing the trait:
+
+[source,groovy]
+-----
+include::{projectdir}/src/spec/test/TraitsSpecificationTest.groovy[tags=simplehandler,indent=0]
+-----
+
+Now what if you want to log all messages, in addition to the default handler? One option is to write this:
+
+[source,groovy]
+-----
+include::{projectdir}/src/spec/test/TraitsSpecificationTest.groovy[tags=simplehandlerwithlogging,indent=0]
+-----
+<1> explicitly implement the `on` method
+<2> perform logging
+<3> continue by delegating to the `DefaultHandler` trait
+
+This works but this approach has drawbacks:
+
+. the logging logic is bound to a "concrete" handler
+. we have an explicit reference to `DefaultHandler` in the `on` method, meaning that if we happen to change the trait that our class implements, code will be broken
+
+As an alternative, we can write another trait which responsibility is limited to logging:
+
+[source,groovy]
+-----
+include::{projectdir}/src/spec/test/TraitsSpecificationTest.groovy[tags=logginghandler,indent=0]
+-----
+<1> the logging handler is itself a handler
+<2> prints the message it receives
+<3> then `super` makes it delegate the call to the next trait in the chain
+
+Then our class can be rewritten as this:
+
+[source,groovy]
+-----
+include::{projectdir}/src/spec/test/TraitsSpecificationTest.groovy[tags=handlerwithlogger,indent=0]
+include::{projectdir}/src/spec/test/TraitsSpecificationTest.groovy[tags=handlerwithlogger_assert,indent=0]
+-----
+
+which will print:
+
+----
+include::{projectdir}/src/spec/test/TraitsSpecificationTest.groovy[tags=handlerwithlogger_assert_output,indent=0]
+----
+
+As the priority rules imply that `LoggerHandler` wins because it is declared last, then a call to `on` will use
+the implementation from `LoggingHandler`. But the latter has a call to `super`, which means the next trait in the
+chain. Here, the next trait is `DefaultHandler` so *both* will be called:
+
+The interest of this approach becomes more evident if we add a third handler, which is responsible for handling messages
+that start with `say`:
+
+[source,groovy]
+-----
+include::{projectdir}/src/spec/test/TraitsSpecificationTest.groovy[tags=sayhandler,indent=0]
+-----
+<1> a handler specific precondition
+<2> if the precondition is not met, pass the message to the next handler in the chain
+
+Then our final handler looks like this:
+
+[source,groovy]
+-----
+include::{projectdir}/src/spec/test/TraitsSpecificationTest.groovy[tags=implementinghandler,indent=0]
+include::{projectdir}/src/spec/test/TraitsSpecificationTest.groovy[tags=implementinghandler_assert,indent=0]
+-----
+
+Which means:
+
+* messages will first go through the logging handler
+* the logging handler calls `super` which will delegate to the next handler, which is the `SayHandler`
+* if the message starts with `say`, then the handler consumes the message
+* if not, the `say` handler delegates to the next handler in the chain
+
+This approach is very powerful because it allows you to write handlers that do not know each other and yet let you
+combine them in the order you want. For example, if we execute the code, it will print:
+
+----
+include::{projectdir}/src/spec/test/TraitsSpecificationTest.groovy[tags=implementinghandler_output,indent=0]
+----
+
+but if we move the logging handler to be the second one in the chain, the output is different:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/TraitsSpecificationTest.groovy[tags=alternatehandler,indent=0]
+include::{projectdir}/src/spec/test/TraitsSpecificationTest.groovy[tags=alternatehandler_assert,indent=0]
+----
+
+prints:
+
+----
+include::{projectdir}/src/spec/test/TraitsSpecificationTest.groovy[tags=alternatehandler_output,indent=0]
+----
+
+The reason is that now, since the `SayHandler` consumes the message without calling `super`, the logging handler is
+not called anymore.
+
+=== Semantics of super inside a trait
+
+If a class implements multiple traits and a call to an unqualified `super` is found, then:
+
+. if the class implements another trait, the call delegates to the next trait in the chain
+. if there isn't any trait left in the chain, `super` refers to the super class of the implementing class (_this_)
+
+For example, it is possible to decorate final classes thanks to this behavior:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/TraitsSpecificationTest.groovy[tags=decoratefinalclass,indent=0]
+----
+<1> define a trait named `Filtering`, supposed to be applied on a `StringBuilder` at runtime
+<2> redefine the `append` method
+<3> remove all 'o's from the string
+<4> then delegate to `super`
+<5> in case `toString` is called, delegate to `super.toString`
+<6> runtime implementation of the `Filtering` trait on a `StringBuilder` instance
+<7> the string which has been appended no longer contains the letter `o`
+
+In this example, when `super.append` is encountered, there is no other trait implemented by the target object, so the
+method which is called is the original `append` method, that is to say the one from `StringBuilder`. The same trick
+is used for `toString`, so that the string representation of the proxy object which is generated delegates to the
+`toString` of the `StringBuilder` instance.
+
+== Advanced features
+=== SAM type coercion
+
+If a trait defines a single abstract method, it is candidate for SAM (Single Abstract Method) type coercion. For example,
+imagine the following trait:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/TraitsSpecificationTest.groovy[tags=sam_trait,indent=0]
+----
+<1> the `greet` method is not abstract and calls the abstract method `getName`
+<2> `getName` is an abstract method
+
+Since `getName` is the _single abstract method_ in the `Greeter` trait, you can write:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/TraitsSpecificationTest.groovy[tags=sam_trait_assignment,indent=0]
+----
+<1> the closure "becomes" the implementation of the `getName` single abstract method
+
+or even:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/TraitsSpecificationTest.groovy[tags=sam_trait_method,indent=0]
+----
+<1> the greet method accepts the SAM type Greeter as parameter
+<2> we can call it directly with a closure
+
+=== Differences with Java 8 default methods
+
+In Java 8, interfaces can have default implementations of methods. If a class implements an interface and does not provide
+an implementation for a default method, then the implementation from the interface is chosen. Traits behave the same but
+with a major difference: the implementation from the trait is *always* used if the class declares the trait in its interface
+list *and* that it doesn't provide an implementation *even* if a super class does.
+
+This feature can be used to compose behaviors in an very precise way, in case you want to override the behavior of an
+already implemented method.
+
+To illustrate the concept, let's start with this simple example:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/TraitsSpecificationTest.groovy[tags=forceoverride_header,indent=0]
+----
+
+In this example, we create a simple test case which uses two properties (_config_ and _shell_) and uses those in
+multiple test methods. Now imagine that you want to test the same, but with another distinct compiler configuration.
+One option is to create a subclass of `SomeTest`:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/TraitsSpecificationTest.groovy[tags=forceoverride_extends,indent=0]
+----
+
+It works, but what if you have actually multiple test classes, and that you want to test the new configuration for all
+those test classes? Then you would have to create a distinct subclass for each test class:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/TraitsSpecificationTest.groovy[tags=forceoverride_extends2,indent=0]
+----
+
+Then what you see is that the `setup` method of both tests is the same. The idea, then, is to create a trait:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/TraitsSpecificationTest.groovy[tags=forceoverride_trait,indent=0]
+----
+
+Then use it in the subclasses:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/TraitsSpecificationTest.groovy[tags=forceoverride_miss_header,indent=0]
+...
+----
+
+It would allow us to dramatically reduce the boilerplate code, and reduces the risk of forgetting to change the setup
+code in case we decide to change it. Even if `setup` is already implemented in the super class, since the test class declares
+the trait in its interface list, the behavior will be borrowed from the trait implementation!
+
+This feature is in particular useful when you don't have access to the super class source code. It can be used to
+mock methods or force a particular implementation of a method in a subclass. It lets you refactor your code to keep
+the overridden logic in a single trait and inherit a new behavior just by implementing it. The alternative, of course,
+is to override the method in *every* place you would have used the new code.
+
+
+IMPORTANT: It's worth noting that if you use runtime traits, the methods from the trait are *always* preferred to those of the proxied
+object:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/TraitsSpecificationTest.groovy[tags=runtime_forceoverride,indent=0]
+----
+<1> the `Person` class defines a `name` property which results in a `getName` method
+<2> `Bob` is a trait which defines `getName` as returning `Bob`
+<3> the default object will return _Alice_
+<4> `p2` coerces `p` into `Bob` at runtime
+<5> `getName` returns _Bob_ because `getName` is taken from the *trait*
+
+IMPORTANT: Again, don't forget that dynamic trait coercion returns a distinct object which only implements the original
+interfaces, as well as the traits.
+
+== Differences with mixins
+
+There are several conceptual differences with mixins, as they are available in Groovy. Note that we are talking about
+runtime mixins, not the @Mixin annotation which is deprecated in favour of traits.
+
+First of all, methods defined in a trait are visible in bytecode:
+
+* internally, the trait is represented as an interface (without default methods) and several helper classes
+* this means that an object implementing a trait effectively implements an _interface_
+* those methods are visible from Java
+* they are compatible with type checking and static compilation
+
+Methods added through a mixin are, on the contrary, only visible at runtime:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/TraitsSpecificationTest.groovy[tags=diff_mixin,indent=0]
+----
+<1> class `A` defines `methodFromA`
+<2> class `B` defines `methodFromB`
+<3> mixin B into A
+<4> we can call `methodFromA`
+<5> we can also call `methodFromB`
+<6> the object is an instance of `A`
+<7> but it's *not* an instanceof `B`
+
+The last point is actually a very important and illustrates a place where mixins have an advantage over traits: the instances
+are *not* modified, so if you mixin some class into another, there isn't a third class generated, and methods which respond to
+A will continue responding to A even if mixed in.
+
+== Static methods, properties and fields
+
+WARNING: The following instructions are subject to caution. Static member support is work in progress and still experimental. The
+information below is valid for {groovyVersion} only.
+
+It is possible to define static methods in a trait, but it comes with numerous limitations:
+
+* traits with static methods cannot be compiled statically or type checked. All static methods/properties/field are accessed dynamically (it's a limitation from the JVM).
+* the trait is interpreted as a _template_ for the implementing class, which means that each implementing class will get its own static methods/properties/methods. So a
+static member declared on a trait doesn't belong to the `Trait`, but to it's implementing class.
+
+Let's start with a simple example:
+
+[source,groovy]
+-----
+include::{projectdir}/src/spec/test/TraitsSpecificationTest.groovy[tags=staticfield_header,indent=0]
+-----
+<1> the static field is declared in the trait
+<2> a static method is also declared in the trait
+<3> the static field is updated _within_ the trait
+<4> a static method _init_ is made available to the implementing class
+<5> the static field is _remapped_ to avoid the diamond issue
+
+As usual, it is not recommended to use public fields. Anyway, should you want this, you must understand that the following code would fail:
+
+[source,groovy]
+-----
+include::{projectdir}/src/spec/test/TraitsSpecificationTest.groovy[tags=staticfield_notontrait,indent=0]
+-----
+
+because there is _no_ static field _CALLED_ defined on the trait itself. Likewise, if you have two distinct implementing classes, each one gets a distinct static field:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/TraitsSpecificationTest.groovy[tags=staticfield_distinct,indent=0]
+----
+<1> class `Bar` implements the trait
+<2> class `Baz` also implements the trait
+<3> `init` is only called on `Bar`
+<4> the static field `CALLED` on `Bar` is updated
+<5> but the static field `CALLED` on `Baz` is not, because it is *distinct*
+
+== Inheritance of state gotchas
+
+We have seen that traits are stateful. It is possible for a trait to define fields or properties, but when a class implements a trait, it gets those fields/properties on
+a per-trait basis. So consider the following example:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/TraitsSpecificationTest.groovy[tags=intcouple,indent=0]
+----
+
+
+The trait defines two properties, `x` and `y`, as well as a `sum` method. Now let's create a class which implements the trait:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/TraitsSpecificationTest.groovy[tags=intcouple_impl,indent=0]
+----
+
+The result of calling `f` is `3`, because `f` delegates to `sum` in the trait, which has state. But what if we write this instead?
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/TraitsSpecificationTest.groovy[tags=intcouple_impl_override,indent=0]
+----
+<1> Override property `x`
+<2> Override property `y`
+<3> Call `sum` from trait
+
+If you call `elem.f()`, what is the expected output? Actually it is:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/TraitsSpecificationTest.groovy[tags=intcouple_impl_override_assert,indent=0]
+----
+
+The reason is that the `sum` method accesses the _fields_ of the trait. So it is using the `x` and `y` values defined
+in the trait. If you want to use the values from the implementing class, then you need to dereference fields by using
+getters and setters, like in this last example:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/TraitsSpecificationTest.groovy[tags=intcouple_impl_override_directgetter,indent=0]
+----
+
+== Self types
+=== Type constraints on traits
+
+Sometimes you will want to write a trait that can only be applied to some type. For example, you may want to apply a
+trait on a class that extends another class which is beyond your control, and still be able to call those methods.
+To illustrate this, let's start with this example:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/TraitsSpecificationTest.groovy[tags=selftype_intro,indent=0]
+----
+<1> A `Service` class, beyond your control (in a library, ...) defines a `sendMessage` method
+<2> A `Device` class, beyond your control (in a library, ...)
+<3> Defines a communicating trait for devices that can call the service
+<4> Defines `MyDevice` as a communicating device
+<5> The method from the trait is called, and `id` is resolved
+
+It is clear, here, that the `Communicating` trait can only apply to `Device`. However, there's no explicit
+contract to tell that, because traits cannot extend classes. However, the code compiles and runs perfectly
+fine, because `id` in the trait method will be resolved dynamically. The problem is that there is nothing that
+prevents the trait from being applied to any class which is *not* a `Device`. Any class which has an `id` would
+work, while any class that does not have an `id` property would cause a runtime error.
+
+The problem is even more complex if you want to enable type checking or apply `@CompileStatic` on the trait: because
+the trait knows nothing about itself being a `Device`, the type checker will complain saying that it does not find
+the `id` property.
+
+One possibility is to explicitly add a `getId` method in the trait, but it would not solve all issues. What if a method
+requires `this` as a parameter, and actually requires it to be a `Device`?
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/TraitsSpecificationTest.groovy[tags=selftype_securityservice,indent=0]
+----
+
+If you want to be able to call this in the trait, then you will explicitly need to cast `this` into a `Device`. This can
+quickly become unreadable with explicit casts to this everywhere.
+
+[[traits-selftype]]
+=== The @SelfType annotation
+
+In order to make this contract explicit, and to make the type checker aware of the _type of itself_, Groovy provides
+a `@SelfType` annotation that will:
+
+* let you declare the types that a class that implements this trait must inherit or implement
+* throw a compile time error if those type constraints are not satisfied
+
+So in our previous example, we can fix the trait using the `@groovy.transform.SelfType` annotation:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/TraitsSpecificationTest.groovy[tags=selftype_fixed,indent=0]
+----
+
+Now if you try to implement this trait on a class that is *not* a device, a compile-time error will occur:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/TraitsSpecificationTest.groovy[tags=selftype_compiletimeerror,indent=0]
+----
+
+The error will be:
+
+----
+class 'MyDevice' implements trait 'Communicating' but does not extend self type class 'Device'
+----
+
+In conclusion, self types are a powerful way of declaring constraints on traits without having to declare the contract
+directly in the trait or having to use casts everywhere, maintaining separation of concerns as tight as it should be.
+
+== Limitations
+=== Compatibility with AST transformations
+
+CAUTION: Traits are not officially compatible with AST transformations. Some of them, like `@CompileStatic` will be applied
+on the trait itself (not on implementing classes), while others will apply on both the implementing class and the trait.
+There is absolutely no guarantee that an AST transformation will run on a trait as it does on a regular class, so use it
+at your own risk!
+
+=== Prefix and postfix operations
+
+Within traits, prefix and postfix operations are not allowed if they update a field of the trait:
+
+[source,groovy]
+----
+include::{projectdir}/src/spec/test/TraitsSpecificationTest.groovy[tags=prefix_postfix,indent=0]
+----
+<1> `x` is defined within the trait, postfix increment is not allowed
+<2> `x` is defined within the trait, prefix decrement is not allowed
+
+A workaround is to use the `+=` operator instead.
+

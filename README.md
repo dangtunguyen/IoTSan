@@ -18,6 +18,9 @@ IoTSan is developed based on [Bandera](http://bandera.projects.cs.ksu.edu/) and 
 # Using The Tool
 
 1. Create an Eclipse project and clone this repository (you can find the instructions [here](https://github.com/collab-uniba/socialcde4eclipse/wiki/How-to-import-a-GitHub-project-into-Eclipse)).
+  1. Please make sure you include all the files (e.g., Lexer.data) in your project.
+  2. Install Groovy plugin on Eclipse following the instructions at [here](https://github.com/groovy/groovy-eclipse/wiki)
+  3. Add all libraries (.jar files) in the "IoTSan/lib" folder.
 
 2. Create the folder "input/smartapps" at the root directory of your porject. You then need to put the source code of apps and their configuration files in this folder. Note that you should give good names to app files since they will become the names of apps in the resulting modeled system.
 

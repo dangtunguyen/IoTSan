@@ -18,7 +18,7 @@ IoTSan is developed based on [Bandera](http://bandera.projects.cs.ksu.edu/) and 
 # Using The Tool
 
 1. Create an Eclipse project and clone this repository (you can find the instructions [here](https://github.com/collab-uniba/socialcde4eclipse/wiki/How-to-import-a-GitHub-project-into-Eclipse)).
-  1. Please make sure you include all the files (e.g., Lexer.data) in your project.
+  1. Make sure to include all the files (e.g., Lexer.data) in your project.
   2. Install Groovy plugin on Eclipse following the instructions at [here](https://github.com/groovy/groovy-eclipse/wiki)
   3. Add all libraries (.jar files) in the "IoTSan/lib" folder.
 

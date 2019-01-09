@@ -2,7 +2,7 @@
 
 In this repository you will find the detailed technical report and protype code of IoTSan, a model-checking-based tool used to verify the safety of IoT systems.
 
-This work was accepted and will be published at *The 14th International Conference on emerging Networking EXperiments and Technologies (CoNEXT '18)*.
+This work is published at *The 14th International Conference on emerging Networking EXperiments and Technologies (CoNEXT '18)*.
 
 # Code Structure
 
